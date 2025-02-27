@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.techsenger.maven-root</groupId>
+        <artifactId>maven-root</artifactId>
+        <version>1.5.0</version>
+    </parent>
+
+    <groupId>com.techsenger.alpha</groupId>
+    <artifactId>alpha</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Alpha</name>
+    <description>Techsenger Alpha Framework</description>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <url>https://github.com/techsenger/alpha</url>
+
+    <scm>
+        <connection>scm:git:https://github.com/techsenger/alpha.git</connection>
+        <developerConnection>scm:git:https://github.com/techsenger/alpha.git</developerConnection>
+        <url>https://github.com/techsenger/alpha</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/techsenger/alpha/issues</url>
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <id>pcastornii</id>
+            <name>Pavel Castornii</name>
+        </developer>
+    </developers>
+
+    <properties>
+        <publishing.plugin.exclusions>alpha-repo-maven-external,alpha-demo,alpha-demo-cli,alpha-demo-gui,alpha-demo-net,alpha-demo-net-auth,alpha-demo-net-cli,alpha-demo-net-gui,alpha-demo-tools,alpha-demo-web,alpha-demo-web-app,alpha-demo-web-manager</publishing.plugin.exclusions>
+
+        <!--### dependencies that are in BOM ###-->
+        <mvn.version>3.8.1</mvn.version>
+        <maven.resolver.version>1.6.2</maven.resolver.version>
+        <log4j.version>2.21.1</log4j.version>
+        <slf4j.version>2.0.9</slf4j.version>
+        <toolkit.version>1.0.0</toolkit.version>
+        <reposium.version>1.0.0</reposium.version>
+        <jansi.version>2.4.1</jansi.version>
+        <jcommander.version>1.78</jcommander.version>
+        <el.version>5.0.0</el.version>
+        <asciitable.version>0.3.2</asciitable.version>
+        <skb-interfaces.version>0.0.1</skb-interfaces.version>
+        <ascii.themes.version>0.0.1</ascii.themes.version>
+        <st4.version>4.0.8</st4.version>
+        <jline.version>3.21.0</jline.version>
+        <gson.version>2.12.1</gson.version>
+
+        <!-- gui console -->
+        <javafx.version>19.0.2.1</javafx.version>
+        <atlantafx.version>2.0.1</atlantafx.version>
+        <stagepro.version>1.0.0</stagepro.version>
+        <mvvm4fx.version>1.0.0</mvvm4fx.version>
+        <tabshell.version>1.0.0</tabshell.version>
+        <controlsfx.version>11.1.1</controlsfx.version>
+        <jaxb.version>4.0.0</jaxb.version>
+        <richtextfx.version>0.11.4</richtextfx.version>
+        <findbugs.version>3.0.2</findbugs.version>
+        <plantuml.version>1.2025.0</plantuml.version>
+        <ansi4j.version>2.0.0</ansi4j.version>
+
+        <!--### dependencies that are not in BOM ###-->
+        <jna.version>5.9.0</jna.version>
+        <commons.codec.version>1.11</commons.codec.version>
+        <apache.httpclient.version>4.5.12</apache.httpclient.version>
+        <apache.httpcore.version>4.4.13</apache.httpcore.version>
+        <plexus.interpolation.version>1.25</plexus.interpolation.version>
+        <plexus.utils.version>3.2.1</plexus.utils.version>
+        <commons.lang.version>3.8.1</commons.lang.version>
+        <commons.logging.version>1.2</commons.logging.version>
+
+        <!-- gui console -->
+        <activation-api.version>2.1.1</activation-api.version>
+        <jaxb.glassfish.version>4.0.2</jaxb.glassfish.version>
+        <istack.version>4.1.1</istack.version>
+        <flowless.version>0.7.3</flowless.version>
+        <undofx.version>2.1.1</undofx.version>
+        <wellbehavedfx.version>0.3.3</wellbehavedfx.version>
+        <reactfx.version>2.0-M5</reactfx.version>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.techsenger.osp-bom</groupId>
+                <artifactId>osp-bom</artifactId>
+                <version>1.5.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--### APLHA ###-->
+            <dependency>
+                <groupId>com.techsenger.alpha</groupId>
+                <artifactId>alpha-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.alpha</groupId>
+                <artifactId>alpha-spi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.alpha.net.shared</groupId>
+                <artifactId>alpha-net-shared-http</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <resources>
+            <!-- activate replacing in files in resources according to config files -->
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
+
+    <modules>
+        <module>alpha-api</module>
+        <module>alpha-spi</module>
+        <module>alpha-core</module>
+        <module>alpha-executor</module>
+        <module>alpha-repo</module>
+        <module>alpha-commands</module>
+        <module>alpha-console</module>
+        <module>alpha-net</module>
+        <module>alpha-demo</module>
+    </modules>
+</project>
+

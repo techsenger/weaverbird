@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration title="Alpha Executor" name="alpha-executor" version="${project.version}" type="base">
+    <Modules>
+        <!--### ASCII TABLE ###-->
+        <Module groupId="de.vandermeer" artifactId="asciitable" version="${asciitable.version}"/>
+        <Module groupId="de.vandermeer" artifactId="skb-interfaces" version="${skb-interfaces.version}"/>
+        <Module groupId="de.vandermeer" artifactId="ascii-utf-themes" version="${ascii.themes.version}"/>
+        <Module groupId="org.antlr" artifactId="ST4" version="${st4.version}"/>
+        <Module groupId="org.apache.commons" artifactId="commons-lang3" version="${commons.lang.version}"/>
+        <Module groupId="com.techsenger.toolkit" artifactId="toolkit-ascii" version="${toolkit.version}"/>
+
+        <!--### ALPHA ###-->
+        <Module groupId="com.techsenger.alpha" artifactId="alpha-commands" version="${project.version}"/>
+        <Module groupId="com.techsenger.alpha" artifactId="alpha-executor" version="${project.version}" active="true"/>
+    </Modules>
+</Configuration>

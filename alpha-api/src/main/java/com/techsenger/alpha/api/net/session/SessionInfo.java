@@ -1,0 +1,62 @@
+/*
+ * Copyright 2018-2025 Pavel Castornii.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.techsenger.alpha.api.net.session;
+
+import java.time.LocalDateTime;
+
+/**
+ *
+ * @author Pavel Castornii
+ */
+public interface SessionInfo extends ConnectionBase {
+
+    /**
+     * Returns the name of the session or null if it is a server session.
+     *
+     * @return
+     */
+    @Override
+    String getName();
+
+    /**
+     * Returns the status of the session.
+     *
+     * @return
+     */
+    SessionStatus getStatus();
+
+    /**
+     * Returns the uuid of the session.
+     *
+     * @return
+     */
+    String getUuid();
+
+    /**
+     * Returns the time when the session was opened.
+     *
+     * @return
+     */
+    LocalDateTime getOpenedAt();
+
+    /**
+     * Returns the time when the session was closed or null if it is not closed.
+     *
+     * @return
+     */
+    LocalDateTime getClosedAt();
+}

@@ -1,0 +1,75 @@
+/*
+ * Copyright 2018-2025 Pavel Castornii.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+
+    XML File
+
+.xml-text-area .tagmark {
+    -fx-fill: -fx-palette-blue;
+}
+
+.xml-text-area .anytag {
+    -fx-fill: -fx-palette-blue;
+}
+
+.xml-text-area .attribute {
+    -fx-fill: -fx-palette-green;
+}
+
+.xml-text-area .avalue {
+    -fx-fill: -fx-palette-yellow;
+}
+
+.xml-text-area .comment {
+    -fx-fill: -fx-palette-bright-black;
+}
+
+
+    Script file
+
+.script-text-area .keyword {
+    -fx-fill: -fx-palette-blue;
+    -fx-font-weight: bold;
+}
+
+.script-text-area .semicolon {
+    -fx-font-weight: bold;
+}
+
+parentheses
+.script-text-area .paren {
+    -fx-fill: -fx-palette-blue;
+    -fx-font-weight: bold;
+}
+
+.script-text-area .bracket {
+    -fx-fill: -fx-palette-blue;
+    -fx-font-weight: bold;
+}
+
+.script-text-area .brace {
+    -fx-fill: -fx-palette-blue;
+    -fx-font-weight: bold;
+}
+
+.script-text-area .string {
+    -fx-fill: -fx-palette-green;
+}
+
+.script-text-area .comment {
+    -fx-fill: -fx-palette-bright-black;
+}*/

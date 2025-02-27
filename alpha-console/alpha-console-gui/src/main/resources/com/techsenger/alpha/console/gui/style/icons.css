@@ -1,0 +1,78 @@
+/*
+ * Copyright 2018-2025 Pavel Castornii.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+    Author     : Pavel Castornii
+*/
+.font-icon-view.console-xml-file-icon {
+    -fx-code-point: 984512; /* xml */
+}
+
+.font-icon-view.console-text-file-icon {
+    -fx-code-point: 985514; /* text-long */
+}
+
+.font-icon-view.console-script-file-icon {
+    -fx-code-point: 986051; /* script-text-outline */
+}
+
+.font-icon-view.console-shell-icon {
+    -fx-code-point: 983437; /* console */
+}
+
+.font-icon-view.console-memory-log-icon {
+    -fx-code-point: 989660; /* receipt-text-outline */
+}
+
+.font-icon-view.console-file-log-icon {
+    -fx-code-point: 985582; /* file-document-outline */
+}
+
+.font-icon-view.console-dependency-icon {
+    -fx-code-point: 989252; /* magic-staff */
+}
+
+.font-icon-view.console-diagrams-icon {
+    -fx-code-point: 984685; /* chart-scatter-plot-hexbin */
+}
+
+.font-icon-view.console-layer-diagrams-icon {
+    -fx-code-point: 988300; /* view-module-outline */
+}
+
+.font-icon-view.console-filter-icon {
+    -fx-code-point: 983603; /* filter-outline */
+}
+
+.font-icon-view.console-filter-settings-icon {
+    -fx-code-point: 989860; /* filter-cog-outline */
+}
+
+.font-icon-view.console-alpha-icon {
+    -fx-code-point: 983083; /* alpha */
+}
+
+.font-icon-view.console-network-icon {
+    -fx-code-point: 983832; /* lan-connect */
+}
+
+.font-icon-view.console-refresh-icon {
+    -fx-code-point: 984144; /* refresh */
+}
+
+.font-icon-view.console-detach-session-icon {
+    -fx-code-point: 983558; /* exit-to-app */
+}

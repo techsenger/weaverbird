@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration title="Alpha Console GUI" name="alpha-console-gui" version="${project.version}" type="base">
+    <Repositories>
+        <Repository name="local" url="file://${settings.localRepository}"/>
+        <Repository name="central" url="${maven.central.url}"/>
+    </Repositories>
+
+    <Choose>
+        <When test="${info['os.family'] == 'linux'}">
+            <Property name="javafx.classifier" value="linux"/>
+        </When>
+        <When test="${info['os.family'] == 'windows'}">
+            <Property name="javafx.classifier" value="win"/>
+        </When>
+        <When test="${info['os.family'] == 'mac'}">
+            <Property name="javafx.classifier" value="mac"/>
+        </When>
+    </Choose>
+
+    <Modules>
+        <!--### JAVAFX ###-->
+        <Module groupId="org.openjfx" artifactId="javafx-base" classifier="${config['javafx.classifier']}" version="${javafx.version}"/>
+        <Module groupId="org.openjfx" artifactId="javafx-controls" classifier="${config['javafx.classifier']}" version="${javafx.version}"/>
+        <Module groupId="org.openjfx" artifactId="javafx-graphics" classifier="${config['javafx.classifier']}" version="${javafx.version}"/>
+        <Module groupId="org.openjfx" artifactId="javafx-swing" classifier="${config['javafx.classifier']}" version="${javafx.version}"/>
+
+        <!--### JAXB ###-->
+        <Module groupId="jakarta.xml.bind" artifactId="jakarta.xml.bind-api" version="${jaxb.version}"/>
+        <Module groupId="jakarta.activation" artifactId="jakarta.activation-api" version="${activation-api.version}"/>
+        <Module groupId="org.glassfish.jaxb" artifactId="jaxb-runtime" version="${jaxb.glassfish.version}"/>
+        <Module groupId="org.glassfish.jaxb" artifactId="jaxb-core" version="${jaxb.glassfish.version}"/>
+        <Module groupId="org.glassfish.jaxb" artifactId="txw2" version="${jaxb.glassfish.version}"/>
+        <Module groupId="com.sun.istack" artifactId="istack-commons-runtime" version="${istack.version}"/>
+
+        <!--### TABSHELL ###-->
+        <Module groupId="io.github.mkpaz" artifactId="atlantafx-base" version="${atlantafx.version}"/>
+        <Module groupId="com.techsenger.mvvm4fx" artifactId="mvvm4fx-core" version="${mvvm4fx.version}"/>
+        <Module groupId="com.techsenger.stagepro" artifactId="stagepro-core" version="${stagepro.version}"/>
+        <Module groupId="com.techsenger.tabshell" artifactId="tabshell-material" version="${tabshell.version}"/>
+        <Module groupId="com.techsenger.tabshell" artifactId="tabshell-core" version="${tabshell.version}"/>
+        <Module groupId="com.techsenger.tabshell.kit" artifactId="tabshell-kit-material" version="${tabshell.version}"/>
+        <Module groupId="com.techsenger.tabshell.kit" artifactId="tabshell-kit-core" version="${tabshell.version}">
+            <Directives>
+                <Directive type="opens" package="com.techsenger.tabshell.kit.core.settings" module="org.glassfish.jaxb.runtime"/>
+            </Directives>
+        </Module>
+        <Module groupId="com.techsenger.tabshell.kit" artifactId="tabshell-kit-text" version="${tabshell.version}"/>
+        <Module groupId="com.techsenger.tabshell.kit" artifactId="tabshell-kit-dialog" version="${tabshell.version}"/>
+
+        <!--### COMMON ###-->
+        <Module groupId="org.controlsfx" artifactId="controlsfx" version="11.1.1"/>
+        <Module groupId="com.techsenger.toolkit" artifactId="toolkit-fx" version="${toolkit.version}"/>
+
+        <!--### RICH TEXT ###-->
+        <Module groupId="org.fxmisc.richtext" artifactId="richtextfx" version="${richtextfx.version}"/>
+        <Module groupId="org.fxmisc.flowless" artifactId="flowless" version="${flowless.version}"/>
+        <Module groupId="org.fxmisc.undo" artifactId="undofx" version="${undofx.version}"/>
+        <Module groupId="org.fxmisc.wellbehaved" artifactId="wellbehavedfx" version="${wellbehavedfx.version}"/>
+        <Module groupId="org.reactfx" artifactId="reactfx" version="${reactfx.version}"/>
+
+        <!--### ANSI4J ###-->
+        <Module groupId="com.google.code.findbugs" artifactId="jsr305" version="${findbugs.version}"/>
+        <Module groupId="com.techsenger.ansi4j" artifactId="ansi4j-core-api" version="${ansi4j.version}"/>
+        <Module groupId="com.techsenger.ansi4j" artifactId="ansi4j-core-impl" version="${ansi4j.version}"/>
+        <Module groupId="com.techsenger.ansi4j" artifactId="ansi4j-css-api" version="${ansi4j.version}"/>
+        <Module groupId="com.techsenger.ansi4j" artifactId="ansi4j-css-impl" version="${ansi4j.version}"/>
+
+        <!--### UML ###-->
+        <Module groupId="net.sourceforge.plantuml" artifactId="plantuml-asl" version="${plantuml.version}"/>
+
+        <!--<Module groupId="org.eclipse.elk" artifactId="org.eclipse.elk.core" version="0.9.1"/>
+        <Module groupId="org.eclipse.elk" artifactId="org.eclipse.elk.graph" version="0.9.1"/>
+        <Module groupId="org.eclipse.elk" artifactId="org.eclipse.elk.alg.common" version="0.9.1"/>
+        <Module groupId="org.eclipse.elk" artifactId="org.eclipse.elk.alg.layered" version="0.9.1"/>
+        <Module groupId="org.eclipse.elk" artifactId="org.eclipse.elk.alg.mrtree" version="0.9.1"/>
+        <Module groupId="org.eclipse.emf" artifactId="org.eclipse.emf.ecore" version="2.12.0"/>
+        <Module groupId="org.eclipse.emf" artifactId="org.eclipse.emf.common" version="2.12.0"/>
+        <Module groupId="org.eclipse.emf" artifactId="org.eclipse.emf.ecore.xmi" version="2.12.0"/>
+        <Module groupId="com.google.guava" artifactId="guava" version="33.4.0-jre"/> <! - - version [15.0,) - - >
+        <Module groupId="com.google.guava" artifactId="failureaccess" version="1.0.2"/>
+        <Module groupId="com.google.errorprone" artifactId="error_prone_annotations" version="2.36.0"/>
+        <Module groupId="com.google.j2objc" artifactId="j2objc-annotations" version="3.0.0"/>
+        <Module groupId="org.checkerframework" artifactId="checker-qual" version="3.43.0"/>-->
+
+        <!--### ALPHA ###-->
+        <Module groupId="com.techsenger.alpha.console" artifactId="alpha-console-commands" version="${project.version}"/>
+        <Module groupId="com.techsenger.alpha.console" artifactId="alpha-console-gui" version="${project.version}" active="true">
+            <Directives>
+                <Directive type="opens" package="com.techsenger.alpha.console.gui.settings" module="org.glassfish.jaxb.core"/>
+                <Directive type="opens" package="com.techsenger.alpha.console.gui.settings" module="org.glassfish.jaxb.runtime"/>
+            </Directives>
+        </Module>
+    </Modules>
+</Configuration>
+

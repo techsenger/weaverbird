@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="error" shutdownHook="disable">
+    <Appenders>
+	    <Console name="Console" target="SYSTEM_OUT">
+            <LevelRangeFilter maxLevel="ERROR"/>
+	        <PatternLayout pattern="%d{HH:mm:ss.SSS} %highlight{[%level]}{FATAL=bright_red bold, ERROR=red bold, WARN=yellow bold, INFO=blue bold, DEBUG=green bold, TRACE=magenta bold} [%t] %logger{36} - %msg%n" disableAnsi="false"/>
+        </Console>
+        <File name="File" fileName="${sys:com.techsenger.alpha.core.log.path}" immediateFlush="true" append="false">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{[%level]}{FATAL=bright_red bold, ERROR=red bold, WARN=yellow bold, INFO=blue bold, DEBUG=green bold, TRACE=magenta bold} [%t] %logger{36} - %msg%n" disableAnsi="false"/>
+	    </File>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="File"/>
+            <!--<AppenderRef ref="Console"/>-->
+        </Root>
+        <Logger name="org.apache.http" level="warn"/>
+        <Logger name="org.eclipse.aether" level="warn"/>
+        <Logger name="javafx" level="info"/>
+        <Logger name="org.apache.tomcat.util.digester.Digester" level="warn"/>
+        <Logger name="org.apache.tomcat.util.IntrospectionUtils" level="warn"/>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration name="test" version="1.0.0" type="base">
+    <Modules>
+        <Module groupId="group1" artifactId="artifact1" version="1.0.0" classifier="${info['os.family']}"/>
+
+        <Choose>
+            <When test="${info['os.family'] == 'linux'}">
+                <Module groupId="group2" artifactId="artifact2" version="2.0.0" classifier="${info['os.family']}"/>
+                <Module groupId="group3" artifactId="artifact3" version="3.0.0" classifier="${info['os.family']}"/>
+                <If test="${true == true}">
+                    <Module groupId="group4" artifactId="artifact4" version="4.0.0" classifier="linux"/>
+                    <Choose>
+                        <When test="${info['os.family'] == 'windows'}">
+                            <Module groupId="group5" artifactId="artifact5" version="5.0.0" classifier="windows"/>
+                        </When>
+                        <When test="${info['os.family'] == 'mac'}">
+                            <Module groupId="group6" artifactId="artifact6" version="6.0.0" classifier="mac"/>
+                            <Module groupId="group7" artifactId="artifact7" version="7.0.0" classifier="mac"/>
+                        </When>
+                        <Otherwise>
+                            <Module groupId="group8" artifactId="artifact8" version="8.0.0" classifier="linux"/>
+                            <Module groupId="group9" artifactId="artifact9" version="9.0.0" classifier="linux"/>
+                        </Otherwise>
+                    </Choose>
+                </If>
+                <If test="${true == false}">
+                    <Module groupId="group10" artifactId="artifact10" version="10.0.0" classifier="other"/>
+                    <Choose>
+                        <When test="${info['os.family'] == 'windows'}">
+                            <Module groupId="group11" artifactId="artifact11" version="11.0.0" classifier="windows"/>
+                        </When>
+                        <When test="${info['os.family'] == 'mac'}">
+                            <Module groupId="group12" artifactId="artifact12" version="12.0.0" classifier="mac"/>
+                            <Module groupId="group13" artifactId="artifact13" version="13.0.0" classifier="mac"/>
+                        </When>
+                        <Otherwise>
+                            <If test="${true}">
+                                <Module groupId="group14" artifactId="artifact14" version="14.0.0" classifier="solaris"/>
+                            </If>
+                            <Module groupId="group15" artifactId="artifact15" version="15.0.0" classifier="solaris"/>
+                        </Otherwise>
+                    </Choose>
+                </If>
+            </When>
+
+            <When test="${info['os.family'] == 'windows'}">
+                <Module groupId="group16" artifactId="artifact16" version="16.0.0" classifier="windows"/>
+                <Module groupId="group17" artifactId="artifact17" version="17.0.0" classifier="windows"/>
+            </When>
+
+            <When test="${info['os.family'] == 'mac'}">
+                <Module groupId="group18" artifactId="artifact18" version="18.0.0" classifier="mac"/>
+                <Module groupId="group19" artifactId="artifact19" version="19.0.0" classifier="mac"/>
+                <If test="${true == true}">
+                    <Module groupId="group20" artifactId="artifact20" version="20.0.0" classifier="mac"/>
+                    <Choose>
+                        <When test="${info['os.family'] == 'windows'}">
+                            <Module groupId="group21" artifactId="artifact21" version="21.0.0" classifier="windows"/>
+                        </When>
+                        <When test="${info['os.family'] == 'mac'}">
+                            <Module groupId="group22" artifactId="artifact22" version="22.0.0" classifier="mac"/>
+                            <Module groupId="group23" artifactId="artifact23" version="23.0.0" classifier="mac"/>
+                        </When>
+                        <Otherwise>
+                            <If test="${false}">
+                                <Module groupId="group24" artifactId="artifact24" version="24.0.0" classifier="solaris"/>
+                            </If>
+                            <Module groupId="group25" artifactId="artifact25" version="25.0.0" classifier="solaris"/>
+                        </Otherwise>
+                    </Choose>
+                </If>
+            </When>
+
+            <Otherwise>
+                <If test="${true}">
+                    <Module groupId="group26" artifactId="artifact26" version="26.0.0" classifier="solaris"/>
+                </If>
+                <If test="${false}">
+                    <Module groupId="group27" artifactId="artifact27" version="27.0.0" classifier="solaris"/>
+                </If>
+                <Module groupId="group28" artifactId="artifact28" version="28.0.0" classifier="solaris"/>
+            </Otherwise>
+        </Choose>
+
+        <Module groupId="group29" artifactId="artifact29" version="29.0.0" classifier="${info['os.family']}"/>
+        <Module groupId="group30" artifactId="artifact30" version="30.0.0" classifier="${info['os.family']}"/>
+    </Modules>
+</Configuration>

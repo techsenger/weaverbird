@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration title="Alpha Repo Maven" name="alpha-repo-maven" version="${project.version}" type="base">
+    <Modules>
+        <!--### TOOLS ###-->
+        <Module groupId="commons-codec" artifactId="commons-codec" version="${commons.codec.version}"/>
+        <Module groupId="org.apache.httpcomponents" artifactId="httpclient" version="${apache.httpclient.version}"/>
+        <Module groupId="org.apache.httpcomponents" artifactId="httpcore" version="${apache.httpcore.version}"/>
+        <Module groupId="org.codehaus.plexus" artifactId="plexus-interpolation" version="${plexus.interpolation.version}" />
+        <Module groupId="org.codehaus.plexus" artifactId="plexus-utils" version="${plexus.utils.version}"/>
+        <Module groupId="org.apache.commons" artifactId="commons-lang3" version="${commons.lang.version}"/>
+        <Module groupId="commons-logging" artifactId="commons-logging" version="${commons.logging.version}"/>
+
+        <!--### MAVEN ###-->
+        <Module groupId="org.apache.maven" artifactId="maven-resolver-provider" version="${mvn.version}"/>
+        <Module groupId="com.techsenger.alpha.repo.maven" artifactId="alpha-repo-maven-external" version="${project.version}"/>
+
+        <!--### MAVEN-RESOLVER ###-->
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-api" version="${maven.resolver.version}"/>
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-connector-basic" version="${maven.resolver.version}"/>
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-impl" version="${maven.resolver.version}"/>
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-spi" version="${maven.resolver.version}"/>
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-transport-file" version="${maven.resolver.version}"/>
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-transport-http" version="${maven.resolver.version}"/>
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-util" version="${maven.resolver.version}"/>
+
+        <!--### REPOSIUM ###-->
+        <Module groupId="com.techsenger.reposium" artifactId="reposium-core" version="${reposium.version}"/>
+
+        <!--### ALPHA ###-->
+        <Module groupId="com.techsenger.alpha.repo.maven" artifactId="alpha-repo-maven-core" version="${project.version}"/>
+    </Modules>
+</Configuration>
+

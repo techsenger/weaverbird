@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Registry>
+    <InstallResult successful="true"/>
+    <AddedComponents>
+        <Component name="alpha-executor" version="${project.version}"/>
+        <Component name="alpha-repo-maven" version="${project.version}"/>
+        <Component name="alpha-console-gui" version="${project.version}"/>
+        <Component name="web-application" version="${project.version}"/>
+        <Component name="web-server" version="${project.version}"/>
+    </AddedComponents>
+    <ResolvedComponents>
+        <Component name="alpha-executor" version="${project.version}"/>
+        <Component name="alpha-repo-maven" version="${project.version}"/>
+    </ResolvedComponents>
+</Registry>

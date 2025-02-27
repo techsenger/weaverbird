@@ -1,0 +1,6 @@
+component:start alpha-repo-maven:${project.version};
+component:resolve alpha-console-gui:${project.version};
+component:resolve alpha-client-http:${project.version};
+component:resolve alpha-server-http:${project.version};
+component:resolve web-server:${project.version};
+component:resolve web-application:${project.version};
