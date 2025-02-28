@@ -204,24 +204,23 @@ public class MemoryLogTabViewModel extends AbstractLogTabViewModel {
         builder.append("] ");
         builder.append(logEvent.getLoggerName());
         builder.append(" - ");
-        builder.append(logEvent.getMessage().getFormattedMessage());
+        var message = logEvent.getMessage().getFormattedMessage();
+        if (message != null) {
+            //as richtextfx doesn't support \r\n it is necessary to replace it, to get correct text length
+            message = message.replace("\r\n", "\n");
+        }
+        builder.append(message);
 
         var thrown = logEvent.getThrown();
         if (thrown != null) {
-//                      StringBuilder sb = new StringBuilder();
-//                    StackTraceElement[] st = ex.getStackTrace();
-//                    sb.append(ex.getClass().getName() + ": " + ex.getMessage() + "\n");
-//                    for (int i = 0; i < st.length; i++) {
-//                      sb.append("\t at " + st[i].toString() + "\n");
-//                    }
-//                    sb.toString();
             StringWriter writer = new StringWriter();
             PrintWriter printWriter = new PrintWriter(writer);
             thrown.printStackTrace(printWriter);
             printWriter.flush();
             var stackTrace = writer.toString();
-            //removing lineSeparator on the end
+            //removing lineSeparator in the end
             stackTrace = stackTrace.substring(0, stackTrace.length() - System.lineSeparator().length());
+            stackTrace = stackTrace.replace("\r\n", "\n");
             builder.append("\n" + stackTrace);
         }
         text = new StyledText("base", builder.toString());
