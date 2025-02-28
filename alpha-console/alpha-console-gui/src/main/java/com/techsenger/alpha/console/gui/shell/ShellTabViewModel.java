@@ -497,7 +497,7 @@ public class ShellTabViewModel extends AbstractViewerTabViewModel {
             return;
         }
         var eol = "\n" + "\n";
-        var commandInfos = provideCommandInfos();
+        var commandInfos = provideCommandInfos(null);
         Map<String, List<StyledText>> descriptionsByCommands = commandInfos.getItems()
                 .stream()
                 .collect(Collectors.toMap(
@@ -537,7 +537,10 @@ public class ShellTabViewModel extends AbstractViewerTabViewModel {
         if (attributeWindow != null) {
             return;
         }
-        var commandInfos = provideCommandInfos();
+        var commandInfos = provideCommandInfos(command);
+        if (command.startsWith(CommandSpecialSymbols.LOCAL_COMMAND)) {
+            command = command.substring(1);
+        }
         CommandInfo info = null;
         for (var i : commandInfos.getItems()) {
             if (i.getName().equals(command)) {
@@ -600,10 +603,12 @@ public class ShellTabViewModel extends AbstractViewerTabViewModel {
         getComponentHelper().openAttributeWindow(this.attributeWindow);
     }
 
-    private CommandInfos provideCommandInfos() {
+    private CommandInfos provideCommandInfos(String unsubmittedCommands) {
         if (this.commandInfosManager.getSessionDescriptor() != null) {
-            var uncommittedCommands = getUnsubmittedCommands(textProperty().get());
-            if (uncommittedCommands != null && uncommittedCommands.startsWith(CommandSpecialSymbols.LOCAL_COMMAND)) {
+            if (unsubmittedCommands == null) {
+                unsubmittedCommands = getUnsubmittedCommands(textProperty().get());
+            }
+            if (unsubmittedCommands != null && unsubmittedCommands.startsWith(CommandSpecialSymbols.LOCAL_COMMAND)) {
                 return this.commandInfosManager.getLocalInfos();
             } else {
                 return this.commandInfosManager.getRemoteInfos();
