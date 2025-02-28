@@ -30,8 +30,6 @@ import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
-import org.jline.utils.AttributedStringBuilder;
-import org.jline.utils.AttributedStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -199,13 +197,11 @@ public class Console {
     }
 
     private String buildSessionPrompt(SessionDescriptor sessionDescriptor) {
-        var asb = new AttributedStringBuilder();
-        asb.append(sessionDescriptor.getLoginName());
-        asb.append("@");
-        asb.append(sessionDescriptor.getHost());
-        asb.style(new AttributedStyle().bold().foreground(0, 0, 0));
-        asb.append(ConsoleService.PROMPT);
-        return asb.toAnsi();
+        var sb = new StringBuilder();
+        sb.append(sessionDescriptor.getLoginName());
+        sb.append("@");
+        sb.append(sessionDescriptor.getHost());
+        sb.append(ConsoleService.PROMPT);
+        return sb.toString();
     }
-
 }
