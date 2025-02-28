@@ -107,6 +107,7 @@ abstract class  AbstractLogTabView<T extends AbstractLogTabViewModel> extends Ab
         textArea.setPadding(new Insets(0, 0, 0, 0));
         textArea.getStyleClass().add("log-text-area");
         getTopPane().getChildren().addAll(getToolBar(), this.getTextScrollPane());
+        getTextAreaMenu().getItems().addAll(getCopyItem());
 
         viewModel.getCssClassesByLevel().values().stream().forEach((v) -> this.styleCollectionsByClassName
                 .put(v, Collections.singleton(new TextAreaStyle(v))));

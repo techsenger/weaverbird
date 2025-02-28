@@ -41,10 +41,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -140,6 +144,10 @@ public class ShellTabView extends AbstractViewerTabView<ShellTabViewModel> {
 
     private final Button clearButton = new Button(null, new FontIconView(CoreIcons.CLEAR));
 
+    private final MenuItem cutItem = new MenuItem("Cut", new FontIconView(CoreIcons.CUT));
+
+    private final MenuItem pasteItem = new MenuItem("Paste", new FontIconView(CoreIcons.PASTE));
+
     public ShellTabView(TabShellView<?> tabShell, ShellTabViewModel viewModel) {
         super(tabShell, viewModel, new BlockingTextArea(viewModel));
         this.textArea = (BlockingTextArea) getTextArea();
@@ -190,12 +198,10 @@ public class ShellTabView extends AbstractViewerTabView<ShellTabViewModel> {
         css = LogPrinterView.class.getResource("log-levels.css").toExternalForm();
         getTopPane().getStylesheets().add(css);
         getTopPane().getChildren().addAll(toolBars, stackPane);
+        cutItem.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));
+        pasteItem.setAccelerator(new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN));
+        getTextAreaMenu().getItems().addAll(cutItem, getCopyItem(), pasteItem);
         NodeUtils.requestFocus(this.getTextArea());
-    }
-
-    @Override
-    protected void bind(ShellTabViewModel viewModel) {
-        super.bind(viewModel);
     }
 
     @Override
@@ -306,6 +312,12 @@ public class ShellTabView extends AbstractViewerTabView<ShellTabViewModel> {
                     this.textArea.moveTo(viewModel.getPromptPosition());
                 }
             }
+        });
+        cutItem.setOnAction((t) -> getTextArea().cut());
+        pasteItem.setOnAction((t) -> getTextArea().paste());
+        getTextArea().addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, event -> {
+            cutItem.setDisable(!viewModel.isCutItemValid());
+            pasteItem.setDisable(!viewModel.isPasteItemValid());
         });
     }
 

@@ -176,22 +176,14 @@ public class ShellTabViewModel extends AbstractViewerTabViewModel {
             new SimpleMenuItemHelper(EditMenuKeys.CUT) {
                 @Override
                 public Boolean getItemValid() {
-                    var selection = selectionProperty().get();
-                    if (selection != null && selection.getStart() >= promptPosition && selection.getEnd()
-                            >= promptPosition && selection.getStart() != selection.getEnd()) {
-                        return true;
-                    }
-                    return false;
+                    return isCutItemValid();
                 }
 
             },
             new SimpleMenuItemHelper(EditMenuKeys.PASTE) {
                 @Override
                 public Boolean getItemValid() {
-                    if (caretPositionProperty().get() >= promptPosition && clipboard.getString() != null) {
-                        return true;
-                    }
-                    return false;
+                    return isPasteItemValid();
                 }
             }
         );
@@ -358,6 +350,22 @@ public class ShellTabViewModel extends AbstractViewerTabViewModel {
             index = this.commandScrollingIndex + 1;
         }
         return index;
+    }
+
+    protected boolean isCutItemValid() {
+        var selection = selectionProperty().get();
+        if (selection != null && selection.getStart() >= promptPosition && selection.getEnd()
+                >= promptPosition && selection.getStart() != selection.getEnd()) {
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean isPasteItemValid() {
+        if (caretPositionProperty().get() >= promptPosition && clipboard.getString() != null) {
+            return true;
+        }
+        return false;
     }
 
     SessionsToolBarViewModel getSessions() {
