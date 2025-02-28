@@ -112,7 +112,7 @@ public final class ConsoleProvider implements ConsoleService {
             );
             this.tabShellView = new DefaultTabShellView(stylesheets, tabShellViewModel);
             tabShellView.initialize();
-            tabShellViewModel.setTitle("Alpha Console");
+            tabShellViewModel.setTitle("Techsenger Alpha Console");
             ValueUtils.callAndAddListener(settings.getAppearance().themeProperty(), (ov, oldV, newV) -> {
                 Font font = Font.font("Material Design Icons", 32);
                 var image = ImageUtils.createIcon(String.format("%c", 0xF002B), font,
