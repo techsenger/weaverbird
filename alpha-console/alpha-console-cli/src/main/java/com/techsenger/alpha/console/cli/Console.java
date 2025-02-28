@@ -195,10 +195,7 @@ public class Console {
     }
 
     private String buildPrompt() {
-        var asb = new AttributedStringBuilder();
-        asb.style(new AttributedStyle().bold().foreground(0, 0, 0));
-        asb.append(ConsoleService.PROMPT);
-        return asb.toAnsi();
+        return ConsoleService.PROMPT;
     }
 
     private String buildSessionPrompt(SessionDescriptor sessionDescriptor) {

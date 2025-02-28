@@ -32,7 +32,6 @@
 
 .shell-text-area .prompt {
     -fx-fill: -color-fg-default;
-    -fx-font-weight: bold;
 }
 
 .shell-text-area .command {
