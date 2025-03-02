@@ -278,8 +278,10 @@ public class ConfigXmlReader {
                     break;
                 case DIRECTIVE_TAG:
                     if (this.areBranchConditionNodesValid()) {
+                        var dType = processValue(attributes.getValue("type"));
+                        dType = camelCaseToScreamingSnakeCase(dType);
                         var directive = new DefaultModuleDirective(
-                                DirectiveType.valueOf(processValue(attributes.getValue("type").toUpperCase())),
+                                DirectiveType.valueOf(dType),
                                 processValue(attributes.getValue("package")),
                                 processValue(attributes.getValue("module")),
                                 processValue(attributes.getValue("layer")));
@@ -323,6 +325,23 @@ public class ConfigXmlReader {
         @Override
         public void error(SAXParseException e) throws SAXException {
             throw e;
+        }
+
+        /**
+         * Converts str from camelCase to SCREAMING_SNAKE_CASE.
+         *
+         * @param str
+         * @return
+         */
+        private String camelCaseToScreamingSnakeCase(String str) {
+            StringBuilder result = new StringBuilder();
+            for (char c : str.toCharArray()) {
+                if (Character.isUpperCase(c) && result.length() > 0) {
+                    result.append('_');
+                }
+                result.append(Character.toUpperCase(c));
+            }
+            return result.toString();
         }
 
         private void processConfigTag(Attributes attributes) throws SAXException {
