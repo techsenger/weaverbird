@@ -226,6 +226,6 @@ public class FrameworkProvider implements FrameworkService {
                         Constants.NAME_VERSION_SEPARATOR, descriptor.getConfig().getVersion(), ex);
             }
         }
-        logger.info("Alpha Framework was shutdown");
+        logger.info("Alpha Framework was shut down");
     }
 }
