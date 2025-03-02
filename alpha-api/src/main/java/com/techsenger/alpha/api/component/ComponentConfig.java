@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Configuration can exist without component so, component can be created on the base of the configuration.
  *
  * @author Pavel Castornii
  */
@@ -76,10 +75,11 @@ public interface ComponentConfig {
     Map<String, String> getMetadata();
 
     /**
-     * Returns repos from which module must be installed.
+     * Returns the repos from which modules will be resolved.
      *
-     * <p>Important. Component modules can be resolved only from repo that proves reliable and safe way
-     * to use component modules - the origin of the module is always known.
+     * <p>Repositories will be used in the order they are specified. This means that the module will first be searched
+     * for in the first repository, then in the second, and so on. It is important to note that, by default, the central
+     * repository is not used. Therefore, if the central repository needs to be used, it must be explicitly added.
      *
      * @return
      */
