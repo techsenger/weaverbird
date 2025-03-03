@@ -57,7 +57,6 @@ public class ToolsMenuRegistrar extends AbstractControlRegistrar implements TabO
         registerToolsMenu();
         registerDefaultGroup();
         registerMainGroup();
-        registerShellItem();
         registerDiagramsItem();
         registerMemoryLogItem();
         registerFileLogItem();
@@ -85,18 +84,6 @@ public class ToolsMenuRegistrar extends AbstractControlRegistrar implements TabO
             return new KeyedMenuGroup(ToolsMenuKeys.DEFAULT);
         };
         addRegistration(getRegistry().registerMenuGroup(TabShellKey.INSTANCE, ToolsMenuKeyManager.getTools(), f, 100));
-    }
-
-    private void registerShellItem() {
-        ControlFactory<KeyedMenuItem> f = (v) -> {
-            var item = new KeyedMenuItem(ToolsMenuKeyManager.getShell(), false, false, false, "S_hell",
-                    new FontIconView(ConsoleIcons.SHELL));
-            item.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-            item.setOnAction((e) -> openShellTab((TabShellView<?>) v));
-            return item;
-
-        };
-        addRegistration(getRegistry().registerMenuItem(TabShellKey.INSTANCE, ToolsMenuKeys.MAIN, f, 100));
     }
 
     private void registerDiagramsItem() {

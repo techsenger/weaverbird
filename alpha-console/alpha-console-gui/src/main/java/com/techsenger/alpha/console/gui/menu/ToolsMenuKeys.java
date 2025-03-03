@@ -32,8 +32,6 @@ public interface ToolsMenuKeys {
 
     MenuGroupKey MAIN = new MenuGroupKey();
 
-    MenuItemKey SHELL = new MenuItemKey();
-
     MenuItemKey DIAGRAMS = new MenuItemKey();
 
     MenuItemKey MEMORY_LOG = new MenuItemKey();

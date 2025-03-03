@@ -16,12 +16,13 @@
 
 package com.techsenger.alpha.console.gui.keys;
 
+import com.techsenger.alpha.console.gui.menu.FileMenuKeys;
 import com.techsenger.alpha.console.gui.menu.ToolsMenuKeys;
 import com.techsenger.tabshell.material.menu.MenuItemKey;
 import com.techsenger.tabshell.material.menu.MenuKey;
 
 /**
- * When alpha is used as plugin then menu keys are used from other application. However, alpha components
+ * When console is used as a plugin then menu keys are used from other application. However, alpha components
  * must know what keys it can use, so this manager is used.
  *
  * @author Pavel Castornii
@@ -30,7 +31,7 @@ public final class ToolsMenuKeyManager {
 
     private static MenuKey tools = ToolsMenuKeys.TOOLS;
 
-    private static MenuItemKey shell = ToolsMenuKeys.SHELL;
+    private static MenuItemKey shell = FileMenuKeys.SHELL;
 
     private static MenuItemKey diagrams = ToolsMenuKeys.DIAGRAMS;
 

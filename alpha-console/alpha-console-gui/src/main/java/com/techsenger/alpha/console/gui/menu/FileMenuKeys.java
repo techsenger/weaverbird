@@ -27,6 +27,8 @@ public interface FileMenuKeys extends com.techsenger.tabshell.kit.core.menu.File
 
     MenuGroupKey MAIN = new MenuGroupKey();
 
+    MenuItemKey SHELL = new MenuItemKey();
+
     MenuItemKey SETTINGS = new MenuItemKey();
 
 //    MenuKey NEW = new MenuKey();
