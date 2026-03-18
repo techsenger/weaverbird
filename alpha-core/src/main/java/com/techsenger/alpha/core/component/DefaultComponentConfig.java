@@ -108,7 +108,7 @@ class DefaultComponentConfig implements ComponentConfig {
         if (!Objects.equals(this.version, other.version)) {
             return false;
         }
-        return this.type == other.type;
+        return this.type.equals(other.type);
     }
 
     @Override
