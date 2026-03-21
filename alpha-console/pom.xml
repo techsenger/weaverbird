@@ -14,8 +14,7 @@
     <description>Console</description>
 
     <modules>
-        <module>alpha-console-commands</module>
         <module>alpha-console-cli</module>
-        <module>alpha-console-gui</module>
+<!--        <module>alpha-console-gui</module>-->
     </modules>
 </project>

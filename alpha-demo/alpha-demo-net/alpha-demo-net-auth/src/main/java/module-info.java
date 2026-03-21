@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-module com.techsenger.demo.net.auth {
+module com.techsenger.alpha.demo.net.auth {
     requires com.techsenger.alpha.api;
     requires com.techsenger.alpha.spi;
     requires com.techsenger.toolkit.core;

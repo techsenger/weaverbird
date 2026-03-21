@@ -18,15 +18,9 @@ package com.techsenger.alpha.console.gui.session;
 
 import atlantafx.base.theme.Styles;
 import com.techsenger.alpha.api.net.session.Protocol;
-import com.techsenger.alpha.api.net.session.SessionInfo;
+import com.techsenger.alpha.api.net.session.ClientSession;
 import com.techsenger.alpha.console.gui.style.ConsoleIcons;
 import com.techsenger.mvvm4fx.core.ComponentHelper;
-import com.techsenger.tabshell.core.dialog.DialogManager;
-import com.techsenger.tabshell.core.dialog.DialogView;
-import com.techsenger.tabshell.core.style.SizeConstants;
-import com.techsenger.tabshell.kit.core.style.StyleClasses;
-import com.techsenger.tabshell.kit.dialog.AbstractSimpleDialogView;
-import com.techsenger.tabshell.material.icon.FontIconView;
 import com.techsenger.toolkit.fx.Spacer;
 import com.techsenger.toolkit.fx.utils.NodeUtils;
 import java.time.LocalDateTime;
@@ -61,7 +55,7 @@ public class SessionDialogView<T extends SessionDialogViewModel>
 
     private final HBox buttonBox = new HBox(newButton, closeButton, new Spacer(), refreshButton);
 
-    private final TableView<SessionInfo> table = new TableView<>();
+    private final TableView<ClientSession> table = new TableView<>();
 
     private final DialogManager dialogManager;
 
@@ -91,19 +85,19 @@ public class SessionDialogView<T extends SessionDialogViewModel>
         table.setPlaceholder(new Label(""));
         VBox.setVgrow(table, Priority.ALWAYS);
 
-        TableColumn<SessionInfo, String> nameColumn = new TableColumn<>("Name");
+        TableColumn<ClientSession, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-        TableColumn<SessionInfo, String> hostColumn = new TableColumn<>("Host");
+        TableColumn<ClientSession, String> hostColumn = new TableColumn<>("Host");
         hostColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getHost()));
-        TableColumn<SessionInfo, String> loginNameColumn = new TableColumn<>("Login Name");
+        TableColumn<ClientSession, String> loginNameColumn = new TableColumn<>("Login Name");
         loginNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLoginName()));
-        TableColumn<SessionInfo, Integer> portColumn = new TableColumn<>("Port");
+        TableColumn<ClientSession, Integer> portColumn = new TableColumn<>("Port");
         portColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getPort()).asObject());
-        TableColumn<SessionInfo, Protocol> protocolColumn = new TableColumn<>("Protocol");
+        TableColumn<ClientSession, Protocol> protocolColumn = new TableColumn<>("Protocol");
         protocolColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getProtocol()));
-        TableColumn<SessionInfo, Boolean> secureColumn = new TableColumn<>("Secure");
+        TableColumn<ClientSession, Boolean> secureColumn = new TableColumn<>("Secure");
         secureColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().isSecure()));
-        TableColumn<SessionInfo, LocalDateTime> openedAtColumn = new TableColumn<>("Opened At");
+        TableColumn<ClientSession, LocalDateTime> openedAtColumn = new TableColumn<>("Opened At");
         openedAtColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getOpenedAt()));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         openedAtColumn.setCellFactory(column ->
@@ -148,7 +142,7 @@ public class SessionDialogView<T extends SessionDialogViewModel>
 
     @Override
     protected ComponentHelper<?> createComponentHelper() {
-        return new SessionDialogHelper(this);
+        return new SessionDialogHelper(this); //PEREDELATI,
     }
 
     void openDialog(DialogView<?> dialog) {

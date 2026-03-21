@@ -16,8 +16,7 @@
 
 package com.techsenger.alpha.console.cli;
 
-import com.techsenger.alpha.api.command.CommandInfo;
-import com.techsenger.alpha.spi.console.CommandInfosManager;
+import com.techsenger.alpha.executor.api.command.CommandInfo;
 import java.util.Map;
 import java.util.regex.Pattern;
 import org.jline.reader.Highlighter;
@@ -34,8 +33,10 @@ class ConsoleHighlighter extends AbstractCommandConsumer implements Highlighter 
 
     private final AttributedStyle commandStyle = new AttributedStyle().bold(); //.foreground(0, 0, 230);
 
-    ConsoleHighlighter(CommandInfosManager manager) {
-        super(manager);
+    private final Map<String, CommandInfo> commandsByName;
+
+    ConsoleHighlighter(Map<String, CommandInfo> commandsByName) {
+        this.commandsByName = commandsByName;
     }
 
     /**
@@ -66,14 +67,6 @@ class ConsoleHighlighter extends AbstractCommandConsumer implements Highlighter 
         boolean remote = false;
 
         AttributedStringBuilder asb = new AttributedStringBuilder();
-        Map<String, CommandInfo> commandsByName = null;
-        if (isRemote(command)) {
-            updateRemoteInfos();
-            commandsByName = getRemoteCommandsByName();
-        } else {
-            updateLocalInfos();
-            commandsByName = getLocalCommandsByName();
-        }
         var strippedName = stripExtraSymbols(command);
         if (commandsByName.containsKey(strippedName)) {
             asb.styled(commandStyle, command);

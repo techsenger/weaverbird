@@ -4,7 +4,6 @@ org.apache.logging.log4j:log4j-jul:${log4j.version}
 org.apache.logging.log4j:log4j-api:${log4j.version}
 org.apache.logging.log4j:log4j-jcl:${log4j.version}
 org.apache.logging.log4j:log4j-slf4j2-impl:${log4j.version}
-com.techsenger.alpha.repo.maven:alpha-repo-maven-resolver:${project.version}
 com.techsenger.alpha:alpha-api:${project.version}
 com.techsenger.alpha:alpha-spi:${project.version}
 com.techsenger.alpha:alpha-core:${project.version}
@@ -13,3 +12,4 @@ org.fusesource.jansi:jansi:${jansi.version}
 com.beust:jcommander:${jcommander.version}
 jakarta.el:jakarta.el-api:${el.version}
 org.glassfish.expressly:expressly:${el.version}
+${demo.main.dependency}:${project.version}

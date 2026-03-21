@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration title="Alpha Server HTTP" name="alpha-server" version="${project.version}" type="base">
+    <Repositories>
+        <Repository name="local" url="file://${settings.localRepository}"/>
+        <Repository name="central" url="${maven.central.url}"/>
+    </Repositories>
+
+    <Modules>
+        <!--### TOOLS ###-->
+        <Module groupId="com.google.code.gson" artifactId="gson" version="${gson.version}"/>
+
+        <!--### ALPHA ###-->
+        <Module groupId="com.techsenger.alpha.net" artifactId="alpha-net-shared" version="${project.version}"/>
+        <Module groupId="com.techsenger.alpha.net" artifactId="alpha-net-server" version="${project.version}" active="true"/>
+        <Module groupId="com.techsenger.toolkit" artifactId="toolkit-http" version="${toolkit.version}"/>
+
+        <!-- SECURITY CONTEXT FACTORY STUB! DON'T USE IN PRODUCTION! TESTS AND DEMO PURPOSES ONLY! -->
+        <Module groupId="com.techsenger.alpha.assembly" artifactId="alpha-assembly-security" version="${project.version}"/>
+    </Modules>
+</Configuration>
+

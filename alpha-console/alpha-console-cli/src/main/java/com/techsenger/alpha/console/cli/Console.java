@@ -16,15 +16,11 @@
 
 package com.techsenger.alpha.console.cli;
 
-import com.techsenger.alpha.api.Framework;
-import com.techsenger.alpha.api.executor.CommandExecutor;
-import com.techsenger.alpha.api.executor.ParameterProvider;
-import com.techsenger.alpha.api.net.session.SessionDescriptor;
-import com.techsenger.alpha.spi.command.ContextParameter;
-import com.techsenger.alpha.spi.console.ConsoleService;
-import com.techsenger.alpha.spi.console.DefaultCommandInfosManager;
-import java.io.IOException;
-import java.util.Objects;
+import com.techsenger.alpha.core.api.Framework;
+import com.techsenger.alpha.executor.api.CommandExecutor;
+import com.techsenger.alpha.executor.api.CommandExecutorFactory;
+import com.techsenger.alpha.executor.api.ParameterProvider;
+import com.techsenger.alpha.net.client.api.ClientSession;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
@@ -39,9 +35,9 @@ import org.slf4j.LoggerFactory;
  */
 public class Console {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConsoleProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(Console.class);
 
-    private final String prompt;
+    private static final String PROMPT = "> ";
 
     private volatile String sessionPrompt;
 
@@ -70,34 +66,35 @@ public class Console {
      */
     private final Thread loopThread;
 
-    private final ConsoleHighlighter highlighter;
-
     /**
      * Indicates if console is stopping.
      */
     private volatile boolean closing = false;
 
-    private final DefaultCommandInfosManager commandInfosManager;
-
     /**
      * Constructor.
      */
-    public Console() throws IOException {
-        this.prompt = buildPrompt();
+    public Console(Framework framework) throws Exception {
         //here we need class loader of the parent (alpha-control) layer
-        this.commandExecutor = Framework.getServiceManager().getCommandExecutor();
-        this.commandInfosManager = new DefaultCommandInfosManager(commandExecutor);
+        this.commandExecutor = CommandExecutorFactory.create(framework);
+        var commandContext = this.commandExecutor.getCommandContext();
         this.printer = new SystemMessagePrinter();
         this.terminal = TerminalBuilder.builder()
-                //.ffm(false) //disable foreign function and memory api, jline 3.28
+                // .system(true)
+                .ffm(true) // enable foreign function and memory api
                 .build();
-        this.highlighter = new ConsoleHighlighter(this.commandInfosManager);
         this.lineReader = LineReaderBuilder.builder()
                 .terminal(terminal)
-                .completer(new ConsoleCompleter(commandInfosManager))
-                .highlighter(highlighter)
-                //disable removing ! prefix. see line 3027 in org/jline/reader/impl/LineReaderImpl.java
+                .completer(new ConsoleCompleter(commandExecutor.getCommandsByName(), commandContext))
+                .highlighter(new ConsoleHighlighter(commandExecutor.getCommandsByName()))
+                // disable removing ! prefix. see line 3027 in org/jline/reader/impl/LineReaderImpl.java
                 .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
+                // .option(LineReader.Option.AUTO_FRESH_LINE, true)
+                .option(LineReader.Option.HISTORY_BEEP, false)
+                .option(LineReader.Option.AUTO_LIST, true) // Automatically list options
+                .option(LineReader.Option.LIST_PACKED, true) // Display completions in a compact form
+                .option(LineReader.Option.AUTO_MENU, true) // Show menu automatically
+                .option(LineReader.Option.MENU_COMPLETE, true)
                 .build();
 
         this.loopThread = new Thread(() -> {
@@ -111,24 +108,15 @@ public class Console {
                         return this.lineReader.readLine(description);
                     }
                 };
-                var commandContext = this.commandExecutor.createContext(provider);
                 while (true) {
-                    var session = (SessionDescriptor) commandContext
-                            .getProperty(ContextParameter.SESSION_DESCRIPTOR);
+                    var session = commandContext.getSession();
                     if (session != null) {
-                        if (!Objects.equals(this.commandInfosManager.getSessionDescriptor(), session)) {
-                            this.sessionPrompt = buildSessionPrompt(session);
-                            this.commandInfosManager.setRemoteInfos(Framework.getServiceManager()
-                                    .getClient(session.getProtocol()).getCommandInfos(session.getName()));
-                            this.commandInfosManager.setSessionDescriptor(session);
-                        }
+                        this.sessionPrompt = buildSessionPrompt(session);
                     } else {
                         this.sessionPrompt = null;
-                        this.commandInfosManager.setSessionDescriptor(null);
-                        this.commandInfosManager.setRemoteInfos(null);
                     }
                     if (sessionPrompt == null) {
-                        commandLine = lineReader.readLine(prompt);
+                        commandLine = lineReader.readLine(PROMPT);
                     } else {
                         commandLine = lineReader.readLine(sessionPrompt);
                     }
@@ -136,8 +124,8 @@ public class Console {
                     if (commandLine != null) {
                         commandLine = commandLine.trim();
                         try {
-                            var results = this.commandExecutor.executeCommands(commandLine, commandContext, null, null,
-                                    printer.getWidth());
+                            var results = this.commandExecutor.executeCommands(commandLine, null,
+                                      null, printer.getWidth());
                             results.forEach(r -> printer.print(r.getMessages()));
                         } catch (Exception ex) {
                             logger.error("Error executing commands from CLI console", ex);
@@ -155,7 +143,7 @@ public class Console {
                 }
                 close();
             } catch (UserInterruptException ex) {
-                //this exception is thrown when this thread is interrupted by another thread
+                // this exception is thrown when this thread is interrupted by another thread
             } catch (Exception ex) {
                 logger.error("There was an error ", ex);
             }
@@ -176,7 +164,6 @@ public class Console {
         } catch (Exception ex) {
             logger.error("Error closing terminal", ex);
         }
-        this.commandInfosManager.deinitialize();
         logger.debug("Console was closed");
     }
 
@@ -192,16 +179,12 @@ public class Console {
         this.closing = closing;
     }
 
-    private String buildPrompt() {
-        return ConsoleService.PROMPT;
-    }
-
-    private String buildSessionPrompt(SessionDescriptor sessionDescriptor) {
+    private String buildSessionPrompt(ClientSession sessionInfo) {
         var sb = new StringBuilder();
-        sb.append(sessionDescriptor.getLoginName());
+        sb.append(sessionInfo.getLoginName());
         sb.append("@");
-        sb.append(sessionDescriptor.getHost());
-        sb.append(ConsoleService.PROMPT);
+        sb.append(sessionInfo.getHost());
+        sb.append(PROMPT);
         return sb.toString();
     }
 }

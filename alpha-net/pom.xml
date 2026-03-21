@@ -11,7 +11,7 @@
     <artifactId>alpha-net</artifactId>
     <packaging>pom</packaging>
     <name>Alpha - Net</name>
-    <description>Net</description>
+    <description>Network</description>
 
     <modules>
         <module>alpha-net-shared</module>

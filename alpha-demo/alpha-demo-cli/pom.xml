@@ -16,13 +16,115 @@
     <properties>
         <install.plugin.phase>package</install.plugin.phase>
         <dependency.plugin.skip>false</dependency.plugin.skip>
+        <demo.main.module>com.techsenger.alpha.demo.cli</demo.main.module>
+        <demo.main.dependency>com.techsenger.alpha.demo:alpha-demo-cli</demo.main.dependency>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.21.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-jul</artifactId>
+            <version>2.21.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.21.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-jcl</artifactId>
+            <version>2.21.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>2.21.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.alpha</groupId>
+            <artifactId>alpha-core</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.toolkit</groupId>
+            <artifactId>toolkit-core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fusesource.jansi</groupId>
+            <artifactId>jansi</artifactId>
+            <version>2.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>jcommander</artifactId>
+            <version>1.78</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+            <version>${el.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.expressly</groupId>
+            <artifactId>expressly</artifactId>
+            <version>${el.version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
+                <groupId>com.techsenger.alpha.assembly</groupId>
+                <artifactId>alpha-assembly-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>assemble-rt</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>assemble-app</goal>
+                        </goals>
+                        <configuration>
+                            <path>${project.build.directory}/framework</path>
+                            <mainClass>com.techsenger.alpha.demo.cli/com.techsenger.alpha.demo.cli.Demo</mainClass>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.techsenger.alpha.demo</groupId>
+                                    <artifactId>alpha-demo-cli</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:7700</argument>
+                        <argument>-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager</argument>
+                        <argument>-Dorg.jboss.logging.provider=log4j</argument>
+                        <argument>--module-path</argument>
+                        <modulepath/> <!-- placeholder that automatically resolves and injects the module path -->
+                        <argument>--module</argument>
+                        <argument>com.techsenger.alpha.demo.cli/com.techsenger.alpha.demo.cli.Demo</argument>
+                    </arguments>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

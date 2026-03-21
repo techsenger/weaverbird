@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration title="IT Activator" name="alpha-it-activator" version="${project.version}" type="base">
+    <Repositories>
+        <Repository name="local" url="file://${settings.localRepository}"/>
+    </Repositories>
+
+    <Modules>
+        <Module groupId="com.techsenger.alpha.it" artifactId="alpha-it-activator" version="${project.version}" active="true"/>
+    </Modules>
+</Configuration>

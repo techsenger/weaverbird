@@ -44,7 +44,6 @@
         <Module groupId="org.ow2.asm" artifactId="asm-tree" version="9.6"/>
         <Module groupId="org.ow2.asm" artifactId="asm-analysis" version="9.6"/>
         <Module groupId="org.eclipse.jdt" artifactId="ecj" version="3.33.0"/>
-        <!-- <Module groupId="commons-logging" artifactId="commons-logging" version="1.2"/> spring.jcl is used -->
         <!-- from jetty-ee10/pom.xml -->
         <Module groupId="jakarta.servlet" artifactId="jakarta.servlet-api" version="6.0.0"/>
         <Module groupId="jakarta.websocket" artifactId="jakarta.websocket-api" version="2.1.1"/>

@@ -7,14 +7,36 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.techsenger.alpha.net.server</groupId>
+    <groupId>com.techsenger.alpha.net</groupId>
     <artifactId>alpha-net-server</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <name>Alpha - Net Server</name>
-    <description>Server modules for bulding a client-server architecture</description>
+    <description>Network server</description>
 
-    <modules>
-        <module>alpha-net-server-commands</module>
-        <module>alpha-net-server-http</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.techsenger.toolkit</groupId>
+            <artifactId>toolkit-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.toolkit</groupId>
+            <artifactId>toolkit-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.alpha</groupId>
+            <artifactId>alpha-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.alpha.net</groupId>
+            <artifactId>alpha-net-shared</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+    </dependencies>
 </project>

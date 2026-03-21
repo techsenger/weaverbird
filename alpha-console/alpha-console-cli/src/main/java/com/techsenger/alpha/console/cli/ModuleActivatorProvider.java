@@ -16,8 +16,8 @@
 
 package com.techsenger.alpha.console.cli;
 
-import com.techsenger.alpha.spi.module.ModuleActivator;
-import com.techsenger.alpha.spi.module.ModuleContext;
+import com.techsenger.alpha.core.spi.module.ModuleActivator;
+import com.techsenger.alpha.core.spi.module.ModuleContext;
 
 /**
  *
@@ -25,17 +25,22 @@ import com.techsenger.alpha.spi.module.ModuleContext;
  */
 public class ModuleActivatorProvider implements ModuleActivator {
 
+    private Console console;
+
     @Override
     public void activate(ModuleContext context) throws Exception {
-
+        this.console = new Console(context.getFramework());
+        this.console.open();
     }
 
     @Override
     public void deactivate(ModuleContext context) throws Exception {
-        //even is console hasn't been created it is very easy to create it as almost all fields initialized in open()
-        var console = (ConsoleProvider) ConsoleProvider.provider();
-        if (console.isOpen()) {
-            console.close();
+        if (Thread.currentThread() == this.console.getLoopThread()) {
+            this.console.setClosing(true);
+        } else {
+            this.console.getLoopThread().interrupt();
+            this.console.close();
         }
+        this.console = null;
     }
 }

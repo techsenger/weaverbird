@@ -39,9 +39,9 @@
             <outputDirectory>config/alpha-executor/${project.version}/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/../assembly/config/alpha-repo-maven</directory>
+            <directory>${project.basedir}/../assembly/config/alpha-repo</directory>
             <filtered>true</filtered>
-            <outputDirectory>config/alpha-repo-maven/${project.version}/</outputDirectory>
+            <outputDirectory>config/alpha-repo/${project.version}/</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>${project.basedir}/../assembly/config/web-application</directory>

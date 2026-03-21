@@ -15,14 +15,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.techsenger.alpha</groupId>
-            <artifactId>alpha-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.techsenger.alpha</groupId>
-            <artifactId>alpha-spi</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.techsenger.toolkit</groupId>
             <artifactId>toolkit-core</artifactId>
         </dependency>

@@ -16,7 +16,7 @@
 
 package com.techsenger.alpha.console.cli;
 
-import com.techsenger.alpha.api.message.AbstractMessagePrinter;
+import com.techsenger.alpha.core.api.message.AbstractMessagePrinter;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 

@@ -15,8 +15,6 @@
  */
 
 open module com.techsenger.alpha.core {
-    requires com.techsenger.alpha.api;
-    requires com.techsenger.alpha.spi;
     requires com.techsenger.toolkit.core;
     requires java.management;
     requires org.slf4j;

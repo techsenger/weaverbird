@@ -17,7 +17,7 @@
 package com.techsenger.alpha.console.gui.session;
 
 import com.techsenger.alpha.api.Framework;
-import com.techsenger.alpha.api.net.session.SessionInfo;
+import com.techsenger.alpha.api.net.session.ClientSession;
 import com.techsenger.alpha.console.gui.keys.ConsoleComponentKeys;
 import com.techsenger.alpha.console.gui.settings.ConsoleSettings;
 import com.techsenger.alpha.console.gui.style.ConsoleIcons;
@@ -42,9 +42,9 @@ import javafx.collections.ObservableList;
  */
 public class SessionDialogViewModel extends AbstractSimpleDialogViewModel {
 
-    private final ObservableList<SessionInfo> sessions = FXCollections.observableArrayList();
+    private final ObservableList<ClientSession> sessions = FXCollections.observableArrayList();
 
-    private final ObjectProperty<SessionInfo> session = new SimpleObjectProperty<>();
+    private final ObjectProperty<ClientSession> session = new SimpleObjectProperty<>();
 
     private final ObservableSource<Boolean> sortRequired = new SimpleObservableSource<>();
 
@@ -72,11 +72,11 @@ public class SessionDialogViewModel extends AbstractSimpleDialogViewModel {
         return (SessionDialogHelper) super.getComponentHelper();
     }
 
-    ObservableList<SessionInfo> getSessions() {
+    ObservableList<ClientSession> getSessions() {
         return sessions;
     }
 
-    ObjectProperty<SessionInfo> sessionProperty() {
+    ObjectProperty<ClientSession> sessionProperty() {
         return session;
     }
 
@@ -122,7 +122,7 @@ public class SessionDialogViewModel extends AbstractSimpleDialogViewModel {
 
     void refreshSessions() {
         sessions.clear();
-        sessions.addAll(Framework.getServiceManager().getSessionInfos());
+        sessions.addAll(Framework.getServiceManager().getClientSessions());
         sortRequired.next(true);
     }
 }

@@ -16,10 +16,11 @@
 
 package com.techsenger.alpha.console.cli;
 
-import com.techsenger.alpha.api.command.CommandInfo;
-import com.techsenger.alpha.api.executor.CommandSpecialSymbols;
-import com.techsenger.alpha.spi.console.CommandInfosManager;
+import com.techsenger.alpha.executor.api.CommandContext;
+import com.techsenger.alpha.executor.api.CommandSyntax;
+import com.techsenger.alpha.executor.api.command.CommandInfo;
 import java.util.List;
+import java.util.Map;
 import org.jline.reader.Candidate;
 import org.jline.reader.Completer;
 import org.jline.reader.LineReader;
@@ -31,8 +32,13 @@ import org.jline.reader.ParsedLine;
  */
 class ConsoleCompleter extends AbstractCommandConsumer implements Completer {
 
-    ConsoleCompleter(CommandInfosManager manager) {
-        super(manager);
+    private final Map<String, CommandInfo> commandsByName;
+
+    private final CommandContext commandContext;
+
+    ConsoleCompleter(Map<String, CommandInfo> commandsByName, CommandContext commandContext) {
+        this.commandsByName = commandsByName;
+        this.commandContext = commandContext;
     }
 
     /**
@@ -46,29 +52,31 @@ class ConsoleCompleter extends AbstractCommandConsumer implements Completer {
     public void complete(LineReader reader, ParsedLine line, List<Candidate> candidates) {
         if (line.wordIndex() == 0) {
             var trimmedLine = line.line().trim();
-            if (isRemote(trimmedLine)) {
-                updateRemoteInfos();
-                getRemoteCommandsByName().keySet().forEach(k -> candidates.add(new Candidate(k)));
-            } else {
-                updateLocalInfos();
-                var pref = "";
-                if (trimmedLine.startsWith(CommandSpecialSymbols.LOCAL_COMMAND)) {
-                    pref = CommandSpecialSymbols.LOCAL_COMMAND;
-                }
-                String finalPref = pref;
-                getLocalCommandsByName().keySet().forEach(k -> candidates.add(new Candidate(finalPref + k)));
+            var pref = "";
+            if (trimmedLine.startsWith(CommandSyntax.LOCAL_COMMAND)) {
+                pref = CommandSyntax.LOCAL_COMMAND;
             }
+            String finalPref = pref;
+            commandsByName.values().forEach(c -> {
+                boolean addCommand = false;
+                if (commandContext.getSession() != null && finalPref.length() == 0) {
+                    if (c.isRemote()) {
+                        addCommand = true;
+                    }
+                } else {
+                    if (c.isLocal()) {
+                        addCommand = true;
+                    }
+                }
+                if (addCommand) {
+                    candidates.add(new Candidate(finalPref + c.getName()));
+                }
+            });
         } else {
             var commandName = line.words().get(0);
             CommandInfo command = null;
-            if (isRemote(commandName)) {
-                updateRemoteInfos();
-                command = getRemoteCommandsByName().get(commandName);
-            } else {
-                updateLocalInfos();
-                var strippedName = stripExtraSymbols(commandName);
-                command = getLocalCommandsByName().get(strippedName);
-            }
+            var strippedName = stripExtraSymbols(commandName);
+            command = commandsByName.get(strippedName);
             if (command != null) {
                 command.getParameters().forEach(c -> {
                     if (!c.isMain()) {
@@ -77,6 +85,5 @@ class ConsoleCompleter extends AbstractCommandConsumer implements Completer {
                 });
             }
         }
-
     }
 }

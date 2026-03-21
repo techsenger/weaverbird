@@ -17,15 +17,14 @@
 module com.techsenger.alpha.console.cli {
     requires com.techsenger.toolkit.core;
     requires org.slf4j;
-    requires com.techsenger.alpha.api;
-    requires com.techsenger.alpha.spi;
+    requires com.techsenger.alpha.core;
+    requires com.techsenger.alpha.executor;
+    requires com.techsenger.alpha.net.client;
     requires org.jline;
 
-    uses com.techsenger.alpha.api.executor.CommandExecutor;
+    uses com.techsenger.alpha.executor.api.CommandExecutor;
 
-    provides com.techsenger.alpha.spi.console.ConsoleService
-            with com.techsenger.alpha.console.cli.ConsoleProvider;
-    provides com.techsenger.alpha.spi.module.ModuleActivator with
+    provides com.techsenger.alpha.core.spi.module .ModuleActivator with
             com.techsenger.alpha.console.cli.ModuleActivatorProvider;
 }
 

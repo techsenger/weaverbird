@@ -19,20 +19,54 @@
             <artifactId>toolkit-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.techsenger.alpha</groupId>
-            <artifactId>alpha-api</artifactId>
+            <groupId>com.techsenger.toolkit</groupId>
+            <artifactId>toolkit-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.toolkit</groupId>
+            <artifactId>toolkit-ascii</artifactId>
         </dependency>
         <dependency>
             <groupId>com.techsenger.alpha</groupId>
-            <artifactId>alpha-spi</artifactId>
+            <artifactId>alpha-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.alpha.net</groupId>
+            <artifactId>alpha-net-shared</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.alpha.net</groupId>
+            <artifactId>alpha-net-client</artifactId>
         </dependency>
         <dependency>
             <groupId>com.beust</groupId>
             <artifactId>jcommander</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.vandermeer</groupId>
+            <artifactId>asciitable</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.vandermeer</groupId>
+            <artifactId>skb-interfaces</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.antlr</groupId>
+                    <artifactId>antlr4</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

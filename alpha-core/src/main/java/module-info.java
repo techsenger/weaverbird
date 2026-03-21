@@ -15,8 +15,6 @@
  */
 
 module com.techsenger.alpha.core {
-    requires com.techsenger.alpha.api;
-    requires com.techsenger.alpha.spi;
     requires com.techsenger.toolkit.core;
     requires java.management;
     requires org.slf4j;
@@ -26,10 +24,21 @@ module com.techsenger.alpha.core {
     requires jakarta.el;
     requires org.fusesource.jansi;
 
-    opens com.techsenger.alpha.core.project to com.techsenger.toolkit.core;
+    exports com.techsenger.alpha.core.api;
+    exports com.techsenger.alpha.core.api.component;
+    exports com.techsenger.alpha.core.api.logging;
+    exports com.techsenger.alpha.core.api.message;
+    exports com.techsenger.alpha.core.api.model;
+    exports com.techsenger.alpha.core.api.module;
+    exports com.techsenger.alpha.core.api.registry;
+    exports com.techsenger.alpha.core.api.state;
+    exports com.techsenger.alpha.core.spi.module;
+    exports com.techsenger.alpha.core.spi.repo;
 
-    uses com.techsenger.alpha.spi.launcher.LauncherProgressHandler;
-
-    provides com.techsenger.alpha.api.spi.FrameworkService with com.techsenger.alpha.core.FrameworkProvider;
+    opens com.techsenger.alpha.core.api.message;
+    opens com.techsenger.alpha.core.api.model;
+    opens com.techsenger.alpha.core.api.module;
+    opens com.techsenger.alpha.core.api.state;
+    opens com.techsenger.alpha.core.impl.project to com.techsenger.toolkit.core;
 }
 

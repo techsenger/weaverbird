@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.techsenger.maven.root</groupId>
         <artifactId>maven-root</artifactId>
-        <version>1.6.0-SNAPSHOT</version>
+        <version>1.7.0-SNAPSHOT</version>
     </parent>
 
     <groupId>com.techsenger.alpha</groupId>
@@ -42,15 +42,18 @@
     </developers>
 
     <properties>
-        <publishing.plugin.exclusions>alpha-repo-maven-external,alpha-demo,alpha-demo-cli,alpha-demo-gui,alpha-demo-net,alpha-demo-net-auth,alpha-demo-net-cli,alpha-demo-net-gui,alpha-demo-tools,alpha-demo-web,alpha-demo-web-app,alpha-demo-web-manager</publishing.plugin.exclusions>
+        <maven.compiler.release>25</maven.compiler.release>
+        <failsafe.plugin.version>3.5.5</failsafe.plugin.version>
+        <publishing.plugin.exclusions>alpha-it,alpha-it-core,alpha-it-net,alpha-it-activator,alpha-demo,alpha-demo-cli,alpha-demo-gui,alpha-demo-net,alpha-demo-net-auth,alpha-demo-net-cli,alpha-demo-net-gui,alpha-demo-tools,alpha-demo-web,alpha-demo-web-app,alpha-demo-web-manager</publishing.plugin.exclusions>
+        <maven.central.url>https://repo1.maven.org/maven2/</maven.central.url>
 
         <!--### dependencies that are in BOM ###-->
         <mvn.version>3.8.1</mvn.version>
         <maven.resolver.version>1.6.2</maven.resolver.version>
         <log4j.version>2.21.1</log4j.version>
         <slf4j.version>2.0.9</slf4j.version>
-        <toolkit.version>1.0.0</toolkit.version>
-        <reposium.version>1.0.0</reposium.version>
+        <toolkit.version>1.2.0-SNAPSHOT</toolkit.version>
+        <reposium.version>1.1.0-SNAPSHOT</reposium.version>
         <jansi.version>2.4.1</jansi.version>
         <jcommander.version>1.78</jcommander.version>
         <el.version>5.0.0</el.version>
@@ -58,7 +61,7 @@
         <skb-interfaces.version>0.0.1</skb-interfaces.version>
         <ascii.themes.version>0.0.1</ascii.themes.version>
         <st4.version>4.0.8</st4.version>
-        <jline.version>3.21.0</jline.version>
+        <jline.version>3.30.9</jline.version>
         <gson.version>2.12.1</gson.version>
         <jna.version>5.17.0</jna.version>
 
@@ -100,7 +103,7 @@
             <dependency>
                 <groupId>com.techsenger.osp.bom</groupId>
                 <artifactId>osp-bom</artifactId>
-                <version>1.7.0-SNAPSHOT</version>
+                <version>1.8.0-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -108,21 +111,211 @@
             <!--### APLHA ###-->
             <dependency>
                 <groupId>com.techsenger.alpha</groupId>
-                <artifactId>alpha-api</artifactId>
+                <artifactId>alpha-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.alpha.net</groupId>
+                <artifactId>alpha-net-shared</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.alpha.net</groupId>
+                <artifactId>alpha-net-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.alpha.net</groupId>
+                <artifactId>alpha-net-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.techsenger.alpha</groupId>
-                <artifactId>alpha-spi</artifactId>
+                <artifactId>alpha-executor</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.techsenger.alpha.net.shared</groupId>
-                <artifactId>alpha-net-shared-http</artifactId>
+                <groupId>com.techsenger.alpha.assembly</groupId>
+                <artifactId>alpha-assembly-security</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.alpha.it</groupId>
+                <artifactId>alpha-it-shared</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.alpha.it</groupId>
+                <artifactId>alpha-it-activator</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--### FRAMEWORK DEPENDENCIES ###-->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-jul</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-jcl</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j2-impl</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.toolkit</groupId>
+                <artifactId>toolkit-core</artifactId>
+                <version>${toolkit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.toolkit</groupId>
+                <artifactId>toolkit-http</artifactId>
+                <version>${toolkit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.fusesource.jansi</groupId>
+                <artifactId>jansi</artifactId>
+                <version>${jansi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.beust</groupId>
+                <artifactId>jcommander</artifactId>
+                <version>${jcommander.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.el</groupId>
+                <artifactId>jakarta.el-api</artifactId>
+                <version>${el.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.expressly</groupId>
+                <artifactId>expressly</artifactId>
+                <version>${el.version}</version>
+            </dependency>
+
+            <!--### MAVEN REPO ###-->
+            <dependency>
+                <groupId>com.techsenger.alpha.repo</groupId>
+                <artifactId>alpha-repo-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.alpha.repo</groupId>
+                <artifactId>alpha-repo-external</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.reposium</groupId>
+                <artifactId>reposium-core</artifactId>
+                <version>${reposium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons.codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${apache.httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>${apache.httpcore.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-interpolation</artifactId>
+                <version>${plexus.interpolation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-utils</artifactId>
+                <version>${plexus.utils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons.lang.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>${commons.logging.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-resolver-provider</artifactId>
+                <version>${mvn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-api</artifactId>
+                <version>${maven.resolver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-connector-basic</artifactId>
+                <version>${maven.resolver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-impl</artifactId>
+                <version>${maven.resolver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-spi</artifactId>
+                <version>${maven.resolver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-transport-file</artifactId>
+                <version>${maven.resolver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-transport-http</artifactId>
+                <version>${maven.resolver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-util</artifactId>
+                <version>${maven.resolver.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <modules>
+        <module>alpha-core</module>
+        <module>alpha-repo</module>
+        <module>alpha-net</module>
+        <module>alpha-executor</module>
+        <module>alpha-console</module>
+        <module>alpha-assembly</module>
+        <module>alpha-it</module>
+        <module>alpha-demo</module>
+    </modules>
 
     <build>
         <resources>
@@ -133,17 +326,5 @@
             </resource>
         </resources>
     </build>
-
-    <modules>
-        <module>alpha-api</module>
-        <module>alpha-spi</module>
-        <module>alpha-core</module>
-        <module>alpha-executor</module>
-        <module>alpha-repo</module>
-        <module>alpha-commands</module>
-        <module>alpha-console</module>
-        <module>alpha-net</module>
-        <module>alpha-demo</module>
-    </modules>
 </project>
 

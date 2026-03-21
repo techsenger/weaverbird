@@ -16,18 +16,23 @@
 
 module com.techsenger.alpha.executor {
     requires com.techsenger.toolkit.core;
+    requires com.techsenger.toolkit.ascii;
+    requires com.techsenger.toolkit.http;
     requires org.slf4j;
-    requires com.techsenger.alpha.api;
-    requires com.techsenger.alpha.spi;
+    requires com.techsenger.alpha.core;
+    requires com.techsenger.alpha.net.shared;
+    requires com.techsenger.alpha.net.client;
     requires jcommander;
+    requires asciitable;
+    requires skb.interfaces;
 
-    uses com.techsenger.alpha.spi.command.CommandFactory;
-    uses com.techsenger.alpha.spi.net.security.SecurityContextService;
+    exports com.techsenger.alpha.executor.api;
+    exports com.techsenger.alpha.executor.api.command;
+    exports com.techsenger.alpha.executor.spi;
 
-    provides com.techsenger.alpha.api.executor.CommandExecutor
-            with com.techsenger.alpha.executor.CommandExecutorProvider;
+    opens com.techsenger.alpha.executor.spi to jcommander;
+    opens com.techsenger.alpha.executor.impl.commands to jcommander;
 
-    provides com.techsenger.alpha.spi.module.ModuleActivator
-            with com.techsenger.alpha.executor.ModuleActivatorProvider;
+    uses com.techsenger.alpha.executor.spi.CommandService;
 }
 

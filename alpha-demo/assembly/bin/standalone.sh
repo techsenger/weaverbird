@@ -60,4 +60,4 @@ java -Xrunjdwp:transport=dt_socket,address=7700,server=y,suspend=n \
     --add-opens java.base/java.time=com.techsenger.alpha.core \
     --add-opens java.base/java.lang=com.techsenger.alpha.core \
     --module-path "$MODULE_PATH" \
-    -m com.techsenger.alpha.core/com.techsenger.alpha.core.launcher.Launcher
+    -m ${demo.main.module}/${demo.main.module}.Demo

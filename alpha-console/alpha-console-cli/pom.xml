@@ -20,11 +20,15 @@
         </dependency>
         <dependency>
             <groupId>com.techsenger.alpha</groupId>
-            <artifactId>alpha-api</artifactId>
+            <artifactId>alpha-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.techsenger.alpha</groupId>
-            <artifactId>alpha-spi</artifactId>
+            <artifactId>alpha-executor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.alpha.net</groupId>
+            <artifactId>alpha-net-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jline</groupId>

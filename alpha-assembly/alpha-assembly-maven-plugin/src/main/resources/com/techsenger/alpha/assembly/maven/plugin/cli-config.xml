@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration title="Alpha Console CLI" name="alpha-console-cli" version="${project.version}" type="base">
+    <Repositories>
+        <Repository name="local" url="file://${settings.localRepository}"/>
+        <Repository name="central" url="${maven.central.url}"/>
+    </Repositories>
+
+    <Modules>
+        <!--### TOOLS ###-->
+        <Module groupId="org.jline" artifactId="jline" version="${jline.version}" nativeAccessEnabled="true"/>
+        <Module groupId="de.vandermeer" artifactId="asciitable" version="${asciitable.version}"/>
+        <Module groupId="de.vandermeer" artifactId="skb-interfaces" version="${skb-interfaces.version}"/>
+        <Module groupId="de.vandermeer" artifactId="ascii-utf-themes" version="${ascii.themes.version}"/>
+        <Module groupId="org.antlr" artifactId="ST4" version="${st4.version}"/>
+        <Module groupId="org.apache.commons" artifactId="commons-lang3" version="${commons.lang.version}"/>
+        <Module groupId="com.techsenger.toolkit" artifactId="toolkit-ascii" version="${toolkit.version}"/>
+        <Module groupId="com.techsenger.toolkit" artifactId="toolkit-http" version="${toolkit.version}"/>
+        <Module groupId="com.google.code.gson" artifactId="gson" version="${gson.version}"/>
+
+        <!--### ALPHA ###-->
+        <Module groupId="com.techsenger.alpha.net" artifactId="alpha-net-shared" version="${project.version}"/>
+        <Module groupId="com.techsenger.alpha.net" artifactId="alpha-net-client" version="${project.version}"/>
+        <Module groupId="com.techsenger.alpha" artifactId="alpha-executor" version="${project.version}"/>
+        <Module groupId="com.techsenger.alpha.console" artifactId="alpha-console-cli" version="${project.version}" active="true"/>
+    </Modules>
+</Configuration>

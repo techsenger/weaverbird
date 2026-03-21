@@ -16,49 +16,20 @@
 
 package com.techsenger.alpha.console.cli;
 
-import com.techsenger.alpha.api.command.CommandInfo;
-import com.techsenger.alpha.spi.console.AbstractCommandInfosConsumer;
-import com.techsenger.alpha.spi.console.CommandInfosManager;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.techsenger.alpha.executor.api.CommandSyntax;
 
 /**
  *
  * @author Pavel Castornii
  */
-abstract class AbstractCommandConsumer extends AbstractCommandInfosConsumer {
+public abstract class AbstractCommandConsumer {
 
-    private Map<String, CommandInfo> localCommandsByName;
-
-    private Map<String, CommandInfo> remoteCommandsByName;
-
-    AbstractCommandConsumer(CommandInfosManager manager) {
-        super(manager);
-    }
-
-    protected Map<String, CommandInfo> getLocalCommandsByName() {
-        return localCommandsByName;
-    }
-
-    protected Map<String, CommandInfo> getRemoteCommandsByName() {
-        return remoteCommandsByName;
-    }
-
-    @Override
-    protected void updateLocalInfos() {
-        if (shouldUpdateLocalInfos()) {
-            super.updateLocalInfos();
-            localCommandsByName = getManager().getLocalInfos().getItems().stream()
-                    .collect(Collectors.toMap(i -> i.getName(), i -> i));
+    protected String stripExtraSymbols(String commandName) {
+        if (commandName.startsWith(CommandSyntax.LOCAL_COMMAND)) {
+            return commandName.substring(1);
+        } else {
+            return commandName;
         }
     }
 
-    @Override
-    protected void updateRemoteInfos() {
-        if (shouldUpdateRemoteInfos()) {
-            super.updateRemoteInfos();
-            remoteCommandsByName = getManager().getRemoteInfos().getItems().stream()
-                    .collect(Collectors.toMap(i -> i.getName(), i -> i));
-        }
-    }
 }

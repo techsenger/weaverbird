@@ -87,7 +87,7 @@ public class SessionsToolBarViewModel extends AbstractNodeViewModel {
     void refreshSessions() {
         this.refreshing = true;
         sessions.clear();
-        var list = Framework.getServiceManager().getSessionInfos().stream().map(s -> new SessionDescriptor(s))
+        var list = Framework.getServiceManager().getClientSessions().stream().map(s -> new SessionDescriptor(s))
                 .collect(Collectors.toCollection(ArrayList::new));
         list.sort(Comparator.comparing(SessionDescriptor::getName));
         sessions.addAll(list);
