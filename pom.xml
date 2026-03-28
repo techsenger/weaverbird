@@ -41,6 +41,19 @@
         </developer>
     </developers>
 
+    <repositories>
+        <repository>
+            <id>repsy-snapshots</id>
+            <url>https://repo.repsy.io/mvn/techsenger/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
         <failsafe.plugin.version>3.5.5</failsafe.plugin.version>
