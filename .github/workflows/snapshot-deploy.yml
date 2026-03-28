@@ -33,6 +33,7 @@ jobs:
           EOF
     - name: Deploy only snapshot versions
       run: |
+        set -x
         VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
         echo "Detected version: $VERSION"
         if [[ $VERSION == *"SNAPSHOT"* ]]; then
