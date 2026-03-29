@@ -10,13 +10,10 @@ commands — helping developers efficiently build and orchestrate modular system
 * [Demo](#demo)
     * [CLI Console Demo](#demo-cli)
     * [GUI Console Demo](#demo-gui)
-* [Requirements](#requirements)
-* [Dependencies](#dependencies)
 * [Usage](#usage)
     * [Framework](#usage-framework)
         * [Directory Layout](#usage-framework-directory)
         * [Registry](#usage-framework-registry)
-        * [Installation Mechanism](#usage-framework-installation)
         * [Boot](#usage-framework-boot)
     * [Component](#usage-component)
         * [Life Cycle](#usage-component-life)
@@ -29,8 +26,10 @@ commands — helping developers efficiently build and orchestrate modular system
     * [GUI Console](#usage-gui)
         * [Shell](#usage-gui-shell)
         * [Memory Log](#usage-gui-memory-log)
-        * [File Log](#usage-gui-file-log)
         * [Diagrams](#diagrams)
+    * [Assembly Maven Plugin](#usage-assembly-plugin)
+* [Requirements](#requirements)
+* [Dependencies](#dependencies)
 * [Code building](#code-building)
 * [Running Demo](#running-demo)
 * [License](#license)
@@ -105,29 +104,6 @@ The framework can be used for programs that:
 ### GUI Console Demo <a name="demo-gui"></a>
 ![Alpha GUI Console](./gui-demo.gif)
 
-## Requirements <a name="requirements"></a>
-
-The entire framework is written in Java 11. However, Java 17+ is required for compiling and running the GUI console and
-the demo application. Therefore, compilation is done with Java 17+, but the framework itself (excluding the GUI and demo)
-can run on Java 11.0.23+.
-
-## Dependencies <a name="dependencies"></a>
-
-This project will be available on Maven Central in a few weeks
-
-```
-<dependency>
-    <groupId>com.techsenger.alpha</groupId>
-    <artifactId>alpha-api</artifactId>
-    <version>${alpha.version}</version>
-</dependency>
-<dependency>
-    <groupId>com.techsenger.alpha</groupId>
-    <artifactId>alpha-spi</artifactId>
-    <version>${alpha.version}</version>
-</dependency>
-```
-
 ## Usage <a name="usage"></a>
 
 ### Framework <a name="usage-framework"></a>
@@ -181,18 +157,6 @@ config
 The framework stores data about the installation and components in a registry, which is located in the file
 `data/alpha-registry.xml`. If the client and server are located in the same folder, as in the `alpha-demo-net` example,
 both the client and server instances of the framework use this file.
-
-#### Installation Mechanism <a name="usage-framework-installation"></a>
-
-The framework includes a simple optional installation mechanism. To use it, the `install` argument must be passed to the
-`Launcher` in the `.sh`/`.bat` files.
-
-There are two possible scenarios. If the framework finds the `InstallService` provider, this service is executed.
-If the provider is not found, a script of commands is run, and then a record of the installation is made in the registry.
-
-It is important to note that the absence of an installation record indicates that the installation process has not
-been carried out. If a record of a failed installation is present, the user is prompted to start the installation from
-scratch.
 
 #### Boot <a name="usage-framework-boot"></a>
 
@@ -515,17 +479,101 @@ intended solely for testing and debugging purposes.
 By default, the memory log is not active. To enable it, you must set the parameter
 `com.techsenger.alpha.core.log.memory` to `true` in the `.sh` / `.bat` scripts.
 
-#### File Log <a name="usage-gui-file-log"></a>
-
-The file log is used to view messages from a file. The log message level is determined by the SGR function, which is
-set in the `log4j2` configuration.
-
 #### Diagrams <a name="diagrams"></a>
 
 Diagrams are a useful tool that provides complete information about layers, modules, and packages. The importance of
 this tool is especially heightened when working with complex systems.
 
 Diagrams have their own settings, which can be viewed in the `Settings` dialog.
+
+## Assembly Maven Plugin <a name="usage-assembly-plugin"></a>
+
+The Assembly Maven Plugin is a key tool for working with the framework, as it handles all the work of assembling the
+framework both for integration tests and distributions. It creates the initial directory structure with the repository
+populated with the required modules and the necessary configuration files. The generated structure follows the standard
+framework layout with `bin`, `config`, `repo`, and other directories. The `bin` directory contains `.sh` and `.bat`
+scripts with the specified main class.
+
+The plugin allows specifying custom modules that need to be added to the repository at the framework assembly stage.
+Typically, this applies to modules that must reside in the boot layer, for example, if a module contains the framework
+startup code. For such modules, `<onModulePath>` must be set to `true`.
+
+It is important to note that if a module is used exclusively for components, it only needs to be specified in the
+plugin configuration in special cases where the module cannot be resolved from any repository (including the local one)
+during component resolution. In other words, as a rule, component modules do not need to be specified in the plugin
+configuration.
+
+The plugin provides two goals. The `assemble-runtime` goal is used for integration tests, producing
+a minimal set of files required to run the framework. The `assemble-distro` goal is used to create a
+full distribution including `.sh`/`.bat` scripts and the default log4j2 configuration.
+
+Configuration Parameters for the `assemble-runtime` goal:
+
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| `path` | Yes | - | Path to the root framework directory where the distribution will be assembled |
+| `modules` | No | - | List of extra JPMS modules to resolve and place into the repository in addition to the minimal set of required modules |
+| `module/groupId` | Yes | - | Module group ID |
+| `module/artifactId` | Yes | - | Module artifact ID |
+| `module/version` | Yes | - | Module version |
+| `module/type` | No | `jar` | Module type |
+| `module/classifier` | No | - | Module Classifier |
+
+Extra configuration Parameters for the `assemble-distro` goal:
+
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| `mainClass` | Yes | - | Main class in the format `module/fully.qualified.ClassName`, used only in `.sh`/`.bat` scripts|
+| `module/onModulePath` | No | `false` | If `true`, the module will be added to `--module-path` in `.sh`/`.bat` scripts |
+
+Example:
+
+```xml
+<plugin>
+    <groupId>com.techsenger.alpha.assembly</groupId>
+    <artifactId>alpha-assembly-maven-plugin</artifactId>
+    <version>${alpha.version}</version>
+    <executions>
+        <execution>
+            <phase>verify</phase>
+            <goals>
+                <goal>assemble-distro</goal>
+            </goals>
+            <configuration>
+                <path>${project.build.directory}/framework</path>
+                <mainClass>com.myapp/com.myapp.Main</mainClass>
+                <modules>
+                    <module>
+                        <groupId>com.myapp</groupId>
+                        <artifactId>myapp-core</artifactId>
+                        <version>${myapp.version}</version>
+                        <onModulePath>true</onModulePath>
+                    </module>
+                </modules>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+```
+
+## Requirements <a name="requirements"></a>
+
+The framework requires Java 25+ and JavaFX 25+ for GUI console.
+
+## Dependencies <a name="dependencies"></a>
+
+This project will be available on Maven Central in a few weeks.
+
+To work with the framework core, the following dependency is required. It provides the key APIs and SPIs for building
+and managing modular components:
+
+```
+<dependency>
+    <groupId>com.techsenger.alpha</groupId>
+    <artifactId>alpha-core</artifactId>
+    <version>${alpha.version}</version>
+</dependency>
+```
 
 ## Code Building <a name="code-building"></a>
 

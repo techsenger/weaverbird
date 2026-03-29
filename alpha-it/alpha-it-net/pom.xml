@@ -99,7 +99,6 @@
                 <version>${project.version}</version>
                 <executions>
                     <execution>
-                        <id>assemble-fw</id>
                         <phase>initialize</phase>
                         <goals>
                             <goal>assemble-runtime</goal>

@@ -16,26 +16,17 @@
 
 package com.techsenger.alpha.assembly.maven.plugin;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Mojo;
-
 /**
  *
  * @author Pavel Castornii
  */
-@Mojo(name = Goals.ASSEMBLE_RUNTIME)
-public class AssembleRuntimeMojo extends AbstractAssembleMojo {
+public final class Goals {
 
-    @Override
-    public void execute() throws MojoExecutionException {
-        try {
-            createRepo();
-            createData();
-            createConfig();
-            createTemp();
-        } catch (Exception ex) {
-            getLog().error(ex);
-        }
+    public static final String ASSEMBLE_RUNTIME = "assemble-runtime";
+
+    public static final String ASSEMBLE_DISTRO = "assemble-distro";
+
+    private Goals() {
+        // empty
     }
 }
-

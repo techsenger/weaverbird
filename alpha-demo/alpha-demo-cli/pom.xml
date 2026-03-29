@@ -91,21 +91,21 @@
                 <version>${project.version}</version>
                 <executions>
                     <execution>
-                        <id>assemble-rt</id>
                         <phase>verify</phase>
                         <goals>
-                            <goal>assemble-app</goal>
+                            <goal>assemble-distro</goal>
                         </goals>
                         <configuration>
                             <path>${project.build.directory}/framework</path>
                             <mainClass>com.techsenger.alpha.demo.cli/com.techsenger.alpha.demo.cli.Demo</mainClass>
-                            <artifactItems>
-                                <artifactItem>
+                            <modules>
+                                <module>
                                     <groupId>com.techsenger.alpha.demo</groupId>
                                     <artifactId>alpha-demo-cli</artifactId>
                                     <version>${project.version}</version>
-                                </artifactItem>
-                            </artifactItems>
+                                    <onModulePath>true</onModulePath>
+                                </module>
+                            </modules>
                         </configuration>
                     </execution>
                 </executions>

@@ -21,7 +21,6 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -36,19 +35,16 @@ import org.eclipse.aether.artifact.Artifact;
  *
  * @author Pavel Castornii
  */
-@Mojo(name = "assemble-app")
-public class AssembleAppMojo extends AbstractAssembleMojo {
+@Mojo(name = Goals.ASSEMBLE_DISTRO)
+public class AssembleDistroMojo extends AbstractAssembleMojo {
 
     @Parameter(required = true)
     private String mainClass;
 
-    @Parameter(required = true)
-    private List<ArtifactItem> artifactItems;
-
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
-            createRepo(artifactItems);
+            createRepo();
             createData();
             createConfig();
             createTemp();
@@ -65,7 +61,7 @@ public class AssembleAppMojo extends AbstractAssembleMojo {
         var s = System.lineSeparator();
         var shModulePath = "MODULE_PATH=\"\"" + s;
         var batModulePath = "set \"MODULE_PATH=\"" + s;
-        for (var artifact : getBootLayerArtifacts()) {
+        for (var artifact : getModulePathModules()) {
             shModulePath += "MODULE_PATH=\"$MODULE_PATH:$REPO_PATH" + resolvePath(artifact, false) + "\"" + s;
             batModulePath += "set \"MODULE_PATH=!MODULE_PATH!%REPO_PATH%" + resolvePath(artifact, true) +  ";\"" + s;
         }

@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -51,7 +52,7 @@ import org.eclipse.aether.resolution.ArtifactResult;
 public abstract class AbstractAssembleMojo extends AbstractMojo {
 
     static List<String> readFile(String fileName) throws IOException {
-        try (InputStream is = AssembleRuntimeMojo.class.getResourceAsStream(fileName);
+        try (InputStream is = AbstractAssembleMojo.class.getResourceAsStream(fileName);
              BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.toList());
         }
@@ -79,11 +80,17 @@ public abstract class AbstractAssembleMojo extends AbstractMojo {
         return artifacts;
     }
 
+    @Parameter(defaultValue = "${mojoExecution}", readonly = true)
+    private MojoExecution mojoExecution;
+
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
     @Parameter(required = true)
     private Path path;
+
+    @Parameter(required = false)
+    private List<ModuleItem> modules;
 
     @Component
     private RepositorySystem repoSystem;
@@ -97,14 +104,14 @@ public abstract class AbstractAssembleMojo extends AbstractMojo {
     /**
      * Contains artifacts that are required the start the framework.
      */
-    private final List<Artifact> bootLayerArtifacts = new ArrayList<>();
+    private final List<Artifact> modulePathModules = new ArrayList<>();
 
     Path getPath() {
         return path;
     }
 
-    List<Artifact> getBootLayerArtifacts() {
-        return bootLayerArtifacts;
+    List<Artifact> getModulePathModules() {
+        return modulePathModules;
     }
 
     void createData() throws Exception {
@@ -135,7 +142,7 @@ public abstract class AbstractAssembleMojo extends AbstractMojo {
         FileUtils.writeFile(cliDirPath.resolve("configuration.xml"), cliConfig, StandardCharsets.UTF_8);
     }
 
-    void createRepo(List<ArtifactItem> extraArtifacts) throws Exception {
+    void createRepo() throws Exception {
         var repoPath = path.resolve("repo");
         Files.createDirectories(repoPath);
         var targetSession = new DefaultRepositorySystemSession(session);
@@ -145,25 +152,36 @@ public abstract class AbstractAssembleMojo extends AbstractMojo {
             )
         );
 
-        var frameworkArtifacts = readArtifacts("framework-artifacts.txt");
+        var frameworkArtifacts = readArtifacts("framework-modules.txt");
         for (var a : frameworkArtifacts) {
             resolveAndInstall(a, targetSession);
-            this.bootLayerArtifacts.add(a);
+            this.modulePathModules.add(a);
         }
-        if (extraArtifacts != null) {
-            for (var item : extraArtifacts) {
+        if (modules != null) {
+            var goal = this.mojoExecution.getGoal();
+            var runtime = goal.equals(Goals.ASSEMBLE_RUNTIME);
+            for (var module : modules) {
                 Artifact artifact = new DefaultArtifact(
-                        item.getGroupId(),
-                        item.getArtifactId(),
-                        item.getClassifier(),
-                        item.getType(),
-                        item.getVersion());
-                this.bootLayerArtifacts.add(artifact);
+                        module.getGroupId(),
+                        module.getArtifactId(),
+                        module.getClassifier(),
+                        module.getType(),
+                        module.getVersion());
+                if (runtime) {
+                    if (module.getOnModulePath() != null) {
+                        throw new MojoExecutionException("Parameter 'onModulePath' is not supported for goal '"
+                                + goal + "'");
+                    }
+                } else {
+                    if (Boolean.TRUE.equals(module.getOnModulePath())) {
+                        this.modulePathModules.add(artifact);
+                    }
+                }
                 resolveAndInstall(artifact, targetSession);
             }
         }
 
-        var repoComponentArtifacts = readArtifacts("repo-artifacts.txt");
+        var repoComponentArtifacts = readArtifacts("repo-modules.txt");
         for (var a : repoComponentArtifacts) {
             resolveAndInstall(a, targetSession);
         }

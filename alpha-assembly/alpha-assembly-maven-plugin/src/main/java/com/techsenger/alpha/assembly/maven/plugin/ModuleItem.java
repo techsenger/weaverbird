@@ -20,7 +20,7 @@ package com.techsenger.alpha.assembly.maven.plugin;
  *
  * @author Pavel Castornii
  */
-public class ArtifactItem {
+public class ModuleItem {
 
     private String groupId;
 
@@ -31,6 +31,8 @@ public class ArtifactItem {
     private String classifier;
 
     private String type = "jar";
+
+    private Boolean onModulePath;
 
     public String getGroupId() {
         return groupId;
@@ -72,9 +74,17 @@ public class ArtifactItem {
         this.type = type;
     }
 
+    public Boolean getOnModulePath() {
+        return onModulePath;
+    }
+
+    public void setOnModulePath(Boolean onModulePath) {
+        this.onModulePath = onModulePath;
+    }
+
     @Override
     public String toString() {
-        return "Artifact{" + "groupId=" + groupId + ", artifactId=" + artifactId + ", version=" + version
-                + ", classifier=" + classifier + ", type=" + type + '}';
+        return "ModuleItem{" + "groupId=" + groupId + ", artifactId=" + artifactId + ", version=" + version
+                + ", classifier=" + classifier + ", type=" + type + ", onModulePath=" + onModulePath + '}';
     }
 }
