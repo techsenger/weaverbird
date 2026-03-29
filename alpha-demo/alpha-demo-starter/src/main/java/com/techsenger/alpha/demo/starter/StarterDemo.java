@@ -36,7 +36,7 @@ import java.nio.file.Paths;
  */
 public final class StarterDemo {
 
-    private static final String CUSTOM_COMPONENT =
+    private static final String CUSTOM_COMPONENT_XML =
             """
             <Configuration title="Custom Component" name="custom-component" version="1.0.0" type="base">
                 <Repositories>
@@ -80,7 +80,7 @@ public final class StarterDemo {
         listComponents(componentManager);
 
         System.out.println("\nInstalling and starting custom component");
-        componentManager.installComponent(CUSTOM_COMPONENT, messagePrinter);
+        componentManager.installComponent(CUSTOM_COMPONENT_XML, messagePrinter);
         componentManager.startComponent("custom-component", Version.parse("1.0.0"));
         listComponents(componentManager);
 
