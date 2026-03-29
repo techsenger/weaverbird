@@ -266,61 +266,63 @@ class LayerBuilder {
 
     private void addDirectModuleDirective(DefaultComponent component, Module module, ModuleDirective directive,
             List<ResolvedModuleDirective> resolvedDirectives) {
-        int directiveCount = 0;
         var layers = findLayers(component, directive.getLayer());
         for (var layer : layers.values()) {
             var otherModule = ModuleUtils.findModule(directive.getModule(), layer);
-            if (directive.getType() == DirectiveType.EXPORTS) {
-                component.getLayerController().addExports(module, directive.getPackage(), otherModule);
-            } else if (directive.getType() == DirectiveType.OPENS) {
-                component.getLayerController().addOpens(module, directive.getPackage(), otherModule);
-            } else if (directive.getType() == DirectiveType.READS) {
-                component.getLayerController().addReads(module, otherModule);
-            }
+            logger.debug("Processing direct directive {} for module {} in {}",
+                    directive.getType(), module.getName(), component.getDescriptor().getConfig().getFullName());
+            applyModuleDirective(component.getLayerController(), module, directive.getType(),
+                    directive.getPackage(), otherModule);
             var resolvedDirective = new DefaultResolvedModuleDirective(directive.getType(),
                     module, directive.getPackage(), otherModule);
             resolvedDirectives.add(resolvedDirective);
-            directiveCount++;
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug("Added directive: {} to module: {} in layer: {}, about package: {}, for module: {} "
-                + "in layers: {} {} times", directive.getType(), module.getName(), component.getDescriptor().getConfig()
-                .getFullName(), directive.getPackage(), directive.getModule(), layers.keySet(), directiveCount);
         }
     }
 
     private void addIndirectModuleDirective(DefaultComponent component, Module module, ModuleDirective directive,
             List<ResolvedModuleDirective> resolvedDirectives) {
-        int directiveCount = 0;
         var layers = findLayers(component, directive.getLayer());
         for (var layer : layers.values()) {
             var otherModule = ModuleUtils.findModule(directive.getModule(), layer);
             ModuleLayer.Controller layerController = null;
             DefaultComponent layerComponent = (DefaultComponent) this.componentManager.findComponent(layer);
-            if (layerComponent != null) { //not boot layer
+            if (layerComponent != null) {
                 layerController = layerComponent.getLayerController();
-            } else {
-                logger.warn("Couldn't add directive {} to module {} because layer controller not available",
-                        directive.getType(), otherModule.getName());
-                continue;
             }
-            if (directive.getType() == DirectiveType.ALLOWS_EXPORT) {
-                layerController.addExports(otherModule, directive.getPackage(), module);
-            } else if (directive.getType() == DirectiveType.ALLOWS_OPEN) {
-                layerController.addOpens(otherModule, directive.getPackage(), module);
-            } else if (directive.getType() == DirectiveType.ALLOWS_READ) {
-                layerController.addReads(otherModule, module);
-            }
+            logger.debug("Processing indirect directive {} for module {} in {}",
+                    directive.getType(), module.getName(), component.getDescriptor().getConfig().getFullName());
+            applyModuleDirective(layerController, otherModule, directive.getType().getOpposite(),
+                    directive.getPackage(), module);
             var resolvedDirective = new DefaultResolvedModuleDirective(directive.getType(),
                     module, directive.getPackage(), otherModule);
             resolvedDirectives.add(resolvedDirective);
-            directiveCount++;
+        }
+    }
+
+    private void applyModuleDirective(ModuleLayer.Controller controller, Module module, DirectiveType type,
+            String pkg, Module otherModule) {
+        if (controller != null) {
+            if (type == DirectiveType.EXPORTS) {
+                controller.addExports(module, pkg, otherModule);
+            } else if (type == DirectiveType.OPENS) {
+                controller.addOpens(module, pkg, otherModule);
+            } else if (type == DirectiveType.READS) {
+                controller.addReads(module, otherModule);
+            }
+        } else {
+            logger.debug("No layer controller available for module: {}, applying directive {} via module API",
+                    module.getName(), type);
+            if (type == DirectiveType.EXPORTS) {
+                module.addExports(pkg, otherModule);
+            } else if (type == DirectiveType.OPENS) {
+                module.addOpens(pkg, otherModule);
+            } else if (type == DirectiveType.READS) {
+                module.addReads(otherModule);
+            }
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("Added directive: {} to module: {} in layers: {}, about package: {}, for module: {} "
-                + "in layer: {} {} times", directive.getType(), directive.getModule(), layers.keySet(),
-                directive.getPackage(), module.getName(), component.getDescriptor().getConfig().getFullName(),
-                directiveCount);
+            logger.debug("Applied directive: {} to module: {}, package: {}, for module: {}",
+                    type, module.getName(), pkg, otherModule.getName());
         }
     }
 

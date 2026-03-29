@@ -13,6 +13,10 @@
     <name>Alpha - IT Net</name>
     <description>Integration tests for client-server interaction</description>
 
+    <properties>
+        <failsafe.plugin.arguments>--add-opens java.base/java.time=com.techsenger.alpha.core</failsafe.plugin.arguments>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.techsenger.toolkit</groupId>

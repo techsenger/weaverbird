@@ -7,7 +7,18 @@
 
     <Modules>
         <!--### TOOLS ###-->
-        <Module groupId="com.google.code.gson" artifactId="gson" version="${gson.version}"/>
+        <Module groupId="com.google.code.gson" artifactId="gson" version="${gson.version}">
+            <!--
+                Gson requires reflective access to java.time classes for serialization/deserialization.
+                Since java.base is in the boot layer and JPMS does not provide access to the boot layer
+                controller, we use a relay approach: java.base opens java.time to the framework core module
+                via the add-opens at JVM startup, and the core module relays the access to Gson using
+                Module.addOpens().
+            -->
+            <Directives>
+                <Directive type="requestsOpen" layer="alpha-framework:${project.version}" module="java.base" package="java.time"/>
+            </Directives>
+        </Module>
 
         <!--### ALPHA ###-->
         <Module groupId="com.techsenger.alpha.net" artifactId="alpha-net-shared" version="${project.version}"/>

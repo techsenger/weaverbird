@@ -13,6 +13,10 @@
     <name>Alpha - IT Core</name>
     <description>Integration tests for framework core</description>
 
+    <properties>
+        <failsafe.plugin.arguments>--add-opens java.base/java.time=com.techsenger.alpha.core</failsafe.plugin.arguments>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.techsenger.toolkit</groupId>

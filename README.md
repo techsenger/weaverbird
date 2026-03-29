@@ -356,7 +356,7 @@ A configuration template with all supported tags:
         <Module groupId="..." artifactId="..." version="${config['modVersion']}" active="true">
             <Directives>
                 <Directive type="opens/reads/exports" package="..." layer="..." module="..."/>
-                <Directive type="allowsOpen/allowsRead/allowsExport" package="..." layer="..." module="..."/>
+                <Directive type="requestsOpen/requestsRead/requestsExport" layer="..." module="..." package="..."/>
             </Directives>
         </Module>
     </Modules>
@@ -390,20 +390,33 @@ The layer attribute allows specifying the module's layer. If this attribute is n
 component is used. To specify the framework and component layer, either the name `foo` or the name and version
 `foo:1.0.0` is used. The name of the layer where the framework is located is `alpha-framework`.
 
-The difference between the directives `opens`, `reads`, `exports` and the directives `allowsOpen`, `allowsRead`,
-`allowsExport` is that the former are applied directly to the module specified in the `Module` tag, while the latter
+The difference between the directives `opens`, `reads`, `exports` and the directives `requestsOpen`, `requestsRead`,
+`requestsExport` is that the former are applied directly to the module specified in the `Module` tag, while the latter
 are applied to the module specified in the `module` attribute. In other words, the first set of directives is applied
 directly to the configured module, while the second set is applied to another module, usually from the parent layer.
 For example, such a configuration:
 
 ```
-<Directive type="allowsRead" package="..." layer="..." module="foo.module"/>
+<Directive type="requestsRead" layer="foo" module="bar"/>
 ```
-will result in the `reads` directive being added to the `foo.module` module.
+will result in the `reads` directive being added to the `bar` module from `foo` layer.
 
 It is important to note that directives are added through the layer controller. Since JPMS does not provide access
-to the boot layer controller, you cannot add directives to the modules of this layer using `allows` directives in
-the component configuration.
+to the boot layer controller, `requests` directives cannot be applied to modules of the boot layer via the layer
+controller.
+
+However, this limitation can be worked around using a relay approach: the boot layer module opens its package to the
+framework core module (configured via `--add-opens` at JVM startup), and since all layers are created by the core
+module, it relays the access further to the target module using `Module.addOpens()`. For example, the following
+configuration will open `java.time` from `java.base` to Gson:
+
+```xml
+<Module groupId="com.google.code.gson" artifactId="gson" version="${gson.version}">
+    <Directives>
+        <Directive type="requestsOpen" layer="alpha-framework:${project.version}" module="java.base" package="java.time"/>
+    </Directives>
+</Module>
+```
 
 For a specific example of working with directives, see the configuration of the demo component — `alpha-console-gui`.
 
