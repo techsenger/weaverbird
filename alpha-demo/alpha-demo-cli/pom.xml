@@ -126,29 +126,6 @@
                     </arguments>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>${assembly.plugin.version}</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>assembly.xml</descriptor>
-                    </descriptors>
-                    <finalName>alpha-demo-cli-${project.version}</finalName>
-                    <outputDirectory>target</outputDirectory>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <tarLongFileMode>gnu</tarLongFileMode>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 </project>

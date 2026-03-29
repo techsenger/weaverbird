@@ -1,4 +1,0 @@
-component:start alpha-repo-maven:${project.version};
-component:start alpha-client-http:${project.version} --parent-aliases executor;
-component:start alpha-console-gui:${project.version};
-console:open;

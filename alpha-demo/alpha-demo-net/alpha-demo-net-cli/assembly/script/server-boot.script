@@ -1,7 +1,0 @@
-component:start alpha-repo-maven:${project.version};
-component:start alpha-server-http:${project.version} --parent-aliases executor;
-component:start web-server:${project.version} --alias web-server;
-component:start web-application:${project.version} --parent-aliases web-server --use-parent-cl;
-server:start -h 127.0.0.1 -p 7900 -r HTTP --secure;
-
-

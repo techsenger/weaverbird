@@ -1,9 +1,0 @@
-component:start alpha-repo-maven:${project.version};
-component:resolve alpha-console-cli:${project.version};
-component:resolve web-server:${project.version};
-component:resolve web-application:${project.version};
-component:start web-server:${project.version} --alias web-server;
-component:start web-application:${project.version} --parent-aliases web-server --use-parent-cl;
-component:start alpha-console-cli:${project.version};
-console:open;
-
