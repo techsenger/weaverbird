@@ -18,20 +18,13 @@
         <dependency.plugin.skip>true</dependency.plugin.skip>
         <maven.central.url>https://repo1.maven.org/maven2/</maven.central.url>
         <javafx.version>20.0.2</javafx.version>
-        <!-- web -->
-        <classgraph.version>4.6.18</classgraph.version>
-        <jetty.version>12.0.3</jetty.version>
-        <jakarta.servlet>6.0.0</jakarta.servlet>
-        <spring.version>6.1.1</spring.version>
-        <thymeleaf.version>3.1.1.RELEASE</thymeleaf.version>
     </properties>
 
     <modules>
         <module>alpha-demo-cli</module>
 <!--        <module>alpha-demo-gui</module>
         <module>alpha-demo-net</module>
-        <module>alpha-demo-tools</module>
-        <module>alpha-demo-web</module>-->
+        <module>alpha-demo-tools</module>-->
         <module>alpha-demo-starter</module>
     </modules>
 
