@@ -160,8 +160,17 @@ both the client and server instances of the framework use this file.
 
 #### Boot <a name="usage-framework-boot"></a>
 
-The framework is booted as follows. If the framework detects a `BootService` provider, this service is executed.
-Otherwise, a command script is executed.
+The boot layer must always contain a minimal set of modules: the two framework modules, the Expression Language modules,
+and the logging modules. In addition, the boot layer must contain a module that launches and initializes the framework
+— in a distribution this is the main application module, and in integration tests this is the test module itself.
+
+There are two ways to populate the boot layer with the required modules. If the JVM is launched via `.sh`/`.bat`
+scripts, the module path is configured by the scripts automatically. The `assemble-distro` goal of the Assembly Maven
+Plugin handles this by generating the scripts with the correct module path.
+
+If the JVM is launched via Maven plugins (`exec-maven-plugin`, `maven-failsafe-plugin`, etc.), Maven takes care of
+adding the required modules to the boot layer, which makes it convenient both for running the application and for
+setting up the integration test environment.
 
 ### Component <a name="usage-component"></a>
 

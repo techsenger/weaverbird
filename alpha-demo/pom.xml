@@ -32,6 +32,7 @@
         <module>alpha-demo-net</module>
         <module>alpha-demo-tools</module>
         <module>alpha-demo-web</module>-->
+        <module>alpha-demo-starter</module>
     </modules>
 
     <dependencyManagement>

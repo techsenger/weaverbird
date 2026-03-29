@@ -6,10 +6,8 @@ org.apache.logging.log4j:log4j-api:${log4j.version}
 org.apache.logging.log4j:log4j-jcl:${log4j.version}
 org.apache.logging.log4j:log4j-slf4j2-impl:${log4j.version}
 org.fusesource.jansi:jansi:${jansi.version}
-com.beust:jcommander:${jcommander.version}
 jakarta.el:jakarta.el-api:${el.version}
 org.glassfish.expressly:expressly:${el.version}
 com.techsenger.toolkit:toolkit-core:${toolkit.version}
-com.techsenger.toolkit:toolkit-http:${toolkit.version}
 com.techsenger.alpha:alpha-core:${project.version}
 

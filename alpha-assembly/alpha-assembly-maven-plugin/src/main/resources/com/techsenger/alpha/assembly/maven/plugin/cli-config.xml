@@ -15,6 +15,7 @@
         <Module groupId="org.apache.commons" artifactId="commons-lang3" version="${commons.lang.version}"/>
         <Module groupId="com.techsenger.toolkit" artifactId="toolkit-ascii" version="${toolkit.version}"/>
         <Module groupId="com.techsenger.toolkit" artifactId="toolkit-http" version="${toolkit.version}"/>
+        <Module groupId="com.beust" artifactId="jcommander" version="${jcommander.version}"/>
         <Module groupId="com.google.code.gson" artifactId="gson" version="${gson.version}">
             <!--
                 Gson requires reflective access to java.time classes for serialization/deserialization.

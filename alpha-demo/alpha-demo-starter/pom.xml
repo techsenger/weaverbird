@@ -8,10 +8,10 @@
     </parent>
 
     <groupId>com.techsenger.alpha.demo</groupId>
-    <artifactId>alpha-demo-cli</artifactId>
+    <artifactId>alpha-demo-starter</artifactId>
     <packaging>jar</packaging>
-    <name>Alpha - Demo CLI</name>
-    <description>A demo of a standalone application with a CLI console</description>
+    <name>Alpha - Demo Starter</name>
+    <description>Starter demo application demonstrating the basic usage of the framework</description>
 
     <properties>
         <install.plugin.phase>package</install.plugin.phase>
@@ -58,6 +58,10 @@
             <artifactId>jansi</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>jcommander</artifactId>
+        </dependency>
+        <dependency>
             <groupId>jakarta.el</groupId>
             <artifactId>jakarta.el-api</artifactId>
         </dependency>
@@ -81,11 +85,11 @@
                         </goals>
                         <configuration>
                             <path>${project.build.directory}/framework</path>
-                            <mainClass>com.techsenger.alpha.demo.cli/com.techsenger.alpha.demo.cli.Demo</mainClass>
+                            <mainClass>com.techsenger.alpha.demo.starter/com.techsenger.alpha.demo.starter.StarterDemo</mainClass>
                             <modules>
                                 <module>
                                     <groupId>com.techsenger.alpha.demo</groupId>
-                                    <artifactId>alpha-demo-cli</artifactId>
+                                    <artifactId>alpha-demo-starter</artifactId>
                                     <version>${project.version}</version>
                                     <onModulePath>true</onModulePath>
                                 </module>
@@ -103,13 +107,15 @@
                         <argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:7700</argument>
                         <argument>-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager</argument>
                         <argument>-Dorg.jboss.logging.provider=log4j</argument>
+                        <argument>-Dcom.techsenger.alpha.core.root.path=${project.build.directory}/framework</argument>
                         <argument>--module-path</argument>
                         <modulepath/> <!-- placeholder that automatically resolves and injects the module path -->
                         <argument>--module</argument>
-                        <argument>com.techsenger.alpha.demo.cli/com.techsenger.alpha.demo.cli.Demo</argument>
+                        <argument>com.techsenger.alpha.demo.starter/com.techsenger.alpha.demo.starter.StarterDemo</argument>
                     </arguments>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
 </project>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-module com.techsenger.alpha.demo.cli  {
+module com.techsenger.alpha.demo.starter  {
     requires org.slf4j;
     requires org.apache.logging.log4j.core;
     requires org.apache.logging.log4j.jul;
@@ -27,3 +27,4 @@ module com.techsenger.alpha.demo.cli  {
     requires com.techsenger.alpha.core;
     requires com.techsenger.toolkit.core;
 }
+
