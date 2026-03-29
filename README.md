@@ -512,19 +512,19 @@ Configuration Parameters for the `assemble-runtime` goal:
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
 | `path` | Yes | - | Path to the root framework directory where the distribution will be assembled |
-| `modules` | No | - | List of extra JPMS modules to resolve and place into the repository in addition to the minimal set of required modules |
+| `modules` | No | - | List of additional JPMS modules to resolve and include into the repository in addition to the minimal set of required modules |
 | `module/groupId` | Yes | - | Module group ID |
 | `module/artifactId` | Yes | - | Module artifact ID |
 | `module/version` | Yes | - | Module version |
 | `module/type` | No | `jar` | Module type |
 | `module/classifier` | No | - | Module Classifier |
 
-Extra configuration Parameters for the `assemble-distro` goal:
+Additional configuration parameters for the `assemble-distro` goal:
 
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
 | `mainClass` | Yes | - | Main class in the format `module/fully.qualified.ClassName`, used only in `.sh`/`.bat` scripts|
-| `module/onModulePath` | No | `false` | If `true`, the module will be added to `--module-path` in `.sh`/`.bat` scripts |
+| `module/onModulePath` | No | `false` | If `true`, the module will be added to the `--module-path` in `.sh`/`.bat` scripts |
 
 Example:
 
