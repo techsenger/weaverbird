@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2025 Pavel Castornii.
+ * Copyright 2018-2026 Pavel Castornii.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class AboutDialogViewModel extends AbstractSimpleDialogViewModel {
 
     static final String VERSION = "Version " + Framework.getVersion().getFull() + "\n\n";
 
-    static final String COPYRIGHT = "Copyright 2018-2025 Pavel Castornii. All rights reserved.\n\n";
+    static final String COPYRIGHT = "Copyright 2018-2026 Pavel Castornii. All rights reserved.\n\n";
 
     static final String LICENSE = "This software is licensed under the Apache License, Version 2.0."
             + " It includes third-party libraries and components that are distributed under their own licenses."
