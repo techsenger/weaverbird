@@ -94,22 +94,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <configuration>
-                    <executable>java</executable>
-                    <arguments>
-                        <argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:7700</argument>
-                        <argument>-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager</argument>
-                        <argument>-Dorg.jboss.logging.provider=log4j</argument>
-                        <argument>--module-path</argument>
-                        <modulepath/> <!-- placeholder that automatically resolves and injects the module path -->
-                        <argument>--module</argument>
-                        <argument>com.techsenger.alpha.demo.cli/com.techsenger.alpha.demo.cli.Demo</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>

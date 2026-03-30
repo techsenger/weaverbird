@@ -1,13 +1,13 @@
-org.slf4j:slf4j-api:${slf4j.version}
+org.slf4j:slf4j-api:${bom.slf4j.version}
 commons-logging:commons-logging:${commons.logging.version}
-org.apache.logging.log4j:log4j-core:${log4j.version}
-org.apache.logging.log4j:log4j-jul:${log4j.version}
-org.apache.logging.log4j:log4j-api:${log4j.version}
-org.apache.logging.log4j:log4j-jcl:${log4j.version}
-org.apache.logging.log4j:log4j-slf4j2-impl:${log4j.version}
-org.fusesource.jansi:jansi:${jansi.version}
-jakarta.el:jakarta.el-api:${el.version}
-org.glassfish.expressly:expressly:${el.version}
-com.techsenger.toolkit:toolkit-core:${toolkit.version}
+org.apache.logging.log4j:log4j-core:${bom.log4j.version}
+org.apache.logging.log4j:log4j-jul:${bom.log4j.version}
+org.apache.logging.log4j:log4j-api:${bom.log4j.version}
+org.apache.logging.log4j:log4j-jcl:${bom.log4j.version}
+org.apache.logging.log4j:log4j-slf4j2-impl:${bom.log4j.version}
+org.fusesource.jansi:jansi:${bom.jansi.version}
+jakarta.el:jakarta.el-api:${bom.el.version}
+org.glassfish.expressly:expressly:${bom.el.version}
+com.techsenger.toolkit:toolkit-core:${bom.toolkit.version}
 com.techsenger.alpha:alpha-core:${project.version}
 

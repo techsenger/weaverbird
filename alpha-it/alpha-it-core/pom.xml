@@ -14,7 +14,7 @@
     <description>Integration tests for framework core</description>
 
     <properties>
-        <failsafe.plugin.arguments>--add-opens java.base/java.time=com.techsenger.alpha.core</failsafe.plugin.arguments>
+        <failsafe.plugin.arguments>--add-opens java.base/java.time=com.techsenger.alpha.core --enable-native-access=com.techsenger.alpha.core</failsafe.plugin.arguments>
     </properties>
 
     <dependencies>

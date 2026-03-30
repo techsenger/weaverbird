@@ -57,40 +57,15 @@
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
         <failsafe.plugin.version>3.5.5</failsafe.plugin.version>
-        <publishing.plugin.exclusions>alpha-it,alpha-it-core,alpha-it-net,alpha-it-activator,alpha-demo,alpha-demo-cli,alpha-demo-gui,alpha-demo-net,alpha-demo-net-auth,alpha-demo-net-cli,alpha-demo-net-gui,alpha-demo-tools,alpha-demo-web,alpha-demo-web-app,alpha-demo-web-manager</publishing.plugin.exclusions>
+        <publishing.plugin.exclusions>alpha-it,alpha-it-shared,alpha-it-activator,alpha-it-core,alpha-it-net,alpha-demo,alpha-demo-cli,alpha-demo-gui,alpha-demo-starter</publishing.plugin.exclusions>
         <maven.central.url>https://repo1.maven.org/maven2/</maven.central.url>
-
-        <!--### dependencies that are in BOM ###-->
+        <maven.plugin.version>3.15.2</maven.plugin.version>
+        <osp-bom.version>1.8.0-SNAPSHOT</osp-bom.version>
+        <bom-properties.plugin.version>1.0.0-SNAPSHOT</bom-properties.plugin.version>
         <mvn.version>3.8.1</mvn.version>
-        <maven.resolver.version>1.6.2</maven.resolver.version>
-        <log4j.version>2.21.1</log4j.version>
-        <slf4j.version>2.0.9</slf4j.version>
-        <toolkit.version>1.2.0-SNAPSHOT</toolkit.version>
-        <reposium.version>1.1.0-SNAPSHOT</reposium.version>
-        <jansi.version>2.4.1</jansi.version>
-        <jcommander.version>1.78</jcommander.version>
-        <el.version>5.0.0</el.version>
-        <asciitable.version>0.3.2</asciitable.version>
-        <skb-interfaces.version>0.0.1</skb-interfaces.version>
+        <javafx.version>25</javafx.version>
+        <exec.plugin.version>3.6.3</exec.plugin.version>
         <ascii.themes.version>0.0.1</ascii.themes.version>
-        <st4.version>4.0.8</st4.version>
-        <jline.version>3.30.9</jline.version>
-        <gson.version>2.12.1</gson.version>
-        <jna.version>5.17.0</jna.version>
-
-        <!-- gui console -->
-        <javafx.version>19.0.2.1</javafx.version>
-        <atlantafx.version>2.0.1</atlantafx.version>
-        <stagepro.version>1.0.0</stagepro.version>
-        <mvvm4fx.version>1.0.0</mvvm4fx.version>
-        <tabshell.version>1.0.0</tabshell.version>
-        <controlsfx.version>11.1.1</controlsfx.version>
-        <jaxb.version>4.0.0</jaxb.version>
-        <richtextfx.version>0.11.5</richtextfx.version>
-        <flowless.version>0.7.4</flowless.version>
-        <findbugs.version>3.0.2</findbugs.version>
-        <plantuml.version>1.2025.0</plantuml.version>
-        <ansi4j.version>2.0.0</ansi4j.version>
 
         <!--### dependencies that are not in BOM ###-->
         <commons.codec.version>1.11</commons.codec.version>
@@ -108,7 +83,6 @@
         <undofx.version>2.1.1</undofx.version>
         <wellbehavedfx.version>0.3.3</wellbehavedfx.version>
         <reactfx.version>2.0-M5</reactfx.version>
-
     </properties>
 
     <dependencyManagement>
@@ -116,7 +90,7 @@
             <dependency>
                 <groupId>com.techsenger.osp.bom</groupId>
                 <artifactId>osp-bom</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>${osp-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -164,7 +138,7 @@
             </dependency>
 
             <!--### FRAMEWORK DEPENDENCIES ###-->
-            <dependency>
+<!--            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
@@ -223,7 +197,7 @@
                 <groupId>org.glassfish.expressly</groupId>
                 <artifactId>expressly</artifactId>
                 <version>${el.version}</version>
-            </dependency>
+            </dependency>-->
 
             <!--### MAVEN REPO ###-->
             <dependency>
@@ -237,11 +211,31 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.techsenger.reposium</groupId>
-                <artifactId>reposium-core</artifactId>
-                <version>${reposium.version}</version>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-artifact</artifactId>
+                <version>${mvn.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-builder-support</artifactId>
+                <version>${mvn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-model</artifactId>
+                <version>${mvn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-model-builder</artifactId>
+                <version>${mvn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-repository-metadata</artifactId>
+                <version>${mvn.version}</version>
+            </dependency>
+<!--            <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${commons.codec.version}</version>
@@ -270,13 +264,13 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons.lang.version}</version>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
                 <version>${commons.logging.version}</version>
             </dependency>
-            <dependency>
+            <!--<dependency>
                 <groupId>org.apache.maven</groupId>
                 <artifactId>maven-resolver-provider</artifactId>
                 <version>${mvn.version}</version>
@@ -284,38 +278,38 @@
             <dependency>
                 <groupId>org.apache.maven.resolver</groupId>
                 <artifactId>maven-resolver-api</artifactId>
-                <version>${maven.resolver.version}</version>
+                <version>${bom.maven.resolver.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.resolver</groupId>
                 <artifactId>maven-resolver-connector-basic</artifactId>
-                <version>${maven.resolver.version}</version>
+                <version>${bom.maven.resolver.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.resolver</groupId>
                 <artifactId>maven-resolver-impl</artifactId>
-                <version>${maven.resolver.version}</version>
+                <version>${bom.maven.resolver.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.resolver</groupId>
                 <artifactId>maven-resolver-spi</artifactId>
-                <version>${maven.resolver.version}</version>
+                <version>${bom.maven.resolver.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.resolver</groupId>
                 <artifactId>maven-resolver-transport-file</artifactId>
-                <version>${maven.resolver.version}</version>
+                <version>${bom.maven.resolver.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.resolver</groupId>
                 <artifactId>maven-resolver-transport-http</artifactId>
-                <version>${maven.resolver.version}</version>
+                <version>${bom.maven.resolver.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.resolver</groupId>
                 <artifactId>maven-resolver-util</artifactId>
-                <version>${maven.resolver.version}</version>
-            </dependency>
+                <version>${bom.maven.resolver.version}</version>
+            </dependency>-->
         </dependencies>
     </dependencyManagement>
 
@@ -338,6 +332,36 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>com.techsenger.maven.plugins</groupId>
+                <artifactId>bom-properties-maven-plugin</artifactId>
+                <version>${bom-properties.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>copy-properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <boms>
+                        <bom>
+                            <groupId>com.techsenger.osp.bom</groupId>
+                            <artifactId>osp-bom</artifactId>
+                            <version>${osp-bom.version}</version>
+                            <prefix>bom</prefix>
+                            <caseSensitive>false</caseSensitive>
+                            <includes>
+                                <include>*.version</include>
+                            </includes>
+                        </bom>
+                    </boms>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>
 

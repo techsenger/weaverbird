@@ -384,7 +384,7 @@ module, it relays the access further to the target module using `Module.addOpens
 configuration will open `java.time` from `java.base` to Gson:
 
 ```xml
-<Module groupId="com.google.code.gson" artifactId="gson" version="${gson.version}">
+<Module groupId="com.google.code.gson" artifactId="gson" version="${bom.gson.version}">
     <Directives>
         <Directive type="requestsOpen" layer="alpha-framework:${project.version}" module="java.base" package="java.time"/>
     </Directives>

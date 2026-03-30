@@ -101,13 +101,28 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec.plugin.version}</version>
                 <configuration>
                     <executable>java</executable>
                     <arguments>
                         <argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:7700</argument>
-                        <argument>-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager</argument>
                         <argument>-Dorg.jboss.logging.provider=log4j</argument>
+                        <argument>-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager</argument>
+                        <argument>-Dlog4j.configurationFile=${project.build.directory}/framework/config/log4j2.xml</argument>
                         <argument>-Dcom.techsenger.alpha.core.root.path=${project.build.directory}/framework</argument>
+                        <argument>-Djava.net.preferIPv4Stack=true</argument>
+                        <argument>-Djava.io.tmpdir="$ROOT_PATH/temp"</argument>
+                        <argument>-Djava.io.tmpdir="$ROOT_PATH/temp"</argument>
+                        <argument>-Dfile.encoding=UTF-8</argument>
+                        <argument>--add-modules</argument>
+                        <argument>ALL-DEFAULT</argument>
+                        <argument>--add-modules</argument>
+                        <argument>org.apache.logging.log4j,org.apache.logging.log4j.jul</argument>
+                        <argument>--add-opens</argument>
+                        <argument>java.base/java.time=com.techsenger.alpha.core</argument>
+                        <argument>--add-opens</argument>
+                        <argument>java.base/java.lang=com.techsenger.alpha.core</argument>
+                        <argument>--enable-native-access=com.techsenger.alpha.core</argument>
                         <argument>--module-path</argument>
                         <modulepath/> <!-- placeholder that automatically resolves and injects the module path -->
                         <argument>--module</argument>

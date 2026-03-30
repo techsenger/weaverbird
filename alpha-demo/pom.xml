@@ -36,22 +36,22 @@
             <dependency>
                 <groupId>de.vandermeer</groupId>
                 <artifactId>asciitable</artifactId>
-                <version>${asciitable.version}</version>
+                <version>${bom.asciitable.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.vandermeer</groupId>
                 <artifactId>skb-interfaces</artifactId>
-                <version>${skb-interfaces.version}</version>
+                <version>${bom.skb-interfaces.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.vandermeer</groupId>
                 <artifactId>ascii-utf-themes</artifactId>
-                <version>${ascii.themes.version}</version>
+                <version>${bom.ascii.themes.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.antlr</groupId>
                 <artifactId>ST4</artifactId>
-                <version>${st4.version}</version>
+                <version>${bom.st4.version}</version>
             </dependency>
             <!--<dependency>
                 <groupId>org.apache.commons</groupId>
@@ -61,7 +61,7 @@
             <dependency>
                 <groupId>com.techsenger.toolkit</groupId>
                 <artifactId>toolkit-ascii</artifactId>
-                <version>${toolkit.version}</version>
+                <version>${bom.toolkit.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.techsenger.alpha.console</groupId>
