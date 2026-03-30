@@ -408,14 +408,23 @@ All text-based commands are transmitted to the platform over the HTTP network pr
 a small overhead when the client and server run within the same JVM instance; on the other hand, this approach
 allows interaction with different servers.
 
+**Local and Remote Commands.** Any command can be local, remote, or both. Local commands can be executed without a
+session, while remote commands require an active session.
+
 **Command Executor**. The execution of commands is handled by `CommandExecutor`, which receives a `String` containing
 the commands as input. Each command is a separate class implementing the `Command` interface. The executor splits the
 text into individual commands and processes each one.
 
-The execution flow is as follows:
+The execution flow of a local command is as follows:
 
 ```
-Console → Command Executor → Client → Server → EndpointHandler → Framework API
+Console ⮂ Command Executor ⮂ Command ⮂ Framework API
+```
+
+The execution flow of a remote command is as follows:
+
+```
+Console ⮂ Command Executor ⮂ Command ⮂ Client ⮂ Server ⮂ EndpointHandler ⮂ Framework API
 ```
 
 **Custom Command**. To create a custom command, you need to do the following:
@@ -432,9 +441,6 @@ To create a custom `EndpointHandler`, do the following:
 **Command Scripts**. A command `String` can contain an unlimited number of commands separated by `;`. This allows for
 the use of command scripts — files that contain text commands. Typically, scripts are stored in the `script` folder.
 
-**Local and Remote Commands.** Any command can be local, remote, or both. Local commands can be executed without a
-session, while remote commands require an active session.
-
 **Special Symbols**. When working with commands, the following special characters should be considered:
 
 * `;` — used to separate commands.
@@ -445,7 +451,7 @@ session, while remote commands require an active session.
 
 ```
 # to open a session to the server
-session:open demo -a 127.0.0.1:7900 -n admin -p admin
+session:open demo -a 127.0.0.1:1200 -n admin -p admin
 
 # to list all remote commands
 command:list
