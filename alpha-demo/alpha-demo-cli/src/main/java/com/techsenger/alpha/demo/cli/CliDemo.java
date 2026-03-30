@@ -26,12 +26,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * This demo shows how to work with the framework console.
+ *
+ * <p>To run this demo: build the project and run the scripts in the {@code target/framework/bin} folder.
  *
  * @author Pavel Castornii
  */
-public final class Demo {
+public final class CliDemo {
 
-    private static final Logger logger = LoggerFactory.getLogger(Demo.class);
+    private static final Logger logger = LoggerFactory.getLogger(CliDemo.class);
 
     /**
      * @param args the command line arguments
@@ -58,7 +61,7 @@ public final class Demo {
         compManager.startComponent(componentName, componentVersion);
     }
 
-    private Demo() {
+    private CliDemo() {
         // empty
     }
 }

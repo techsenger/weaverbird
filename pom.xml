@@ -57,7 +57,7 @@
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
         <failsafe.plugin.version>3.5.5</failsafe.plugin.version>
-        <publishing.plugin.exclusions>alpha-it,alpha-it-shared,alpha-it-activator,alpha-it-core,alpha-it-net,alpha-demo,alpha-demo-cli,alpha-demo-gui,alpha-demo-starter</publishing.plugin.exclusions>
+        <publishing.plugin.exclusions>alpha-it,alpha-it-shared,alpha-it-activator,alpha-it-core,alpha-it-net,alpha-demo,alpha-demo-cli,alpha-demo-gui,alpha-demo-starter,alpha-demo-jfx,alpha-demo-jfx-boot,alpha-demo-jfx-core</publishing.plugin.exclusions>
         <maven.central.url>https://repo1.maven.org/maven2/</maven.central.url>
         <maven.plugin.version>3.15.2</maven.plugin.version>
         <osp-bom.version>1.8.0-SNAPSHOT</osp-bom.version>
@@ -84,6 +84,17 @@
         <wellbehavedfx.version>0.3.3</wellbehavedfx.version>
         <reactfx.version>2.0-M5</reactfx.version>
     </properties>
+
+    <modules>
+        <module>alpha-core</module>
+        <module>alpha-repo</module>
+        <module>alpha-net</module>
+        <module>alpha-executor</module>
+        <module>alpha-console</module>
+        <module>alpha-assembly</module>
+        <module>alpha-it</module>
+        <module>alpha-demo</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
@@ -124,16 +135,6 @@
             <dependency>
                 <groupId>com.techsenger.alpha.assembly</groupId>
                 <artifactId>alpha-assembly-security</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.techsenger.alpha.it</groupId>
-                <artifactId>alpha-it-shared</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.techsenger.alpha.it</groupId>
-                <artifactId>alpha-it-activator</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -180,17 +181,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <modules>
-        <module>alpha-core</module>
-        <module>alpha-repo</module>
-        <module>alpha-net</module>
-        <module>alpha-executor</module>
-        <module>alpha-console</module>
-        <module>alpha-assembly</module>
-        <module>alpha-it</module>
-        <module>alpha-demo</module>
-    </modules>
 
     <build>
         <resources>

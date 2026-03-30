@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package com.techsenger.alpha.core.api.component;
-
-import java.util.concurrent.ConcurrentHashMap;
+package com.techsenger.alpha.core.api.message;
 
 /**
- * Contains information that can be passed to the EL context of the configuration file.
  *
  * @author Pavel Castornii
  */
-public class ComponentConfigInfo extends ConcurrentHashMap<Object, Object> {
+public class SystemMessagePrinter extends AbstractMessagePrinter {
 
+    @Override
+    public void printlnMessage(String message) {
+        System.out.println(message);
+    }
+
+    @Override
+    public void printlnError(String error) {
+        System.err.println(error);
+    }
 }

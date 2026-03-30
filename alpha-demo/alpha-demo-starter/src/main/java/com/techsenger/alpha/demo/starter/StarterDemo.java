@@ -20,7 +20,7 @@ import com.techsenger.alpha.core.api.ComponentManager;
 import com.techsenger.alpha.core.api.FrameworkFactory;
 import com.techsenger.alpha.core.api.FrameworkSettings;
 import com.techsenger.alpha.core.api.SystemProperties;
-import com.techsenger.alpha.core.api.message.MessagePrinter;
+import com.techsenger.alpha.core.api.message.SystemMessagePrinter;
 import com.techsenger.toolkit.core.version.Version;
 import java.nio.file.Paths;
 
@@ -29,9 +29,10 @@ import java.nio.file.Paths;
  *
  * <p>Two ways to run this demo:
  * <ol>
- *     <li>Compile and run scripts in {@code target/framework/bin} folder</li>
+ *     <li>Compile and run the scripts in the {@code target/framework/bin} folder</li>
  *     <li>Run: {@code mvn clean install exec:exec}</li>
  * </ol>
+ *
  * @author Pavel Castornii
  */
 public final class StarterDemo {
@@ -49,30 +50,11 @@ public final class StarterDemo {
             </Configuration>
             """;
 
-    private static final class MessagePrinterImpl implements MessagePrinter {
-
-        @Override
-        public void printlnMessage(String message) {
-            System.out.println(message);
-        }
-
-        @Override
-        public void printlnError(String error) {
-            System.err.println(error);
-        }
-
-        @Override
-        public int getWidth() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-    }
-
     public static void main(String[] args) throws Exception {
         var frameworkPath = Paths.get(System.getProperty(SystemProperties.ROOT_PATH));
         var settings = FrameworkSettings.builder().repoChecksumEnabled(false).build();
         var framework = FrameworkFactory.create(settings, frameworkPath);
-        var messagePrinter = new MessagePrinterImpl();
+        var messagePrinter = new SystemMessagePrinter();
         var componentManager = framework.getComponentManager();
 
         System.out.println("Starting repo (it is already resolved)");

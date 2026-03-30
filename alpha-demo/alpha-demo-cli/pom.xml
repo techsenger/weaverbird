@@ -13,13 +13,6 @@
     <name>Alpha - Demo CLI</name>
     <description>A demo of a standalone application with a CLI console</description>
 
-    <properties>
-        <install.plugin.phase>package</install.plugin.phase>
-        <dependency.plugin.skip>false</dependency.plugin.skip>
-        <demo.main.module>com.techsenger.alpha.demo.cli</demo.main.module>
-        <demo.main.dependency>com.techsenger.alpha.demo:alpha-demo-cli</demo.main.dependency>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -81,7 +74,7 @@
                         </goals>
                         <configuration>
                             <path>${project.build.directory}/framework</path>
-                            <mainClass>com.techsenger.alpha.demo.cli/com.techsenger.alpha.demo.cli.Demo</mainClass>
+                            <mainClass>com.techsenger.alpha.demo.cli/com.techsenger.alpha.demo.cli.CliDemo</mainClass>
                             <modules>
                                 <module>
                                     <groupId>com.techsenger.alpha.demo</groupId>

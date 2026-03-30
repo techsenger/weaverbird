@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package com.techsenger.alpha.core.api.component;
+module com.techsenger.alpha.demo.jfx.boot  {
+    requires org.slf4j;
+    requires com.techsenger.alpha.core;
+    requires javafx.base;
+    requires javafx.controls;
+    requires javafx.graphics;
 
-import java.util.concurrent.ConcurrentHashMap;
+    opens com.techsenger.alpha.demo.jfx.core to javafx.graphics;
 
-/**
- * Contains information that can be passed to the EL context of the configuration file.
- *
- * @author Pavel Castornii
- */
-public class ComponentConfigInfo extends ConcurrentHashMap<Object, Object> {
-
+    provides com.techsenger.alpha.core.spi.module.ModuleActivator
+            with com.techsenger.alpha.demo.jfx.core.ModuleActivatorProvider;
 }
+

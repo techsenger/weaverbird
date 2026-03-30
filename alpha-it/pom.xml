@@ -13,8 +13,25 @@
     <name>Alpha - IT</name>
     <description>Integration tests and modules for them</description>
 
+    <modules>
+        <module>alpha-it-shared</module>
+        <module>alpha-it-activator</module>
+        <module>alpha-it-core</module>
+        <module>alpha-it-net</module>
+    </modules>
+
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.techsenger.alpha.it</groupId>
+                <artifactId>alpha-it-shared</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.alpha.it</groupId>
+                <artifactId>alpha-it-activator</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.techsenger.alpha.it</groupId>
                 <artifactId>alpha-it-core</artifactId>
@@ -22,11 +39,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <modules>
-        <module>alpha-it-shared</module>
-        <module>alpha-it-activator</module>
-        <module>alpha-it-core</module>
-        <module>alpha-it-net</module>
-    </modules>
 </project>

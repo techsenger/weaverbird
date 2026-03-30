@@ -13,11 +13,6 @@
     <name>Alpha - Demo GUI</name>
     <description>A demo of a standalone application with a GUI console</description>
 
-    <properties>
-        <install.plugin.phase>package</install.plugin.phase>
-        <dependency.plugin.skip>false</dependency.plugin.skip>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.techsenger.alpha.demo</groupId>

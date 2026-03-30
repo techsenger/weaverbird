@@ -14,15 +14,37 @@
     <description>Demo</description>
 
     <properties>
-        <install.plugin.phase>none</install.plugin.phase>
-        <dependency.plugin.skip>true</dependency.plugin.skip>
         <maven.central.url>https://repo1.maven.org/maven2/</maven.central.url>
-        <javafx.version>20.0.2</javafx.version>
+        <javafx.version>25</javafx.version>
     </properties>
 
     <modules>
         <module>alpha-demo-cli</module>
 <!--        <module>alpha-demo-gui</module>-->
         <module>alpha-demo-starter</module>
+        <module>alpha-demo-jfx</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-controls</artifactId>
+                 <version>${javafx.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-base</artifactId>
+                 <version>${javafx.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-graphics</artifactId>
+                 <version>${javafx.version}</version>
+                <scope>compile</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

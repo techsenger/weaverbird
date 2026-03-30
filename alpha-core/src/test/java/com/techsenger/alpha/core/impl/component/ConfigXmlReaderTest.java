@@ -36,13 +36,15 @@ public class ConfigXmlReaderTest {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigXmlReaderTest.class);
 
+    private static final String OS_FAMILY = "os.family";
+
     @Test
     public void read_nestedIfChooseConditionsForLinuxSystemProperty_success()
             throws URISyntaxException, ParserConfigurationException, SAXException, IOException {
         var uri = this.getClass().getResource("conditional-configuration.xml").toURI();
         var reader = new ConfigXmlReader();
         var configInfo = new ComponentConfigInfo();
-        configInfo.put(ComponentConfigInfo.OS_FAMILY, "linux");
+        configInfo.put(OS_FAMILY, "linux");
         var config = reader.read(new File(uri).toPath(), configInfo, null);
         var descriptors = config.getModules();
         assertThat(descriptors).hasSize(8);
@@ -63,7 +65,7 @@ public class ConfigXmlReaderTest {
         var uri = this.getClass().getResource("conditional-configuration.xml").toURI();
         var reader = new ConfigXmlReader();
         var configInfo = new ComponentConfigInfo();
-        configInfo.put(ComponentConfigInfo.OS_FAMILY, "windows");
+        configInfo.put(OS_FAMILY, "windows");
         var config = reader.read(new File(uri).toPath(), configInfo, null);
         var descriptors = config.getModules();
         assertThat(descriptors).hasSize(5);
@@ -80,7 +82,7 @@ public class ConfigXmlReaderTest {
         var uri = this.getClass().getResource("conditional-configuration.xml").toURI();
         var reader = new ConfigXmlReader();
         var configInfo = new ComponentConfigInfo();
-        configInfo.put(ComponentConfigInfo.OS_FAMILY, "mac");
+        configInfo.put(OS_FAMILY, "mac");
         var config = reader.read(new File(uri).toPath(), configInfo, null);
         var descriptors = config.getModules();
         assertThat(descriptors).hasSize(8);
@@ -100,7 +102,7 @@ public class ConfigXmlReaderTest {
         var uri = this.getClass().getResource("conditional-configuration.xml").toURI();
         var reader = new ConfigXmlReader();
         var configInfo = new ComponentConfigInfo();
-        configInfo.put(ComponentConfigInfo.OS_FAMILY, "solaris");
+        configInfo.put(OS_FAMILY, "solaris");
         var config = reader.read(new File(uri).toPath(), configInfo, null);
         var descriptors = config.getModules();
         assertThat(descriptors).hasSize(5);

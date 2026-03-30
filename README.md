@@ -594,25 +594,10 @@ To build the framework use standard Git and Maven commands:
 
 ## Running Demo <a name="running-demo"></a>
 
-The project includes 4 binary demo archives (`.tar`) with CLI and GUI consoles in `standalone` and `client`, `server`
-modes.
+The project contains various demo modules. Some of them can be run using the Maven Exec Plugin, some only via
+`.sh`/`.bat` scripts, and some support both options.
 
-Each demo, in addition to framework components, includes two web components: a web server (Jetty 12 + Spring 6) and a
-web application. When the demo is running, you can open a browser and check the page at `http://127.0.0.1:8080/`. At
-the same time, it is important to note that the framework knows nothing about the web server or the web
-application — for it, they are just components.
-
-Demo archives are created during the project build process and placed in the following directories:
-
-```
-alpha-demo/alpha-demo-cli/target
-alpha-demo/alpha-demo-gui/target
-alpha-demo/alpha-demo-net/alpha-demo-net-cli/target
-alpha-demo/alpha-demo-net/alpha-demo-net-gui/target
-```
-The `alpha-demo-net-cli` and `alpha-demo-net-gui` projects also demonstrate installation using `install.sh/.bat` files.
-When this file is executed, all changes will occur within the framework directory. For details, refer to
-`script/installation.script`.
+Information on how to run a specific `Demo.java` is provided in the Javadoc of that class.
 
 To connect the server use the following command (name: admin, password: admin):
 

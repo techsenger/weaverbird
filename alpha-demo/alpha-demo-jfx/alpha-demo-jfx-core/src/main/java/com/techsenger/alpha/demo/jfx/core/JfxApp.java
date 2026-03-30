@@ -14,15 +14,28 @@
  * limitations under the License.
  */
 
-package com.techsenger.alpha.core.api.component;
+package com.techsenger.alpha.demo.jfx.core;
 
-import java.util.concurrent.ConcurrentHashMap;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 /**
- * Contains information that can be passed to the EL context of the configuration file.
  *
  * @author Pavel Castornii
  */
-public class ComponentConfigInfo extends ConcurrentHashMap<Object, Object> {
+public class JfxApp extends Application {
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        var label = new Label("Hello, world!");
+        label.setStyle("-fx-font-size: 60");
+        var stackPane = new StackPane(label);
+        var scene = new Scene(stackPane, 800, 600);
+        stage.setScene(scene);
+        stage.show();
+    }
 
 }

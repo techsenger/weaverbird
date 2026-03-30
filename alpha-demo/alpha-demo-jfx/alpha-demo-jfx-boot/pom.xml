@@ -2,18 +2,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.techsenger.alpha.demo</groupId>
-        <artifactId>alpha-demo</artifactId>
+        <groupId>com.techsenger.alpha.demo.jfx</groupId>
+        <artifactId>alpha-demo-jfx</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.techsenger.alpha.demo</groupId>
-    <artifactId>alpha-demo-starter</artifactId>
+    <groupId>com.techsenger.alpha.demo.jfx</groupId>
+    <artifactId>alpha-demo-jfx-boot</artifactId>
     <packaging>jar</packaging>
-    <name>Alpha - Demo Starter</name>
-    <description>Starter demo application demonstrating the basic usage of the framework</description>
+    <name>Alpha - Demo JFX Boot</name>
+    <description>A boot module for JavaFX demo</description>
 
     <dependencies>
+        <dependency>
+            <!-- the core module must be compiled before the boot module -->
+            <groupId>com.techsenger.alpha.demo.jfx</groupId>
+            <artifactId>alpha-demo-jfx-core</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -74,19 +79,10 @@
                     <execution>
                         <phase>verify</phase>
                         <goals>
-                            <goal>assemble-distro</goal>
+                            <goal>assemble-runtime</goal>
                         </goals>
                         <configuration>
                             <path>${project.build.directory}/framework</path>
-                            <mainClass>com.techsenger.alpha.demo.starter/com.techsenger.alpha.demo.starter.StarterDemo</mainClass>
-                            <modules>
-                                <module>
-                                    <groupId>com.techsenger.alpha.demo</groupId>
-                                    <artifactId>alpha-demo-starter</artifactId>
-                                    <version>${project.version}</version>
-                                    <onModulePath>true</onModulePath>
-                                </module>
-                            </modules>
                         </configuration>
                     </execution>
                 </executions>
@@ -98,10 +94,12 @@
                 <configuration>
                     <executable>java</executable>
                     <arguments>
+                        <argument>-Dmvn.localrepo=file://${settings.localRepository}</argument>
+                        <argument>-Dproject.version=${project.version}</argument>
+
                         <argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:7700</argument>
                         <argument>-Dorg.jboss.logging.provider=log4j</argument>
                         <argument>-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager</argument>
-                        <argument>-Dlog4j.configurationFile=${project.build.directory}/framework/config/log4j2.xml</argument>
                         <argument>-Dcom.techsenger.alpha.core.root.path=${project.build.directory}/framework</argument>
                         <argument>-Djava.net.preferIPv4Stack=true</argument>
                         <argument>-Djava.io.tmpdir="$ROOT_PATH/temp"</argument>
@@ -119,11 +117,10 @@
                         <argument>--module-path</argument>
                         <modulepath/> <!-- placeholder that automatically resolves and injects the module path -->
                         <argument>--module</argument>
-                        <argument>com.techsenger.alpha.demo.starter/com.techsenger.alpha.demo.starter.StarterDemo</argument>
+                        <argument>com.techsenger.alpha.demo.jfx.boot/com.techsenger.alpha.demo.jfx.boot.JfxDemo</argument>
                     </arguments>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>

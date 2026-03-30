@@ -14,15 +14,27 @@
  * limitations under the License.
  */
 
-package com.techsenger.alpha.core.api.component;
+package com.techsenger.alpha.demo.jfx.core;
 
-import java.util.concurrent.ConcurrentHashMap;
+import com.techsenger.alpha.core.spi.module.ModuleActivator;
+import com.techsenger.alpha.core.spi.module.ModuleContext;
+import javafx.application.Application;
+import javafx.application.Platform;
 
 /**
- * Contains information that can be passed to the EL context of the configuration file.
  *
  * @author Pavel Castornii
  */
-public class ComponentConfigInfo extends ConcurrentHashMap<Object, Object> {
+public class ModuleActivatorProvider implements ModuleActivator {
+
+    @Override
+    public void activate(ModuleContext context) throws Exception {
+        Application.launch(JfxApp.class);
+    }
+
+    @Override
+    public void deactivate(ModuleContext context) throws Exception {
+        Platform.exit();
+    }
 
 }
