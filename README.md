@@ -2,7 +2,7 @@
 
 Techsenger Alpha is a framework built on top of the Java Platform Module System (JPMS) that manages modular components
 through dynamic module layers. It provides a powerful API and versatile interfaces (CLI/GUI) with multiple built-in
-commands — helping developers efficiently build and orchestrate modular systems.
+commands — helping developers efficiently build and manage modular systems.
 
 ## Table of Contents
 * [Overview](#overview)
@@ -21,12 +21,13 @@ commands — helping developers efficiently build and orchestrate modular system
         * [Configuration](#usage-component-config)
         * [Events](#usage-component-events)
         * [Services](#usage-component-services)
+    * [Remote Control](#usage-remote-control)
     * [Text Commands](#usage-commands)
     * [CLI Console](#usage-cli)
     * [GUI Console](#usage-gui)
         * [Shell](#usage-gui-shell)
         * [Memory Log](#usage-gui-memory-log)
-        * [Diagrams](#diagrams)
+        * [Diagrams](#usage-gui-diagrams)
     * [Assembly Maven Plugin](#usage-assembly-plugin)
 * [Requirements](#requirements)
 * [Dependencies](#dependencies)
@@ -42,7 +43,7 @@ JPMS (Java Platform Module System), which was introduced in Java 9, along with m
 layer. A layer can be defined as a group of modules that are loaded and managed together. Key features of a layer
 include:
 
-* Isolation - modules within a layer can be independent from other layers.
+* Isolation - modules within a layer can be independent of other layers.
 * Hierarchy - layers form a graph and can use modules from parent layers.
 * Dynamic configuration - layers can be dynamically added and removed (except the boot layer).
 
@@ -65,7 +66,7 @@ The framework operates in three modes: `standalone`, `client`, and `server`. The
 already running Alpha frameworks.
 
 You can interact with the framework either through the API or through the text command mechanism. Text commands are a
-convenient way to work with the framework. Out of the box, about 40 commands are provided for working with components,
+convenient way to work with the framework. By default, about 40 commands are provided for working with components,
 sessions, gathering information, etc. At the same time, it is very easy to add your own commands. The framework will
 automatically discover them in any layer (the module must provide a factory service) and integrate them into any
 console. The framework can also execute command scripts, which consist of a series of commands, for example, from a file.
@@ -171,11 +172,7 @@ setting up the integration test environment.
 ### Component <a name="usage-component"></a>
 
 Each component has a name and a version. The name and version are separated by `:`. For example, the foo component
-with version 1.0.0 is specified as `foo:1.0.0`, and the command to launch the component will be:
-
-```
-component:start foo:1.0.0
-```
+with version 1.0.0 is specified as `foo:1.0.0`.
 
 An unlimited number of instances of the same component can be created, as instances are identified in the system by
 their `id`. Additionally, a component instance can be assigned an `alias` and accessed using this `alias`. This is
@@ -322,7 +319,7 @@ A configuration template with all supported tags:
             <Module groupId="..." artifactId="..." version="..."/>
         </If>
 
-        <Module groupId="..." artifactId="..." version="${config['modVersion']}" active="true" nativeAccessEnabled="true>
+        <Module groupId="..." artifactId="..." version="${config['modVersion']}" active="true" nativeAccessEnabled="true">
             <Directives>
                 <Directive type="opens/reads/exports" package="..." layer="..." module="..."/>
                 <Directive type="requestsOpen/requestsRead/requestsExport" layer="..." module="..." package="..."/>
@@ -407,39 +404,71 @@ There are two solutions to this problem:
 1. Use `ServiceTracker`.
 2. Use `ComponentObserver`.
 
+### Remote Control <a name="usage-remote-control"></a>
+
+The framework provides out-of-the-box support for remote management over HTTP. To understand how to work with it, you
+can refer to the integration test configuration in the `alpha-it-net` module.
+
+It is important to note that the data channel is not encrypted. When deploying the client and server on different
+hosts, you must ensure traffic protection using a VPN or an SSH tunnel.
+
 ### Text Commands <a name="usage-commands"></a>
 
 Text commands are a powerful tool for working with the framework; however, their use is optional. It is important
 to note that all commands, both built-in and custom, are automatically added to the CLI and GUI consoles.
 
+All text-based commands are transmitted to the platform over the HTTP network protocol. On one hand, this introduces
+a small overhead when the client and server run within the same JVM instance; on the other hand, this approach
+allows interaction with different servers.
+
 **Command Executor**. The execution of commands is handled by `CommandExecutor`, which receives a `String` containing
 the commands as input. Each command is a separate class implementing the `Command` interface. The executor splits the
-text into individual commands and processes each one. If a command is local, the executor handles it internally.
-If a command is remote, the executor forwards it to the executor of the remote framework.
+text into individual commands and processes each one.
 
-The command processing follows these steps: First, the class implementing the command is identified. Then, the
-`CommandFactory` provider of the module containing the command is invoked. The `CommandFactory` creates an instance
-of the command and returns it to the executor. Next, the command's parameters are parsed and their values are set
-in the command instance. Finally, the command is executed.
+The execution flow is as follows:
 
-It is important to note that `CommandExecutor` will find the `CommandFactory` in any layer.
+```
+Console → Command Executor → Client → Server → EndpointHandler → Framework API
+```
 
 **Custom Command**. To create a custom command, you need to do the following:
 
 1. Implement the `Command` interface (it is recommended to inherit from `AbstractCommand`).
-2. Create a `CommandFactory` in the module containing the command.
-3. Add the command to the `CommandFactory`.
+2. Create provider for `CommandService` in the module containing the command.
+3. Add the module to the console component.
 
-For examples, refer to the `alpha-commands` module.
+To create a custom `EndpointHandler`, do the following:
+1. Implement the EndpointHandler interface.
+2. Create provider for `EndpointHandlerService` in the module containing the handler.
+3. Add the module to the server component.
 
 **Command Scripts**. A command `String` can contain an unlimited number of commands separated by `;`. This allows for
 the use of command scripts — files that contain text commands. Typically, scripts are stored in the `script` folder.
+
+**Local and Remote Commands.** Any command can be local, remote, or both. Local commands can be executed without a
+session, while remote commands require an active session.
 
 **Special Symbols**. When working with commands, the following special characters should be considered:
 
 * `;` — used to separate commands.
 * `#` — used for comments in scripts. It can only be the first character of a line.
-* `!` — used as a prefix for commands when working in sessions, to execute the command locally.
+* `!` — used as a prefix for commands when working in sessions, to execute them as local commands.
+
+**Basic Commands**
+
+```
+# to open a session to the server
+session:open demo -a 127.0.0.1:7900 -n admin -p admin
+
+# to list all remote commands
+command:list
+
+# to list all local commands
+!command:list
+
+# to detach the session
+!session:detach
+```
 
 ### CLI Console <a name="usage-cli"></a>
 
@@ -447,19 +476,8 @@ The CLI console is a simple command-line interface. Unlike the GUI console, its 
 executing commands. The strength of the CLI console lies in its versatility—it can operate in environments without a
 graphical interface.
 
-The console supports a completer, which is invoked using the `Tab` key.
-
-Help is available for all commands in the console. Therefore, we will highlight only two points:
-
-1. The framework is shut down via the `framework:shutdown` command.
-2. When working in a session, use the `!` prefix to exit a session, switch between sessions, etc.
-
-For example, the following command will exit the session but will not close it.
-
-```
-demouser@localhost> !session:detach
-> |
-```
+At the same time, it supports command history, autocomplete (both for commands and parameters via Tab key) and
+command highlighting.
 
 ### GUI Console <a name="usage-gui"></a>
 
@@ -468,7 +486,7 @@ but also provides features for viewing log messages and generating graphs for wo
 
 #### Shell <a name="usage-gui-shell"></a>
 
-The Shell is a component that allows executing text commands. It is similar to the GUI console with two exceptions:
+The Shell is a component that allows executing text commands. It is similar to the CLI console with two exceptions:
 
 1. To invoke the completer, you need to use the `Ctrl` + `Space` keyboard shortcut.
 2. It provides a graphical interface for working with sessions.
@@ -484,7 +502,7 @@ intended solely for testing and debugging purposes.
 By default, the memory log is not active. To enable it, you must set the parameter
 `com.techsenger.alpha.core.log.memory` to `true` in the `.sh` / `.bat` scripts.
 
-#### Diagrams <a name="diagrams"></a>
+#### Diagrams <a name="usage-gui-diagrams"></a>
 
 Diagrams are a useful tool that provides complete information about layers, modules, and packages. The importance of
 this tool is especially heightened when working with complex systems.
@@ -594,12 +612,6 @@ The project contains various demo modules. Some of them can be run using the Exe
 `.sh`/`.bat` scripts, and some support both options.
 
 Information on how to run a specific `Demo.java` is provided in the Javadoc of that class.
-
-To connect the server use the following command (name: admin, password: admin):
-
-```
-session:open demo -a 127.0.0.1:7900 -s -n admin
-```
 
 ## License <a name="license"></a>
 
