@@ -326,7 +326,7 @@ A configuration template with all supported tags:
             <Module groupId="..." artifactId="..." version="..."/>
         </If>
 
-        <Module groupId="..." artifactId="..." version="${config['modVersion']}" active="true">
+        <Module groupId="..." artifactId="..." version="${config['modVersion']}" active="true" nativeAccessEnabled="true>
             <Directives>
                 <Directive type="opens/reads/exports" package="..." layer="..." module="..."/>
                 <Directive type="requestsOpen/requestsRead/requestsExport" layer="..." module="..." package="..."/>

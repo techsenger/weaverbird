@@ -215,7 +215,7 @@ class LayerBuilder {
         ModuleLayer.Controller controller =
                 ModuleLayer.defineModulesWithOneLoader(cf, parentLayers, parentClassLoader);
         component.setLayerController(controller);
-        addModuleDirectives(component);
+        configureModules(component);
         Set<ClassLoader> cachedClassLoaders = new HashSet<>();
         controller.layer()
                 .modules()
@@ -231,13 +231,7 @@ class LayerBuilder {
         }
     }
 
-    /**
-     * It is impossible to get reference to boot layer controller in JPMS, so, we can only use module and
-     * JVM arguments add-*.
-     *
-     * @param component
-     */
-    private void addModuleDirectives(DefaultComponent component) {
+    private void configureModules(DefaultComponent component) {
         var descriptor = component.getDescriptor();
         var config = descriptor.getConfig();
         var resolvedDirectives = new ArrayList<ResolvedModuleDirective>();
@@ -254,6 +248,7 @@ class LayerBuilder {
                     }
                 }
             }
+            // native access is not a directive
             if (m.isNativeAccessEnabled()) {
                 component.getLayerController().enableNativeAccess(module);
                 if (logger.isDebugEnabled()) {
