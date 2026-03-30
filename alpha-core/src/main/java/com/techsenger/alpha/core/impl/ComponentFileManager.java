@@ -17,7 +17,10 @@
 package com.techsenger.alpha.core.impl;
 
 import com.techsenger.alpha.core.api.Constants;
+import com.techsenger.alpha.core.api.DefaultPathManager;
+import com.techsenger.alpha.core.api.DefaultPathResolver;
 import com.techsenger.alpha.core.api.PathManager;
+import com.techsenger.alpha.core.api.PathResolver;
 import com.techsenger.alpha.core.api.component.ComponentConfig;
 import com.techsenger.alpha.core.api.component.ComponentConfigInfo;
 import com.techsenger.alpha.core.api.component.ComponentConfigUtils;
@@ -85,16 +88,16 @@ class ComponentFileManager {
 
     private final PathManager pathManager;
 
-    private final DefaultPathResolver pathResolver;
+    private final PathResolver pathResolver;
 
     private final ComponentConfigInfo configInfo;
 
     private final ComponentConfigUtils configUtils;
 
-    ComponentFileManager(PathManager pathManager, DefaultPathResolver pathResolver, ComponentConfigInfo configInfo,
+    ComponentFileManager(PathManager pathManager, ComponentConfigInfo configInfo,
             ComponentConfigUtils configUtils) {
         this.pathManager = pathManager;
-        this.pathResolver = pathResolver;
+        this.pathResolver = pathManager.getPathResolver();
         this.configInfo = configInfo;
         this.configUtils = configUtils;
     }

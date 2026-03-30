@@ -18,6 +18,7 @@ package com.techsenger.alpha.core.impl;
 
 import com.techsenger.alpha.core.api.ComponentManager;
 import com.techsenger.alpha.core.api.Constants;
+import com.techsenger.alpha.core.api.DefaultPathManager;
 import com.techsenger.alpha.core.api.Framework;
 import com.techsenger.alpha.core.api.FrameworkSettings;
 import com.techsenger.alpha.core.api.JvmInspector;
@@ -64,7 +65,7 @@ public class DefaultFramework implements Framework {
     /**
      * Service tracker.
      */
-    private final ServiceTracker serviceTracker = new DefaultServiceTracker();
+    private final DefaultServiceTracker serviceTracker = new DefaultServiceTracker();
 
     /**
      * Path provider. It must be created before component manager.
@@ -79,7 +80,7 @@ public class DefaultFramework implements Framework {
     /**
      * Component manager.
      */
-    private final ComponentManager componentManager;
+    private final DefaultComponentManager componentManager = new DefaultComponentManager(this);
 
     /**
      * Flag indicating that framework is shutting down.
@@ -91,15 +92,24 @@ public class DefaultFramework implements Framework {
     private volatile RepoService repoService;
 
     public DefaultFramework(FrameworkSettings settings, Path rootPath) {
-        this(settings, new DefaultPathManager(rootPath));
+        this(settings, rootPath, null);
     }
 
     public DefaultFramework(FrameworkSettings settings, PathManager pathManager) {
+        this(settings, null, pathManager);
+    }
+
+    private DefaultFramework(FrameworkSettings settings, Path rootPath, PathManager pathManager) {
+        if (pathManager == null) {
+            this.pathManager = new DefaultPathManager(rootPath, componentManager);
+        } else {
+            this.pathManager = pathManager;
+        }
         this.settings = settings;
-        this.pathManager = pathManager;
+        serviceTracker.initialize(this.componentManager);
         this.repoRegistration = this.serviceTracker.registerTracking(RepoService.class);
-        this.registry = new DefaultRegistry(pathManager);
-        this.componentManager = new DefaultComponentManager(registry, pathManager, this);
+        this.registry = new DefaultRegistry(this.pathManager);
+
         logger.info("Alpha Framework {} created on {}", getVersion().getFull(), this.getClass().getModule().getLayer());
     }
 

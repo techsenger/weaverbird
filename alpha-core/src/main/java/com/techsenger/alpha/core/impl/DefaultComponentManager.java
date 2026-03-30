@@ -19,8 +19,6 @@ package com.techsenger.alpha.core.impl;
 import com.techsenger.alpha.core.api.ComponentManager;
 import com.techsenger.alpha.core.api.Constants;
 import com.techsenger.alpha.core.api.Framework;
-import com.techsenger.alpha.core.api.PathManager;
-import com.techsenger.alpha.core.api.PathResolver;
 import com.techsenger.alpha.core.api.component.Component;
 import com.techsenger.alpha.core.api.component.ComponentConfig;
 import com.techsenger.alpha.core.api.component.ComponentConfigInfo;
@@ -70,11 +68,7 @@ public class DefaultComponentManager implements ComponentManager {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultComponentManager.class);
 
-    private final DefaultRegistry registry;
-
-    private final PathManager pathManager;
-
-    private final DefaultPathResolver pathResolver;
+    private final Framework framework;
 
     private final LayerBuilder layerBuilder;
 
@@ -95,17 +89,10 @@ public class DefaultComponentManager implements ComponentManager {
 
     private final ComponentConfigUtils configUtils = new ComponentConfigUtils();
 
-    private final Framework framework;
-
-    public DefaultComponentManager(DefaultRegistry registry, PathManager pathManager, Framework framework) {
-        this.registry = registry;
-        this.pathManager = pathManager;
+    public DefaultComponentManager(Framework framework) {
         this.framework = framework;
-        this.pathResolver = new DefaultPathResolver(pathManager, this);
-        this.layerBuilder = new LayerBuilder(this, framework);
-        this.activatorManager = new ModuleActivatorManager(framework, this);
-        var serviceTracker = (DefaultServiceTracker) framework.getServiceTracker();
-        serviceTracker.initialize(this);
+        this.layerBuilder = new LayerBuilder(framework);
+        this.activatorManager = new ModuleActivatorManager(framework);
     }
 
     @Override
@@ -119,7 +106,7 @@ public class DefaultComponentManager implements ComponentManager {
     public synchronized Path buildComponent(ComponentConfig config, Path path, String extension)
             throws ComponentException {
         notifyObservers((o) -> o.onBuilding(config), null);
-        var fileManager = new ComponentFileManager(pathManager, pathResolver, this.configInfo, this.configUtils);
+        var fileManager = new ComponentFileManager(framework.getPathManager(), this.configInfo, this.configUtils);
         var archivePath = fileManager.build(config, path, extension);
         notifyObservers((o) -> o.onBuilt(config), null);
         logger.info("Built component {}{}{} at {}", config.getName(),
@@ -129,21 +116,21 @@ public class DefaultComponentManager implements ComponentManager {
 
     @Override
     public synchronized ComponentConfig addComponent(Path zipPath) throws ComponentException {
-        var fileManager = new ComponentFileManager(pathManager, pathResolver, this.configInfo, this.configUtils);
+        var fileManager = new ComponentFileManager(framework.getPathManager(), this.configInfo, this.configUtils);
         try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
             var config = fileManager.readConfig(zipFile);
-            if (registry.isComponentAdded(config.getName(), config.getVersion())) {
+            if (getRegistry().isComponentAdded(config.getName(), config.getVersion())) {
                 throw new ComponentException(StringUtils.format("Component {}{}{} is already added",
                         config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion()));
             }
             notifyObservers((o) -> o.onAdding(config), null);
             fileManager.addComponent(config, zipPath, zipFile);
-            registry.getModifiableAddedComponents().add(new ComponentEntry(config));
-            registry.save();
+            getRegistry().getModifiableAddedComponents().add(new ComponentEntry(config));
+            getRegistry().save();
             notifyObservers((o) -> o.onAdded(config), null);
             logger.info("Added component {}{}{} from {}; total added components: {}", config.getName(),
                     Constants.NAME_VERSION_SEPARATOR, config.getVersion(), zipPath,
-                    registry.getModifiableAddedComponents().size());
+                    getRegistry().getModifiableAddedComponents().size());
             return config;
         } catch (IOException ex) {
             throw new ComponentException(StringUtils.format("Error adding component from {}", zipPath), ex);
@@ -160,24 +147,25 @@ public class DefaultComponentManager implements ComponentManager {
         } catch (Exception ex) {
             throw new ComponentException("Error reading provided XML configuration", ex);
         }
-        if (registry.isComponentAdded(config.getName(), config.getVersion())) {
+        if (getRegistry().isComponentAdded(config.getName(), config.getVersion())) {
             throw new ComponentException(StringUtils.format("Component {}{}{} is already added",
                     config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion()));
         }
         var finalConfig = config;
         notifyObservers((o) -> o.onAdding(finalConfig), null);
-        var fileManager = new ComponentFileManager(pathManager, pathResolver, this.configInfo, this.configUtils);
+        var fileManager = new ComponentFileManager(framework.getPathManager(), this.configInfo, this.configUtils);
         try {
             fileManager.addComponent(config, xmlConfig);
         } catch (Exception ex) {
             throw new ComponentException(StringUtils.format("Error adding component {}{}{} with XML configuration",
                     config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion()), ex);
         }
-        registry.getModifiableAddedComponents().add(new ComponentEntry(config));
-        registry.save();
+        getRegistry().getModifiableAddedComponents().add(new ComponentEntry(config));
+        getRegistry().save();
         notifyObservers((o) -> o.onAdded(finalConfig), null);
         logger.info("Added component {}{}{} with XML configuration; total added components: {}", config.getName(),
-                Constants.NAME_VERSION_SEPARATOR, config.getVersion(), registry.getModifiableAddedComponents().size());
+                Constants.NAME_VERSION_SEPARATOR, config.getVersion(),
+                getRegistry().getModifiableAddedComponents().size());
         return config;
     }
 
@@ -193,7 +181,7 @@ public class DefaultComponentManager implements ComponentManager {
     public synchronized void resolveComponent(ComponentConfig config, MessagePrinter printer)
             throws ComponentException {
         //check if component is not resolved yet.
-        if (registry.isComponentResolved(config.getName(), config.getVersion())) {
+        if (getRegistry().isComponentResolved(config.getName(), config.getVersion())) {
             throw new ComponentException(StringUtils.format("Component {}{}{} is already resolved",
                     config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion()));
         }
@@ -212,12 +200,12 @@ public class DefaultComponentManager implements ComponentManager {
             resolved = repoService.resolve(reposByName, (List<ModuleArtifact>) (List<?>) config.getModules(), printer);
         }
         if (resolved) {
-            registry.getModifiableResolvedComponents().add(new ComponentEntry(config));
-            registry.save();
+            getRegistry().getModifiableResolvedComponents().add(new ComponentEntry(config));
+            getRegistry().save();
             notifyObservers((o) -> o.onResolved(config), null);
             logger.info("Resolved component {}{}{}; total resolved components: {}", config.getName(),
                     Constants.NAME_VERSION_SEPARATOR, config.getVersion(),
-                    registry.getModifiableResolvedComponents().size());
+                    getRegistry().getModifiableResolvedComponents().size());
         } else {
             throw new ComponentException(StringUtils.format("Error resolving {}{}{}",
                     config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion()));
@@ -425,7 +413,7 @@ public class DefaultComponentManager implements ComponentManager {
     public synchronized void unresolveComponent(ComponentConfig config, MessagePrinter printer)
             throws ComponentException {
         //check if component is not resolved yet.
-        var regEntryIndex = registry.getModifiableResolvedComponents().indexOf(new ComponentEntry(config));
+        var regEntryIndex = getRegistry().getModifiableResolvedComponents().indexOf(new ComponentEntry(config));
         if (regEntryIndex == -1) {
             throw new ComponentException(StringUtils.format("Component {}{}{} is not resolved",
                     config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion()));
@@ -436,7 +424,7 @@ public class DefaultComponentManager implements ComponentManager {
         }
         //now we need all installed configs
         List<ComponentConfig> otherResolvedConfigs = new ArrayList<>();
-        for (var entry : registry.getModifiableResolvedComponents()) {
+        for (var entry : getRegistry().getModifiableResolvedComponents()) {
             try {
                 ComponentConfig someConfig = readConfig(entry.getName(), entry.getVersion());
                 if (!config.equals(someConfig)) {
@@ -470,11 +458,11 @@ public class DefaultComponentManager implements ComponentManager {
             notifyObservers((o) -> o.onUnresolved(config), null);
         }
         if (result) {
-            registry.getModifiableResolvedComponents().remove(regEntryIndex);
-            registry.save();
+            getRegistry().getModifiableResolvedComponents().remove(regEntryIndex);
+            getRegistry().save();
             logger.info("Unresolved component {}{}{}; total resolved components: {}",
                     config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion(),
-                    registry.getModifiableResolvedComponents().size());
+                    getRegistry().getModifiableResolvedComponents().size());
         }
     }
 
@@ -488,20 +476,20 @@ public class DefaultComponentManager implements ComponentManager {
 
     @Override
     public synchronized void removeComponent(ComponentConfig config) throws ComponentException {
-        var regEntryIndex = registry.getModifiableAddedComponents().indexOf(new ComponentEntry(config));
+        var regEntryIndex = getRegistry().getModifiableAddedComponents().indexOf(new ComponentEntry(config));
         if (regEntryIndex == -1) {
             throw new ComponentException(StringUtils.format("Component {}{}{} is not added",
                     config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion()));
         }
         notifyObservers((o) -> o.onRemoving(config), null);
-        var fileManager = new ComponentFileManager(pathManager, pathResolver, this.configInfo, this.configUtils);
+        var fileManager = new ComponentFileManager(framework.getPathManager(), this.configInfo, this.configUtils);
         fileManager.removeComponent(config);
-        registry.getModifiableAddedComponents().remove(regEntryIndex);
-        registry.save();
+        getRegistry().getModifiableAddedComponents().remove(regEntryIndex);
+        getRegistry().save();
         notifyObservers((o) -> o.onRemoved(config), null);
         logger.info("Removed component {}{}{}; total added components: {}",
                 config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion(),
-                registry.getModifiableAddedComponents().size());
+                getRegistry().getModifiableAddedComponents().size());
     }
 
     @Override
@@ -638,8 +626,8 @@ public class DefaultComponentManager implements ComponentManager {
     @Override
     public ComponentConfig readConfig(String name, Version version)
             throws ComponentException, UnknownComponentException {
-        Path componentConfigPath = this.pathResolver.resolveConfigFile(name, version);
-        if (!registry.isComponentAdded(name, version)) {
+        Path componentConfigPath = framework.getPathManager().getPathResolver().resolveConfigFile(name, version);
+        if (!getRegistry().isComponentAdded(name, version)) {
             throw new UnknownComponentException(StringUtils.format("Component {}{}{} not found", name,
                     Constants.NAME_VERSION_SEPARATOR, version));
         }
@@ -655,11 +643,6 @@ public class DefaultComponentManager implements ComponentManager {
             throw new ComponentException(StringUtils.format("Error reading configuration for {}{}{}",
                     name, Constants.NAME_VERSION_SEPARATOR, version), ex);
         }
-    }
-
-    @Override
-    public PathResolver getPathResolver() {
-        return pathResolver;
     }
 
     @Override
@@ -732,5 +715,9 @@ public class DefaultComponentManager implements ComponentManager {
             throw new UnknownComponentException(StringUtils.format("Component with alias:{} wasn't found", alias));
         }
         return (DefaultComponentDescriptor) component.getDescriptor();
+    }
+
+    private DefaultRegistry getRegistry() {
+        return (DefaultRegistry) this.framework.getRegistry();
     }
 }

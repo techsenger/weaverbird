@@ -41,10 +41,10 @@ public class DefaultRegistry implements Registry {
 
     private final List<ComponentEntry> resolvedComponents  = new CopyOnWriteArrayList<>();
 
-    private final PathManager pathProvider;
+    private final PathManager pathManager;
 
-    public DefaultRegistry(PathManager pathProvider) {
-        this.pathProvider = pathProvider;
+    public DefaultRegistry(PathManager pathManager) {
+        this.pathManager = pathManager;
         this.read();
     }
 
@@ -79,7 +79,7 @@ public class DefaultRegistry implements Registry {
     public synchronized void save() {
         try {
             var writer = new RegistryXmlWriter(this);
-            var path = this.pathProvider.getDataDirectory().resolve(REGISTRY_FILE);
+            var path = this.pathManager.getDataDirectory().resolve(REGISTRY_FILE);
             writer.write(path);
             logger.debug("Registry was written to {}", path);
         } catch (Exception ex) {
@@ -90,7 +90,7 @@ public class DefaultRegistry implements Registry {
     private void read() {
         try {
             var reader = new RegistryXmlReader(this);
-            var dataPath = this.pathProvider.getDataDirectory();
+            var dataPath = this.pathManager.getDataDirectory();
             var path = dataPath.resolve(Paths.get(REGISTRY_FILE));
             reader.read(path.toUri().toURL());
             logger.debug("Registry was read from file {}", path);

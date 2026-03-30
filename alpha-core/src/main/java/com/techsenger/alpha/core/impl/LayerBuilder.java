@@ -16,10 +16,8 @@
 
 package com.techsenger.alpha.core.impl;
 
-import com.techsenger.alpha.core.api.ComponentManager;
 import com.techsenger.alpha.core.api.Constants;
 import com.techsenger.alpha.core.api.Framework;
-import com.techsenger.alpha.core.api.LayerOwner;
 import com.techsenger.alpha.core.api.component.Component;
 import com.techsenger.alpha.core.api.component.ComponentDescriptor;
 import com.techsenger.alpha.core.api.module.DirectiveType;
@@ -55,12 +53,9 @@ class LayerBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(LayerBuilder.class);
 
-    private final ComponentManager componentManager;
+    private final Framework framework;
 
-    private final LayerOwner framework;
-
-    LayerBuilder(ComponentManager componentManager, LayerOwner framework) {
-        this.componentManager = componentManager;
+    LayerBuilder(Framework framework) {
         this.framework = framework;
     }
 
@@ -162,7 +157,7 @@ class LayerBuilder {
         component.getDescriptor().getConfig().getModules().forEach(descriptor -> {
             if (descriptor.getResolvedPath() == null) {
                 ((DefaultModuleDescriptor) descriptor).setResolvedPath(
-                        this.componentManager.getPathResolver().resolveModule(descriptor));
+                        framework.getPathManager().getPathResolver().resolveModule(descriptor));
             }
             if (descriptor.getType() == null || descriptor.getType() == ModuleType.JAR) {
                 jarModulePaths.add(descriptor.getResolvedPath().toAbsolutePath());
@@ -181,7 +176,7 @@ class LayerBuilder {
         final ComponentDescriptor descriptor = component.getDescriptor();
         if (!descriptor.getParents().isEmpty()) {
             for (ComponentDescriptor desc: descriptor.getParents()) {
-                ModuleLayer layer = componentManager.getComponent(desc.getId()).getLayer();
+                ModuleLayer layer = framework.getComponentManager().getComponent(desc.getId()).getLayer();
                 parentLayers.add(layer);
                 parentConfs.add(layer.configuration());
             }
@@ -195,7 +190,8 @@ class LayerBuilder {
                 throw new IllegalArgumentException("Component uses parent classloader, but has multiple parents");
             }
             if (!descriptor.getParents().isEmpty()) {
-                Component parentComponent = componentManager.getComponent(descriptor.getParents().get(0).getId());
+                Component parentComponent = framework.getComponentManager()
+                        .getComponent(descriptor.getParents().get(0).getId());
                 if (parentComponent.getClassLoaders().size() != 1) {
                     throw new IllegalArgumentException("Parent component has multiple classloaders");
                 }
@@ -280,7 +276,7 @@ class LayerBuilder {
         for (var layer : layers.values()) {
             var otherModule = ModuleUtils.findModule(directive.getModule(), layer);
             ModuleLayer.Controller layerController = null;
-            DefaultComponent layerComponent = (DefaultComponent) this.componentManager.findComponent(layer);
+            DefaultComponent layerComponent = (DefaultComponent) framework.getComponentManager().findComponent(layer);
             if (layerComponent != null) {
                 layerController = layerComponent.getLayerController();
             }
@@ -330,7 +326,7 @@ class LayerBuilder {
         if (layer == Framework.class.getModule().getLayer()) {
             return this.framework.getFullName();
         }
-        var descriptor = componentManager.findComponent(layer).getDescriptor();
+        var descriptor = framework.getComponentManager().findComponent(layer).getDescriptor();
         if (descriptor != null) {
             return descriptor.getConfig().getName()
                     + Constants.NAME_VERSION_SEPARATOR + descriptor.getConfig().getVersion();
@@ -360,7 +356,7 @@ class LayerBuilder {
                     for (var ancestor : ancestors) {
                         var config = ancestor.getConfig();
                         if (config.getName().equals(nameAndVersion.getFirst())) {
-                            var ancestorComponent = componentManager.getComponent(ancestor.getId());
+                            var ancestorComponent = framework.getComponentManager().getComponent(ancestor.getId());
                             layersByName.put(config.getFullName(), ((DefaultComponent) ancestorComponent).getLayer());
                         }
                     }
@@ -375,7 +371,7 @@ class LayerBuilder {
                         var config = ancestor.getConfig();
                         if (config.getName().equals(nameAndVersion.getFirst())
                                 && config.getVersion().equals(nameAndVersion.getSecond())) {
-                            var ancestorComponent = componentManager.getComponent(ancestor.getId());
+                            var ancestorComponent = framework.getComponentManager().getComponent(ancestor.getId());
                             layersByName.put(config.getFullName(), ((DefaultComponent) ancestorComponent).getLayer());
                         }
                     }

@@ -83,4 +83,11 @@ public interface PathManager {
      * @return temp path.
      */
     Path getTempDirectory();
+
+    /**
+     * Returns the component path resolver.
+     *
+     * @return
+     */
+    PathResolver getPathResolver();
 }

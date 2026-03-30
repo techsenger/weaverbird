@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.techsenger.alpha.core.impl;
+package com.techsenger.alpha.core.api;
 
-import com.techsenger.alpha.core.api.PathManager;
 import java.nio.file.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,21 +46,18 @@ public class DefaultPathManager implements PathManager {
 
     public static final String TEMPORARY_DIRECTORY_NAME = "temp";
 
-    /**
-     * Logger.
-     */
     private static final Logger logger = LoggerFactory.getLogger(DefaultPathManager.class);
 
-    /**
-     * Root path.
-     */
     private final Path rootPath;
+
+    private final PathResolver pathResolver;
 
     /**
      * Constructor.
      */
-    public DefaultPathManager(Path rootPath) {
+    public DefaultPathManager(Path rootPath, ComponentManager componentManager) {
         this.rootPath = rootPath;
+        this.pathResolver = new DefaultPathResolver(this, componentManager);
         logger.info("Framework root path: " + rootPath);
     }
 
@@ -122,5 +118,10 @@ public class DefaultPathManager implements PathManager {
     public Path getTempDirectory() {
         var tempPath = rootPath.resolve(TEMPORARY_DIRECTORY_NAME);
         return tempPath;
+    }
+
+    @Override
+    public PathResolver getPathResolver() {
+        return pathResolver;
     }
 }

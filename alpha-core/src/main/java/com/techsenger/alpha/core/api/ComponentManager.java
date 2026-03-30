@@ -37,13 +37,6 @@ import java.util.List;
 public interface ComponentManager {
 
     /**
-     * Returns the component path manager.
-     *
-     * @return
-     */
-    PathResolver getPathResolver();
-
-    /**
      * Builds a component distro archive. If a file with this path already exists, it will be overwritten.
      *
      * @param name the name of the component

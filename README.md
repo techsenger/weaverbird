@@ -118,28 +118,24 @@ the boot layer.
 
 #### Directory Layout <a name="usage-framework-directory"></a>
 
-The framework provides a specific folder structure, see `PathManager`. All folders are divided into two groups:
+To use the framework in the most efficient way, it is important to carefully design the folder and file structure.
+This responsibility is handled by two classes: `PathManager` and `PathResolver` (to create a framework with a custom
+`PathManager`, use `FrameworkFactory.create(settings, pathManager)`).
 
-1. Standard Folders — the contents of these folders are either unstructured or structured according to external
-standards, such as the Maven repository standards.
-2. Special Folders — the contents of these folders are structured according to the framework's rules.
+`PathManager` defines paths to the main directories used by the platform, such as `bin`, `cache`, `data`, `repo`, etc.
+The `PathResolver`, which can be obtained via `PathManager#getPathResolver()`, is responsible for resolving paths for
+a specific component.
 
-```
-bin     //standard
-cache
-config
-data
-doc
-legal
-log     //standard
-repo    //standard
-script  //standard
-temp
-```
+The need for `PathResolver` arises from the fact that each component may have not only its own configuration, but
+also its own cache, data, documentation, and other resources. Therefore, it is necessary to separate files of
+different components within shared directories where component data is stored. Such directories may include:
+`cache`, `config`, `data`, `doc`, `legal`.
 
-Special folders have the following structure: at the root of the folder, framework files are located, while component
-files are organized into two nested folders. The name of the first folder is the component name, and the name of the
-second folder is the component version, see `PathResolver`.
+By default (`DefaultPathResolver`), the framework organizes these directories as follows:
+
+At the root of the folder, framework files are located, while component files are organized into two nested folders.
+The name of the first folder is the component name, and the name of the second folder is the component version,
+see `PathResolver`.
 
 For example:
 
@@ -594,7 +590,7 @@ To build the framework use standard Git and Maven commands:
 
 ## Running Demo <a name="running-demo"></a>
 
-The project contains various demo modules. Some of them can be run using the Maven Exec Plugin, some only via
+The project contains various demo modules. Some of them can be run using the Exec Maven Plugin, some only via
 `.sh`/`.bat` scripts, and some support both options.
 
 Information on how to run a specific `Demo.java` is provided in the Javadoc of that class.

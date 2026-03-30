@@ -16,7 +16,6 @@
 
 package com.techsenger.alpha.core.impl;
 
-import com.techsenger.alpha.core.api.ComponentManager;
 import com.techsenger.alpha.core.api.Framework;
 import com.techsenger.alpha.core.api.component.ComponentConfig;
 import com.techsenger.alpha.core.impl.component.DefaultComponent;
@@ -48,11 +47,8 @@ class ModuleActivatorManager {
 
     private final Framework framework;
 
-    private final ComponentManager componentManager;
-
-    ModuleActivatorManager(Framework framework, ComponentManager componentManager) {
+    ModuleActivatorManager(Framework framework) {
         this.framework = framework;
-        this.componentManager = componentManager;
     }
 
     public void activateActivators(final DefaultComponent component) throws Exception {
@@ -131,7 +127,7 @@ class ModuleActivatorManager {
             if (m.isActive()) {
                 //module path using module descriptor
                 if (m.getResolvedPath() == null) {
-                    ((DefaultModuleDescriptor) m).setResolvedPath(componentManager
+                    ((DefaultModuleDescriptor) m).setResolvedPath(framework.getPathManager()
                             .getPathResolver().resolveModule(m));
                 }
                 for (var entry : modulePathsByName.entrySet()) {

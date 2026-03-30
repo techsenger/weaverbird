@@ -29,7 +29,7 @@ public class ModuleActivatorProvider implements ModuleActivator {
 
     @Override
     public void activate(ModuleContext context) throws Exception {
-        var pathResolver = context.getFramework().getComponentManager().getPathResolver();
+        var pathResolver = context.getFramework().getPathManager().getPathResolver();
         var settingsPath = pathResolver.resolveSettingsFile(context.getComponent().getLayer());
         var settings = new SettingsXmlReader().read(settingsPath);
         this.server = new HttpServer(context.getFramework());

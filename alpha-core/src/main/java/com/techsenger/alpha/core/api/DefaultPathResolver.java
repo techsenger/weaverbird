@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package com.techsenger.alpha.core.impl;
+package com.techsenger.alpha.core.api;
 
-import com.techsenger.alpha.core.api.ComponentManager;
-import com.techsenger.alpha.core.api.PathManager;
-import com.techsenger.alpha.core.api.PathResolver;
 import com.techsenger.alpha.core.api.component.ComponentConfig;
 import com.techsenger.alpha.core.api.module.ModuleArtifact;
 import com.techsenger.toolkit.core.os.OsUtils;
@@ -33,7 +30,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Pavel Castornii
  */
-class DefaultPathResolver implements PathResolver {
+public class DefaultPathResolver implements PathResolver {
 
     public static final String CONFIG_FILE_NAME = "configuration.xml";
 
@@ -45,7 +42,7 @@ class DefaultPathResolver implements PathResolver {
 
     private final ComponentManager componentManager;
 
-    DefaultPathResolver(PathManager pathManager, ComponentManager componentManager) {
+    public DefaultPathResolver(PathManager pathManager, ComponentManager componentManager) {
         this.pathManager = pathManager;
         this.componentManager = componentManager;
     }
