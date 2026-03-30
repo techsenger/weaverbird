@@ -75,19 +75,6 @@ The framework provides two types of consoles: CLI and GUI. The CLI console allow
 console additionally allows working with logs and generates diagrams with information about layers, modules, and
 packages. These diagrams are especially useful when working with complex systems.
 
-During the development of the framework, much attention was paid to flexibility and universality. For this reason,
-all key elements of the framework — repository, command executor, client, server, console, etc. are designed as
-services, allowing easy integration of custom implementations when needed. For example, even when a command script is
-being executed, a service for tracking its progress can be added. This feature also allows for the creation of a splash
-screen with a loading indicator.
-
-Thus, four main responsibilities of the framework can be highlighted:
-
-1. Component management
-2. Text command mechanism
-3. Log message viewing
-4. Information provision
-
 ## Use Cases <a name="use-cases"></a>
 
 The framework can be used for programs that:
