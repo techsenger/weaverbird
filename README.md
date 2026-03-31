@@ -434,7 +434,7 @@ Console ⮂ Command Executor ⮂ Command ⮂ Client ⮂ Server ⮂ EndpointHandl
 3. Add the module to the console component.
 
 To create a custom `EndpointHandler`, do the following:
-1. Implement the EndpointHandler interface.
+1. Implement the `EndpointHandler` interface.
 2. Create provider for `EndpointHandlerService` in the module containing the handler.
 3. Add the module to the server component.
 
