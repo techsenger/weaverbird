@@ -63,7 +63,7 @@
         <osp-bom.version>1.8.0-SNAPSHOT</osp-bom.version>
         <bom-properties.plugin.version>1.0.0-SNAPSHOT</bom-properties.plugin.version>
         <mvn.version>3.8.1</mvn.version>
-        <javafx.version>25</javafx.version>
+        <javafx.version>26</javafx.version>
         <exec.plugin.version>3.6.3</exec.plugin.version>
         <ascii.themes.version>0.0.1</ascii.themes.version>
 
@@ -130,6 +130,16 @@
             <dependency>
                 <groupId>com.techsenger.alpha</groupId>
                 <artifactId>alpha-executor</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.alpha.console</groupId>
+                <artifactId>alpha-console-cli</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.techsenger.alpha.console</groupId>
+                <artifactId>alpha-console-gui</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -19,48 +19,12 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-jul</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-jcl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j2-impl</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.techsenger.alpha</groupId>
             <artifactId>alpha-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.techsenger.toolkit</groupId>
             <artifactId>toolkit-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.fusesource.jansi</groupId>
-            <artifactId>jansi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.beust</groupId>
-            <artifactId>jcommander</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.el</groupId>
-            <artifactId>jakarta.el-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.expressly</groupId>
-            <artifactId>expressly</artifactId>
         </dependency>
     </dependencies>
 
@@ -90,38 +54,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>${exec.plugin.version}</version>
-                <configuration>
-                    <executable>java</executable>
-                    <arguments>
-                        <argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:7700</argument>
-                        <argument>-Dorg.jboss.logging.provider=log4j</argument>
-                        <argument>-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager</argument>
-                        <argument>-Dlog4j.configurationFile=${project.build.directory}/framework/config/log4j2.xml</argument>
-                        <argument>-Dcom.techsenger.alpha.core.root.path=${project.build.directory}/framework</argument>
-                        <argument>-Djava.net.preferIPv4Stack=true</argument>
-                        <argument>-Djava.io.tmpdir="$ROOT_PATH/temp"</argument>
-                        <argument>-Djava.io.tmpdir="$ROOT_PATH/temp"</argument>
-                        <argument>-Dfile.encoding=UTF-8</argument>
-                        <argument>--add-modules</argument>
-                        <argument>ALL-DEFAULT</argument>
-                        <argument>--add-modules</argument>
-                        <argument>org.apache.logging.log4j,org.apache.logging.log4j.jul</argument>
-                        <argument>--add-opens</argument>
-                        <argument>java.base/java.time=com.techsenger.alpha.core</argument>
-                        <argument>--add-opens</argument>
-                        <argument>java.base/java.lang=com.techsenger.alpha.core</argument>
-                        <argument>--enable-native-access=com.techsenger.alpha.core</argument>
-                        <argument>--module-path</argument>
-                        <modulepath/> <!-- placeholder that automatically resolves and injects the module path -->
-                        <argument>--module</argument>
-                        <argument>com.techsenger.alpha.demo.starter/com.techsenger.alpha.demo.starter.StarterDemo</argument>
-                    </arguments>
-                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -23,33 +23,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecution;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.eclipse.aether.DefaultRepositorySystemSession;
-import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.artifact.DefaultArtifact;
-import org.eclipse.aether.installation.InstallRequest;
-import org.eclipse.aether.repository.LocalRepository;
-import org.eclipse.aether.repository.RemoteRepository;
-import org.eclipse.aether.resolution.ArtifactRequest;
-import org.eclipse.aether.resolution.ArtifactResult;
 
 /**
  *
  * @author Pavel Castornii
  */
-public abstract class AbstractAssembleMojo extends AbstractMojo {
+public abstract class AbstractAssembleMojo extends AbstractBaseMojo {
 
     static List<String> readFile(String fileName) throws IOException {
         try (InputStream is = AbstractAssembleMojo.class.getResourceAsStream(fileName);
@@ -80,49 +67,27 @@ public abstract class AbstractAssembleMojo extends AbstractMojo {
         return artifacts;
     }
 
-    @Parameter(defaultValue = "${mojoExecution}", readonly = true)
-    private MojoExecution mojoExecution;
-
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
-
-    @Parameter(required = true)
-    private Path path;
-
-    @Parameter(required = false)
-    private List<ModuleItem> modules;
-
-    @Component
-    private RepositorySystem repoSystem;
-
-    @Parameter(defaultValue = "${repositorySystemSession}", readonly = true)
-    private RepositorySystemSession session;
-
-    @Parameter(defaultValue = "${project.remoteProjectRepositories}", readonly = true)
-    private List<RemoteRepository> remoteRepositories;
 
     /**
      * Contains artifacts that are required the start the framework.
      */
     private final List<Artifact> modulePathModules = new ArrayList<>();
 
-    Path getPath() {
-        return path;
-    }
-
     List<Artifact> getModulePathModules() {
         return modulePathModules;
     }
 
     void createData() throws Exception {
-        var dataPath = path.resolve("data");
+        var dataPath = getPath().resolve("data");
         Files.createDirectories(dataPath);
         var registry = readFileToStr("registry.xml");
         FileUtils.writeFile(dataPath.resolve("alpha-registry.xml"), registry, StandardCharsets.UTF_8);
     }
 
     void createConfig() throws Exception {
-        var configPath = path.resolve("config");
+        var configPath = getPath().resolve("config");
 
         var repoDirPath = configPath.resolve("alpha-repo").resolve(project.getVersion());
         Files.createDirectories(repoDirPath);
@@ -140,71 +105,38 @@ public abstract class AbstractAssembleMojo extends AbstractMojo {
         Files.createDirectories(cliDirPath);
         var cliConfig = readFileToStr("cli-config.xml");
         FileUtils.writeFile(cliDirPath.resolve("configuration.xml"), cliConfig, StandardCharsets.UTF_8);
+
+        var guiDirPath = configPath.resolve("alpha-console-gui").resolve(project.getVersion());
+        Files.createDirectories(guiDirPath);
+        var guiConfig = readFileToStr("gui-config.xml");
+        FileUtils.writeFile(guiDirPath.resolve("configuration.xml"), guiConfig, StandardCharsets.UTF_8);
     }
 
-    void createRepo() throws Exception {
-        var repoPath = path.resolve("repo");
+    void createRepo(boolean modulePathSupported) throws Exception {
+        var repoPath = getPath().resolve("repo");
         Files.createDirectories(repoPath);
-        var targetSession = new DefaultRepositorySystemSession(session);
-        targetSession.setLocalRepositoryManager(
-            repoSystem.newLocalRepositoryManager(
-                targetSession, new LocalRepository(repoPath.toFile())
-            )
-        );
 
+        var session = createTargetSession(repoPath);
         var frameworkArtifacts = readArtifacts("framework-modules.txt");
         for (var a : frameworkArtifacts) {
-            resolveAndInstall(a, targetSession);
+            resolveModule(a, session);
             this.modulePathModules.add(a);
         }
-        if (modules != null) {
-            var goal = this.mojoExecution.getGoal();
-            var runtime = goal.equals(Goals.ASSEMBLE_RUNTIME);
-            for (var module : modules) {
-                Artifact artifact = new DefaultArtifact(
-                        module.getGroupId(),
-                        module.getArtifactId(),
-                        module.getClassifier(),
-                        module.getType(),
-                        module.getVersion());
-                if (runtime) {
-                    if (module.getOnModulePath() != null) {
-                        throw new MojoExecutionException("Parameter 'onModulePath' is not supported for goal '"
-                                + goal + "'");
-                    }
-                } else {
-                    if (Boolean.TRUE.equals(module.getOnModulePath())) {
-                        this.modulePathModules.add(artifact);
-                    }
-                }
-                resolveAndInstall(artifact, targetSession);
-            }
+
+        if (modulePathSupported) {
+            resolveProvidedModules(session, modulePathModules);
+        } else {
+            resolveProvidedModules(session, null);
         }
 
         var repoComponentArtifacts = readArtifacts("repo-modules.txt");
         for (var a : repoComponentArtifacts) {
-            resolveAndInstall(a, targetSession);
+            resolveModule(a, session);
         }
     }
 
     void createTemp() throws Exception {
-        var tempPath = path.resolve("temp");
+        var tempPath = getPath().resolve("temp");
         Files.createDirectories(tempPath);
     }
-
-    void resolveAndInstall(Artifact artifact, DefaultRepositorySystemSession targetSession)
-            throws MojoExecutionException {
-        try {
-            ArtifactRequest request = new ArtifactRequest(artifact, remoteRepositories, null);
-            ArtifactResult result = repoSystem.resolveArtifact(session, request);
-
-            InstallRequest install = new InstallRequest();
-            install.addArtifact(result.getArtifact());
-            repoSystem.install(targetSession, install);
-            getLog().info("Installed: " + artifact);
-        } catch (Exception e) {
-            throw new MojoExecutionException("Failed: " + artifact, e);
-        }
-    }
-
 }

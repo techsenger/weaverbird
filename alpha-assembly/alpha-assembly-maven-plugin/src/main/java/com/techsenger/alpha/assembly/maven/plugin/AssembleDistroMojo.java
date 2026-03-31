@@ -44,7 +44,11 @@ public class AssembleDistroMojo extends AbstractAssembleMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
-            createRepo();
+            if (Files.exists(getPath())) {
+                getLog().info(getPath() + " already exists. Skipping...");
+                return;
+            }
+            createRepo(true);
             createData();
             createConfig();
             createTemp();

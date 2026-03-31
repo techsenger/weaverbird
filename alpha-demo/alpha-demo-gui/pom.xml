@@ -15,37 +15,82 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.techsenger.alpha.demo</groupId>
-            <artifactId>alpha-demo-tools</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.techsenger.alpha</groupId>
+            <artifactId>alpha-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.toolkit</groupId>
+            <artifactId>toolkit-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.expressly</groupId>
+            <artifactId>expressly</artifactId>
+        </dependency>
+<!--        <dependency>
+            <groupId>com.techsenger.alpha.console</groupId>
+            <artifactId>alpha-console-gui</artifactId>
+        </dependency>-->
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>${exec.plugin.version}</version>
-                <inherited>false</inherited>
+                <groupId>com.techsenger.alpha.assembly</groupId>
+                <artifactId>alpha-assembly-maven-plugin</artifactId>
+                <version>${project.version}</version>
                 <executions>
+                    <!-- after clean -->
                     <execution>
-                        <id>download-fonts</id>
-                        <phase>package</phase>
+                        <id>assemble</id>
+                        <phase>verify</phase>
                         <goals>
-                            <goal>java</goal> <!-- java goal runs loader on the plugin thread -->
+                            <goal>assemble-distro</goal>
                         </goals>
                         <configuration>
-                            <mainClass>com.techsenger.alpha.demo.tools.DejavuFontsLoader</mainClass>
-                            <arguments>
-                                <argument>${project.build.directory}</argument>
-                            </arguments>
+                            <path>${project.build.directory}/framework</path>
+                            <mainClass>com.techsenger.alpha.demo.gui/com.techsenger.alpha.demo.gui.GuiDemo</mainClass>
+                            <modules>
+                                <module>
+                                    <groupId>com.techsenger.alpha.demo</groupId>
+                                    <artifactId>alpha-demo-gui</artifactId>
+                                    <version>${project.version}</version>
+                                    <onModulePath>true</onModulePath>
+                                </module>
+                            </modules>
+                        </configuration>
+                    </execution>
+                    <!-- after build without clean for dev purposes -->
+                    <execution>
+                        <id>update</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                        <configuration>
+                            <path>${project.build.directory}/framework</path>
+                            <modules>
+                                <module>
+                                    <groupId>com.techsenger.alpha.console</groupId>
+                                    <artifactId>alpha-console-gui</artifactId>
+                                    <version>${project.version}</version>
+                                </module>
+                                <module>
+                                    <groupId>com.techsenger.alpha.demo</groupId>
+                                    <artifactId>alpha-demo-gui</artifactId>
+                                    <version>${project.version}</version>
+                                </module>
+                            </modules>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

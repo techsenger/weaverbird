@@ -519,16 +519,21 @@ plugin configuration in special cases where the module cannot be resolved from a
 during component resolution. In other words, as a rule, component modules do not need to be specified in the plugin
 configuration.
 
-The plugin provides two goals. The `assemble-runtime` goal is used for integration tests, producing
-a minimal set of files required to run the framework. The `assemble-distro` goal is used to create a
-full distribution including `.sh`/`.bat` scripts and the default log4j2 configuration.
+The plugin provides the following goals:
 
-Configuration Parameters for the `assemble-runtime` goal:
+* `assemble-runtime` — used for integration testing. It produces a minimal set of files required to run the framework.
+  The execution is skipped if the specified `path` already exists.
+* `assemble-distro` — creates a full distribution, including `.sh`/`.bat` scripts and the default Log4j2 configuration.
+  The execution is skipped if the specified `path` already exists.
+* `update` — intended for development purposes. It updates the repository with the specified modules in an existing
+  distribution, avoiding full reassembly on every change. The execution is skipped if the specified `path` doesn't exist.
+
+Configuration Parameters for the `assemble-runtime` and `assemble-update` goals:
 
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
-| `path` | Yes | - | Path to the root framework directory where the distribution will be assembled |
-| `modules` | No | - | List of additional JPMS modules to resolve and include into the repository in addition to the minimal set of required modules |
+| `path` | Yes | - | Path to the root framework directory where the distribution will be assembled or updated |
+| `modules` | No | - | For `assemble-runtime`: the list of additional JPMS modules to resolve and include in the repository in addition to the minimal set of required modules. For `assemble-update`: the list of modules in the repository to update. |
 | `module/groupId` | Yes | - | Module group ID |
 | `module/artifactId` | Yes | - | Module artifact ID |
 | `module/version` | Yes | - | Module version |

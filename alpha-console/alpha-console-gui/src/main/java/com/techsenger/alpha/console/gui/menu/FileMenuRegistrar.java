@@ -16,19 +16,19 @@
 
 package com.techsenger.alpha.console.gui.menu;
 
-import com.techsenger.alpha.console.gui.keys.ToolsMenuKeyManager;
-import com.techsenger.alpha.console.gui.settings.ConsoleSettings;
-import com.techsenger.alpha.console.gui.settings.SettingsDialogView;
-import com.techsenger.alpha.console.gui.settings.SettingsDialogViewModel;
+import com.techsenger.alpha.console.gui.ConsoleTabFxView;
+import com.techsenger.alpha.console.gui.ConsoleTabPresenter;
 import com.techsenger.alpha.console.gui.style.ConsoleIcons;
-import com.techsenger.alpha.console.gui.utils.TabOpener;
-import com.techsenger.tabshell.core.TabShellKey;
-import com.techsenger.tabshell.core.TabShellView;
+import com.techsenger.alpha.core.api.Framework;
+import com.techsenger.tabshell.core.CoreComponents;
+import com.techsenger.tabshell.core.ShellFxView;
+import com.techsenger.tabshell.core.registry.AbstractControlRegistrar;
 import com.techsenger.tabshell.core.registry.ControlFactory;
-import com.techsenger.tabshell.core.registry.ControlRegistry;
+import com.techsenger.tabshell.layout.tabhost.TabHostFxView;
 import com.techsenger.tabshell.material.icon.FontIconView;
-import com.techsenger.tabshell.material.menu.KeyedMenuGroup;
-import com.techsenger.tabshell.material.menu.KeyedMenuItem;
+import com.techsenger.tabshell.material.menu.NamedMenu;
+import com.techsenger.tabshell.material.menu.NamedMenuGroup;
+import com.techsenger.tabshell.material.menu.NamedMenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -37,75 +37,73 @@ import javafx.scene.input.KeyCombination;
  *
  * @author Pavel Castornii
  */
-public class FileMenuRegistrar extends com.techsenger.tabshell.kit.core.menu.FileMenuRegistrar implements TabOpener {
+public class FileMenuRegistrar extends AbstractControlRegistrar {
 
-    public FileMenuRegistrar(ControlRegistry registry) {
-        super(registry);
+    private final ShellFxView<?> shell;
+
+    private final Framework framework;
+
+    public FileMenuRegistrar(ShellFxView<?> shell, Framework framework) {
+        super(shell.getControlRegistry());
+        this.shell = shell;
+        this.framework = framework;
     }
 
     @Override
     public void register() {
-        super.register();
+        registerMenu();
         registerMainGroup();
         registerShellItem();
-        registerSettingsItem();
+//        registerSettingsItem();
     }
 
-    @Override
-    protected void registerSaveFileAsItem() {
-        //TODO
-    }
-
-    @Override
-    protected void registerSaveFileItem() {
-        //TODO
-    }
-
-    @Override
-    protected void registerOpenFileItem() {
-        //TODO
-    }
-
-    @Override
-    protected void registerBaseFileGroup() {
-        //TODO
+    protected void registerMenu() {
+        ControlFactory<NamedMenu> f = (v) -> {
+            return new NamedMenu(FileMenu.NAME, "_File", 0);
+        };
+        addRegistration(getRegistry().registerMenu(CoreComponents.SHELL, null, f));
     }
 
     private void registerMainGroup() {
-        ControlFactory<KeyedMenuGroup> f = (v) -> {
-            return new KeyedMenuGroup(FileMenuKeys.MAIN);
-        };
-        addRegistration(getRegistry().registerMenuGroup(TabShellKey.INSTANCE, FileMenuKeys.FILE, f, 0));
+        ControlFactory<NamedMenuGroup> f = (v) -> new NamedMenuGroup(FileMenu.MAIN, 100);
+        addRegistration(getRegistry().registerMenuGroup(CoreComponents.SHELL, FileMenu.NAME, f));
     }
 
     private void registerShellItem() {
-        ControlFactory<KeyedMenuItem> f = (v) -> {
-            var item = new KeyedMenuItem(ToolsMenuKeyManager.getShell(), false, false, false, "S_hell",
-                    new FontIconView(ConsoleIcons.SHELL));
+        ControlFactory<NamedMenuItem> f = (v) -> {
+            var item = new NamedMenuItem(FileMenu.SHELL, false, false, false, "S_hell", 100);
+            item.setGraphic(new FontIconView(ConsoleIcons.CONSOLE));
             item.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-            item.setOnAction((e) -> openShellTab((TabShellView<?>) v));
-            return item;
-
-        };
-        addRegistration(getRegistry().registerMenuItem(TabShellKey.INSTANCE, FileMenuKeys.MAIN, f, 100));
-    }
-
-    private void registerSettingsItem() {
-        ControlFactory<KeyedMenuItem> f = (v) -> {
-            var tabShellView = (TabShellView<?>) v;
-            var item = new KeyedMenuItem(FileMenuKeys.SETTINGS, false, false, false, "_Settings",
-                    new FontIconView(ConsoleIcons.SETTINGS));
             item.setOnAction((e) -> {
-                var viewModel =
-                        new SettingsDialogViewModel((ConsoleSettings) tabShellView.getViewModel().getSettings(),
-                        tabShellView.getViewModel().getHistoryManager());
-                var view = new SettingsDialogView(viewModel);
-                view.initialize();
-                tabShellView.getDialogManager().openDialog(view);
+                var shell = (ShellFxView<?>) v;
+                var shellTabView = new ConsoleTabFxView<>(shell);
+                var shellTabPresenter = new ConsoleTabPresenter<>(shellTabView, framework);
+                shellTabPresenter.initialize();
+                TabHostFxView<?> workspace = (TabHostFxView<?>) shell.getComposer().getWorkspace();
+                workspace.getComposer().addTab(shellTabView);
             });
             return item;
 
         };
-        addRegistration(getRegistry().registerMenuItem(TabShellKey.INSTANCE, FileMenuKeys.MAIN, f, 1000));
+        addRegistration(getRegistry().registerMenuItem(CoreComponents.SHELL, FileMenu.MAIN, f));
     }
+
+//    private void registerSettingsItem() {
+//        ControlFactory<KeyedMenuItem> f = (v) -> {
+//            var tabShellView = (TabShellView<?>) v;
+//            var item = new KeyedMenuItem(FileMenuKeys.SETTINGS, false, false, false, "_Settings",
+//                    new FontIconView(ConsoleIcons.SETTINGS));
+//            item.setOnAction((e) -> {
+//                var viewModel =
+//                        new SettingsDialogViewModel((ConsoleSettings) tabShellView.getViewModel().getSettings(),
+//                        tabShellView.getViewModel().getHistoryManager());
+//                var view = new SettingsDialogView(viewModel);
+//                view.initialize();
+//                tabShellView.getDialogManager().openDialog(view);
+//            });
+//            return item;
+//
+//        };
+//        addRegistration(getRegistry().registerMenuItem(TabShellKey.INSTANCE, FileMenuKeys.MAIN, f, 1000));
+//    }
 }

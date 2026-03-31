@@ -22,9 +22,30 @@ package com.techsenger.alpha.assembly.maven.plugin;
  */
 public final class Goals {
 
+    /**
+     * Assembles a minimal framework runtime required for integration testing. Creates the initial directory structure
+     * with the repository populated with the required modules and necessary configuration files.
+     *
+     * <p>If the provided path already exists, execution is skipped.
+     */
     public static final String ASSEMBLE_RUNTIME = "assemble-runtime";
 
+    /**
+     * Assembles a full framework distribution including {@code .sh}/{@code .bat} scripts and the default Log4j2
+     * configuration. Creates the initial directory structure with the repository populated with the required modules
+     * and necessary configuration files.
+     *
+     * <p>If the provided path already exists, execution is skipped.
+     */
     public static final String ASSEMBLE_DISTRO = "assemble-distro";
+
+    /**
+     * Updates the repository with the specified modules in an existing framework runtime or distribution. This goal is
+     * intended for development purposes to avoid full reassembly on every change.
+     *
+     * <p>If the provided path does not exist, execution is skipped.
+     */
+    public static final String UPDATE = "update";
 
     private Goals() {
         // empty

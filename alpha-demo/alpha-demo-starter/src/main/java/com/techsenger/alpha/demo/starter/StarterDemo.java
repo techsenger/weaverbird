@@ -27,17 +27,13 @@ import java.nio.file.Paths;
 /**
  * A simple starter that demonstrates basic operations with components.
  *
- * <p>Two ways to run this demo:
- * <ol>
- *     <li>Compile and run the scripts in the {@code target/framework/bin} folder</li>
- *     <li>Run: {@code mvn clean install exec:exec}</li>
- * </ol>
+ * <p>Build and run the scripts in the {@code target/framework/bin} folder
  *
  * @author Pavel Castornii
  */
 public final class StarterDemo {
 
-    private static final String CUSTOM_COMPONENT_XML =
+    private static final String COMPONENT_CONFIG =
             """
             <Configuration title="Custom Component" name="custom-component" version="1.0.0" type="base">
                 <Repositories>
@@ -49,6 +45,10 @@ public final class StarterDemo {
                 </Modules>
             </Configuration>
             """;
+
+    private static final String COMPONENT_NAME = "custom-component";
+
+    private static final Version COMPONENT_VERSION = Version.parse("1.0.0");
 
     public static void main(String[] args) throws Exception {
         var frameworkPath = Paths.get(System.getProperty(SystemProperties.ROOT_PATH));
@@ -62,8 +62,11 @@ public final class StarterDemo {
         listComponents(componentManager);
 
         System.out.println("\nInstalling and starting custom component");
-        componentManager.installComponent(CUSTOM_COMPONENT_XML, messagePrinter);
-        componentManager.startComponent("custom-component", Version.parse("1.0.0"));
+        if (!framework.getRegistry().isComponentAdded(COMPONENT_NAME, COMPONENT_VERSION)) {
+            componentManager.installComponent(COMPONENT_CONFIG, messagePrinter);
+        }
+
+        componentManager.startComponent(COMPONENT_NAME, COMPONENT_VERSION);
         listComponents(componentManager);
 
         framework.shutdown();

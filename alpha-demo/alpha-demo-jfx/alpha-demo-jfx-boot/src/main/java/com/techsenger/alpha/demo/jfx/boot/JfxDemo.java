@@ -28,13 +28,13 @@ import java.nio.file.Paths;
 /**
  * This demo shows how to run JavaFX.
  *
- * <p>Two run this demo: {@code mvn clean install exec:exec}
+ * <p>Build and run the scripts in the {@code target/framework/bin} folder
  *
  * @author Pavel Castornii
  */
 public final class JfxDemo {
 
-    private static final String JFX_COMPONENT_XML =
+    private static final String COMPONENT_CONFIG =
             """
             <Configuration title="JFX Component" name="jfx-component" version="1.0.0" type="base">
                 <Repositories>
@@ -53,9 +53,9 @@ public final class JfxDemo {
             </Configuration>
             """;
 
-    private static final String JFX_COMPONENT_NAME = "jfx-component";
+    private static final String COMPONENT_NAME = "jfx-component";
 
-    private static final Version JFX_COMPONENT_VERSION = Version.parse("1.0.0");
+    private static final Version COMPONENT_VERSION = Version.parse("1.0.0");
 
     public static void main(String[] args) throws Exception {
         var frameworkPath = Paths.get(System.getProperty(SystemProperties.ROOT_PATH));
@@ -77,11 +77,11 @@ public final class JfxDemo {
         System.out.println("Starting repo (it is already resolved)");
         componentManager.startComponent("alpha-repo", framework.getVersion());
 
-        if (!framework.getRegistry().isComponentAdded(JFX_COMPONENT_NAME, JFX_COMPONENT_VERSION)) {
+        if (!framework.getRegistry().isComponentAdded(COMPONENT_NAME, COMPONENT_VERSION)) {
             System.out.println("\nInstalling and starting JFX component");
-            componentManager.installComponent(JFX_COMPONENT_XML, messagePrinter);
+            componentManager.installComponent(COMPONENT_CONFIG, messagePrinter);
         }
-        componentManager.startComponent(JFX_COMPONENT_NAME, JFX_COMPONENT_VERSION);
+        componentManager.startComponent(COMPONENT_NAME, COMPONENT_VERSION);
     }
 
     private JfxDemo() {

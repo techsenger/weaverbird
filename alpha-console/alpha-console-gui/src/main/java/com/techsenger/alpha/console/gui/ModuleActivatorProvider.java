@@ -16,10 +16,10 @@
 
 package com.techsenger.alpha.console.gui;
 
-import com.techsenger.alpha.api.component.ComponentDescriptor;
-import com.techsenger.alpha.spi.module.ModuleActivator;
-import com.techsenger.alpha.spi.module.ModuleContext;
-import com.techsenger.toolkit.fx.FxPlatform;
+import com.techsenger.alpha.core.api.Framework;
+import com.techsenger.alpha.core.spi.module.ModuleActivator;
+import com.techsenger.alpha.core.spi.module.ModuleContext;
+import javafx.application.Application;
 
 /**
  *
@@ -27,24 +27,79 @@ import com.techsenger.toolkit.fx.FxPlatform;
  */
 public class ModuleActivatorProvider implements ModuleActivator {
 
-    private static ComponentDescriptor componentDescriptor;
+    private static Framework framework;
 
-    static ComponentDescriptor getComponentDescriptor() {
-        return componentDescriptor;
+    static Framework getFramework() {
+        return framework;
     }
 
     @Override
     public void activate(ModuleContext context) throws Exception {
-        componentDescriptor = context.getComponent().getDescriptor();
-        FxPlatform.start();
+        framework = context.getFramework();
+        // JavaFX Application.launch() blocks the calling thread until the application exits.
+        // To prevent blocking the activator, we start it in a separate daemon thread.
+        Thread thread = new Thread(() -> Application.launch(ConsoleApplication.class));
+        thread.setDaemon(true);
+        thread.start();
+
+
+
+
+//        componentDescriptor = context.getComponent().getDescriptor();
+//        var componentConfig = ModuleActivatorProvider.getComponentDescriptor().getConfig();
+//        FxPlatform.runLaterAndWait(() -> {
+//            //var settings = settingsFile.getSettings();
+//            var stage = new Stage();
+//            var shellView = new DefaultShellFxView<>(this, stage, IconStylesheetFactory.forAll());
+//            var context = new DefaultShellContext(DemoSettings.createSettings(),
+//            var tabShellViewModel = new DefaultTabShellViewModel(settings, new DefaultHistoryManager(historyFile));
+//            var stylesheets = List.of(
+//                StyleClasses.class.getResource("base.css").toExternalForm(),
+//                CoreIcons.class.getResource("icons.css").toExternalForm(),
+//                TextIcons.class.getResource("icons.css").toExternalForm(),
+//                DialogIcons.class.getResource("icons.css").toExternalForm(),
+//                ConsoleIcons.class.getResource("icons.css").toExternalForm()
+//            );
+//            this.tabShellView = new DefaultTabShellView(stylesheets, tabShellViewModel);
+//            tabShellView.initialize();
+//            tabShellViewModel.setTitle("Techsenger Alpha Console");
+//            ValueUtils.callAndAddListener(settings.getAppearance().themeProperty(), (ov, oldV, newV) -> {
+//                Font font = Font.font("Material Design Icons", 32);
+//                var image = ImageUtils.createIcon(String.format("%c", 0xF002B), font,
+//                        ColorUtils.toColor(newV.getPalette().getDefaultFgColor()), Color.TRANSPARENT,
+//                        -6, 28, 22, 34);
+//                tabShellViewModel.setIcon(new ImageIcon(image));
+//            });
+//            tabShellViewModel.setOnClosed(() -> {
+//                try {
+//                    doClose();
+//                } catch (Exception ex) {
+//                    logger.error("Error closing console", ex);
+//                }
+//            });
+//            ShellTabViewModel shellViewModel = new ShellTabViewModel(tabShellView.getViewModel());
+//            ShellTabView shellView = new ShellTabView(tabShellView, shellViewModel);
+//            shellView.initialize();
+//
+//            var controlRegistry = new ControlRegistry();
+//            var controlRegistrators = List.of(
+//                    new FileMenuRegistrar(controlRegistry),
+//                    new EditMenuRegistrar(controlRegistry),
+//                    new ToolsMenuRegistrar(controlRegistry),
+//                    new HelpMenuRegistrar(controlRegistry));
+//            controlRegistrators.forEach(r -> r.register());
+//            tabShellView.upgradeMenuBar(controlRegistry);
+//            tabShellView.openTab(shellView);
+//        });
+
     }
 
     @Override
     public void deactivate(ModuleContext context) throws Exception {
-        //even if the console hasn't been created it is very easy to create it as all fields initialized in open()
-        var console = (ConsoleProvider) ConsoleProvider.provider();
-        if (console.isOpen()) {
-            console.close();
-        }
+//        //even if the console hasn't been created it is very easy to create it as all fields initialized in open()
+//        var console = (ConsoleProvider) ConsoleProvider.provider();
+//        if (console.isOpen()) {
+//            console.close();
+//        }
     }
 }

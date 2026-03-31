@@ -16,42 +16,41 @@
 
 package com.techsenger.alpha.console.gui.style;
 
-import com.techsenger.tabshell.kit.core.style.CoreIcons;
-import com.techsenger.tabshell.kit.text.style.TextIcons;
+import com.techsenger.tabshell.material.icon.StyleFontIcon;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface ConsoleIcons extends TextIcons, CoreIcons {
+public interface ConsoleIcons {
 
-    String XML_FILE = "console-xml-file-icon";
+//    String XML_FILE = "console-xml-file-icon";
+//
+//    String TEXT_FILE = "console-text-file-icon";
+//
+//    String SCRIPT_FILE = "console-script-file-icon";
 
-    String TEXT_FILE = "console-text-file-icon";
+    StyleFontIcon CONSOLE = new StyleFontIcon("console-icon");
 
-    String SCRIPT_FILE = "console-script-file-icon";
+    StyleFontIcon MEMORY_LOG = new StyleFontIcon("console-memory-log-icon");
 
-    String SHELL = "console-shell-icon";
+    StyleFontIcon FILE_LOG = new StyleFontIcon("console-file-log-icon");
 
-    String MEMORY_LOG = "console-memory-log-icon";
+    StyleFontIcon DEPENDENCY = new StyleFontIcon("console-dependency-icon");
 
-    String FILE_LOG = "console-file-log-icon";
+    StyleFontIcon DIAGRAMS = new StyleFontIcon("console-diagrams-icon");
 
-    String DEPENDENCY = "console-dependency-icon";
+    StyleFontIcon LAYER_DIAGRAMS = new StyleFontIcon("console-layer-diagrams-icon");
 
-    String DIAGRAMS = "console-diagrams-icon";
+    StyleFontIcon FILTER = new StyleFontIcon("console-filter-icon");
 
-    String LAYER_DIAGRAMS = "console-layer-diagrams-icon";
+    StyleFontIcon FILTER_SETTINGS = new StyleFontIcon("console-filter-settings-icon");
 
-    String FILTER = "console-filter-icon";
+    StyleFontIcon ALPHA = new StyleFontIcon("console-alpha-icon");
 
-    String FILTER_SETTINGS = "console-filter-settings-icon";
+    StyleFontIcon NETWORK = new StyleFontIcon("console-network-icon");
 
-    String ALPHA = "console-alpha-icon";
+    StyleFontIcon REFRESH = new StyleFontIcon("console-refresh-icon");
 
-    String NETWORK = "console-network-icon";
-
-    String REFRESH = "console-refresh-icon";
-
-    String DETACH_SESSION = "console-detach-session-icon";
+    StyleFontIcon DETACH_SESSION = new StyleFontIcon("console-detach-session-icon");
 }

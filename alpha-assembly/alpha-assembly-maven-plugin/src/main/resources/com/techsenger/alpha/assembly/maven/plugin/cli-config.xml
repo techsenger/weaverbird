@@ -6,13 +6,15 @@
     </Repositories>
 
     <Modules>
-        <!--### TOOLS ###-->
-        <Module groupId="org.jline" artifactId="jline" version="${bom.jline.version}" nativeAccessEnabled="true"/>
+        <!--### ASCII TABLE ###-->
         <Module groupId="de.vandermeer" artifactId="asciitable" version="${bom.asciitable.version}"/>
         <Module groupId="de.vandermeer" artifactId="skb-interfaces" version="${bom.skb-interfaces.version}"/>
         <Module groupId="de.vandermeer" artifactId="ascii-utf-themes" version="${ascii.themes.version}"/>
         <Module groupId="org.antlr" artifactId="ST4" version="${bom.st4.version}"/>
         <Module groupId="org.apache.commons" artifactId="commons-lang3" version="${commons.lang.version}"/>
+
+        <!--### TOOLS ###-->
+        <Module groupId="org.jline" artifactId="jline" version="${bom.jline.version}" nativeAccessEnabled="true"/>
         <Module groupId="com.techsenger.toolkit" artifactId="toolkit-ascii" version="${bom.toolkit.version}"/>
         <Module groupId="com.techsenger.toolkit" artifactId="toolkit-http" version="${bom.toolkit.version}"/>
         <Module groupId="com.beust" artifactId="jcommander" version="${bom.jcommander.version}"/>

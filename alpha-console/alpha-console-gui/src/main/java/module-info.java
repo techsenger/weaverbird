@@ -18,46 +18,42 @@ module com.techsenger.alpha.console.gui {
     requires com.techsenger.toolkit.core;
     requires com.techsenger.toolkit.fx;
     requires org.slf4j;
-    requires org.apache.logging.log4j.core;
-    requires org.apache.logging.log4j;
-    requires com.techsenger.alpha.api;
-    requires com.techsenger.alpha.spi;
-    requires com.techsenger.mvvm4fx.core;
+    requires com.techsenger.alpha.core;
+    requires com.techsenger.alpha.executor;
+    requires com.techsenger.alpha.net.client;
+    requires com.techsenger.patternfx.core;
+    requires com.techsenger.patternfx.mvp;
     requires com.techsenger.tabshell.material;
     requires com.techsenger.tabshell.core;
-    requires com.techsenger.tabshell.kit.material;
-    requires com.techsenger.tabshell.kit.core;
-    requires com.techsenger.tabshell.kit.text;
-    requires com.techsenger.tabshell.kit.dialog;
+    requires com.techsenger.tabshell.icons;
+    requires com.techsenger.tabshell.shared;
+    requires com.techsenger.tabshell.layout;
     requires javafx.base;
     requires javafx.controls;
     requires javafx.graphics;
     requires javafx.swing;
-    requires org.controlsfx.controls;
     requires atlantafx.base;
-    requires org.fxmisc.richtext;
-    requires org.fxmisc.flowless;
-    requires org.fxmisc.undo;
-    requires wellbehavedfx;
-    requires reactfx;
-    requires com.techsenger.ansi4j.core.api;
+    requires jfx.incubator.richtext;
+//    requires org.fxmisc.richtext;
+//    requires org.fxmisc.flowless;
+//    requires org.fxmisc.undo;
+//    requires wellbehavedfx;
+//    requires reactfx;
     requires net.sourceforge.plantuml;
-    requires jakarta.xml.bind;
 
-    exports com.techsenger.alpha.console.gui.diagram;
-    exports com.techsenger.alpha.console.gui.keys;
-    exports com.techsenger.alpha.console.gui.log;
-    exports com.techsenger.alpha.console.gui.shell;
-    exports com.techsenger.alpha.console.gui.style;
-    exports com.techsenger.alpha.console.gui.utils;
+    exports com.techsenger.alpha.console.gui;
+//    exports com.techsenger.alpha.console.gui.log;
+//    exports com.techsenger.alpha.console.gui.shell;
+//    exports com.techsenger.alpha.console.gui.style;
+//    exports com.techsenger.alpha.console.gui.utils;
 
-    opens com.techsenger.alpha.console.gui.diagram to javafx.base;
-    opens com.techsenger.alpha.console.gui.settings to jakarta.xml.bind;
-    opens com.techsenger.alpha.console.gui.style;
+//    opens com.techsenger.alpha.console.gui.diagram to javafx.base;
+//    opens com.techsenger.alpha.console.gui.settings to jakarta.xml.bind;
+//    opens com.techsenger.alpha.console.gui.style;
 
-    provides com.techsenger.alpha.spi.console.ConsoleService
-            with com.techsenger.alpha.console.gui.ConsoleProvider;
-    provides com.techsenger.alpha.spi.module.ModuleActivator
+//    provides com.techsenger.alpha.spi.console.ConsoleService
+//            with com.techsenger.alpha.console.gui.ConsoleProvider;
+    provides com.techsenger.alpha.core.spi.module.ModuleActivator
             with com.techsenger.alpha.console.gui.ModuleActivatorProvider;
 }
 

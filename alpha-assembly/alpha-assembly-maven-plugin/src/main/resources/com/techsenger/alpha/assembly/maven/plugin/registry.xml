@@ -6,6 +6,7 @@
         <Component name="alpha-repo" version="${project.version}"/>
         <Component name="alpha-server" version="${project.version}"/>
         <Component name="alpha-console-cli" version="${project.version}"/>
+        <Component name="alpha-console-gui" version="${project.version}"/>
     </AddedComponents>
     <ResolvedComponents>
         <Component name="alpha-repo" version="${project.version}"/>

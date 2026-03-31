@@ -179,11 +179,11 @@ public class Console {
         this.closing = closing;
     }
 
-    private String buildSessionPrompt(ClientSession sessionInfo) {
+    private String buildSessionPrompt(ClientSession session) {
         var sb = new StringBuilder();
-        sb.append(sessionInfo.getLoginName());
+        sb.append(session.getLoginName());
         sb.append("@");
-        sb.append(sessionInfo.getHost());
+        sb.append(session.getHost());
         sb.append(PROMPT);
         return sb.toString();
     }

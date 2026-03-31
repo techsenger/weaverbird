@@ -22,19 +22,15 @@ import com.techsenger.alpha.core.api.FrameworkSettings;
 import com.techsenger.alpha.core.api.SystemProperties;
 import com.techsenger.toolkit.core.version.Version;
 import java.nio.file.Paths;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This demo shows how to work with the framework console.
  *
- * <p>To run this demo: build the project and run the scripts in the {@code target/framework/bin} folder.
+ * <p>Build and run the scripts in the {@code target/framework/bin} folder
  *
  * @author Pavel Castornii
  */
 public final class CliDemo {
-
-    private static final Logger logger = LoggerFactory.getLogger(CliDemo.class);
 
     /**
      * @param args the command line arguments

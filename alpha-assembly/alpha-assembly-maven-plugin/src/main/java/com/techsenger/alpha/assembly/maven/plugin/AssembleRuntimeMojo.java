@@ -16,6 +16,7 @@
 
 package com.techsenger.alpha.assembly.maven.plugin;
 
+import java.nio.file.Files;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 
@@ -29,7 +30,11 @@ public class AssembleRuntimeMojo extends AbstractAssembleMojo {
     @Override
     public void execute() throws MojoExecutionException {
         try {
-            createRepo();
+            if (Files.exists(getPath())) {
+                getLog().info(getPath() + " already exists. Skipping...");
+                return;
+            }
+            createRepo(false);
             createData();
             createConfig();
             createTemp();

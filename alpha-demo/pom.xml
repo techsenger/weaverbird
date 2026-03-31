@@ -20,7 +20,7 @@
 
     <modules>
         <module>alpha-demo-cli</module>
-<!--        <module>alpha-demo-gui</module>-->
+        <module>alpha-demo-gui</module>
         <module>alpha-demo-starter</module>
         <module>alpha-demo-jfx</module>
     </modules>

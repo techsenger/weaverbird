@@ -16,14 +16,6 @@
 
 module com.techsenger.alpha.demo.starter  {
     requires org.slf4j;
-    requires org.apache.logging.log4j.core;
-    requires org.apache.logging.log4j.jul;
-    requires org.apache.logging.log4j;
-    requires org.apache.logging.log4j.jcl;
-    requires org.apache.logging.log4j.slf4j2.impl;
-    requires org.fusesource.jansi;
-    requires jakarta.el;
-    requires org.glassfish.expressly;
     requires com.techsenger.alpha.core;
     requires com.techsenger.toolkit.core;
 }
