@@ -55,7 +55,7 @@ public final class GuiDemo {
 
         resolveAndStartComponent(framework, "alpha-repo");
         resolveAndStartComponent(framework, "alpha-server");
-        resolveAndStartComponent(framework, "alpha-console-gui");
+        resolveAndStartComponent(framework, "alpha-gui");
     }
 
     private static void resolveAndStartComponent(Framework framework, String componentName) throws Exception {

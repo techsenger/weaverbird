@@ -8,8 +8,8 @@ commands — helping developers efficiently build and manage modular systems.
 * [Overview](#overview)
 * [Use Cases](#use-cases)
 * [Demo](#demo)
-    * [CLI Console Demo](#demo-cli)
-    * [GUI Console Demo](#demo-gui)
+    * [CLI Demo](#demo-cli)
+    * [GUI Demo](#demo-gui)
 * [Usage](#usage)
     * [Framework](#usage-framework)
         * [Directory Layout](#usage-framework-directory)
@@ -23,9 +23,9 @@ commands — helping developers efficiently build and manage modular systems.
         * [Services](#usage-component-services)
     * [Remote Control](#usage-remote-control)
     * [Text Commands](#usage-commands)
-    * [CLI Console](#usage-cli)
-    * [GUI Console](#usage-gui)
-        * [Shell](#usage-gui-shell)
+    * [CLI](#usage-cli)
+    * [GUI](#usage-gui)
+        * [Console](#usage-gui-console)
         * [Memory Log](#usage-gui-memory-log)
         * [Diagrams](#usage-gui-diagrams)
     * [Assembly Maven Plugin](#usage-assembly-plugin)
@@ -86,11 +86,11 @@ The framework can be used for programs that:
 
 ## Demo <a name="demo"></a>
 
-### CLI Console Demo <a name="demo-cli"></a>
-![Alpha CLI Console](./cli-demo.gif)
+### CLI Demo <a name="demo-cli"></a>
+![Alpha CLI](./cli-demo.gif)
 
-### GUI Console Demo <a name="demo-gui"></a>
-![Alpha GUI Console](./gui-demo.gif)
+### GUI Demo <a name="demo-gui"></a>
+![Alpha GUI](./gui-demo.gif)
 
 ## Usage <a name="usage"></a>
 
@@ -371,7 +371,7 @@ configuration will open `java.time` from `java.base` to Gson:
 </Module>
 ```
 
-For a specific example of working with directives, see the configuration of the demo component — `alpha-console-gui`.
+For a specific example of working with directives, see the configuration of the demo component — `alpha-gui`.
 
 #### Events <a name="usage-component-events"></a>
 
@@ -463,23 +463,24 @@ command:list
 !session:detach
 ```
 
-### CLI Console <a name="usage-cli"></a>
+### CLI <a name="usage-cli"></a>
 
-The CLI console is a simple command-line interface. Unlike the GUI console, its capabilities are limited to
-executing commands. The strength of the CLI console lies in its versatility—it can operate in environments without a
-graphical interface.
+The CLI is represented by a console that allows you to enter commands and parameters to interact with the framework.
+The console supports command history, autocomplete (for both commands and parameters via the Tab key), and command
+highlighting.
 
-At the same time, it supports command history, autocomplete (both for commands and parameters via Tab key) and
-command highlighting.
+Unlike the GUI, the CLI is limited to executing commands. Its strength lies in its versatility — it can operate in
+environments without a graphical interface.
 
-### GUI Console <a name="usage-gui"></a>
+### GUI <a name="usage-gui"></a>
 
-The GUI console has significantly more capabilities compared to the CLI console. It not only allows executing commands
-but also provides features for viewing log messages and generating graphs for working with layers, modules, and packages.
+The GUI offers significantly more capabilities compared to the CLI. While the CLI is limited to a single console,
+the GUI provides three components: Console, Memory Log, and Diagrams — allowing you not only to execute commands but also
+to view log messages and generate diagrams for working with layers, modules, and packages.
 
-#### Shell <a name="usage-gui-shell"></a>
+#### Console <a name="usage-gui-console"></a>
 
-The Shell is a component that allows executing text commands. It is similar to the CLI console with two exceptions:
+The Console is a component that allows executing text commands. It is similar to the CLI console with two main differences:
 
 1. To invoke the completer, you need to use the `Ctrl` + `Space` keyboard shortcut.
 2. It provides a graphical interface for working with sessions.

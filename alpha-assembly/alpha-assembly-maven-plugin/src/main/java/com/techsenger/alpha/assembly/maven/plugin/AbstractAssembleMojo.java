@@ -101,12 +101,12 @@ public abstract class AbstractAssembleMojo extends AbstractBaseMojo {
         var serverSettings = readFileToStr("server-settings.xml");
         FileUtils.writeFile(serverDirPath.resolve("settings.xml"), serverSettings, StandardCharsets.UTF_8);
 
-        var cliDirPath = configPath.resolve("alpha-console-cli").resolve(project.getVersion());
+        var cliDirPath = configPath.resolve("alpha-cli").resolve(project.getVersion());
         Files.createDirectories(cliDirPath);
         var cliConfig = readFileToStr("cli-config.xml");
         FileUtils.writeFile(cliDirPath.resolve("configuration.xml"), cliConfig, StandardCharsets.UTF_8);
 
-        var guiDirPath = configPath.resolve("alpha-console-gui").resolve(project.getVersion());
+        var guiDirPath = configPath.resolve("alpha-gui").resolve(project.getVersion());
         Files.createDirectories(guiDirPath);
         var guiConfig = readFileToStr("gui-config.xml");
         FileUtils.writeFile(guiDirPath.resolve("configuration.xml"), guiConfig, StandardCharsets.UTF_8);

@@ -90,7 +90,8 @@
         <module>alpha-repo</module>
         <module>alpha-net</module>
         <module>alpha-executor</module>
-        <module>alpha-console</module>
+        <module>alpha-cli</module>
+        <module>alpha-gui</module>
         <module>alpha-assembly</module>
         <module>alpha-it</module>
         <module>alpha-demo</module>
@@ -133,13 +134,13 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.techsenger.alpha.console</groupId>
-                <artifactId>alpha-console-cli</artifactId>
+                <groupId>com.techsenger.alpha</groupId>
+                <artifactId>alpha-cli</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.techsenger.alpha.console</groupId>
-                <artifactId>alpha-console-gui</artifactId>
+                <groupId>com.techsenger.alpha</groupId>
+                <artifactId>alpha-gui</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -45,7 +45,7 @@ public final class CliDemo {
         var framework = FrameworkFactory.create(settings, rootPath);
         resolveAndStartComponent(framework, "alpha-repo");
         resolveAndStartComponent(framework, "alpha-server");
-        resolveAndStartComponent(framework, "alpha-console-cli");
+        resolveAndStartComponent(framework, "alpha-cli");
     }
 
     private static void resolveAndStartComponent(Framework framework, String componentName) throws Exception {

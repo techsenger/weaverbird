@@ -34,10 +34,10 @@
             <groupId>org.glassfish.expressly</groupId>
             <artifactId>expressly</artifactId>
         </dependency>
-<!--        <dependency>
-            <groupId>com.techsenger.alpha.console</groupId>
-            <artifactId>alpha-console-gui</artifactId>
-        </dependency>-->
+        <dependency>
+            <groupId>com.techsenger.alpha</groupId>
+            <artifactId>alpha-gui</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -78,8 +78,8 @@
                             <path>${project.build.directory}/framework</path>
                             <modules>
                                 <module>
-                                    <groupId>com.techsenger.alpha.console</groupId>
-                                    <artifactId>alpha-console-gui</artifactId>
+                                    <groupId>com.techsenger.alpha</groupId>
+                                    <artifactId>alpha-gui</artifactId>
                                     <version>${project.version}</version>
                                 </module>
                                 <module>

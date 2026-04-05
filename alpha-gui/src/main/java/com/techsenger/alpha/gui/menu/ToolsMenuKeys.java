@@ -1,0 +1,45 @@
+package com.techsenger.alpha.gui.menu;
+
+///*
+// * Copyright 2018-2026 Pavel Castornii.
+// *
+// * Licensed under the Apache License, Version 2.0 (the "License");
+// * you may not use this file except in compliance with the License.
+// * You may obtain a copy of the License at
+// *
+// *     http://www.apache.org/licenses/LICENSE-2.0
+// *
+// * Unless required by applicable law or agreed to in writing, software
+// * distributed under the License is distributed on an "AS IS" BASIS,
+// * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// * See the License for the specific language governing permissions and
+// * limitations under the License.
+// */
+//
+//package com.techsenger.alpha.console.gui.menu;
+//
+//import com.techsenger.tabshell.material.menu.MenuGroupKey;
+//import com.techsenger.tabshell.material.menu.MenuItemKey;
+//import com.techsenger.tabshell.material.menu.MenuKey;
+//
+///**
+// *
+// * @author Pavel Castornii
+// */
+//public interface ToolsMenuKeys {
+//
+//    MenuKey TOOLS = new MenuKey();
+//
+//    MenuGroupKey DEFAULT = new MenuGroupKey();
+//
+//    MenuGroupKey MAIN = new MenuGroupKey();
+//
+//    MenuItemKey DIAGRAMS = new MenuItemKey();
+//
+//    MenuItemKey MEMORY_LOG = new MenuItemKey();
+//
+//    MenuItemKey FILE_LOG = new MenuItemKey();
+//
+//    MenuItemKey SESSIONS = new MenuItemKey();
+//
+//}

@@ -23,6 +23,10 @@
             <artifactId>alpha-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.techsenger.alpha</groupId>
+            <artifactId>alpha-cli</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.techsenger.toolkit</groupId>
             <artifactId>toolkit-core</artifactId>
         </dependency>
