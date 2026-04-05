@@ -16,10 +16,12 @@
 
 package com.techsenger.alpha.gui.menu;
 
+import com.techsenger.alpha.core.api.Framework;
 import com.techsenger.alpha.gui.console.ConsoleTabFxView;
 import com.techsenger.alpha.gui.console.ConsoleTabPresenter;
 import com.techsenger.alpha.gui.style.ConsoleIcons;
-import com.techsenger.alpha.core.api.Framework;
+import com.techsenger.alpha.net.client.api.ClientService;
+import com.techsenger.alpha.net.client.api.ClientServiceFactory;
 import com.techsenger.tabshell.core.CoreComponents;
 import com.techsenger.tabshell.core.ShellFxView;
 import com.techsenger.tabshell.core.registry.AbstractControlRegistrar;
@@ -42,6 +44,8 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
     private final ShellFxView<?> shell;
 
     private final Framework framework;
+
+    private final ClientService client = ClientServiceFactory.create();
 
     public FileMenuRegistrar(ShellFxView<?> shell, Framework framework) {
         super(shell.getControlRegistry());
@@ -71,13 +75,13 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
 
     private void registerShellItem() {
         ControlFactory<NamedMenuItem> f = (v) -> {
-            var item = new NamedMenuItem(FileMenu.SHELL, false, false, false, "S_hell", 100);
+            var item = new NamedMenuItem(FileMenu.CONSOLE, false, false, false, "C_onsole", 100);
             item.setGraphic(new FontIconView(ConsoleIcons.CONSOLE));
             item.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
             item.setOnAction((e) -> {
                 var shell = (ShellFxView<?>) v;
                 var shellTabView = new ConsoleTabFxView<>(shell);
-                var shellTabPresenter = new ConsoleTabPresenter<>(shellTabView, framework);
+                var shellTabPresenter = new ConsoleTabPresenter<>(shellTabView, framework, client, null);
                 shellTabPresenter.initialize();
                 TabHostFxView<?> workspace = (TabHostFxView<?>) shell.getComposer().getWorkspace();
                 workspace.getComposer().addTab(shellTabView);

@@ -16,28 +16,18 @@
 
 package com.techsenger.alpha.gui.console;
 
-import com.techsenger.alpha.core.api.message.AbstractMessagePrinter;
-import jfx.incubator.scene.control.richtext.RichTextArea;
-
 /**
  *
  * @author Pavel Castornii
  */
-class TextAreaMessagePrinter extends AbstractMessagePrinter {
+public interface CompletionPopupAwarePort {
 
-    private final RichTextArea textArea;
+    /**
+     * To simplify things, we insert new text at the caret position and remove everything after it.
+     *
+     * @param paragraph
+     */
+    void onElementSubmitted(CompletionType type, String text);
 
-    TextAreaMessagePrinter(RichTextArea textArea) {
-        this.textArea = textArea;
-    }
-
-    @Override
-    public void printlnMessage(String message) {
-        textArea.appendText(message + "\n");
-    }
-
-    @Override
-    public void printlnError(String error) {
-        textArea.appendText(error + "\n", TextAreaCssStyles.ERROR);
-    }
+    void onPopupClose();
 }

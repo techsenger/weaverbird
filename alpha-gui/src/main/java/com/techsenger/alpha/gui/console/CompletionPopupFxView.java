@@ -18,11 +18,13 @@ package com.techsenger.alpha.gui.console;
 
 import com.techsenger.tabshell.core.popup.AbstractPopupFxView;
 import com.techsenger.tabshell.material.style.StyleClasses;
+import com.techsenger.toolkit.fx.utils.ListViewUtils;
 import com.techsenger.toolkit.fx.utils.NodeUtils;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.input.KeyCode;
@@ -36,10 +38,10 @@ import jfx.incubator.scene.control.richtext.model.StyleAttributeMap;
  *
  * @author Pavel Castornii
  */
-public class AttributePopupFxView<P extends AttributePopupPresenter<?, ?>>
-        extends AbstractPopupFxView<P> implements AttributePopupView {
+public class CompletionPopupFxView<P extends CompletionPopupPresenter<?, ?>>
+        extends AbstractPopupFxView<P> implements CompletionPopupView {
 
-    private final ListView<String> listView = new ListView<String>();
+    private final ListView<CompletionItem<?>> listView = new ListView<>();
 
     private final RichTextArea textArea = new RichTextArea();
 
@@ -51,7 +53,27 @@ public class AttributePopupFxView<P extends AttributePopupPresenter<?, ?>>
     }
 
     @Override
-    public void setItems(List<String> items) {
+    public void selectPrevious() {
+        var current = this.listView.getSelectionModel().getSelectedIndex();
+        if (current > 0) {
+            var newIndex = current - 1;
+            this.listView.getSelectionModel().select(newIndex);
+            ListViewUtils.scrollToIfNeeded(listView, newIndex);
+        }
+    }
+
+    @Override
+    public void selectNext() {
+        var current = this.listView.getSelectionModel().getSelectedIndex();
+        if (current + 1 < this.listView.getItems().size()) {
+            var newIndex = current + 1;
+            this.listView.getSelectionModel().select(newIndex);
+            ListViewUtils.scrollToIfNeeded(listView, newIndex);
+        }
+    }
+
+    @Override
+    public void setItems(List<CompletionItem<?>> items) {
         listView.setItems(FXCollections.observableArrayList(items));
         listView.getSelectionModel().select(0);
     }
@@ -67,6 +89,18 @@ public class AttributePopupFxView<P extends AttributePopupPresenter<?, ?>>
     }
 
     @Override
+    public void setInfo(String description, boolean required, String alias) {
+        textArea.clear();
+        var boldStyle = StyleAttributeMap.builder().setBold(true).build();
+        textArea.appendText("Description: ", boldStyle);
+        textArea.appendText(description + "\n\n", StyleAttributeMap.EMPTY);
+        textArea.appendText("Required: ", boldStyle);
+        textArea.appendText(String.valueOf(required) + "\n\n", StyleAttributeMap.EMPTY);
+        textArea.appendText("Alias: ", boldStyle);
+        textArea.appendText(alias, StyleAttributeMap.EMPTY);
+    }
+
+    @Override
     protected void build() {
         super.build();
         textArea.setPadding(new Insets(0, 5, 0, 5));
@@ -77,14 +111,29 @@ public class AttributePopupFxView<P extends AttributePopupPresenter<?, ?>>
         splitPane.setDividerPositions(0.35);
         VBox.setVgrow(splitPane, Priority.ALWAYS);
         getContentBox().getChildren().add(splitPane);
-        getContentBox().getStyleClass().add("attribute-popup-box");
+        getContentBox().getStyleClass().add("autocomplete-popup-box");
 
-        getContentBox().setPrefSize(AttributePopupConstants.WIDTH, AttributePopupConstants.HEIGHT);
-        getContentBox().setMinSize(AttributePopupConstants.WIDTH, AttributePopupConstants.HEIGHT);
-        getContentBox().setMaxSize(AttributePopupConstants.WIDTH, AttributePopupConstants.HEIGHT);
+        getContentBox().setPrefSize(CompletionPopupConstants.WIDTH, CompletionPopupConstants.HEIGHT);
+        getContentBox().setMinSize(CompletionPopupConstants.WIDTH, CompletionPopupConstants.HEIGHT);
+        getContentBox().setMaxSize(CompletionPopupConstants.WIDTH, CompletionPopupConstants.HEIGHT);
         //note - stackpange doesn't include menu bar
 //        StackPane.setMargin(this.getNode(), new Insets(viewModel.getTop(), 0, 0, viewModel.getLeft()));
         listView.getStyleClass().add(StyleClasses.COMPACT);
+        listView.setCellFactory(lv -> {
+            ListCell<CompletionItem<?>> cell = new ListCell<>() {
+                @Override
+                protected void updateItem(CompletionItem<?> item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? null : item.getText());
+                }
+            };
+            cell.setOnMouseClicked(event -> {
+                if (!cell.isEmpty() && event.getClickCount() == 2) {
+                    getPresenter().onItemSubmitted(cell.getItem());
+                }
+            });
+            return cell;
+        });
     }
 
     @Override
@@ -106,7 +155,7 @@ public class AttributePopupFxView<P extends AttributePopupPresenter<?, ?>>
         });
     }
 
-    protected ListView<String> getListView() {
+    protected ListView<CompletionItem<?>> getListView() {
         return listView;
     }
 

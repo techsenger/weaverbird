@@ -69,6 +69,7 @@ import com.techsenger.alpha.executor.spi.AbstractCommand;
 import com.techsenger.alpha.executor.spi.Command;
 import com.techsenger.alpha.executor.spi.CommandDescriptor;
 import com.techsenger.alpha.executor.spi.CommandService;
+import com.techsenger.alpha.net.client.api.ClientService;
 import com.techsenger.toolkit.core.StopWatch;
 import com.techsenger.toolkit.core.StringUtils;
 import com.techsenger.toolkit.core.jpms.ServiceUtils;
@@ -102,8 +103,8 @@ public final class DefaultCommandExecutor implements CommandExecutor {
     /**
      * Constructor.
      */
-    public DefaultCommandExecutor(Framework framework) throws Exception {
-        this.commandContext = new DefaultCommandContext(framework, this);
+    public DefaultCommandExecutor(Framework framework, ClientService client) throws Exception {
+        this.commandContext = new DefaultCommandContext(framework, this, client);
         var commandProviders = ServiceUtils.loadProviders(DefaultCommandExecutor.class.getModule().getLayer(), false,
                 CommandService.class);
         var customCommands = commandProviders.stream()

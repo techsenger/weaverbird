@@ -20,6 +20,7 @@ import com.techsenger.alpha.core.api.Framework;
 import com.techsenger.alpha.core.spi.module.ModuleActivator;
 import com.techsenger.alpha.core.spi.module.ModuleContext;
 import javafx.application.Application;
+import javafx.application.Platform;
 
 /**
  *
@@ -39,7 +40,7 @@ public class ModuleActivatorProvider implements ModuleActivator {
         // JavaFX Application.launch() blocks the calling thread until the application exits.
         // To prevent blocking the activator, we start it in a separate daemon thread.
         Thread thread = new Thread(() -> Application.launch(AlphaApplication.class));
-        thread.setDaemon(true);
+        thread.setDaemon(false);
         thread.start();
 
 
@@ -96,10 +97,6 @@ public class ModuleActivatorProvider implements ModuleActivator {
 
     @Override
     public void deactivate(ModuleContext context) throws Exception {
-//        //even if the console hasn't been created it is very easy to create it as all fields initialized in open()
-//        var console = (ConsoleProvider) ConsoleProvider.provider();
-//        if (console.isOpen()) {
-//            console.close();
-//        }
+        Platform.exit();
     }
 }

@@ -32,25 +32,31 @@ public interface ConsoleIcons {
 
     StyleFontIcon CONSOLE = new StyleFontIcon("console-icon");
 
-    StyleFontIcon MEMORY_LOG = new StyleFontIcon("console-memory-log-icon");
+    StyleFontIcon MEMORY_LOG = new StyleFontIcon("memory-log-icon");
 
-    StyleFontIcon FILE_LOG = new StyleFontIcon("console-file-log-icon");
+    StyleFontIcon FILE_LOG = new StyleFontIcon("file-log-icon");
 
-    StyleFontIcon DEPENDENCY = new StyleFontIcon("console-dependency-icon");
+    StyleFontIcon DEPENDENCY = new StyleFontIcon("dependency-icon");
 
-    StyleFontIcon DIAGRAMS = new StyleFontIcon("console-diagrams-icon");
+    StyleFontIcon DIAGRAMS = new StyleFontIcon("diagrams-icon");
 
-    StyleFontIcon LAYER_DIAGRAMS = new StyleFontIcon("console-layer-diagrams-icon");
+    StyleFontIcon LAYER_DIAGRAMS = new StyleFontIcon("layer-diagrams-icon");
 
-    StyleFontIcon FILTER = new StyleFontIcon("console-filter-icon");
+    StyleFontIcon FILTER = new StyleFontIcon("filter-icon");
 
-    StyleFontIcon FILTER_SETTINGS = new StyleFontIcon("console-filter-settings-icon");
+    StyleFontIcon FILTER_SETTINGS = new StyleFontIcon("filter-settings-icon");
 
-    StyleFontIcon ALPHA = new StyleFontIcon("console-alpha-icon");
+    StyleFontIcon ALPHA = new StyleFontIcon("alpha-icon");
 
-    StyleFontIcon NETWORK = new StyleFontIcon("console-network-icon");
+    StyleFontIcon NETWORK = new StyleFontIcon("network-icon");
 
-    StyleFontIcon REFRESH = new StyleFontIcon("console-refresh-icon");
+    StyleFontIcon REFRESH = new StyleFontIcon("refresh-icon");
 
-    StyleFontIcon DETACH_SESSION = new StyleFontIcon("console-detach-session-icon");
+    StyleFontIcon DETACH_SESSION = new StyleFontIcon("detach-session-icon");
+
+    StyleFontIcon COPY = new StyleFontIcon("copy-icon");
+
+    StyleFontIcon PASTE = new StyleFontIcon("paste-icon");
+
+    StyleFontIcon CLEAR = new StyleFontIcon("clear-icon");
 }

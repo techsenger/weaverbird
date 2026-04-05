@@ -20,7 +20,22 @@ package com.techsenger.alpha.gui.console;
  *
  * @author Pavel Castornii
  */
-enum AttributePopupType {
+public class CompletionItem<T> {
 
-    COMMAND, PARAMETER
+    private final String text;
+
+    private final T element;
+
+    public CompletionItem(String text, T element) {
+        this.text = text;
+        this.element = element;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public T getElement() {
+        return element;
+    }
 }

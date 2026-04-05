@@ -16,8 +16,8 @@
 
 package com.techsenger.alpha.gui;
 
-import com.techsenger.alpha.gui.console.InMemoryHistoryManager;
 import com.techsenger.alpha.gui.menu.FileMenuRegistrar;
+import com.techsenger.alpha.gui.style.ConsoleIcons;
 import com.techsenger.tabshell.core.DefaultShellContext;
 import com.techsenger.tabshell.core.DefaultShellFxView;
 import com.techsenger.tabshell.core.DefaultShellPresenter;
@@ -27,9 +27,10 @@ import com.techsenger.tabshell.core.settings.Settings;
 import com.techsenger.tabshell.icons.IconStylesheetFactory;
 import com.techsenger.tabshell.layout.tabhost.TabHostFxView;
 import com.techsenger.tabshell.layout.tabhost.TabHostPresenter;
+import com.techsenger.tabshell.material.style.Stylesheet;
 import com.techsenger.tabshell.material.theme.AtlantaFxTheme;
+import java.util.ArrayList;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -57,12 +58,15 @@ public class AlphaApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        var shellView = new DefaultShellFxView<>(this, stage, IconStylesheetFactory.forAll());
+        var stylesheets = new ArrayList<Stylesheet>(IconStylesheetFactory.forAll());
+        stylesheets.add(new Stylesheet(ConsoleIcons.class.getResource("icons.css")));
+        var shellView = new DefaultShellFxView<>(this, stage, stylesheets);
         var context = new DefaultShellContext(createSettings(), new InMemoryHistoryManager(), getHostServices());
         var shellPresenter = new DefaultShellPresenter<>(shellView, context);
-        shellPresenter.setOnClose(() -> Platform.exit());
+        shellPresenter.setOnClose(() ->
+                Thread.startVirtualThread(() -> ModuleActivatorProvider.getFramework().shutdown()));
         shellPresenter.initialize();
-        shellView.setTitle("Console");
+        shellView.setTitle("Alpha Framework");
 
         var workspaceView = new TabHostFxView<>(true);
         var workspacePresenter = new TabHostPresenter<>(workspaceView);

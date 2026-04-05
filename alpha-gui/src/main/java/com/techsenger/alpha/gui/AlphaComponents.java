@@ -43,6 +43,8 @@ public interface AlphaComponents {
 
     ComponentName CONSOLE_TAB = new DefaultComponentName("Console Tab");
 
+    ComponentName CONSOLE_TOOL_BAR = new DefaultComponentName("Console ToolBar");
+
 //    ShellTabKey FILE_TAB = new ShellTabKey("File Tab");
 //
 //    TabKey CONVERTED_XML_TAB = new TabKey("Converted XML Tab");

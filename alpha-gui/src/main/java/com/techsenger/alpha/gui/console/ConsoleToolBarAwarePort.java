@@ -16,15 +16,19 @@
 
 package com.techsenger.alpha.gui.console;
 
+import com.techsenger.alpha.net.client.api.ClientSession;
+
 /**
  *
  * @author Pavel Castornii
  */
-public class AttributePopupConstants {
+public interface ConsoleToolBarAwarePort {
 
-    protected static final double WIDTH = 600.0;
+    void onClear();
 
-    protected static final double HEIGHT = 300.0;
+    void onCopy();
 
-    protected static final double V_MARGIN = 12.0;
+    void onPaste();
+
+    void onSessionChanged(ClientSession session);
 }

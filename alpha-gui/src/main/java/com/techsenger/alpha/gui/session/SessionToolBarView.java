@@ -14,33 +14,19 @@
  * limitations under the License.
  */
 
-package com.techsenger.alpha.gui.console;
+package com.techsenger.alpha.gui.session;
 
-import com.techsenger.alpha.executor.api.command.CommandInfo;
-import com.techsenger.alpha.executor.api.command.ParameterDescriptor;
-import com.techsenger.alpha.net.client.api.ClientService;
 import com.techsenger.alpha.net.client.api.ClientSession;
-import com.techsenger.tabshell.core.tab.TabComposer;
-import java.util.Collection;
+import com.techsenger.tabshell.core.area.AreaView;
 import java.util.List;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface ConsoleTabComposer extends TabComposer {
+public interface SessionToolBarView extends AreaView {
 
-    void setClient(ClientService client);
+    void setSessions(List<ClientSession> sessions);
 
     void setSession(ClientSession session);
-
-    ConsoleToolBarPort getToolBarPort();
-
-    void addCommandPopup(Collection<CommandInfo> commands, boolean sessionExists, String token, int offset);
-
-    void addParameterPopup(List<ParameterDescriptor> parameters,  String token, int offset);
-
-    CompletionPopupPort getPopupPort();
-
-    void removePopup();
 }

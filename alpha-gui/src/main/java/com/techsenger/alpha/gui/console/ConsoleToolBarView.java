@@ -16,35 +16,15 @@
 
 package com.techsenger.alpha.gui.console;
 
-import com.techsenger.alpha.core.api.message.Message;
-import com.techsenger.tabshell.core.tab.TabView;
-import java.util.List;
-import java.util.Set;
-import javafx.scene.text.Font;
+import com.techsenger.alpha.gui.session.SessionToolBarView;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface ConsoleTabView extends TabView {
+public interface ConsoleToolBarView extends SessionToolBarView {
 
-    void setMonospaceFont(Font font);
+    void setCopyDisabled(boolean disabled);
 
-    void printPrompt(String prompt);
-
-    void updatePrompt(String prompt);
-
-    void printMessages(List<Message> messages);
-
-    void highlightCommands(Set<String> commands);
-
-    void updateInput(String text);
-
-    void beep();
-
-    void clear();
-
-    void copy();
-
-    void paste();
+    void setPasteDisabled(boolean disabled);
 }

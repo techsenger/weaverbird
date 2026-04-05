@@ -14,37 +14,21 @@
  * limitations under the License.
  */
 
-package com.techsenger.alpha.gui.console;
+package com.techsenger.alpha.gui.session;
 
-import com.techsenger.alpha.core.api.message.Message;
-import com.techsenger.tabshell.core.tab.TabView;
-import java.util.List;
-import java.util.Set;
-import javafx.scene.text.Font;
+import com.techsenger.alpha.net.client.api.ClientSession;
+import javafx.scene.control.ListCell;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface ConsoleTabView extends TabView {
+class SessionListCell<T extends ClientSession> extends ListCell<T> {
 
-    void setMonospaceFont(Font font);
-
-    void printPrompt(String prompt);
-
-    void updatePrompt(String prompt);
-
-    void printMessages(List<Message> messages);
-
-    void highlightCommands(Set<String> commands);
-
-    void updateInput(String text);
-
-    void beep();
-
-    void clear();
-
-    void copy();
-
-    void paste();
+    @Override
+    protected void updateItem(T item, boolean empty) {
+        super.updateItem(item, empty);
+        setText(empty || item == null ? null : item.getName() + " [" + item.getLoginName()
+                    + "@" + item.getHost() + "]");
+    }
 }

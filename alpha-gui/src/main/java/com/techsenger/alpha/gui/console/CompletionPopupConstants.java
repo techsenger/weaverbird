@@ -16,35 +16,15 @@
 
 package com.techsenger.alpha.gui.console;
 
-import com.techsenger.alpha.core.api.message.Message;
-import com.techsenger.tabshell.core.tab.TabView;
-import java.util.List;
-import java.util.Set;
-import javafx.scene.text.Font;
-
 /**
  *
  * @author Pavel Castornii
  */
-public interface ConsoleTabView extends TabView {
+public class CompletionPopupConstants {
 
-    void setMonospaceFont(Font font);
+    protected static final double WIDTH = 600.0;
 
-    void printPrompt(String prompt);
+    protected static final double HEIGHT = 300.0;
 
-    void updatePrompt(String prompt);
-
-    void printMessages(List<Message> messages);
-
-    void highlightCommands(Set<String> commands);
-
-    void updateInput(String text);
-
-    void beep();
-
-    void clear();
-
-    void copy();
-
-    void paste();
+    protected static final double V_MARGIN = 12.0;
 }

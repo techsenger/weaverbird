@@ -16,7 +16,7 @@
 
 package com.techsenger.alpha.gui.console;
 
-import static com.techsenger.alpha.gui.console.ConsoleTabFxView.CSS_ATTRIBUTE;
+import jfx.incubator.scene.control.richtext.model.StyleAttribute;
 import jfx.incubator.scene.control.richtext.model.StyleAttributeMap;
 
 /**
@@ -25,11 +25,17 @@ import jfx.incubator.scene.control.richtext.model.StyleAttributeMap;
  */
 public final class TextAreaCssStyles {
 
+    protected static final StyleAttribute<String> CSS_ATTRIBUTE
+            = new StyleAttribute("CSS_ATTRIBUTE", String.class, false);
+
     protected static final StyleAttributeMap ERROR = StyleAttributeMap
             .of(CSS_ATTRIBUTE, "-fx-fill: -color-danger-5;");
 
     protected static final StyleAttributeMap COMMAND = StyleAttributeMap
             .of(CSS_ATTRIBUTE, "-fx-fill: -color-accent-5;");
+
+    protected static final StyleAttributeMap DEFAULT = StyleAttributeMap
+            .of(CSS_ATTRIBUTE, "-fx-fill: -color-fg-default;");
 
     private TextAreaCssStyles() {
         // empty

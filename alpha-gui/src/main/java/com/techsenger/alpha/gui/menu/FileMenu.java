@@ -33,7 +33,7 @@ public interface FileMenu {
 
     MenuGroupName MAIN = new DefaultMenuGroupName("Main");
 
-    MenuItemName SHELL = new DefaultMenuItemName();
+    MenuItemName CONSOLE = new DefaultMenuItemName();
 
     MenuItemName SETTINGS = new DefaultMenuItemName();
 

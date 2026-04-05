@@ -16,16 +16,15 @@
 
 package com.techsenger.alpha.gui.console;
 
-import com.techsenger.tabshell.core.popup.PopupView;
-import java.util.List;
+import com.techsenger.alpha.net.client.api.ClientSession;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface AttributePopupView extends PopupView {
+public interface ConsoleToolBarPort {
 
-    void setItems(List<String> items);
+    void updateSession(ClientSession session);
 
-    void setInfo(String description, String module);
+    void onCopyAvailable(boolean value);
 }

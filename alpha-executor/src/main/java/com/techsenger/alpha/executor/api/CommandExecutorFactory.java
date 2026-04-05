@@ -18,6 +18,8 @@ package com.techsenger.alpha.executor.api;
 
 import com.techsenger.alpha.core.api.Framework;
 import com.techsenger.alpha.executor.impl.DefaultCommandExecutor;
+import com.techsenger.alpha.net.client.api.ClientService;
+import com.techsenger.alpha.net.client.api.ClientServiceFactory;
 
 /**
  *
@@ -26,7 +28,11 @@ import com.techsenger.alpha.executor.impl.DefaultCommandExecutor;
 public final class CommandExecutorFactory {
 
     public static CommandExecutor create(Framework framework) throws Exception {
-        return new DefaultCommandExecutor(framework);
+        return new DefaultCommandExecutor(framework, ClientServiceFactory.create());
+    }
+
+    public static CommandExecutor create(Framework framework, ClientService client) throws Exception {
+        return new DefaultCommandExecutor(framework, client);
     }
 
     private CommandExecutorFactory() {

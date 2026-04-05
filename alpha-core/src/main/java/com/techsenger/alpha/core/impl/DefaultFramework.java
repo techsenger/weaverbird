@@ -189,12 +189,13 @@ public class DefaultFramework implements Framework {
     public synchronized void shutdown() {
         shuttingDown = true;
         logger.debug("Shutting down framework");
-        List<ComponentDescriptor> descriptors =
-                new ArrayList<>(componentManager.getDescriptors());
+        List<ComponentDescriptor> descriptors = new ArrayList<>(componentManager.getDescriptors());
         Collections.sort(descriptors, new Comparator<ComponentDescriptor>() {
+
             @Override public int compare(ComponentDescriptor d1, ComponentDescriptor d2) {
                 return d2.getId() - d1.getId(); // reverse
             }
+
         });
         for (ComponentDescriptor descriptor : descriptors) {
             try {

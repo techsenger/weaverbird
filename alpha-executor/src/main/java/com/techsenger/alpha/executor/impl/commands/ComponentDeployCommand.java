@@ -48,8 +48,8 @@ public class ComponentDeployCommand extends AbstractComponentNameVerCommand {
     private List<String> parentAliases = new ArrayList<>();
 
     @Parameter(names = {"--use-parent-cl"}, required = false,
-            description = "sets whether the class loader of the parent component should be used; "
-                    + "can be used only for components with one parent having one loader")
+            description = "use the parent component's class loader "
+                    + "(only if there is a single parent with a single loader)")
     private boolean useParentClassLoader;
 
     @Override

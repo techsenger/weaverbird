@@ -40,7 +40,7 @@ Until it is possible to style text via CSS
 /*
     Popup
 */
-.attribute-popup-box {
+.autocomplete-popup-box {
     -fx-border-color:  -color-border-default;
     -fx-border-width: 1px;
     -fx-border-style: solid;
@@ -50,16 +50,4 @@ Until it is possible to style text via CSS
 
 .list-view {
     -fx-border-width: 0;
-}
-
-.popup-text-area .paragraph-text {
-    -fx-padding: 0 5px 0 5px;
-}
-
-.popup-text-area .marked-text {
-    -fx-font-weight: bold;
-}
-
-.popup-text-area .simple-text {
-    -fx-font-weight: normal;
 }

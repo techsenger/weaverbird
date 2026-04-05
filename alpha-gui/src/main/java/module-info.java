@@ -34,11 +34,6 @@ module com.techsenger.alpha.gui {
     requires javafx.swing;
     requires atlantafx.base;
     requires jfx.incubator.richtext;
-//    requires org.fxmisc.richtext;
-//    requires org.fxmisc.flowless;
-//    requires org.fxmisc.undo;
-//    requires wellbehavedfx;
-//    requires reactfx;
     requires net.sourceforge.plantuml;
 
     exports com.techsenger.alpha.gui;

@@ -60,14 +60,6 @@
         <Module groupId="com.techsenger.tabshell" artifactId="tabshell-dialogs" version="${bom.tabshell.version}"/>
         <Module groupId="com.techsenger.tabshell" artifactId="tabshell-layout" version="${bom.tabshell.version}"/>
 
-        <!--### RICH TEXT ###-->
-        <!-- todo: check versions -->
-        <Module groupId="org.fxmisc.richtext" artifactId="richtextfx" version="${bom.richtextfx.version}"/>
-        <Module groupId="org.fxmisc.flowless" artifactId="flowless" version="${bom.flowless.version}"/>
-        <Module groupId="org.fxmisc.undo" artifactId="undofx" version="${undofx.version}"/>
-        <Module groupId="org.fxmisc.wellbehaved" artifactId="wellbehavedfx" version="${wellbehavedfx.version}"/>
-        <Module groupId="org.reactfx" artifactId="reactfx" version="${reactfx.version}"/>
-
         <!--### UML ###-->
         <Module groupId="net.sourceforge.plantuml" artifactId="plantuml-asl" version="${bom.plantuml.version}"/>
 

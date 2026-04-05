@@ -16,13 +16,22 @@
 
 package com.techsenger.alpha.gui.console;
 
+import com.techsenger.tabshell.core.popup.PopupView;
+import java.util.List;
+
 /**
  *
  * @author Pavel Castornii
  */
-public interface PopupOwnerPort {
+public interface CompletionPopupView extends PopupView {
 
-    void onAttributeSubmitted(AttributePopupType type, String attribute);
+    void setItems(List<CompletionItem<?>> items);
 
-    void onPopupClose();
+    void setInfo(String description, String module);
+
+    void setInfo(String description, boolean required, String alias);
+
+    void selectPrevious();
+
+    void selectNext();
 }

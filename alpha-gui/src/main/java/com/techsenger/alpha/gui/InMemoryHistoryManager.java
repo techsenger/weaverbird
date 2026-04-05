@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.techsenger.alpha.gui.console;
+package com.techsenger.alpha.gui;
 
 import com.techsenger.patternfx.core.ComponentHistory;
 import com.techsenger.tabshell.core.history.HistoryManager;

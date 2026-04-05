@@ -22,7 +22,6 @@ import com.techsenger.alpha.executor.api.CommandExecutor;
 import com.techsenger.alpha.executor.api.ParameterProvider;
 import com.techsenger.alpha.executor.api.command.ExecutionTarget;
 import com.techsenger.alpha.net.client.api.ClientService;
-import com.techsenger.alpha.net.client.api.ClientServiceFactory;
 import com.techsenger.alpha.net.client.api.ClientSession;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,7 +46,7 @@ public class DefaultCommandContext implements CommandContext {
 
     private ClientSession session;
 
-    private ClientService client = ClientServiceFactory.create();
+    private final ClientService client;
 
     private ExecutionProgress progress;
 
@@ -56,9 +55,10 @@ public class DefaultCommandContext implements CommandContext {
     /**
      * Constructor.
      */
-    public DefaultCommandContext(Framework framework, CommandExecutor executor) {
+    public DefaultCommandContext(Framework framework, CommandExecutor executor, ClientService client) {
         this.framework = framework;
         this.executor = executor;
+        this.client = client;
     }
 
     @Override

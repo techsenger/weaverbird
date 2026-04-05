@@ -18,6 +18,7 @@ package com.techsenger.alpha.net.client.impl;
 
 import com.techsenger.alpha.net.client.api.ClientSession;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  *
@@ -105,5 +106,27 @@ class DefaultClientSession implements ClientSession {
 
     public void setClosedAt(LocalDateTime closedAt) {
         this.closedAt = closedAt;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.uuid);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DefaultClientSession other = (DefaultClientSession) obj;
+        return Objects.equals(this.uuid, other.uuid);
     }
 }

@@ -19,24 +19,27 @@ package com.techsenger.alpha.gui.console;
 import com.techsenger.alpha.core.api.message.Message;
 import com.techsenger.alpha.core.api.message.MessageType;
 import com.techsenger.alpha.executor.api.command.CommandInfo;
+import com.techsenger.alpha.executor.api.command.ParameterDescriptor;
+import com.techsenger.alpha.net.client.api.ClientService;
+import com.techsenger.alpha.net.client.api.ClientSession;
 import com.techsenger.tabshell.core.ShellFxView;
 import com.techsenger.tabshell.core.tab.AbstractTabFxView;
 import com.techsenger.tabshell.material.Anchors;
-import com.techsenger.tabshell.material.icon.FontIconView;
 import com.techsenger.tabshell.material.style.StyleClasses;
 import com.techsenger.tabshell.material.style.StyleUtils;
-import com.techsenger.tabshell.shared.style.SharedIcons;
+import com.techsenger.tabshell.material.theme.AtlantaFxTheme;
+import com.techsenger.toolkit.fx.utils.NodeUtils;
+import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -44,7 +47,6 @@ import javafx.scene.text.Font;
 import jfx.incubator.scene.control.richtext.RichTextArea;
 import jfx.incubator.scene.control.richtext.StyleHandlerRegistry;
 import jfx.incubator.scene.control.richtext.TextPos;
-import jfx.incubator.scene.control.richtext.model.StyleAttribute;
 import jfx.incubator.scene.control.richtext.model.StyleAttributeMap;
 
 /**
@@ -61,7 +63,7 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
             // brings in the handlers from the base class
             StyleHandlerRegistry.Builder b = StyleHandlerRegistry.builder(RichTextArea.styleHandlerRegistry);
             // adds a handler for the new attribute
-            b.setSegHandler(CSS_ATTRIBUTE, (c, cx, style) -> {
+            b.setSegHandler(TextAreaCssStyles.CSS_ATTRIBUTE, (c, cx, style) -> {
                 cx.addStyle(style);
             });
             return b.build();
@@ -73,43 +75,94 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
         }
     };
 
-    protected static final StyleAttribute<String> CSS_ATTRIBUTE
-            = new StyleAttribute("CSS_ATTRIBUTE", String.class, false);
-
     protected class Composer extends AbstractTabFxView<P>.Composer implements ConsoleTabComposer {
 
         private final ConsoleTabFxView<P> view = ConsoleTabFxView.this;
 
-        private AttributePopupFxView<?> attributePopup;
+        private ConsoleToolBarFxView<?> toolBar;
+
+        private CompletionPopupFxView<?> completionPopup;
+
+        private ClientService client;
+
+        private ClientSession session;
 
         @Override
-        public void addCommandPopup(Map<String, CommandInfo> commandsByName) {
-            this.attributePopup = createCommandPopup(commandsByName);
-            this.attributePopup.getPresenter().initialize();
-            var topLeft = calculatePopupPosition();
-            addPopup(this.attributePopup, Anchors.topLeft(topLeft.getY(), topLeft.getX()));
-            view.caret.setOpacity(0);
-            this.attributePopup.requestFocus();
+        public void setClient(ClientService client) {
+            this.client = client;
+        }
+
+        @Override
+        public void setSession(ClientSession session) {
+            this.session = session;
+        }
+
+        @Override
+        public ConsoleToolBarPort getToolBarPort() {
+            return this.toolBar == null ? null : this.toolBar.getPresenter();
+        }
+
+        @Override
+        public void compose() {
+            super.compose();
+            this.toolBar = createToolBar(client , session);
+            this.toolBar.getPresenter().initialize();
+            getModifiableChildren().add(this.toolBar);
+            view.getContentBox().getChildren().add(0, toolBar.getNode());
+        }
+
+        @Override
+        public void addCommandPopup(Collection<CommandInfo> commands, boolean sessionExists, String token, int offset) {
+            this.completionPopup = createCommandPopup(commands, sessionExists, token);
+            this.completionPopup.getPresenter().initialize();
+            var topLeft = calculatePopupPosition(offset);
+            addPopup(this.completionPopup, Anchors.topLeft(topLeft.getY(), topLeft.getX()));
+        }
+
+        @Override
+        public void addParameterPopup(List<ParameterDescriptor> parameters, String token, int offset) {
+            this.completionPopup = createParameterPopup(parameters, token);
+            this.completionPopup.getPresenter().initialize();
+            var topLeft = calculatePopupPosition(offset);
+            addPopup(this.completionPopup, Anchors.topLeft(topLeft.getY(), topLeft.getX()));
         }
 
         @Override
         public void removePopup() {
-            if (this.attributePopup == null) {
+            if (this.completionPopup == null) {
                 return;
             }
-            this.attributePopup.getComposer().remove();
-            view.caret.setOpacity(1);
+            removePopup(completionPopup);
+            this.completionPopup = null;
             view.textArea.requestFocus();
         }
 
-        protected AttributePopupFxView<?> createCommandPopup(Map<String, CommandInfo> commandsByName) {
-            var view = new AttributePopupFxView<>();
-            var presenter = new AttributePopupPresenter<>(view, commandsByName,
-                    AttributePopupType.COMMAND, getPresenter());
+        @Override
+        public CompletionPopupPort getPopupPort() {
+            return this.completionPopup == null ? null : this.completionPopup.getPresenter();
+        }
+
+        protected ConsoleToolBarFxView<?> createToolBar(ClientService client, ClientSession session) {
+            var view = new ConsoleToolBarFxView<>();
+            var presenter = new ConsoleToolBarPresenter<>(view, client, session, getPresenter());
             return view;
         }
 
-        Point2D calculatePopupPosition() {
+        protected CompletionPopupFxView<?> createCommandPopup(Collection<CommandInfo> commands,
+                boolean sessionExists, String token) {
+            var view = new CompletionPopupFxView<>();
+            var presenter = new CompletionPopupPresenter<>(view, commands, sessionExists, token, getPresenter());
+            return view;
+        }
+
+        protected CompletionPopupFxView<?> createParameterPopup(List<ParameterDescriptor> params,
+                String token) {
+            var view = new CompletionPopupFxView<>();
+            var presenter = new CompletionPopupPresenter<>(view, params, token, getPresenter());
+            return view;
+        }
+
+        private Point2D calculatePopupPosition(int offset) {
             Node caret = getCaret();
 
             Bounds boundsInScreen = caret.localToScreen(caret.getBoundsInLocal());
@@ -122,7 +175,8 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
                 return new Point2D(0, 0);
             }
 
-            double caretX = boundsInStackPane.getMinX();
+            // double caretX = boundsInStackPane.getMinX() - (offset * view.characterWidth);
+            double caretX = offset * view.characterWidth;
             double caretY = boundsInStackPane.getMinY();
             double caretBottom = boundsInStackPane.getMaxY();
 
@@ -130,17 +184,17 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
             double y;
 
             // vertical position: show below caret if there is enough space, otherwise show above
-            if (caretBottom + AttributePopupConstants.V_MARGIN + AttributePopupConstants.HEIGHT >
+            if (caretBottom + CompletionPopupConstants.V_MARGIN + CompletionPopupConstants.HEIGHT >
                     getWrapperPane().getHeight()) {
-                y = caretY - AttributePopupConstants.V_MARGIN - AttributePopupConstants.HEIGHT;
+                y = caretY - CompletionPopupConstants.V_MARGIN - CompletionPopupConstants.HEIGHT;
             } else {
-                y = caretBottom + AttributePopupConstants.V_MARGIN;
+                y = caretBottom + CompletionPopupConstants.V_MARGIN;
             }
 
             // horizontal position: align left edge with caret if there is enough space,
             // otherwise align right edge with caret
-            if (caretX + AttributePopupConstants.WIDTH > getWrapperPane().getWidth()) {
-                x = caretX - AttributePopupConstants.WIDTH;
+            if (caretX + CompletionPopupConstants.WIDTH > getWrapperPane().getWidth()) {
+                x = caretX - CompletionPopupConstants.WIDTH;
             } else {
                 x = caretX;
             }
@@ -163,58 +217,47 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
      */
     private TextPos promptPos;
 
-//    private final ShellHighlighter highlighter;
-
-//    private final LogMessagePrinter logPrinter;
-
-//    private final MessagePrinter printer;
-
-//    private final SessionsToolBarView sessions;
-
-    private final Button clearButton = new Button(null, new FontIconView(SharedIcons.CLEAR));
-
-    private final MenuItem cutItem = new MenuItem("Cut", new FontIconView(SharedIcons.CUT));
-
-    private final MenuItem pasteItem = new MenuItem("Paste", new FontIconView(SharedIcons.PASTE));
+    private final CommandHighlighter highlighter;
 
     private Node caret;
 
+    private boolean textChangeValid = true;
+
     public ConsoleTabFxView(ShellFxView<?> shell) {
         super(shell);
-//        this.logPrinter = new LogMessagePrinter(textArea, getTextScrollPane());
-//        this.printer = new TextAreaMessagePrinter(textArea);
-//        if (viewModel.getSessions() != null) {
-//            sessions = new SessionsToolBarView(viewModel.getSessions());
-//            sessions.initialize();
-//        } else {
-//            sessions = null;
-//        }
-//        this.highlighter =  new ShellHighlighter(viewModel.getCommandInfosManager());
+        this.highlighter = createHighlighter();
     }
 
-    public void cut() {
-        this.textArea.cut();
+    @Override
+    public void copy() {
+        this.textArea.copy();
     }
 
+    @Override
     public void paste() {
         this.textArea.paste();
     }
 
     @Override
     public void requestFocus() {
-//        NodeUtils.requestFocus(textArea);
-        textArea.requestFocus();
+        NodeUtils.requestFocus(textArea);
     }
 
     @Override
     public void printPrompt(String prompt) {
-//        var viewModel = this.getViewModel();
-//        viewModel.setHighlighterEnabled(false);
         this.printTexts(List.of(new StyledText(StyleAttributeMap.EMPTY, prompt)), false); // adds a new paragraph
-        this.promptPos = textArea.getCaretPosition();
-//        viewModel.setPromptPosition(textArea.getText().length());
-//        viewModel.setHighlighterEnabled(true);
-//        this.textArea.requestFocus();
+        this.promptPos = new TextPos(this.textArea.getParagraphCount() - 1, prompt.length(), 0, false);
+        moveCaretToEnd();
+    }
+
+    @Override
+    public void updatePrompt(String prompt) {
+        var paragraphText = this.textArea.getModel().getParagraph(this.promptPos.index()).getPlainText();
+        var start = new TextPos(this.promptPos.index(), 0, 0, false);
+        var end = new TextPos(this.promptPos.index(), paragraphText.length(), 0, false);
+        this.textArea.replaceText(start, end, prompt);
+        this.promptPos = new TextPos(this.promptPos.index(), prompt.length(), 0, false);
+        moveCaretToEnd();
     }
 
     @Override
@@ -232,19 +275,22 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
     }
 
     @Override
-    public void setHighlighterEnabled(boolean value) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void setMonospaceFont(Font font) {
         this.font = font;
         this.characterWidth = StyleUtils.getMonospaceCharSize(font).getWidth();
     }
 
     @Override
-    public void apppendText(String text) {
-        textArea.appendText(text, StyleAttributeMap.EMPTY);
+    public void highlightCommands(Set<String> commands) {
+        this.highlighter.setCommands(commands);
+    }
+
+    @Override
+    public void updateInput(String text) {
+        int paraIndex = promptPos.index();
+        int paraLen = textArea.getModel().getParagraph(paraIndex).getPlainText().length();
+        TextPos paraEnd = new TextPos(paraIndex, paraLen, 0, false);
+        textArea.replaceText(promptPos, paraEnd, text);
         moveCaretToEnd();
     }
 
@@ -254,143 +300,106 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
     }
 
     @Override
+    public void beep() {
+        Toolkit.getDefaultToolkit().beep();
+    }
+
+    @Override
+    public void clear() {
+        this.promptPos = null; // to prevent making text area non editable
+        this.textArea.clear();
+    }
+
+    @Override
     protected void build() {
         super.build();
-
-//        var toolBars = new HBox(getToolBar());
-//        clearButton.setTooltip(new Tooltip("Clear"));
-//        clearButton.getStyleClass().add(StyleClasses.ICONED_BUTTON);
-//        //toolbar
-//        getToolBar().getItems().addAll(clearButton, new Separator(Orientation.VERTICAL), getCopyButton(),
-//                getFindButton());
-//        if (Framework.getMode() == FrameworkMode.CLIENT) {
-//            toolBars.getChildren().add(sessions.getNode());
-//        }
-//        HBox.setHgrow(getToolBar(), Priority.ALWAYS);
+        var button = new Button("test");
+        button.setOnAction(e -> getComposer().getShell().getPresenter().getContext()
+                .getSettings().getAppearance().setTheme(AtlantaFxTheme.DRACULA));
         textArea.getStyleClass().addAll("console-text-area", StyleClasses.MONOSPACE);
         textArea.setEditable(true);
+        textArea.setWrapText(true);
+        textArea.setUndoRedoEnabled(false);
         VBox.setVgrow(textArea, Priority.ALWAYS);
-//        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-//
-//        stackPane.getChildren().add(scrollPane);
-//        stackPane.setMargin(scrollPane, new Insets(0, 0, 0, 0));
-//        VBox.setVgrow(stackPane, Priority.ALWAYS);
 
         var css = ConsoleTabFxView.class.getResource("console.css").toExternalForm();
         getWrapperPane().getStylesheets().add(css);
         getContentBox().getChildren().add(textArea);
-//        css = LogPrinterView.class.getResource("log-levels.css").toExternalForm();
-//        getTopPane().getStylesheets().add(css);
-//        getTopPane().getChildren().addAll(toolBars, stackPane);
-        cutItem.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));
-        pasteItem.setAccelerator(new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN));
-//        getTextAreaMenu().getItems().addAll(cutItem, getCopyItem(), pasteItem);
     }
 
     @Override
     protected void addListeners() {
         super.addListeners();
         textArea.caretPositionProperty().addListener((ov, oldV, newV) -> {
-            textArea.setEditable(isInEditableRegion(newV));
+            if (textArea.getSelection() == null) {
+                textArea.setEditable(isInEditableRegion(newV));
+            }
+            updateCaretPos(newV);
         });
-//        //highliter work only 1) when it is enabled and 2) processes only text after prompt
-//        //1) because we don't need to highlight words in messages, errors etc
-//        //2) because highlighter clears all other style classes for example, it can clear styles of messages, errors etc
-//        textArea.textProperty().addListener((obs, oldText, newText) -> {
-//            if (newText.length() > 0 && viewModel.isHighlighterEnabled()) {
-//                textArea.setStyleSpans(viewModel.getPromptPosition(),
-//                        highlighter.computeHighlighting(newText.substring(viewModel.getPromptPosition())));
-//            }
-//        });
-//
-//        var settings = viewModel.getSettings();
-//        ValueUtils.callAndAddListener(settings.fontProperty(), fontListener);
-//        textArea.widthProperty().addListener((ov, oldV, newV) -> recalculateOutputWidth());
-//        viewModel.getMessages().addListener((messages) -> this.printer.print(messages));
-//        viewModel.getLogMessages().addListener((messages) -> this.logPrinter.print(messages));
+        textArea.selectionProperty().addListener((ov, oldV, newV) -> {
+            if (newV != null && !Objects.equals(newV.getCaret(), newV.getAnchor())) {
+                var caretIsInEditableRegion = isInEditableRegion(newV.getCaret());
+                textArea.setEditable(isInEditableRegion(newV.getAnchor()) && caretIsInEditableRegion);
+                getPresenter().onCopyAvailable(true);
+            } else {
+                textArea.setEditable(isInEditableRegion(newV.getCaret()));
+                getPresenter().onCopyAvailable(false);
+            }
+            updateCaretPos(newV.getCaret());
+        });
+        textArea.getModel().addListener((change) -> {
+            if (textChangeValid) {
+                if (promptPos != null && change.getStart().index() == promptPos.index()
+                        && change.getEnd().index() == promptPos.index()) {
+                    getPresenter().onTextInput(textArea.getModel().getParagraph(promptPos.index()).getPlainText());
+                    this.textChangeValid = false;
+                    this.highlighter.highlight(promptPos.index());
+                }
+            }
+            this.textChangeValid = true;
+        });
     }
 
     @Override
     protected void addHandlers() {
-//        super.addHandlers();
-//        clearButton.setOnAction((e) -> {
-//            if (!textArea.isOutputPrinting()) {
-//                textArea.setOutputPrinting(true);
-//                textArea.clear();
-//                viewModel.showPrompt();
-//                textArea.moveTo(viewModel.getPromptLength());
-//                textArea.requestFocus();
-//                textArea.setShowCaret(Caret.CaretVisibility.AUTO);
-//                textArea.setOutputPrinting(false);
-//            }
-//        });
-//        //to disable text gragging
-//        textArea.setOnSelectionDropped(EH -> { });
-//        textArea.setOnKeyPressed((event) -> {
-//            if (event.getCode() == KeyCode.SPACE && event.isControlDown()) {
-//                event.consume();
-//                viewModel.openAttributeWindow();
-//            } else if (event.getCode() == KeyCode.ESCAPE && !event.isControlDown()) {
-//                event.consume();
-//                viewModel.closeAttributeWindow();
-//            }
-//        });
-//
+        super.addHandlers();
         textArea.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
             var pos = textArea.getCaretPosition();
             if (isInEditableRegion(pos)) {
                 if (event.getCode() == KeyCode.UP) {
-//                    var currentWindowView = this.attributeWindow;
-//                    if (currentWindowView != null) {
-//                        currentWindowView.getViewModel().selectUp();
-//                    } else {
-//                        var index = viewModel.scrollHistoryUp();
-//                        scrollHistory(index);
-//                    }
-                    event.consume();
+                    if (textArea.getCaretPosition().index() == this.promptPos.index()) {
+                        getPresenter().onMoveUp();
+                        event.consume();
+                    }
                 } else if (event.getCode() == KeyCode.DOWN) {
-//                    var currentWindowView = this.attributeWindow;
-//                    if (currentWindowView != null) {
-//                        currentWindowView.getViewModel().selectDown();
-//                    } else {
-//                        var index = viewModel.scrollHistoryDown();
-//                        scrollHistory(index);
-//                    }
-                    event.consume();
+                    if (textArea.getCaretPosition().index() == this.promptPos.index()) {
+                        getPresenter().onMoveDown();
+                        event.consume();
+                    }
                 } else if (event.getCode() == KeyCode.ENTER) {
                     event.consume();
-                    textArea.appendText("\n");
-//                    var currentWindowView = this.attributeWindow;
-//                    if (currentWindowView != null) {
-//                        viewModel.doOnListViewSelected();
-//                        viewModel.closeAttributeWindow();
-//                    } else {
-                        //we add eol manually to prevent adding the line separator in the middle of the line
-                        getPresenter().onCommandsSubmitted(getTextsWithPrompt(), calculateOutputWidth());
-//                    }
+                    if (getComposer().completionPopup == null) {
+                        textArea.appendText("\n");
+                        getPresenter().onCommandsSubmitted(getCurrentParagraph(), calculateOutputWidth());
+                    } else {
+                        getPresenter().onElementSubmitted();
+                    }
+
                 } else if (event.getCode() == KeyCode.HOME) {
                     event.consume();
                     textArea.select(this.promptPos);
-                } else if (event.getCode() == KeyCode.DELETE) {
-                    var selection = textArea.getSelection();
-                    if (selection != null && !isInEditableRegion(selection.getAnchor())) {
-                        event.consume();
-                    }
-                } else if (event.getCode() == KeyCode.X) { // cut
-                    var selection = textArea.getSelection();
-                    if (event.isShiftDown() && selection != null && !isInEditableRegion(selection.getAnchor())) {
-                        event.consume();
-                    }
                 } else if (event.getCode() == KeyCode.BACK_SPACE) {
                     if (pos.index() == promptPos.index() && pos.offset() == promptPos.offset()) {
                         event.consume();
                     }
                 } else if (event.getCode() == KeyCode.SPACE) {
                     if (event.isControlDown()) {
-                        getPresenter().onAutocompleteRequest();
+                        getPresenter().onAutocomplete(getCurrentParagraph());
+                        event.consume();
                     }
                 } else if (event.getCode() == KeyCode.ESCAPE) {
                     getPresenter().onPopupClose();
+                    event.consume();
                 }
             }
         });
@@ -414,45 +423,17 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
         return new ConsoleTabFxView.Composer();
     }
 
-//    @Override
-//    protected ComponentHelper<?> createComponentHelper() {
-//        return new ShellTabHelper(this);
-//    }
-//
-//    protected ExtendedTextArea getTextArea() {
-//        return super.getTextArea();
-//    }
-//
-//    void openAttributeWindow(AttributeWindowView attributeWindow) {
-//        this.attributeWindow = attributeWindow;
-//        this.stackPane.getChildren().add(this.attributeWindow.getNode());
-//        this.attributeWindow.getListView().setOnMouseClicked((e) -> {
-//            if (e.getClickCount() == 2) {
-//                getViewModel().doOnListViewSelected();
-//                getViewModel().closeAttributeWindow();
-//            }
-//        });
-//    }
-//
-//    void closeAttributeWindow() {
-//        this.stackPane.getChildren().remove(this.attributeWindow.getNode());
-//        this.attributeWindow.deinitialize();
-//        this.attributeWindow = null;
-//    }
-//
-//    private void scrollHistory(int index) {
-//        var textArea = this.getTextArea();
-//        var viewModel = this.getViewModel();
-//        var lastCommands = viewModel.getLastCommands();
-//        if (0 <= index &&  index < lastCommands.size()) {
-//            viewModel.setCommandScrollingIndex(index);
-//            textArea.deleteText(viewModel.getPromptPosition(), textArea.getText().length());
-//            textArea.appendText(lastCommands.get(index));
-//        } else if (index >= lastCommands.size()) {
-//            viewModel.setCommandScrollingIndex(-1);
-//            textArea.deleteText(viewModel.getPromptPosition(), textArea.getText().length());
-//        }
-//    }
+    protected CommandHighlighter createHighlighter() {
+        return new CommandHighlighter(textArea);
+    }
+
+    private void updateCaretPos(TextPos pos) {
+        getPresenter().onCaretChanged(isInEditableRegion(pos) ? pos.offset() : null);
+    }
+
+    private String getCurrentParagraph() {
+        return this.textArea.getModel().getParagraph(promptPos.index()).getPlainText();
+    }
 
     private int calculateOutputWidth() {
         //vertical bar width is set in em, so, when font size changes vertical bar width changes too.
@@ -466,17 +447,7 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
         if (promptPos == null) {
             return true;
         }
-        var result = (pos.index() == promptPos.index() && pos.offset()>= promptPos.offset())
-                    || pos.index() > promptPos.index();
-        return result;
-    }
-
-    private List<String> getTextsWithPrompt() {
-        int count = textArea.getParagraphCount();
-        List<String> result = new ArrayList<>();
-        for (int i = promptPos.index(); i < count; i++) {
-            result.add(textArea.getModel().getPlainText(i));
-        }
+        var result = pos.index() == promptPos.index() && pos.offset()>= promptPos.offset();
         return result;
     }
 
@@ -487,8 +458,8 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
             textArea.appendText(text, style);
             if (newLine) {
                 textArea.appendText("\n");
+                moveCaretToEnd();
             }
-            moveCaretToEnd();
         }
     }
 
