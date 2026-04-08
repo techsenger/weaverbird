@@ -16,15 +16,14 @@
 
 package com.techsenger.alpha.gui.diagram;
 
-import com.techsenger.tabshell.core.page.PageView;
+import com.techsenger.tabshell.core.dialog.DialogPort;
+import java.util.List;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface LayerPageView extends PageView {
+public interface LayerDialogPort extends DialogPort {
 
-    void showLayer(LayerConfig layer);
-
-    void deselectAll();
+    List<LayerConfig> getLayerConfigs();
 }

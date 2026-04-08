@@ -59,4 +59,8 @@ public interface ConsoleIcons {
     StyleFontIcon PASTE = new StyleFontIcon("paste-icon");
 
     StyleFontIcon CLEAR = new StyleFontIcon("clear-icon");
+
+    StyleFontIcon ZOOM_IN = new StyleFontIcon("zoom-in-icon");
+
+    StyleFontIcon ZOOM_OUT = new StyleFontIcon("zoom-out-icon");
 }

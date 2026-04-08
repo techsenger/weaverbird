@@ -26,7 +26,6 @@ import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.Region;
 
 /**
  *
@@ -44,11 +43,6 @@ public class ConsoleToolBarFxView<P extends ConsoleToolBarPresenter<?, ?>> exten
     @Override
     public void requestFocus() {
 
-    }
-
-    @Override
-    public Region getNode() {
-        return getToolBar();
     }
 
     @Override
@@ -71,7 +65,7 @@ public class ConsoleToolBarFxView<P extends ConsoleToolBarPresenter<?, ?>> exten
         pasteButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT);
         pasteButton.setTooltip(new Tooltip("Paste"));
 
-        getToolBar().getItems().addAll(clearButton, new Separator(Orientation.VERTICAL), copyButton, pasteButton,
+        getNode().getItems().addAll(clearButton, new Separator(Orientation.VERTICAL), copyButton, pasteButton,
                 new Spacer(Orientation.HORIZONTAL), getSessionLabel(), getSessionComboBox(), getRefreshButton());
     }
 

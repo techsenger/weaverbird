@@ -57,12 +57,18 @@ public abstract class AbstractSessionToolBarFxView<P extends AbstractSessionTool
     }
 
     @Override
+    public ToolBar getNode() {
+        return this.toolBar;
+    }
+
+    @Override
     protected void build() {
         super.build();
         sessionComboBox.getStyleClass().add(Styles.DENSE);
         sessionComboBox.setMaxWidth(Double.MAX_VALUE);
         sessionComboBox.setCellFactory(lv -> new SessionListCell<ClientSession>());
         sessionComboBox.setButtonCell(new SessionListCell<ClientSession>());
+        sessionComboBox.getStyleClass().add("session");
         HBox.setHgrow(sessionComboBox, Priority.ALWAYS);
         refreshButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT);
 
@@ -93,9 +99,5 @@ public abstract class AbstractSessionToolBarFxView<P extends AbstractSessionTool
 
     protected Button getRefreshButton() {
         return refreshButton;
-    }
-
-    protected ToolBar getToolBar() {
-        return toolBar;
     }
 }

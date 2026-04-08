@@ -88,3 +88,11 @@
 .font-icon-view.clear-icon {
     -fx-code-point: 983266; /* broom */
 }
+
+.font-icon-view.zoom-in-icon {
+    -fx-code-point: 984085; /* plus */
+}
+
+.font-icon-view.zoom-out-icon {
+    -fx-code-point: 983924; /* minus */
+}

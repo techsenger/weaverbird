@@ -19,7 +19,9 @@ package com.techsenger.alpha.net.client.api;
 import com.techsenger.alpha.core.api.component.ComponentConfigDto;
 import com.techsenger.alpha.core.api.component.ComponentDescriptorDto;
 import com.techsenger.alpha.core.api.message.DefaultMessage;
+import com.techsenger.alpha.core.api.model.LayersInfo;
 import com.techsenger.alpha.core.api.module.DefaultModuleArtifact;
+import com.techsenger.alpha.core.api.state.ComponentsState;
 import com.techsenger.alpha.net.shared.ComponentActivateRequest;
 import com.techsenger.alpha.net.shared.ComponentActivateResponse;
 import com.techsenger.alpha.net.shared.ComponentAddRequest;
@@ -41,6 +43,7 @@ import com.techsenger.alpha.net.shared.ComponentResolveResponse;
 import com.techsenger.alpha.net.shared.ComponentStartRequest;
 import com.techsenger.alpha.net.shared.ComponentStartResponse;
 import com.techsenger.alpha.net.shared.ComponentState;
+import com.techsenger.alpha.net.shared.ComponentStateResponse;
 import com.techsenger.alpha.net.shared.ComponentStopRequest;
 import com.techsenger.alpha.net.shared.ComponentStopResponse;
 import com.techsenger.alpha.net.shared.ComponentUndeployRequest;
@@ -50,6 +53,7 @@ import com.techsenger.alpha.net.shared.ComponentUninstallResponse;
 import com.techsenger.alpha.net.shared.ComponentUnresolveRequest;
 import com.techsenger.alpha.net.shared.ComponentUnresolveResponse;
 import com.techsenger.alpha.net.shared.Endpoints;
+import com.techsenger.alpha.net.shared.LayerInfoResponse;
 import com.techsenger.alpha.net.shared.ModuleListResponse;
 import com.techsenger.alpha.net.shared.ModuleResolveRequest;
 import com.techsenger.alpha.net.shared.ModuleResolveResponse;
@@ -87,6 +91,16 @@ public class DomainClient extends AbstractDomainClient {
         var response = sendRequest(Endpoints.COMPONENT_DESCRIPTOR, new ComponentDescriptorRequest(alias),
                 ComponentDescriptorResponse.class);
         return response.getComponentDescriptor();
+    }
+
+    public ComponentsState getComponentsState() throws ClientException, ServerException {
+        var response = sendRequest(Endpoints.COMPONENT_STATE, null, ComponentStateResponse.class);
+        return response.getState();
+    }
+
+    public LayersInfo getLayersInfo() throws ClientException, ServerException {
+        var response = sendRequest(Endpoints.LAYER_INFO, null, LayerInfoResponse.class);
+        return response.getLayersInfo();
     }
 
     public ComponentConfigDto addComponent(String xmlConfig) throws ClientException, ServerException {

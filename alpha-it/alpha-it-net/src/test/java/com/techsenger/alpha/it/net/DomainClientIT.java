@@ -24,6 +24,7 @@ import com.techsenger.alpha.it.shared.ServerSettings;
 import com.techsenger.alpha.it.shared.TestUtils;
 import com.techsenger.alpha.net.client.api.ClientService;
 import com.techsenger.alpha.net.client.api.ClientServiceFactory;
+import com.techsenger.alpha.net.client.api.ClientSession;
 import com.techsenger.alpha.net.client.api.DomainClient;
 import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.toolkit.http.exceptions.ServerException;
@@ -37,7 +38,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.techsenger.alpha.net.client.api.ClientSession;
 
 /**
  *
@@ -508,6 +508,30 @@ public class DomainClientIT {
 
         var activated = client.getActivatedComponents();
         assertThat(activated).noneMatch(d -> d.getId().equals(deployed.getId()));
+    }
+
+    // -------------------------------------------------------------------------
+    // getComponentsState / getLayersInfo
+    // -------------------------------------------------------------------------
+    @Test
+    public void getComponentsState_twoComponentsStarted_correctComponentsState() throws Exception {
+        var componentsState = client.getComponentsState();
+        assertThat(componentsState.getId()).isEqualTo(4);
+        assertThat(componentsState.getDeployedCount()).isEqualTo(2);
+        assertThat(componentsState.getActivatedCount()).isEqualTo(2);
+        client.deactivateComponent(1); // repo
+        componentsState = client.getComponentsState();
+        assertThat(componentsState.getId()).isEqualTo(5);
+        assertThat(componentsState.getDeployedCount()).isEqualTo(2);
+        assertThat(componentsState.getActivatedCount()).isEqualTo(1);
+    }
+
+    @Test
+    public void getLayersInfo_twoComponentsStarted_correctLayersInfo() throws Exception {
+        var layersInfo = client.getLayersInfo();
+        layersInfo.resolveReferences();
+        assertThat(layersInfo.getLayersById()).hasSize(3);
+        assertThat(layersInfo.getLayersById().get(0).getName()).isEqualTo(framework.getFullName());
     }
 
     // -------------------------------------------------------------------------

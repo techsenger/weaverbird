@@ -80,7 +80,7 @@ public class CompletionPopupPresenter<V extends CompletionPopupView, C extends P
 
     @Override
     protected Descriptor createDescriptor() {
-        return new Descriptor(AlphaComponents.SHELL_POPUP);
+        return new Descriptor(AlphaComponents.COMPLETION_POPUP);
     }
 
     @Override

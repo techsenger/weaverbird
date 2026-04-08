@@ -300,7 +300,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
                 // syncSessionBarAndContext(null);
                 this.showPrompt();
             } catch (Exception ex) {
-                logger.error("Error executing commands from GUI console", ex);
+                logger.error("{} Error executing commands from GUI console", getDescriptor().getLogPrefix(), ex);
                 List<Message> messages = new ArrayList<>();
                 messages.add(new DefaultMessage(MessageType.ERROR, ex.getMessage()));
                 if (ex.getCause() != null) {

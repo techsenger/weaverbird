@@ -1,0 +1,174 @@
+/*
+ * Copyright 2018-2026 Pavel Castornii.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.techsenger.alpha.gui.diagram;
+
+import com.techsenger.alpha.core.api.model.ComponentLayerModel;
+import com.techsenger.alpha.net.client.api.ClientService;
+import com.techsenger.alpha.net.client.api.ClientSession;
+import com.techsenger.tabshell.core.ShellFxView;
+import com.techsenger.tabshell.core.tab.AbstractTabFxView;
+import com.techsenger.tabshell.material.style.StyleClasses;
+import java.util.List;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+
+/**
+ *
+ * @author Pavel Castornii
+ */
+public class DiagramTabFxView<P extends DiagramTabPresenter<?, ?>> extends AbstractTabFxView<P>
+        implements DiagramTabView {
+
+    protected class Composer extends AbstractTabFxView<P>.Composer implements DiagramTabComposer {
+
+        private final DiagramTabFxView<P> view = DiagramTabFxView.this;
+
+        private ClientService client;
+
+        private ClientSession session;
+
+        @Override
+        public void setClient(ClientService client) {
+            this.client = client;
+        }
+
+        @Override
+        public void setSession(ClientSession session) {
+            this.session = session;
+        }
+
+        @Override
+        public LayerDialogPort openLayerDialog(List<ComponentLayerModel> layerModels,
+                List<LayerConfig> previousLayerConfigs) {
+            var dialog = createDialog(layerModels, previousLayerConfigs);
+            dialog.getPresenter().initialize();
+            addDialog(dialog);
+            return dialog.getPresenter();
+        }
+
+        @Override
+        public void compose() {
+            super.compose();
+            var toolBar = createToolBar();
+            toolBar.getPresenter().initialize();
+            view.getModifiableChildren().add(toolBar);
+            view.getContentBox().getChildren().add(0, toolBar.getNode());
+        }
+
+        protected DiagramToolBarFxView<?> createToolBar() {
+            var view = new DiagramToolBarFxView<>();
+            var presenter = new DiagramToolBarPresenter<>(view, client, session, getPresenter());
+            return view;
+        }
+
+        protected LayerDialogFxView<?> createDialog(List<ComponentLayerModel> layerModels,
+                List<LayerConfig> previousLayerConfigs) {
+            var view = new LayerDialogFxView<>();
+            var presenter = new LayerDialogPresenter<>(view, layerModels, previousLayerConfigs);
+            return view;
+        }
+    }
+
+    private final ImageView imageView = new ImageView();
+
+    private final ScrollPane scrollPane = new ScrollPane(imageView);
+
+    public DiagramTabFxView(ShellFxView<?> shell) {
+        super(shell);
+//        if (viewModel.getSessions() != null) {
+//            sessions = new SessionsToolBarView(viewModel.getSessions());
+//            sessions.initialize();
+//        } else {
+//            sessions = null;
+//        }
+    }
+
+    @Override
+    public void requestFocus() {
+        imageView.requestFocus();
+    }
+
+    @Override
+    public Composer getComposer() {
+        return (Composer) super.getComposer();
+    }
+
+    @Override
+    public void setDiagram(Image diagram) {
+        imageView.setImage(diagram);
+    }
+
+    @Override
+    public void setDiagramSize(double width, double height) {
+        this.imageView.setFitWidth(width);
+        this.imageView.setFitHeight(height);
+    }
+
+    @Override
+    protected Composer createComposer() {
+        return new DiagramTabFxView.Composer();
+    }
+
+    @Override
+    protected void build() {
+        super.build();
+        imageView.setPickOnBounds(true); //to get scroll events even on transparent image section
+        imageView.setPreserveRatio(true);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+        scrollPane.getStyleClass().add(StyleClasses.NO_BORDER);
+
+
+//        if (sessions != null) {
+//            toolBars.getChildren().add(sessions.getNode());
+//        }
+        getContentBox().getChildren().add(scrollPane);
+    }
+
+//    @Override
+//    protected void bind() {
+//        super.bind();
+//        zoomLevelComboBox.valueProperty().bindBidirectional(viewModel.zoomLevelProperty());
+//        viewModel.zoomLevelIndexProperty().bind(zoomLevelComboBox.getSelectionModel().selectedIndexProperty());
+//    }
+
+    @Override
+    protected void addHandlers() {
+        super.addHandlers();
+//        layerDiagramButton.setOnAction((e) -> viewModel.openLayerDialog());
+//        scrollPane.setOnScroll((ScrollEvent event) -> {
+//            if (event.isControlDown()) {
+//                //there can be several events non zero and zero deltas
+//                if (event.getDeltaY() < 0) {
+//                    viewModel.zoomOut();
+//                } else if (event.getDeltaY() > 0) {
+//                    viewModel.zoomIn();
+//                }
+//                event.consume();
+//            }
+//        });
+//        this.zoomInButton.setOnAction(e -> viewModel.zoomIn());
+//        this.zoomOutButton.setOnAction(e -> viewModel.zoomOut());
+    }
+//
+//    @Override
+//    protected ComponentHelper<?> createComponentHelper() {
+//        return new DiagramTabHelper(this);
+//    }
+}

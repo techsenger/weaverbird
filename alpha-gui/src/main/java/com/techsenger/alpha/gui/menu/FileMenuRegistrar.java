@@ -19,6 +19,8 @@ package com.techsenger.alpha.gui.menu;
 import com.techsenger.alpha.core.api.Framework;
 import com.techsenger.alpha.gui.console.ConsoleTabFxView;
 import com.techsenger.alpha.gui.console.ConsoleTabPresenter;
+import com.techsenger.alpha.gui.diagram.DiagramTabFxView;
+import com.techsenger.alpha.gui.diagram.DiagramTabPresenter;
 import com.techsenger.alpha.gui.style.ConsoleIcons;
 import com.techsenger.alpha.net.client.api.ClientService;
 import com.techsenger.alpha.net.client.api.ClientServiceFactory;
@@ -57,7 +59,8 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
     public void register() {
         registerMenu();
         registerMainGroup();
-        registerShellItem();
+        registerConsoleItem();
+        registerDiagramItem();
 //        registerSettingsItem();
     }
 
@@ -73,18 +76,37 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
         addRegistration(getRegistry().registerMenuGroup(CoreComponents.SHELL, FileMenu.NAME, f));
     }
 
-    private void registerShellItem() {
+    private void registerConsoleItem() {
         ControlFactory<NamedMenuItem> f = (v) -> {
             var item = new NamedMenuItem(FileMenu.CONSOLE, false, false, false, "C_onsole", 100);
             item.setGraphic(new FontIconView(ConsoleIcons.CONSOLE));
             item.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
             item.setOnAction((e) -> {
                 var shell = (ShellFxView<?>) v;
-                var shellTabView = new ConsoleTabFxView<>(shell);
-                var shellTabPresenter = new ConsoleTabPresenter<>(shellTabView, framework, client, null);
-                shellTabPresenter.initialize();
+                var consoleView = new ConsoleTabFxView<>(shell);
+                var consolePresenter = new ConsoleTabPresenter<>(consoleView, framework, client, null);
+                consolePresenter.initialize();
                 TabHostFxView<?> workspace = (TabHostFxView<?>) shell.getComposer().getWorkspace();
-                workspace.getComposer().addTab(shellTabView);
+                workspace.getComposer().addTab(consoleView);
+            });
+            return item;
+
+        };
+        addRegistration(getRegistry().registerMenuItem(CoreComponents.SHELL, FileMenu.MAIN, f));
+    }
+
+    private void registerDiagramItem() {
+        ControlFactory<NamedMenuItem> f = (v) -> {
+            var item = new NamedMenuItem(FileMenu.DIAGRAM, false, false, false, "D_iagrams", 200);
+            item.setGraphic(new FontIconView(ConsoleIcons.DIAGRAMS));
+            item.setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN));
+            item.setOnAction((e) -> {
+                var shell = (ShellFxView<?>) v;
+                var diagramView = new DiagramTabFxView<>(shell);
+                var diagramPresenter = new DiagramTabPresenter<>(diagramView, framework, client, null);
+                diagramPresenter.initialize();
+                TabHostFxView<?> workspace = (TabHostFxView<?>) shell.getComposer().getWorkspace();
+                workspace.getComposer().addTab(diagramView);
             });
             return item;
 

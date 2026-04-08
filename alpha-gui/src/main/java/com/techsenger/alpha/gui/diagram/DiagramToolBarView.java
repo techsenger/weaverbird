@@ -16,15 +16,16 @@
 
 package com.techsenger.alpha.gui.diagram;
 
-import com.techsenger.tabshell.core.page.PageView;
+import com.techsenger.alpha.gui.session.SessionToolBarView;
+import java.util.List;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface LayerPageView extends PageView {
+public interface DiagramToolBarView extends SessionToolBarView {
 
-    void showLayer(LayerConfig layer);
+    void setZoomLevels(List<String> levels);
 
-    void deselectAll();
+    void setZoomLevel(String level);
 }

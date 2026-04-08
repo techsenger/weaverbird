@@ -17,18 +17,19 @@
 package com.techsenger.alpha.gui;
 
 import com.techsenger.alpha.gui.menu.FileMenuRegistrar;
+import com.techsenger.alpha.gui.settings.ConsoleSettings;
+import com.techsenger.alpha.gui.settings.LayoutEngine;
+import com.techsenger.alpha.gui.settings.LineType;
 import com.techsenger.alpha.gui.style.ConsoleIcons;
 import com.techsenger.tabshell.core.DefaultShellContext;
 import com.techsenger.tabshell.core.DefaultShellFxView;
 import com.techsenger.tabshell.core.DefaultShellPresenter;
-import com.techsenger.tabshell.core.settings.AppearanceSettings;
-import com.techsenger.tabshell.core.settings.DefaultAppearanceSettings;
-import com.techsenger.tabshell.core.settings.Settings;
 import com.techsenger.tabshell.icons.IconStylesheetFactory;
 import com.techsenger.tabshell.layout.tabhost.TabHostFxView;
 import com.techsenger.tabshell.layout.tabhost.TabHostPresenter;
 import com.techsenger.tabshell.material.style.Stylesheet;
 import com.techsenger.tabshell.material.theme.AtlantaFxTheme;
+import com.techsenger.toolkit.fx.color.ColorUtils;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.scene.text.Font;
@@ -40,19 +41,18 @@ import javafx.stage.Stage;
  */
 public class AlphaApplication extends Application {
 
-    public static Settings createSettings() {
-        var regularFont = Font.font("System", 14);
-        var monospaceFont = Font.font("Monospace", 14);
-        var appearance = new DefaultAppearanceSettings(regularFont, monospaceFont);
+    public static ConsoleSettings createSettings() {
+        var settings = new ConsoleSettings();
+        var appearance = settings.getAppearance();
+        appearance.setRegularFont(Font.font("System", 14));
+        appearance.setMonospaceFont(Font.font("Monospace", 14));
         appearance.setTheme(AtlantaFxTheme.CUPERTINO_DARK);
-        var settings = new Settings() {
-
-            @Override
-            public AppearanceSettings getAppearance() {
-                return appearance;
-            }
-
-        };
+        var diagram = settings.getDiagram();
+        diagram.setLayoutEngine(LayoutEngine.SMETANA);
+        diagram.setLimitSize(10000);
+        diagram.setLineType(LineType.ORTHO);
+        diagram.setLayerColor(ColorUtils.toColor(appearance.getTheme().getPalette().getAccent3Color()));
+        diagram.setModuleColor(ColorUtils.toColor(appearance.getTheme().getPalette().getDanger3Color()));
         return settings;
     }
 
@@ -60,11 +60,13 @@ public class AlphaApplication extends Application {
     public void start(Stage stage) throws Exception {
         var stylesheets = new ArrayList<Stylesheet>(IconStylesheetFactory.forAll());
         stylesheets.add(new Stylesheet(ConsoleIcons.class.getResource("icons.css")));
+
         var shellView = new DefaultShellFxView<>(this, stage, stylesheets);
         var context = new DefaultShellContext(createSettings(), new InMemoryHistoryManager(), getHostServices());
         var shellPresenter = new DefaultShellPresenter<>(shellView, context);
         shellPresenter.setOnClose(() ->
                 Thread.startVirtualThread(() -> ModuleActivatorProvider.getFramework().shutdown()));
+
         shellPresenter.initialize();
         shellView.setTitle("Alpha Framework");
 

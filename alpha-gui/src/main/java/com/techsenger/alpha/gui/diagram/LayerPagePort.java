@@ -16,15 +16,11 @@
 
 package com.techsenger.alpha.gui.diagram;
 
-import com.techsenger.tabshell.core.page.PageView;
-
 /**
  *
  * @author Pavel Castornii
  */
-public interface LayerPageView extends PageView {
+public interface LayerPagePort {
 
-    void showLayer(LayerConfig layer);
-
-    void deselectAll();
+    void reset();
 }

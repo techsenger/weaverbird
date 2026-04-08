@@ -27,9 +27,6 @@ public interface AlphaComponents {
 
 //    DialogKey ABOUT_DIALOG = new DialogKey("About Dialog");
 //
-//    DialogKey LAYER_DIALOG = new DialogKey("Layer Dialog");
-//
-//    DialogKey MODULE_FILTER_DIALOG = new DialogKey("Module Filter Dialog");
 //
 //    DialogKey LOG_EVENT_DIALOG = new DialogKey("Log Event Dialog");
 //
@@ -39,11 +36,19 @@ public interface AlphaComponents {
 //
 //    DialogKey NEW_SESSION_DIALOG = new DialogKey("New Session Dialog");
 //
-    ComponentName SHELL_POPUP = new DefaultComponentName("Shell Popup");
-
     ComponentName CONSOLE_TAB = new DefaultComponentName("Console Tab");
 
+    ComponentName COMPLETION_POPUP = new DefaultComponentName("Completion Popup");
+
     ComponentName CONSOLE_TOOL_BAR = new DefaultComponentName("Console ToolBar");
+
+    ComponentName DIAGRAM_TAB = new DefaultComponentName("Diagram Tab");
+
+    ComponentName DIAGRAM_TOOL_BAR = new DefaultComponentName("Diagram ToolBar");
+
+    ComponentName LAYER_DIALOG = new DefaultComponentName("Layer Dialog");
+
+    ComponentName LAYER_PAGE = new DefaultComponentName("Layer Page");
 
 //    ShellTabKey FILE_TAB = new ShellTabKey("File Tab");
 //
@@ -53,7 +58,6 @@ public interface AlphaComponents {
 //
 //    ShellTabKey FILE_LOG_TAB = new ShellTabKey("File Log Tab");
 //
-//    ShellTabKey DIAGRAM_TAB = new ShellTabKey("Diagram Tab");
 //
 //    NodeKey SESSIONS_TOOL_BAR = new NodeKey("Sessions Tool Bar");
 }

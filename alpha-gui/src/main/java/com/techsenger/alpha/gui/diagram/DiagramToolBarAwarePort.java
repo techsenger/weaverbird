@@ -16,15 +16,17 @@
 
 package com.techsenger.alpha.gui.diagram;
 
-import com.techsenger.tabshell.core.page.PageView;
+import com.techsenger.alpha.net.client.api.ClientSession;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface LayerPageView extends PageView {
+public interface DiagramToolBarAwarePort {
 
-    void showLayer(LayerConfig layer);
+    void onLayerDiagram();
 
-    void deselectAll();
+    void onZoomLevelChanged(int level);
+
+    void onSessionChanged(ClientSession session);
 }

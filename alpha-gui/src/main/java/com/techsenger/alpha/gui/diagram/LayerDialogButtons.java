@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2026 Pavel Castornii.
+ * Copyright 2024-2026 Pavel Castornii.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,18 @@
 
 package com.techsenger.alpha.gui.diagram;
 
-import com.techsenger.tabshell.core.page.PageView;
+import com.techsenger.tabshell.material.button.DefaultResultButtonName;
+import com.techsenger.tabshell.material.button.ResultButtonName;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface LayerPageView extends PageView {
+public class LayerDialogButtons {
 
-    void showLayer(LayerConfig layer);
+    public static final ResultButtonName OK = new DefaultResultButtonName();
 
-    void deselectAll();
+    public static final ResultButtonName CANCEL = new DefaultResultButtonName();
+
+    public static final ResultButtonName RESET = new DefaultResultButtonName();
 }

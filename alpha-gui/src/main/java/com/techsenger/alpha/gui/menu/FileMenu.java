@@ -35,6 +35,8 @@ public interface FileMenu {
 
     MenuItemName CONSOLE = new DefaultMenuItemName();
 
+    MenuItemName DIAGRAM = new DefaultMenuItemName();
+
     MenuItemName SETTINGS = new DefaultMenuItemName();
 
 //    MenuKey NEW = new MenuKey();

@@ -17,7 +17,7 @@
 /*
     Author     : Pavel Castornii
 */
-.combo-box {
+.combo-box.session {
     -fx-max-width: 30em;
     -fx-min-width: 30em;
     -fx-pref-width: 30em;

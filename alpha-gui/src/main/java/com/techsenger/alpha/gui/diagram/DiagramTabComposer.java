@@ -16,15 +16,21 @@
 
 package com.techsenger.alpha.gui.diagram;
 
-import com.techsenger.tabshell.core.page.PageView;
+import com.techsenger.alpha.core.api.model.ComponentLayerModel;
+import com.techsenger.alpha.net.client.api.ClientService;
+import com.techsenger.alpha.net.client.api.ClientSession;
+import com.techsenger.tabshell.core.tab.TabComposer;
+import java.util.List;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface LayerPageView extends PageView {
+public interface DiagramTabComposer extends TabComposer {
 
-    void showLayer(LayerConfig layer);
+    void setClient(ClientService client);
 
-    void deselectAll();
+    void setSession(ClientSession session);
+
+    LayerDialogPort openLayerDialog(List<ComponentLayerModel> layerModels, List<LayerConfig> previousLayerConfigs);
 }

@@ -16,15 +16,17 @@
 
 package com.techsenger.alpha.gui.diagram;
 
-import com.techsenger.tabshell.core.page.PageView;
+import com.techsenger.tabshell.core.dialog.DialogComposer;
+import com.techsenger.tabshell.layout.pagehost.PageHostPort;
+import java.util.List;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface LayerPageView extends PageView {
+public interface LayerDialogComposer extends DialogComposer {
 
-    void showLayer(LayerConfig layer);
+    void setLayerConfigs(List<LayerConfig> layerConfigs);
 
-    void deselectAll();
+    PageHostPort getPageHost();
 }
