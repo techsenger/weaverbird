@@ -42,57 +42,6 @@ public class ModuleActivatorProvider implements ModuleActivator {
         Thread thread = new Thread(() -> Application.launch(AlphaApplication.class));
         thread.setDaemon(false);
         thread.start();
-
-
-
-
-//        componentDescriptor = context.getComponent().getDescriptor();
-//        var componentConfig = ModuleActivatorProvider.getComponentDescriptor().getConfig();
-//        FxPlatform.runLaterAndWait(() -> {
-//            //var settings = settingsFile.getSettings();
-//            var stage = new Stage();
-//            var shellView = new DefaultShellFxView<>(this, stage, IconStylesheetFactory.forAll());
-//            var context = new DefaultShellContext(DemoSettings.createSettings(),
-//            var tabShellViewModel = new DefaultTabShellViewModel(settings, new DefaultHistoryManager(historyFile));
-//            var stylesheets = List.of(
-//                StyleClasses.class.getResource("base.css").toExternalForm(),
-//                CoreIcons.class.getResource("icons.css").toExternalForm(),
-//                TextIcons.class.getResource("icons.css").toExternalForm(),
-//                DialogIcons.class.getResource("icons.css").toExternalForm(),
-//                ConsoleIcons.class.getResource("icons.css").toExternalForm()
-//            );
-//            this.tabShellView = new DefaultTabShellView(stylesheets, tabShellViewModel);
-//            tabShellView.initialize();
-//            tabShellViewModel.setTitle("Techsenger Alpha Console");
-//            ValueUtils.callAndAddListener(settings.getAppearance().themeProperty(), (ov, oldV, newV) -> {
-//                Font font = Font.font("Material Design Icons", 32);
-//                var image = ImageUtils.createIcon(String.format("%c", 0xF002B), font,
-//                        ColorUtils.toColor(newV.getPalette().getDefaultFgColor()), Color.TRANSPARENT,
-//                        -6, 28, 22, 34);
-//                tabShellViewModel.setIcon(new ImageIcon(image));
-//            });
-//            tabShellViewModel.setOnClosed(() -> {
-//                try {
-//                    doClose();
-//                } catch (Exception ex) {
-//                    logger.error("Error closing console", ex);
-//                }
-//            });
-//            ShellTabViewModel shellViewModel = new ShellTabViewModel(tabShellView.getViewModel());
-//            ShellTabView shellView = new ShellTabView(tabShellView, shellViewModel);
-//            shellView.initialize();
-//
-//            var controlRegistry = new ControlRegistry();
-//            var controlRegistrators = List.of(
-//                    new FileMenuRegistrar(controlRegistry),
-//                    new EditMenuRegistrar(controlRegistry),
-//                    new ToolsMenuRegistrar(controlRegistry),
-//                    new HelpMenuRegistrar(controlRegistry));
-//            controlRegistrators.forEach(r -> r.register());
-//            tabShellView.upgradeMenuBar(controlRegistry);
-//            tabShellView.openTab(shellView);
-//        });
-
     }
 
     @Override
