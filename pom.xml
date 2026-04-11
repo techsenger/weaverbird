@@ -141,6 +141,13 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <!--### JAVAFX ###-->
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>jfx-incubator-richtext</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+
             <!--### MAVEN REPO ###-->
             <dependency>
                 <groupId>com.techsenger.alpha.repo</groupId>
