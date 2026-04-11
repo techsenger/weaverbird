@@ -26,7 +26,9 @@ import com.techsenger.tabshell.layout.pagehost.PageHostPresenter;
 import com.techsenger.tabshell.material.button.ResultButton;
 import java.util.List;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -116,7 +118,9 @@ public class LayerDialogFxView<P extends LayerDialogPresenter<?, ?>> extends Abs
     protected void build() {
         super.build();
         registerButtons(cancelButton, okButton);
-        getLeftButtonBox().getChildren().add(resetButton);
+        var separator = new Separator(Orientation.VERTICAL);
+        separator.setPadding(Insets.EMPTY);
+        getRightButtonBox().getChildren().addAll(resetButton, separator);
         getContentBox().setPadding(Insets.EMPTY);
     }
 
@@ -125,6 +129,4 @@ public class LayerDialogFxView<P extends LayerDialogPresenter<?, ?>> extends Abs
         super.addHandlers();
         resetButton.setOnAction(e -> getPresenter().onReset());
     }
-
-
 }
