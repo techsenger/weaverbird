@@ -85,7 +85,8 @@ package com.techsenger.alpha.gui.menu;
 //        ControlFactory<KeyedMenuGroup> f = (v) -> {
 //            return new KeyedMenuGroup(ToolsMenuKeys.DEFAULT);
 //        };
-//        addRegistration(getRegistry().registerMenuGroup(TabShellKey.INSTANCE, ToolsMenuKeyManager.getTools(), f, 100));
+//        addRegistration(getRegistry().registerMenuGroup(TabShellKey.INSTANCE,
+//              ToolsMenuKeyManager.getTools(), f, 100));
 //    }
 //
 //    private void registerDiagramsItem() {
@@ -143,7 +144,8 @@ package com.techsenger.alpha.gui.menu;
 //            var item = new KeyedMenuItem(ToolsMenuKeys.SESSIONS, false, false, false, "S_essions",
 //                    new FontIconView(ConsoleIcons.NETWORK));
 //            item.setOnAction((e) -> {
-//                var viewModel = new SessionDialogViewModel((ConsoleSettings) tabShellView.getViewModel().getSettings(),
+//                var viewModel =
+//                      new SessionDialogViewModel((ConsoleSettings) tabShellView.getViewModel().getSettings(),
 //                        tabShellView.getViewModel().getHistoryManager());
 //                var view = new SessionDialogView(viewModel, tabShellView.getDialogManager());
 //                view.initialize();

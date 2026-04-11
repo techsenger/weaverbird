@@ -75,7 +75,7 @@ public class CommandHighlighter {
             @Override public StyledSegment nextSegment() {
                 return it.hasNext() ? it.next() : null;
             }
-            @Override public void close() {}
+            @Override public void close() { }
         };
     }
 

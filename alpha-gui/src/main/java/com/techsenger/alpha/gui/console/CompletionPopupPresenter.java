@@ -158,7 +158,7 @@ public class CompletionPopupPresenter<V extends CompletionPopupView, C extends P
     }
 
     private List<CompletionItem<?>> createCommandItems(String token) {
-        var local = sessionExists == false;
+        var local = !sessionExists;
         var prefix = "";
         if (token != null && token.trim().startsWith(CommandSyntax.LOCAL_COMMAND)) {
             local = true;
@@ -180,7 +180,7 @@ public class CompletionPopupPresenter<V extends CompletionPopupView, C extends P
                 .<CompletionItem<?>>map(c ->
                         new CompletionItem<>(c.isRequired() ? c.getLongName() + "*" : c.getLongName(), c))
                 .sorted(Comparator
-                        .<CompletionItem<?>, Boolean>comparing( i -> !i.getText().endsWith("*"))
+                        .<CompletionItem<?>, Boolean>comparing(i -> !i.getText().endsWith("*"))
                         .thenComparing(i -> i.getText()))
                 .toList();
     }

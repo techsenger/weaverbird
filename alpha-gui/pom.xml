@@ -13,10 +13,6 @@
     <name>Alpha - GUI</name>
     <description>Graphical user interface for the framework</description>
 
-    <properties>
-        <checkstyle.plugin.skip>true</checkstyle.plugin.skip>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>

@@ -56,7 +56,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
      * @param text the text without prompt
      * @param caretOffset the caret offset inside input text.
      */
-    private static record PromptlessInput(String text, int caretOffset, int elementIndex,
+    private record PromptlessInput(String text, int caretOffset, int elementIndex,
         int elementLength, boolean elementFirst) { };
 
     private static final Logger logger = LoggerFactory.getLogger(ConsoleTabPresenter.class);
@@ -286,11 +286,12 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
                 var oldSession = executor.getCommandContext().getSession();
                 var results = executor.executeCommands(input, null, null, width);
                 results.forEach(r -> {
-                if (r.getCommandName().equals(Commands.LOG_PRINT)) {
-//                        this.logMessages.next(r.getMessages());
-                    } else {
-                        UiExecutor.execute(() -> getView().printMessages(r.getMessages()));
-                    }
+                if (!r.getCommandName().equals(Commands.LOG_PRINT)) {
+                    UiExecutor.execute(() -> getView().printMessages(r.getMessages()));
+                }
+//                else {
+//                    this.logMessages.next(r.getMessages());
+//                }
                 });
                 var newSession = executor.getCommandContext().getSession();
                 if (!Objects.equals(oldSession, newSession)) {

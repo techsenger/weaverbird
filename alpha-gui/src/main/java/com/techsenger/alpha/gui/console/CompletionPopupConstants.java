@@ -20,11 +20,15 @@ package com.techsenger.alpha.gui.console;
  *
  * @author Pavel Castornii
  */
-public class CompletionPopupConstants {
+public final class CompletionPopupConstants {
 
-    protected static final double WIDTH = 600.0;
+    public static final double WIDTH = 600.0;
 
-    protected static final double HEIGHT = 300.0;
+    public static final double HEIGHT = 300.0;
 
-    protected static final double V_MARGIN = 12.0;
+    public static final double V_MARGIN = 12.0;
+
+    private CompletionPopupConstants() {
+        // empty
+    }
 }

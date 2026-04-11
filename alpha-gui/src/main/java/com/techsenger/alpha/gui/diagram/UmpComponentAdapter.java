@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package com.techsenger.alpha.gui.diagram;
 
 import javafx.beans.property.BooleanProperty;

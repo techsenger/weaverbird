@@ -34,7 +34,8 @@ package com.techsenger.alpha.gui.log;
 //
 //    private final ToggleButton moduleFilterButton = new ToggleButton("Module", new FontIconView(ConsoleIcons.FILTER));
 //
-//    private final Button moduleFilterSettingsButton = new Button(null, new FontIconView(ConsoleIcons.FILTER_SETTINGS));
+//    private final Button moduleFilterSettingsButton = new Button(null,
+//              new FontIconView(ConsoleIcons.FILTER_SETTINGS));
 //
 //    public MemoryLogTabView(TabShellView<?> tabShell, MemoryLogTabViewModel viewModel) {
 //        super(tabShell, viewModel, new ExtendedTextArea());

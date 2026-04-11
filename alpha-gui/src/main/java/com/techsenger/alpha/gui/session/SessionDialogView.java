@@ -94,7 +94,8 @@ package com.techsenger.alpha.gui.session;
 //        TableColumn<ClientSession, String> loginNameColumn = new TableColumn<>("Login Name");
 //        loginNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLoginName()));
 //        TableColumn<ClientSession, Integer> portColumn = new TableColumn<>("Port");
-//        portColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getPort()).asObject());
+//        portColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getPort())
+//              .asObject());
 //        TableColumn<ClientSession, Protocol> protocolColumn = new TableColumn<>("Protocol");
 //        protocolColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getProtocol()));
 //        TableColumn<ClientSession, Boolean> secureColumn = new TableColumn<>("Secure");

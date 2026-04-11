@@ -23,11 +23,11 @@ import com.techsenger.tabshell.material.button.ResultButtonName;
  *
  * @author Pavel Castornii
  */
-public class LayerDialogButtons {
+public interface LayerDialogButtons {
 
-    public static final ResultButtonName OK = new DefaultResultButtonName();
+    ResultButtonName OK = new DefaultResultButtonName();
 
-    public static final ResultButtonName CANCEL = new DefaultResultButtonName();
+    ResultButtonName CANCEL = new DefaultResultButtonName();
 
-    public static final ResultButtonName RESET = new DefaultResultButtonName();
+    ResultButtonName RESET = new DefaultResultButtonName();
 }

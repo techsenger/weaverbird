@@ -87,7 +87,8 @@ package com.techsenger.alpha.gui.settings;
 //        //we don't update settings values via listeners as changes must happen only after ok clicking
 //        settings.getAppearance().setTheme(appearance.themeProperty().get());
 //        settings.getAppearance()
-//                .setRegularFont(Font.font(appearance.fontFamilyProperty().get(), appearance.fontSizeProperty().get()));
+//                .setRegularFont(Font.font(appearance.fontFamilyProperty().get(),
+//                          appearance.fontSizeProperty().get()));
 //        settings.getViewer().setFont(Font
 //                .font(appearance.viewerFontFamilyProperty().get(), appearance.viewerFontSizeProperty().get()));
 //

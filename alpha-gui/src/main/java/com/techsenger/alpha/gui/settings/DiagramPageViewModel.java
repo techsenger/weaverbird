@@ -44,7 +44,8 @@ package com.techsenger.alpha.gui.settings;
 //
 //    private final ObjectProperty<LineType> lineType = new SimpleObjectProperty<>();
 //
-//    private final ObservableList<LayoutEngine> layoutEngines = FXCollections.observableArrayList(LayoutEngine.values());
+//    private final ObservableList<LayoutEngine> layoutEngines =
+//              FXCollections.observableArrayList(LayoutEngine.values());
 //
 //    private final ObjectProperty<LayoutEngine> layoutEngine = new SimpleObjectProperty<>();
 //

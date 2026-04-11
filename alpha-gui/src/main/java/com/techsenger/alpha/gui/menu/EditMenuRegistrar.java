@@ -44,7 +44,8 @@ package com.techsenger.alpha.gui.menu;
 //    @Override
 //    protected void registerCutItem() {
 //        ControlFactory<KeyedMenuItem> f = (v) -> {
-//            var item = new KeyedMenuItem(EditMenuKeys.CUT, false, true, false, "Cu_t", new FontIconView(CoreIcons.CUT));
+//            var item = new KeyedMenuItem(EditMenuKeys.CUT, false, true, false, "Cu_t",
+//                     new FontIconView(CoreIcons.CUT));
 //            item.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));
 //            item.setOnAction(e -> {
 //                var tab = ((TabShellView<?>) v).getSelectedTab();

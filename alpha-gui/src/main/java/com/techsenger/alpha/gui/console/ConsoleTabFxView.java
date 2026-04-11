@@ -53,7 +53,8 @@ import jfx.incubator.scene.control.richtext.model.StyleAttributeMap;
  *
  * @author Pavel Castornii
  */
-public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends AbstractTabFxView<P> implements ConsoleTabView {
+public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends AbstractTabFxView<P>
+        implements ConsoleTabView {
 
     private static final class CssRichTextArea extends RichTextArea {
 
@@ -105,7 +106,7 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
         @Override
         public void compose() {
             super.compose();
-            this.toolBar = createToolBar(client , session);
+            this.toolBar = createToolBar(client, session);
             this.toolBar.getPresenter().initialize();
             getModifiableChildren().add(this.toolBar);
             view.getContentBox().getChildren().add(0, toolBar.getNode());
@@ -184,8 +185,8 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
             double y;
 
             // vertical position: show below caret if there is enough space, otherwise show above
-            if (caretBottom + CompletionPopupConstants.V_MARGIN + CompletionPopupConstants.HEIGHT >
-                    getWrapperPane().getHeight()) {
+            if (caretBottom + CompletionPopupConstants.V_MARGIN + CompletionPopupConstants.HEIGHT
+                    > getWrapperPane().getHeight()) {
                 y = caretY - CompletionPopupConstants.V_MARGIN - CompletionPopupConstants.HEIGHT;
             } else {
                 y = caretBottom + CompletionPopupConstants.V_MARGIN;
@@ -447,7 +448,7 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
         if (promptPos == null) {
             return true;
         }
-        var result = pos.index() == promptPos.index() && pos.offset()>= promptPos.offset();
+        var result = pos.index() == promptPos.index() && pos.offset() >= promptPos.offset();
         return result;
     }
 

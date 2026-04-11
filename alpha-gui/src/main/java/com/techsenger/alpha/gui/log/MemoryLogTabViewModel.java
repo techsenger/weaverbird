@@ -68,7 +68,8 @@ package com.techsenger.alpha.gui.log;
 //    private final List<LogEvent> logEvents = new ArrayList<>();
 //
 //    /**
-//     * We need to clear text area in exact point that can not be achieved by listeners on level button enabled property.
+//     * We need to clear text area in exact point that can not be achieved by listeners on level
+//     * button enabled property.
 //     */
 //    private final ObservableSource<Boolean> textAreaClear = new SimpleObservableSource<>();
 //

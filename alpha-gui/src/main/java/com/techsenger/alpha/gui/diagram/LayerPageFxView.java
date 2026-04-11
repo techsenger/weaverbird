@@ -46,7 +46,7 @@ import javafx.scene.layout.VBox;
 public class LayerPageFxView<P extends LayerPagePresenter<?, ?>> extends AbstractPageFxView<P>
         implements LayerPageView {
 
-    private final static Object SELECT_ALL_CHECK_BOX = new Object();
+    private static final Object SELECT_ALL_CHECK_BOX = new Object();
 
     /**
      * We use an adapter because we cannot obtain a stable {@link BooleanProperty} reference to mark the entire column
