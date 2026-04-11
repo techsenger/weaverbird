@@ -25,8 +25,6 @@ import javafx.beans.property.SimpleBooleanProperty;
  */
 class ModuleConfigAdapter extends UmlComponentAdapter {
 
-    private final ModuleConfig config;
-
     private final BooleanProperty reads = new SimpleBooleanProperty();
 
     private final BooleanProperty exports = new SimpleBooleanProperty();
@@ -41,7 +39,6 @@ class ModuleConfigAdapter extends UmlComponentAdapter {
 
     ModuleConfigAdapter(ModuleConfig config) {
         super(config);
-        this.config = config;
 
         reads.set(config.isReads());
         exports.set(config.isExports());
@@ -65,12 +62,8 @@ class ModuleConfigAdapter extends UmlComponentAdapter {
         services.addListener((obs, o, v) -> config.setServices(v));
     }
 
-    public ModuleConfig getConfig() {
-        return config;
-    }
-
-    public String getName() {
-        return config.getName();
+    public ModuleConfig getComponent() {
+        return (ModuleConfig) super.getComponent();
     }
 
     public BooleanProperty readsProperty() {
@@ -146,13 +139,14 @@ class ModuleConfigAdapter extends UmlComponentAdapter {
     }
 
     @Override
-    public void reset() {
-        super.reset();
-        reads.set(false);
-        exports.set(false);
-        opens.set(false);
-        requires.set(false);
-        requests.set(false);
-        services.set(false);
+    public void update() {
+        var component = getComponent();
+        super.update();
+        reads.set(component.isReads());
+        exports.set(component.isExports());
+        opens.set(component.isOpens());
+        requires.set(component.isRequires());
+        requests.set(component.isRequests());
+        services.set(component.isServices());
     }
 }

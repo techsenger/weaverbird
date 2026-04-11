@@ -28,6 +28,8 @@ import javafx.beans.value.ChangeListener;
  */
 abstract class UmlComponentAdapter {
 
+    private final AbstractUmlComponent component;
+
     private final StringProperty name = new SimpleStringProperty();
 
     private final BooleanProperty included = new SimpleBooleanProperty();
@@ -41,6 +43,7 @@ abstract class UmlComponentAdapter {
     };
 
     UmlComponentAdapter(AbstractUmlComponent component) {
+        this.component = component;
         name.set(component.getName());
         included.set(component.isIncluded());
         colored.set(component.isColored());
@@ -91,8 +94,13 @@ abstract class UmlComponentAdapter {
         return colored;
     }
 
-    public void reset() {
-        included.set(false);
-        colored.set(false);
+    public void update() {
+        name.set(component.getName());
+        included.set(component.isIncluded());
+        colored.set(component.isColored());
+    }
+
+    protected AbstractUmlComponent getComponent() {
+        return component;
     }
 }

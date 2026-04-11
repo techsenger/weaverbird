@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.function.Function;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -81,11 +80,17 @@ public class LayerPageFxView<P extends LayerPagePresenter<?, ?>> extends Abstrac
     }
 
     @Override
-    public void deselectAll() {
+    public void updateModules() {
         this.listenersDisabled = true;
         for (var m : this.table.getItems()) {
-            m.reset();
+            m.update();
         }
+        this.listenersDisabled = false;
+    }
+
+    @Override
+    public void clearSelectAll() {
+        this.listenersDisabled = true;
         for (var column : this.table.getColumns()) {
             var checkBox = getSelectAllCheckBox(column);
             if (checkBox != null) {
@@ -228,8 +233,8 @@ public class LayerPageFxView<P extends LayerPagePresenter<?, ?>> extends Abstrac
         }
         boolean selectedAll = true;
         for (int i = 0; i < this.table.getItems().size(); i++) {
-            ObservableValue<Boolean> val = (ObservableValue<Boolean>) column.getCellObservableValue(i);
-            if (Boolean.FALSE.equals(val.getValue())) {
+            Boolean val = (Boolean) column.getCellData(i);
+            if (Boolean.FALSE.equals(val)) {
                 selectedAll = false;
                 break;
             }
