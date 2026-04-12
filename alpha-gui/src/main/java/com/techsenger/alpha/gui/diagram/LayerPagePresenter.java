@@ -38,15 +38,6 @@ public class LayerPagePresenter<V extends LayerPageView, C extends PageComposer>
 
     @Override
     public void reset() {
-        for (var m : layer.getModules()) {
-            m.setIncluded(false);
-            m.setReads(false);
-            m.setExports(false);
-            m.setOpens(false);
-            m.setRequires(false);
-            m.setRequests(false);
-            m.setColored(false);
-        }
         getView().updateModules();
         getView().clearSelectAll();
     }

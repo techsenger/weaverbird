@@ -93,6 +93,19 @@ public class LayerDialogPresenter<V extends LayerDialogView, C extends LayerDial
     }
 
     protected void onReset() {
+        // some pages can be non initialized, so we update all layers here
+        for (var layer : this.layerConfigs) {
+            for (var m : layer.getModules()) {
+                m.setIncluded(false);
+                m.setReads(false);
+                m.setExports(false);
+                m.setOpens(false);
+                m.setRequires(false);
+                m.setRequests(false);
+                m.setColored(false);
+            }
+        }
+        // and only now update all initialized pages
         for (var p : getComposer().getPageHost().getComposer().getPagePorts()) {
             LayerPagePort pagePort = (LayerPagePort) p;
             pagePort.reset();
