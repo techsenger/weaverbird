@@ -28,6 +28,4 @@ public interface LayerDialogButtons {
     ResultButtonName OK = new DefaultResultButtonName();
 
     ResultButtonName CANCEL = new DefaultResultButtonName();
-
-    ResultButtonName RESET = new DefaultResultButtonName();
 }

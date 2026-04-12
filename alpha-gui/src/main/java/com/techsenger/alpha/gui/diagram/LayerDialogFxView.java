@@ -24,6 +24,7 @@ import com.techsenger.tabshell.layout.pagehost.PageHostFxView;
 import com.techsenger.tabshell.layout.pagehost.PageHostPort;
 import com.techsenger.tabshell.layout.pagehost.PageHostPresenter;
 import com.techsenger.tabshell.material.button.ResultButton;
+import com.techsenger.tabshell.material.button.ResultButtonName;
 import java.util.List;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -99,12 +100,22 @@ public class LayerDialogFxView<P extends LayerDialogPresenter<?, ?>> extends Abs
 
     @Override
     public void requestFocus() {
-//        NodeUtils.requestFocus(getContentPane());
+
     }
 
     @Override
     public Composer getComposer() {
         return (Composer) super.getComposer();
+    }
+
+    @Override
+    public void setRightButtons(ResultButtonName... names) {
+        super.setRightButtons(names);
+        makeButtonsEqualWidth();
+    }
+
+    protected void makeButtonsEqualWidth() {
+        makeEqualWidth(getRightButtons(false));
     }
 
     @Override
