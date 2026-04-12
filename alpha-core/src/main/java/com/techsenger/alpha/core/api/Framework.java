@@ -18,15 +18,21 @@ package com.techsenger.alpha.core.api;
 
 import com.techsenger.alpha.core.api.registry.Registry;
 import com.techsenger.alpha.core.spi.repo.RepoService;
+import com.techsenger.toolkit.core.version.Version;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface Framework extends LayerOwner {
+public interface Framework {
 
     /**
-     * Returns framework settings.
+     * Returns the version of the framework.
+     */
+    Version getVersion();
+
+    /**
+     * Returns the framework settings.
      */
     FrameworkSettings getSettings();
 

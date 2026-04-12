@@ -95,7 +95,7 @@ public class DefaultJvmInspector implements JvmInspector {
     @Override
     public ModulesInfo getModulesInfo() {
         Map<String, ModuleLayer> layersByName = new LinkedHashMap<>();
-        layersByName.put(ComponentLayerModel.resolveName(framework.getFullName(), 0),
+        layersByName.put(ComponentLayerModel.resolveName(framework.getSettings().getApplication().getFullName(), 0),
                 Framework.class.getModule().getLayer());
         var result = new DefaultModulesInfo();
         synchronized (framework.getComponentManager()) {
@@ -165,8 +165,8 @@ public class DefaultJvmInspector implements JvmInspector {
         var map = new HashMap<Integer, ComponentLayerModel>();
         result.setLayersById(map);
         //boot layer or non boot
-        var bootLayer = createLayer(framework.getFullName(), 0, Framework.class.getModule().getLayer(),
-                idsByLayerConfig, null);
+        var bootLayer = createLayer(framework.getSettings().getApplication().getFullName(), 0,
+                Framework.class.getModule().getLayer(), idsByLayerConfig, null);
         map.put(bootLayer.getId(), bootLayer);
         components.forEach(c -> {
             var d = c.getDescriptor();

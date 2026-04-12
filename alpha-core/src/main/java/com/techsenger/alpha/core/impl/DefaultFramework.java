@@ -119,16 +119,6 @@ public class DefaultFramework implements Framework {
     }
 
     @Override
-    public String getName() {
-        return LAYER_NAME;
-    }
-
-    @Override
-    public String getFullName() {
-        return LAYER_NAME + Constants.NAME_VERSION_SEPARATOR + getVersion();
-    }
-
-    @Override
     public Version getVersion() {
         return ProjectInfo.getVersion();
     }

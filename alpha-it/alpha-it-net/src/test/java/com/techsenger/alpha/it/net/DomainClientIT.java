@@ -80,7 +80,13 @@ public class DomainClientIT {
     public void startFramework() throws Exception {
         var frameworkPath = Paths.get(System.getProperty("basedir"), "target", "framework");
         TestUtils.copyDirectory(frameworkPath, tempFwPath);
-        framework = FrameworkFactory.create(FrameworkSettings.builder().repoChecksumEnabled(false).build(), tempFwPath);
+        var settings = FrameworkSettings.builder()
+                .repoChecksumEnabled(false)
+                .application(app -> app
+                        .name("client-test")
+                        .version(Version.parse("1.0.0")))
+                .build();
+        framework = FrameworkFactory.create(settings, tempFwPath);
         var componentManager = framework.getComponentManager();
         componentManager.startComponent("alpha-repo", framework.getVersion());
         componentManager.resolveComponent("alpha-server", framework.getVersion(), new LoggerMessagePrinter(logger));
@@ -531,7 +537,8 @@ public class DomainClientIT {
         var layersInfo = client.getLayersInfo();
         layersInfo.resolveReferences();
         assertThat(layersInfo.getLayersById()).hasSize(3);
-        assertThat(layersInfo.getLayersById().get(0).getName()).isEqualTo(framework.getFullName());
+        assertThat(layersInfo.getLayersById().get(0).getName())
+                .isEqualTo(framework.getSettings().getApplication().getFullName());
     }
 
     // -------------------------------------------------------------------------

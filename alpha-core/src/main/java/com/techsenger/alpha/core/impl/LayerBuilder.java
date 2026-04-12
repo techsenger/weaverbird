@@ -324,7 +324,7 @@ class LayerBuilder {
      */
     private String resolveLayerName(ModuleLayer layer) {
         if (layer == Framework.class.getModule().getLayer()) {
-            return this.framework.getFullName();
+            return this.framework.getSettings().getApplication().getFullName();
         }
         var descriptor = framework.getComponentManager().findComponent(layer).getDescriptor();
         if (descriptor != null) {
@@ -349,8 +349,9 @@ class LayerBuilder {
         } else {
             var nameAndVersion = Component.resolveNameAndVersion(layerName);
             if (nameAndVersion.getSecond() == null) { //find by name
-                if (nameAndVersion.getFirst().equals(framework.getName())) {
-                    layersByName.put(framework.getFullName(), Framework.class.getModule().getLayer());
+                if (nameAndVersion.getFirst().equals(framework.getSettings().getApplication().getName())) {
+                    layersByName.put(framework.getSettings().getApplication().getFullName(),
+                            Framework.class.getModule().getLayer());
                 } else {
                     Set<ComponentDescriptor> ancestors = component.getDescriptor().findAncestors();
                     for (var ancestor : ancestors) {
@@ -362,9 +363,10 @@ class LayerBuilder {
                     }
                 }
             } else { //find by name and version
-                if (nameAndVersion.getFirst().equals(framework.getName())
+                if (nameAndVersion.getFirst().equals(framework.getSettings().getApplication().getName())
                         && nameAndVersion.getSecond().equals(framework.getVersion())) {
-                    layersByName.put(framework.getFullName(), Framework.class.getModule().getLayer());
+                    layersByName.put(framework.getSettings().getApplication().getFullName(),
+                            Framework.class.getModule().getLayer());
                 } else {
                     Set<ComponentDescriptor> ancestors = component.getDescriptor().findAncestors();
                     for (var ancestor : ancestors) {

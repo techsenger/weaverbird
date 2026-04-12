@@ -77,7 +77,13 @@ public class ClientServiceIT {
     @BeforeAll
     public static void startFramework() throws Exception {
         var fwPath = Paths.get(System.getProperty("basedir"), "target", "framework");
-        framework = FrameworkFactory.create(FrameworkSettings.builder().repoChecksumEnabled(false).build(), fwPath);
+        var settings = FrameworkSettings.builder()
+                .repoChecksumEnabled(false)
+                .application(app -> app
+                        .name("client-test")
+                        .version(Version.parse("1.0.0")))
+                .build();
+        framework = FrameworkFactory.create(settings, fwPath);
         server = ServerServiceFactory.create(framework);
         server.start(HOST, PORT);
         client = ClientServiceFactory.create();

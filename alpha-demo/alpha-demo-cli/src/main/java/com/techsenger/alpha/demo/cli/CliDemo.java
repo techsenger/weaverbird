@@ -40,7 +40,12 @@ public final class CliDemo {
 
         // Checksum is disabled because artifacts resolved from the local Maven repository
         // do not have checksum files when installed via "mvn install"
-        var settings = FrameworkSettings.builder().repoChecksumEnabled(false).build();
+        var settings = FrameworkSettings.builder()
+                .repoChecksumEnabled(false)
+                .application(app -> app
+                        .name("cli-demo")
+                        .version(Version.parse("1.0.0")))
+                .build();
 
         var framework = FrameworkFactory.create(settings, rootPath);
         resolveAndStartComponent(framework, "alpha-repo");

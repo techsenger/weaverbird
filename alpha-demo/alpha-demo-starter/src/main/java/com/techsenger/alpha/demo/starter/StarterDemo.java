@@ -52,7 +52,12 @@ public final class StarterDemo {
 
     public static void main(String[] args) throws Exception {
         var frameworkPath = Paths.get(System.getProperty(SystemProperties.ROOT_PATH));
-        var settings = FrameworkSettings.builder().repoChecksumEnabled(false).build();
+        var settings = FrameworkSettings.builder()
+                .repoChecksumEnabled(false)
+                .application(app -> app
+                        .name("starter-demo")
+                        .version(Version.parse("1.0.0")))
+                .build();
         var framework = FrameworkFactory.create(settings, frameworkPath);
         var messagePrinter = new SystemMessagePrinter();
         var componentManager = framework.getComponentManager();

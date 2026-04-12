@@ -23,6 +23,7 @@ import com.techsenger.alpha.core.api.FrameworkSettings;
 import com.techsenger.alpha.core.api.component.UnknownComponentException;
 import com.techsenger.alpha.core.api.message.LoggerMessagePrinter;
 import com.techsenger.alpha.it.shared.TestUtils;
+import com.techsenger.toolkit.core.version.Version;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,7 +73,13 @@ public class ComponentManagerIT {
     public void startFramework() throws Exception {
         var frameworkPath = Paths.get(System.getProperty("basedir"), "target", "framework");
         TestUtils.copyDirectory(frameworkPath, tempFwPath);
-        framework = FrameworkFactory.create(FrameworkSettings.builder().repoChecksumEnabled(false).build(), tempFwPath);
+        var settings = FrameworkSettings.builder()
+                .repoChecksumEnabled(false)
+                .application(app -> app
+                        .name("core-test")
+                        .version(Version.parse("1.0.0")))
+                .build();
+        framework = FrameworkFactory.create(settings, tempFwPath);
         componentManager = framework.getComponentManager();
         componentManager.startComponent("alpha-repo", framework.getVersion());
     }

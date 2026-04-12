@@ -16,6 +16,8 @@
 
 package com.techsenger.alpha.core.api;
 
+import java.util.function.Consumer;
+
 /**
  *
  * @author Pavel Castornii
@@ -24,6 +26,8 @@ public final class FrameworkSettings {
 
     private boolean repoChecksumEnabled;
 
+    private ApplicationSettings application;
+
     private FrameworkSettings() {
     }
 
@@ -31,13 +35,17 @@ public final class FrameworkSettings {
         return repoChecksumEnabled;
     }
 
+    public ApplicationSettings getApplication() {
+        return application;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
 
     public static final class Builder {
-
         private boolean repoChecksumEnabled = true;
+        private final ApplicationSettings.Builder applicationBuilder = new ApplicationSettings.Builder();
 
         private Builder() {
         }
@@ -47,9 +55,15 @@ public final class FrameworkSettings {
             return this;
         }
 
+        public Builder application(Consumer<ApplicationSettings.Builder> consumer) {
+            consumer.accept(applicationBuilder);
+            return this;
+        }
+
         public FrameworkSettings build() {
             var settings = new FrameworkSettings();
             settings.repoChecksumEnabled = this.repoChecksumEnabled;
+            settings.application = applicationBuilder.build();
             return settings;
         }
     }
