@@ -28,6 +28,7 @@ import com.techsenger.alpha.executor.spi.ParameterUtils;
 import com.techsenger.alpha.executor.spi.RemoteCommand;
 import com.techsenger.alpha.net.client.api.DomainClient;
 import com.techsenger.toolkit.core.StringUtils;
+import com.techsenger.toolkit.core.version.Version;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -97,7 +98,7 @@ public class ModuleUpdateCommand extends AbstractCommand {
         if (this.type != null) {
             t = ModuleType.valueOf(type.toUpperCase());
         }
-        var artifact = new DefaultModuleArtifact(groupId, artifactId, version, classifier, t);
+        var artifact = new DefaultModuleArtifact(groupId, artifactId, Version.of(version), classifier, t);
         String message = "Module was uninstalled";
         if (context.isExecutionLocal()) {
             var framework = context.getFramework();

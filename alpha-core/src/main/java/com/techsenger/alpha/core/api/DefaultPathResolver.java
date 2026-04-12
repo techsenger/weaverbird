@@ -202,7 +202,7 @@ public class DefaultPathResolver implements PathResolver {
                 + File.separator
                 + artifact.getVersion()
                 + File.separator
-                + artifact.getFileName();
+                + ModuleArtifact.resolveFileName(artifact);
         var resolvedPath = this.pathManager.getRepositoryDirectory().resolve(modulePath);
         logger.trace("Module {} has path {}", artifact.getArtifactId(), resolvedPath);
         return resolvedPath;

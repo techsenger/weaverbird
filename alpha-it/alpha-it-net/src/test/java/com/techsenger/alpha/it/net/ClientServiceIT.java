@@ -80,8 +80,8 @@ public class ClientServiceIT {
         var settings = FrameworkSettings.builder()
                 .repoChecksumEnabled(false)
                 .application(app -> app
-                        .name("client-test")
-                        .version(Version.parse("1.0.0")))
+                    .name("client-test")
+                    .version(Version.of("1.0.0")))
                 .build();
         framework = FrameworkFactory.create(settings, fwPath);
         server = ServerServiceFactory.create(framework);

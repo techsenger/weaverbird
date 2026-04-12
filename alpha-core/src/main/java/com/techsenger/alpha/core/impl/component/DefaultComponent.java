@@ -18,7 +18,7 @@ package com.techsenger.alpha.core.impl.component;
 
 import com.techsenger.alpha.core.api.component.Component;
 import com.techsenger.alpha.core.api.component.ComponentObserver;
-import com.techsenger.alpha.core.api.module.ModuleDescriptor;
+import com.techsenger.alpha.core.api.module.ModuleConfig;
 import com.techsenger.alpha.core.api.module.ResolvedModuleDirective;
 import com.techsenger.alpha.core.spi.module.ModuleActivator;
 import com.techsenger.alpha.core.spi.module.ModuleContext;
@@ -60,7 +60,7 @@ public class DefaultComponent implements Component {
 
     private Map<Module, ModuleContext> moduleContextsByModule;
 
-    private final Map<ModuleDescriptor, Module> modulesByDesciptor = new HashMap<>();
+    private final Map<ModuleConfig, Module> modulesByConfig = new HashMap<>();
 
      /**
      * Observers that were created BY this component. We bind them to component as components come and go.
@@ -87,8 +87,8 @@ public class DefaultComponent implements Component {
     }
 
     @Override
-    public Module getModule(ModuleDescriptor descriptor) {
-        return this.modulesByDesciptor.get(descriptor);
+    public Module getModule(ModuleConfig config) {
+        return this.modulesByConfig.get(config);
     }
 
     /**
@@ -177,20 +177,21 @@ public class DefaultComponent implements Component {
     }
 
     private void buildDescriptorModuleMap() {
-        var descriptorsByPath = new HashMap<String, ModuleDescriptor>();
-        for (var descriptor : descriptor.getConfig().getModules()) {
-            var path = descriptor.getResolvedPath().toAbsolutePath().normalize().toString();
-            descriptorsByPath.put(path, descriptor);
+        var configsByPath = new HashMap<String, ModuleConfig>();
+        for (var i = 0; i < descriptor.getConfig().getModules().size(); i++) {
+            var config = descriptor.getConfig().getModules().get(i);
+            var path = descriptor.getModulePaths().get(i).toAbsolutePath().normalize().toString();
+            configsByPath.put(path, config);
         }
         var modulesByPath = new HashMap<String, Module>();
         for (var module : getLayer().modules()) {
             var path = ModuleUtils.getPath(module).toAbsolutePath().normalize().toString();
             modulesByPath.put(path, module);
         }
-        for (var entry : descriptorsByPath.entrySet()) {
+        for (var entry : configsByPath.entrySet()) {
             var module = modulesByPath.get(entry.getKey());
             if (module != null) {
-                this.modulesByDesciptor.put(entry.getValue(), module);
+                this.modulesByConfig.put(entry.getValue(), module);
             } else {
                 throw new RuntimeException("Couldn't resolve module by path = " + entry.getKey());
             }

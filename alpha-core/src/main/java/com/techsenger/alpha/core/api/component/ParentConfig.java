@@ -14,39 +14,24 @@
  * limitations under the License.
  */
 
-package com.techsenger.alpha.core.api.module;
+package com.techsenger.alpha.core.api.component;
 
-import java.nio.file.Path;
-import java.util.List;
+import com.techsenger.toolkit.core.version.Version;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface ModuleDescriptor extends ModuleArtifact {
+public interface ParentConfig {
+
+    String getName();
+
+    Version getVersion();
 
     /**
-     * Returns the resolved path of the module for used repo.
+     * Returns the version match. Default value is {@link VersionMatch#ANY}.
      *
      * @return
      */
-    Path getResolvedPath();
-
-    /**
-     * Returns boolean that indicates if activator is enabled or disabled.
-     * @return true if enabled and false if disabled.
-     */
-    boolean isActive();
-
-    /**
-     * Returns module directives.
-     *
-     * @return
-     */
-    List<ModuleDirective> getDirectives();
-
-    /**
-     * Returns true if native access is enabled for this module, allowing the use of JNI/FFM API.
-     */
-    boolean isNativeAccessEnabled();
+    VersionMatch getVersionMatch();
 }

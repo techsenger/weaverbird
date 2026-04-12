@@ -14,11 +14,32 @@
  * limitations under the License.
  */
 
-module com.techsenger.alpha.demo.starter  {
-    requires org.slf4j;
-    requires com.techsenger.alpha.core;
-    requires com.techsenger.toolkit.core;
-    requires jakarta.el;
-    requires org.glassfish.expressly;
-}
+package com.techsenger.alpha.core.impl.repo;
 
+import com.techsenger.alpha.core.api.component.RepositoryConfig;
+
+/**
+ *
+ * @author Pavel Castornii
+ */
+public class DefaultRepositoryConfig implements RepositoryConfig {
+
+    private final String name;
+
+    private final String url;
+
+    public DefaultRepositoryConfig(String name, String url) {
+        this.name = name;
+        this.url = url;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getUrl() {
+        return url;
+    }
+}

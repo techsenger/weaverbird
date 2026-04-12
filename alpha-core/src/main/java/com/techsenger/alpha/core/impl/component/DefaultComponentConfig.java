@@ -18,9 +18,9 @@ package com.techsenger.alpha.core.impl.component;
 
 import com.techsenger.alpha.core.api.Constants;
 import com.techsenger.alpha.core.api.component.ComponentConfig;
-import com.techsenger.alpha.core.api.module.ModuleDescriptor;
-import com.techsenger.alpha.core.api.module.ModuleType;
-import com.techsenger.alpha.core.api.component.RepositoryDescriptor;
+import com.techsenger.alpha.core.api.component.ParentConfig;
+import com.techsenger.alpha.core.api.component.RepositoryConfig;
+import com.techsenger.alpha.core.api.module.ModuleConfig;
 import com.techsenger.toolkit.core.version.Version;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +31,7 @@ import java.util.Objects;
  *
  * @author Pavel Castornii
  */
-class DefaultComponentConfig implements ComponentConfig {
+public class DefaultComponentConfig implements ComponentConfig {
 
     private final String title;
 
@@ -43,13 +43,13 @@ class DefaultComponentConfig implements ComponentConfig {
 
     private Map<String, String> metadata;
 
-    private List<RepositoryDescriptor> repositories;
+    private List<RepositoryConfig> repositories;
 
-    private List<ModuleDescriptor> modules;
+    private List<ParentConfig> parents;
 
-    private Boolean containsWarModules = null;
+    private List<ModuleConfig> modules;
 
-    DefaultComponentConfig(String title, String name, Version version, String type) {
+    public DefaultComponentConfig(String title, String name, Version version, String type) {
         this.title = title;
         this.name = name;
         this.version = version;
@@ -117,39 +117,33 @@ class DefaultComponentConfig implements ComponentConfig {
     }
 
     @Override
-    public List<RepositoryDescriptor> getRepositories() {
+    public List<RepositoryConfig> getRepositories() {
         return repositories;
     }
 
     @Override
-    public List<ModuleDescriptor> getModules() {
-        return modules;
+    public List<ParentConfig> getParents() {
+        return parents;
     }
 
     @Override
-    public boolean containsWarModules() {
-        if (this.containsWarModules != null) {
-            return this.containsWarModules;
-        }
-        this.containsWarModules = false;
-        for (var m : modules) {
-            if (m.getType() == ModuleType.WAR) {
-                this.containsWarModules = true;
-                break;
-            }
-        }
-        return this.containsWarModules;
+    public List<ModuleConfig> getModules() {
+        return modules;
     }
 
-    void setMetadata(Map<String, String> metadata) {
+    public void setMetadata(Map<String, String> metadata) {
         this.metadata = Collections.unmodifiableMap(metadata);
     }
 
-    void setRepositories(List<RepositoryDescriptor> repositories) {
+    public void setRepositories(List<RepositoryConfig> repositories) {
         this.repositories = Collections.unmodifiableList(repositories);
     }
 
-    void setModules(List<ModuleDescriptor> moduleDescriptors) {
-        this.modules = Collections.unmodifiableList(moduleDescriptors);
+    public void setParents(List<ParentConfig> parents) {
+        this.parents = parents;
+    }
+
+    public void setModules(List<ModuleConfig> moduleConfigs) {
+        this.modules = Collections.unmodifiableList(moduleConfigs);
     }
 }

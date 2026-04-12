@@ -14,32 +14,15 @@
  * limitations under the License.
  */
 
-package com.techsenger.alpha.core.impl.repo;
-
-import com.techsenger.alpha.core.api.component.RepositoryDescriptor;
+package com.techsenger.alpha.core.api.component;
 
 /**
  *
  * @author Pavel Castornii
  */
-public class DefaultRepositoryDescriptor implements RepositoryDescriptor {
+public interface RepositoryConfig {
 
-    private final String name;
+    String getName();
 
-    private final String url;
-
-    public DefaultRepositoryDescriptor(String name, String url) {
-        this.name = name;
-        this.url = url;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getUrl() {
-        return url;
-    }
+    String getUrl();
 }

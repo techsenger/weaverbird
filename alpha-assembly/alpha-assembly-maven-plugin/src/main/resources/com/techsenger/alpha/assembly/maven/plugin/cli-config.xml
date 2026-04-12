@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Configuration title="Alpha CLI" name="alpha-cli" version="${project.version}" type="base">
+<Configuration title="Alpha CLI" name="alpha-cli" version="${project.version}">
     <Repositories>
         <Repository name="local" url="file://${settings.localRepository}"/>
         <Repository name="central" url="${maven.central.url}"/>

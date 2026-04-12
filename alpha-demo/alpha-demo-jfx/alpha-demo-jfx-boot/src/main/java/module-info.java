@@ -18,5 +18,9 @@ module com.techsenger.alpha.demo.jfx.boot  {
     requires org.slf4j;
     requires com.techsenger.alpha.core;
     requires com.techsenger.toolkit.core;
+    requires jakarta.el;
+    requires org.glassfish.expressly;
+
+    opens com.techsenger.alpha.demo.jfx.boot to com.techsenger.toolkit.core;
 }
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- AUTO-GENERATED FILE — DO NOT EDIT -->
 <Registry>
-    <InstallResult successful="true"/>
     <AddedComponents>
         <Component name="alpha-repo" version="${project.version}"/>
         <Component name="alpha-server" version="${project.version}"/>

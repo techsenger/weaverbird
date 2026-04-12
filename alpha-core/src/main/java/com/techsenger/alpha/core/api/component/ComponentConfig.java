@@ -17,48 +17,52 @@
 package com.techsenger.alpha.core.api.component;
 
 import com.techsenger.alpha.core.api.LayerOwner;
-import com.techsenger.alpha.core.api.module.ModuleDescriptor;
-import com.techsenger.alpha.core.api.module.ModuleType;
+import com.techsenger.alpha.core.api.module.ModuleConfig;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * Provides configuration for a component.
  *
  * @author Pavel Castornii
  */
 public interface ComponentConfig extends ComponentConfigDto, LayerOwner {
 
+    static ComponentConfigBuilder builder() {
+        return new ComponentConfigBuilder();
+    }
+
     /**
-     * Returns map where key is the attribute name, and value is the attribute value. It is possible to add any
-     * metadata, for example, author, developer, license etc.
+     * Returns an unmodifiable map of metadata where the key is the attribute name and the value is the
+     * attribute value. Arbitrary metadata can be provided, for example: author, developer, license, etc.
      *
-     * @return
+     * @return the metadata map
      */
     Map<String, String> getMetadata();
 
     /**
-     * Returns the repos from which modules will be resolved.
+     * Returns an unmodifiable list of repositories from which modules will be resolved.
      *
-     * <p>Repositories will be used in the order they are specified. This means that the module will first be searched
-     * for in the first repository, then in the second, and so on. It is important to note that, by default, the central
-     * repository is not used. Therefore, if the central repository needs to be used, it must be explicitly added.
+     * <p>Repositories are used in the order they are specified. A module is searched for in the first
+     * repository, then in the next, and so on. By default, the central repository is not used and must
+     * be explicitly added if required.
      *
-     * @return
+     * @return the list of repository configurations
      */
-    List<RepositoryDescriptor> getRepositories();
+    List<RepositoryConfig> getRepositories();
 
     /**
-     * Returns module descriptors.
+     * Returns an unmodifiable list of parent component configurations to which this component can be
+     * added as a child. An empty list indicates that this component can be added to any component.
      *
-     * @return
+     * @return the list of parent configurations
      */
-    List<ModuleDescriptor> getModules();
+    List<ParentConfig> getParents();
 
     /**
-     * Returns true if this component contains modules with type {@link ModuleType#WAR}, otherwise returns false.
-     * The check is performed only once, and the result is stored.
+     * Returns an unmodifiable list of module configurations.
      *
-     * @return
+     * @return the list of module configurations
      */
-    boolean containsWarModules();
+    List<ModuleConfig> getModules();
 }

@@ -17,7 +17,7 @@
 package com.techsenger.alpha.core.api.component;
 
 import com.techsenger.alpha.core.api.Constants;
-import com.techsenger.alpha.core.api.module.ModuleDescriptor;
+import com.techsenger.alpha.core.api.module.ModuleConfig;
 import com.techsenger.alpha.core.api.module.ResolvedModuleDirective;
 import com.techsenger.toolkit.core.Pair;
 import com.techsenger.toolkit.core.version.Version;
@@ -41,7 +41,7 @@ public interface Component {
             return new Pair<>(nameAndVersion.trim(), null);
         } else {
             String name = nameAndVersion.substring(0, index).trim();
-            Version version = Version.parse(nameAndVersion.substring(index + 1).trim());
+            Version version = Version.of(nameAndVersion.substring(index + 1).trim());
             return new Pair<>(name, version);
         }
     }
@@ -73,12 +73,11 @@ public interface Component {
     ModuleLayer getLayer();
 
     /**
-     * Returns module by descriptor.
+     * Returns module by config.
      *
-     * @param descriptor
-     * @return
+     * @param config
      */
-    Module getModule(ModuleDescriptor descriptor);
+    Module getModule(ModuleConfig config);
 
     /**
      * Returns resolved modules directives. It is important to clarify that these will only be the directives

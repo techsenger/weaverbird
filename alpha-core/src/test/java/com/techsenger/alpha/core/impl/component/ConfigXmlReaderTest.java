@@ -17,7 +17,7 @@
 package com.techsenger.alpha.core.impl.component;
 
 import com.techsenger.alpha.core.api.component.ComponentConfigInfo;
-import com.techsenger.alpha.core.api.module.ModuleDescriptor;
+import com.techsenger.alpha.core.api.module.ModuleConfig;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -46,16 +46,16 @@ public class ConfigXmlReaderTest {
         var configInfo = new ComponentConfigInfo();
         configInfo.put(OS_FAMILY, "linux");
         var config = reader.read(new File(uri).toPath(), configInfo, null);
-        var descriptors = config.getModules();
-        assertThat(descriptors).hasSize(8);
-        assertModuleDescriptor(descriptors.get(0), 1, "linux");
-        assertModuleDescriptor(descriptors.get(1), 2, "linux");
-        assertModuleDescriptor(descriptors.get(2), 3, "linux");
-        assertModuleDescriptor(descriptors.get(3), 4, "linux");
-        assertModuleDescriptor(descriptors.get(4), 8, "linux");
-        assertModuleDescriptor(descriptors.get(5), 9, "linux");
-        assertModuleDescriptor(descriptors.get(6), 29, "linux");
-        assertModuleDescriptor(descriptors.get(7), 30, "linux");
+        var modules = config.getModules();
+        assertThat(modules).hasSize(8);
+        assertModule(modules.get(0), 1, "linux");
+        assertModule(modules.get(1), 2, "linux");
+        assertModule(modules.get(2), 3, "linux");
+        assertModule(modules.get(3), 4, "linux");
+        assertModule(modules.get(4), 8, "linux");
+        assertModule(modules.get(5), 9, "linux");
+        assertModule(modules.get(6), 29, "linux");
+        assertModule(modules.get(7), 30, "linux");
 
     }
 
@@ -67,13 +67,13 @@ public class ConfigXmlReaderTest {
         var configInfo = new ComponentConfigInfo();
         configInfo.put(OS_FAMILY, "windows");
         var config = reader.read(new File(uri).toPath(), configInfo, null);
-        var descriptors = config.getModules();
-        assertThat(descriptors).hasSize(5);
-        assertModuleDescriptor(descriptors.get(0), 1, "windows");
-        assertModuleDescriptor(descriptors.get(1), 16, "windows");
-        assertModuleDescriptor(descriptors.get(2), 17, "windows");
-        assertModuleDescriptor(descriptors.get(3), 29, "windows");
-        assertModuleDescriptor(descriptors.get(4), 30, "windows");
+        var modules = config.getModules();
+        assertThat(modules).hasSize(5);
+        assertModule(modules.get(0), 1, "windows");
+        assertModule(modules.get(1), 16, "windows");
+        assertModule(modules.get(2), 17, "windows");
+        assertModule(modules.get(3), 29, "windows");
+        assertModule(modules.get(4), 30, "windows");
     }
 
     @Test
@@ -84,16 +84,16 @@ public class ConfigXmlReaderTest {
         var configInfo = new ComponentConfigInfo();
         configInfo.put(OS_FAMILY, "mac");
         var config = reader.read(new File(uri).toPath(), configInfo, null);
-        var descriptors = config.getModules();
-        assertThat(descriptors).hasSize(8);
-        assertModuleDescriptor(descriptors.get(0), 1, "mac");
-        assertModuleDescriptor(descriptors.get(1), 18, "mac");
-        assertModuleDescriptor(descriptors.get(2), 19, "mac");
-        assertModuleDescriptor(descriptors.get(3), 20, "mac");
-        assertModuleDescriptor(descriptors.get(4), 22, "mac");
-        assertModuleDescriptor(descriptors.get(5), 23, "mac");
-        assertModuleDescriptor(descriptors.get(6), 29, "mac");
-        assertModuleDescriptor(descriptors.get(7), 30, "mac");
+        var modules = config.getModules();
+        assertThat(modules).hasSize(8);
+        assertModule(modules.get(0), 1, "mac");
+        assertModule(modules.get(1), 18, "mac");
+        assertModule(modules.get(2), 19, "mac");
+        assertModule(modules.get(3), 20, "mac");
+        assertModule(modules.get(4), 22, "mac");
+        assertModule(modules.get(5), 23, "mac");
+        assertModule(modules.get(6), 29, "mac");
+        assertModule(modules.get(7), 30, "mac");
     }
 
     @Test
@@ -104,19 +104,19 @@ public class ConfigXmlReaderTest {
         var configInfo = new ComponentConfigInfo();
         configInfo.put(OS_FAMILY, "solaris");
         var config = reader.read(new File(uri).toPath(), configInfo, null);
-        var descriptors = config.getModules();
-        assertThat(descriptors).hasSize(5);
-        assertModuleDescriptor(descriptors.get(0), 1, "solaris");
-        assertModuleDescriptor(descriptors.get(1), 26, "solaris");
-        assertModuleDescriptor(descriptors.get(2), 28, "solaris");
-        assertModuleDescriptor(descriptors.get(3), 29, "solaris");
-        assertModuleDescriptor(descriptors.get(4), 30, "solaris");
+        var modules = config.getModules();
+        assertThat(modules).hasSize(5);
+        assertModule(modules.get(0), 1, "solaris");
+        assertModule(modules.get(1), 26, "solaris");
+        assertModule(modules.get(2), 28, "solaris");
+        assertModule(modules.get(3), 29, "solaris");
+        assertModule(modules.get(4), 30, "solaris");
     }
 
-    private void assertModuleDescriptor(ModuleDescriptor descriptor, int index, String classifier) {
-        assertThat(descriptor.getGroupId()).isEqualTo("group" + index);
-        assertThat(descriptor.getArtifactId()).isEqualTo("artifact" + index);
-        assertThat(descriptor.getVersion()).isEqualTo(index + ".0.0");
-        assertThat(descriptor.getClassifier()).isEqualTo(classifier);
+    private void assertModule(ModuleConfig module, int index, String classifier) {
+        assertThat(module.getGroupId()).isEqualTo("group" + index);
+        assertThat(module.getArtifactId()).isEqualTo("artifact" + index);
+        assertThat(module.getVersion()).isEqualTo(index + ".0.0");
+        assertThat(module.getClassifier()).isEqualTo(classifier);
     }
 }

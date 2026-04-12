@@ -65,7 +65,7 @@ class RegistryXmlReader {
                     break;
                 case Xml.COMPONENT_TAG:
                     var component = new ComponentEntry(attributes.getValue(Xml.NAME_ATTRIBUTE),
-                            Version.parse(attributes.getValue(Xml.VERSION_ATTRIBUTE)));
+                            Version.of(attributes.getValue(Xml.VERSION_ATTRIBUTE)));
                     this.components.add(component);
                     break;
             }

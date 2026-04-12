@@ -14,15 +14,31 @@
  * limitations under the License.
  */
 
-package com.techsenger.alpha.core.api.component;
+package com.techsenger.alpha.core.api.module;
+
+import java.util.List;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface RepositoryDescriptor {
+public interface ModuleConfig extends ModuleArtifact {
 
-    String getName();
+    /**
+     * Returns boolean that indicates if activator is enabled or disabled.
+     * @return true if enabled and false if disabled.
+     */
+    boolean isActive();
 
-    String getUrl();
+    /**
+     * Returns module directives.
+     *
+     * @return
+     */
+    List<ModuleDirective> getDirectives();
+
+    /**
+     * Returns true if native access is enabled for this module, allowing the use of JNI/FFM API.
+     */
+    boolean isNativeAccessEnabled();
 }

@@ -16,47 +16,65 @@
 
 package com.techsenger.alpha.core.api.component;
 
+import com.techsenger.alpha.core.api.module.ModuleType;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 
 /**
- * Every component instance has one ComponentDescriptor instance. A descriptor is created for every component
- * and is deleted when component is undeployed.
+ * Each component instance has a corresponding {@code ComponentDescriptor}. A descriptor is created when a
+ * component is deployed and removed when the component is undeployed.
  *
  * @author Pavel Castornii
  */
 public interface ComponentDescriptor extends ComponentDescriptorDto {
 
     /**
-     * Returns the descriptors of the parent components. If there is no parent returns empty list.
-     * @return
+     * Returns an unmodifiable list of parent component descriptors. If the component has no parents,
+     * returns an empty list.
+     *
+     * @return the list of parent descriptors
      */
     @Override
     List<? extends ComponentDescriptor> getParents();
 
     /**
-     * Returns the descriptors of all ancestor components (nodes higher than a given node in the same lineage),
-     * i.e. higher than the component of the passed  descriptor. JPMS module layer graph is a directed acyclic
-     * graph (DAG).
+     * Returns an unmodifiable set of all ancestor component descriptors (nodes higher in the same lineage).
+     * The JPMS module layer graph is a directed acyclic graph (DAG).
      *
-     * @return
+     * @return the set of ancestor descriptors
      */
     Set<ComponentDescriptor> findAncestors();
 
     /**
-     * Returns the descriptors of all descendant components (nodes below than a given node in the same lineage),
-     * i.e. below than the component of the passed  descriptor. JPMS module layer graph is a directed acyclic
-     * graph (DAG).
+     * Returns an unmodifiable set of all descendant component descriptors (nodes lower in the same lineage).
+     * The JPMS module layer graph is a directed acyclic graph (DAG).
      *
-     * @return
+     * @return the set of descendant descriptors
      */
     Set<ComponentDescriptor> findDescendants();
 
     /**
-     * Returns component config.
+     * Returns the component configuration.
      *
-     * @return
+     * @return the component configuration
      */
     @Override
     ComponentConfig getConfig();
+
+    /**
+     * Returns an unmodifiable list of module paths. The index in this list corresponds to the index in
+     * {@link ComponentConfig#getModules()}.
+     *
+     * @return the list of module paths
+     */
+    List<Path> getModulePaths();
+
+    /**
+     * Returns {@code true} if this component contains modules of type {@link ModuleType#WAR}, otherwise {@code false}.
+     * The result is computed once and cached.
+     *
+     * @return {@code true} if WAR modules are present, otherwise {@code false}
+     */
+    boolean containsWarModules();
 }

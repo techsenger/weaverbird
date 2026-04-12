@@ -61,7 +61,7 @@ public class DomainClientIT {
 
     private static final String TEST_COMP_NAME = "test-comp";
 
-    private static final Version TEST_COMP_VERSION = Version.parse("1.0.0");
+    private static final Version TEST_COMP_VERSION = Version.of("1.0.0");
 
     private static final String TEST_COMP_ALIAS = "test-alias";
 
@@ -83,8 +83,8 @@ public class DomainClientIT {
         var settings = FrameworkSettings.builder()
                 .repoChecksumEnabled(false)
                 .application(app -> app
-                        .name("client-test")
-                        .version(Version.parse("1.0.0")))
+                    .name("client-test")
+                    .version(Version.of("1.0.0")))
                 .build();
         framework = FrameworkFactory.create(settings, tempFwPath);
         var componentManager = framework.getComponentManager();
@@ -153,7 +153,7 @@ public class DomainClientIT {
 
     @Test
     public void removeComponent_nonExistentComponent_serverExceptionThrown() {
-        assertThatThrownBy(() -> client.removeComponent("ghost-comp", Version.parse("9.9.9")))
+        assertThatThrownBy(() -> client.removeComponent("ghost-comp", Version.of("9.9.9")))
                 .isInstanceOf(ServerException.class);
     }
 
@@ -171,7 +171,7 @@ public class DomainClientIT {
 
     @Test
     public void resolveComponent_nonExistentComponent_serverExceptionThrown() {
-        assertThatThrownBy(() -> client.resolveComponent("ghost-comp", Version.parse("9.9.9")))
+        assertThatThrownBy(() -> client.resolveComponent("ghost-comp", Version.of("9.9.9")))
                 .isInstanceOf(ServerException.class);
     }
 
@@ -186,7 +186,7 @@ public class DomainClientIT {
 
     @Test
     public void unresolveComponent_nonExistentComponent_serverExceptionThrown() {
-        assertThatThrownBy(() -> client.unresolveComponent("ghost-comp", Version.parse("9.9.9")))
+        assertThatThrownBy(() -> client.unresolveComponent("ghost-comp", Version.of("9.9.9")))
                 .isInstanceOf(ServerException.class);
     }
 
@@ -218,7 +218,7 @@ public class DomainClientIT {
 
     @Test
     public void deployComponent_nonExistentComponent_serverExceptionThrown() {
-        assertThatThrownBy(() -> client.deployComponent("ghost-comp", Version.parse("9.9.9"),
+        assertThatThrownBy(() -> client.deployComponent("ghost-comp", Version.of("9.9.9"),
                 null, null, null, false))
                 .isInstanceOf(ServerException.class);
     }
@@ -358,7 +358,7 @@ public class DomainClientIT {
 
     @Test
     public void uninstallComponent_nonExistentComponent_serverExceptionThrown() {
-        assertThatThrownBy(() -> client.uninstallComponent("ghost-comp", Version.parse("9.9.9")))
+        assertThatThrownBy(() -> client.uninstallComponent("ghost-comp", Version.of("9.9.9")))
                 .isInstanceOf(ServerException.class);
     }
 
@@ -387,7 +387,7 @@ public class DomainClientIT {
 
     @Test
     public void startComponent_nonExistentComponent_serverExceptionThrown() {
-        assertThatThrownBy(() -> client.startComponent("ghost-comp", Version.parse("9.9.9"),
+        assertThatThrownBy(() -> client.startComponent("ghost-comp", Version.of("9.9.9"),
                 null, null, null, false))
                 .isInstanceOf(ServerException.class);
     }

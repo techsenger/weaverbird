@@ -42,7 +42,7 @@ public final class ProjectInfo {
         try {
             var properties = PropertiesUtils.read(ProjectInfo.class, "project-info.properties");
             n = properties.getProperty("name");
-            v = Version.parse(properties.getProperty("version"));
+            v = Version.of(properties.getProperty("version"));
         } catch (Exception ex) {
             logger.error("Error reading project info", ex);
         }

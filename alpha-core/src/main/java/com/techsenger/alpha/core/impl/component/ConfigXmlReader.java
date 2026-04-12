@@ -19,14 +19,16 @@ package com.techsenger.alpha.core.impl.component;
 import com.techsenger.alpha.core.api.component.ComponentConfig;
 import com.techsenger.alpha.core.api.component.ComponentConfigInfo;
 import com.techsenger.alpha.core.api.component.ComponentConfigUtils;
-import com.techsenger.alpha.core.api.component.RepositoryDescriptor;
+import com.techsenger.alpha.core.api.component.ParentConfig;
+import com.techsenger.alpha.core.api.component.RepositoryConfig;
+import com.techsenger.alpha.core.api.component.VersionMatch;
 import com.techsenger.alpha.core.api.module.DirectiveType;
-import com.techsenger.alpha.core.api.module.ModuleDescriptor;
+import com.techsenger.alpha.core.api.module.ModuleConfig;
 import com.techsenger.alpha.core.api.module.ModuleDirective;
 import com.techsenger.alpha.core.api.module.ModuleType;
-import com.techsenger.alpha.core.impl.module.DefaultModuleDescriptor;
+import com.techsenger.alpha.core.impl.module.DefaultModuleConfig;
 import com.techsenger.alpha.core.impl.module.DefaultModuleDirective;
-import com.techsenger.alpha.core.impl.repo.DefaultRepositoryDescriptor;
+import com.techsenger.alpha.core.impl.repo.DefaultRepositoryConfig;
 import com.techsenger.toolkit.core.version.Version;
 import jakarta.el.ELProcessor;
 import java.io.IOException;
@@ -148,39 +150,17 @@ public class ConfigXmlReader {
      */
     private static class SaxHandler extends DefaultHandler {
 
-        private static final String CHOOSE_TAG = "Choose";
-
-        private static final String WHEN_TAG = "When";
-
-        private static final String OTHERWISE_TAG = "Otherwise";
-
-        private static final String IF_TAG = "If";
-
-        private static final String CONFIGURATION_TAG = "Configuration";
-
-        private static final String METADATA_TAG = "Metadata";
-
-        private static final String ENTRY_TAG = "Entry";
-
-        private static final String REPOSITORY_TAG = "Repository";
-
-        private static final String MODULE_TAG = "Module";
-
-        private static final String DIRECTIVES_TAG = "Directives";
-
-        private static final String DIRECTIVE_TAG = "Directive";
-
-        private static final String PROPERTY_TAG = "Property";
-
         private DefaultComponentConfig config;
 
         private final Map<String, String> metadata = new HashMap<>();
 
-        private final List<RepositoryDescriptor> repositories = new ArrayList<>();
+        private final List<RepositoryConfig> repositories = new ArrayList<>();
 
-        private final List<ModuleDescriptor> modules = new ArrayList<>();
+        private final List<ParentConfig> parents = new ArrayList<>();
 
-        private DefaultModuleDescriptor module;
+        private final List<ModuleConfig> modules = new ArrayList<>();
+
+        private DefaultModuleConfig module;
 
         private List<ModuleDirective> directives;
 
@@ -208,7 +188,7 @@ public class ConfigXmlReader {
             Boolean result = null;
             String test = null;
             switch (qName) {
-                case CHOOSE_TAG:
+                case Tags.CHOOSE_TAG:
                     if (this.areBranchConditionNodesValid()) {
                         node = new ConditionNode(ConditionTag.CHOOSE, true);
                     } else {
@@ -216,7 +196,7 @@ public class ConfigXmlReader {
                     }
                     this.conditionNodes.offerFirst(node);
                     break;
-                case WHEN_TAG:
+                case Tags.WHEN_TAG:
                     if (this.areBranchConditionNodesValid()
                             && !this.conditionNodes.peekFirst().hasChildEvaluatedToTrue()) {
                         test = attributes.getValue("test");
@@ -229,7 +209,7 @@ public class ConfigXmlReader {
                     this.conditionNodes.peekFirst().getChildren().add(node);
                     this.conditionNodes.offerFirst(node);
                     break;
-                case OTHERWISE_TAG:
+                case Tags.OTHERWISE_TAG:
                     if (this.areBranchConditionNodesValid()
                             && !this.conditionNodes.peekFirst().hasChildEvaluatedToTrue()) {
                         node = new ConditionNode(ConditionTag.OTHERWISE, true);
@@ -238,7 +218,7 @@ public class ConfigXmlReader {
                     }
                     this.conditionNodes.offerFirst(node);
                     break;
-                case IF_TAG:
+                case Tags.IF_TAG:
                     if (this.areBranchConditionNodesValid()) {
                         test = attributes.getValue("test");
                         result = processTest(test);
@@ -249,34 +229,43 @@ public class ConfigXmlReader {
                     }
                     this.conditionNodes.offerFirst(node);
                     break;
-                case CONFIGURATION_TAG:
+                case Tags.CONFIGURATION_TAG:
                     if (this.areBranchConditionNodesValid()) {
                         processConfigTag(attributes);
                     }
                     break;
-                case ENTRY_TAG:
+                case Tags.ENTRY_TAG:
                     if (this.areBranchConditionNodesValid()) {
                         this.metadata.put(attributes.getValue("key"), attributes.getValue("value"));
                     }
                     break;
-                case REPOSITORY_TAG:
+                case Tags.REPOSITORY_TAG:
                     if (this.areBranchConditionNodesValid()) {
                         var name = processValue(attributes.getValue("name"));
                         var url = processValue(attributes.getValue("url"));
-                        repositories.add(new DefaultRepositoryDescriptor(name, url));
+                        repositories.add(new DefaultRepositoryConfig(name, url));
                     }
                     break;
-                case MODULE_TAG:
+                case Tags.PARENT_TAG:
+                    if (this.areBranchConditionNodesValid()) {
+                        var name = processValue(attributes.getValue("name"));
+                        var v = processValue(attributes.getValue("version"));
+                        var m = processValue(attributes.getValue("versionMatch"));
+                        parents.add(new DefaultParentConfig(name, Version.of(v),
+                                VersionMatch.valueOf(m.toUpperCase())));
+                    }
+                    break;
+                case Tags.MODULE_TAG:
                     if (this.areBranchConditionNodesValid()) {
                         processModuleTag(attributes);
                     }
                     break;
-                case DIRECTIVES_TAG:
+                case Tags.DIRECTIVES_TAG:
                     if (this.areBranchConditionNodesValid()) {
                         this.directives = new ArrayList<>();
                     }
                     break;
-                case DIRECTIVE_TAG:
+                case Tags.DIRECTIVE_TAG:
                     if (this.areBranchConditionNodesValid()) {
                         var dType = processValue(attributes.getValue("type"));
                         dType = camelCaseToScreamingSnakeCase(dType);
@@ -288,7 +277,7 @@ public class ConfigXmlReader {
                         this.directives.add(directive);
                     }
                     break;
-                case PROPERTY_TAG:
+                case Tags.PROPERTY_TAG:
                     if (this.areBranchConditionNodesValid()) {
                         var name = attributes.getValue("name");
                         var value = convert(attributes.getValue("value"));
@@ -302,19 +291,19 @@ public class ConfigXmlReader {
         public void endElement(String uri, String localName, String qName) throws SAXException {
             ConditionNode condition = null;
             switch (qName) {
-                case CHOOSE_TAG:
+                case Tags.CHOOSE_TAG:
                     condition = this.conditionNodes.removeFirst();
                     break;
-                case WHEN_TAG:
+                case Tags.WHEN_TAG:
                     condition = this.conditionNodes.removeFirst();
                     break;
-                case OTHERWISE_TAG:
+                case Tags.OTHERWISE_TAG:
                     condition = this.conditionNodes.removeFirst();
                     break;
-                case IF_TAG:
+                case Tags.IF_TAG:
                     condition = this.conditionNodes.removeFirst();
                     break;
-                case DIRECTIVES_TAG:
+                case Tags.DIRECTIVES_TAG:
                     if (!this.directives.isEmpty()) {
                         this.module.setDirectives(Collections.unmodifiableList(this.directives));
                     }
@@ -355,13 +344,11 @@ public class ConfigXmlReader {
                 throw new SAXException("The version of the component was not set");
             }
             var componentType = processValue(attributes.getValue("type"));
-            if (componentType == null) {
-                throw new SAXException("The type of the component was not set");
-            }
-            this.config = new DefaultComponentConfig(title, name, Version.parse(version), componentType);
-            config.setMetadata(metadata);
-            config.setRepositories(repositories);
-            config.setModules(modules);
+            this.config = new DefaultComponentConfig(title, name, Version.of(version), componentType);
+            config.setMetadata(Collections.unmodifiableMap(metadata));
+            config.setRepositories(Collections.unmodifiableList(repositories));
+            config.setParents(Collections.unmodifiableList(parents));
+            config.setModules(Collections.unmodifiableList(modules));
         }
 
         private void processModuleTag(Attributes attributes) {
@@ -370,10 +357,10 @@ public class ConfigXmlReader {
             if (t != null) {
                 moduleType = ModuleType.valueOf(t.trim().toUpperCase());
             }
-            this.module = new DefaultModuleDescriptor(
+            this.module = new DefaultModuleConfig(
                     processValue(attributes.getValue("groupId")),
                     processValue(attributes.getValue("artifactId")),
-                    processValue(attributes.getValue("version")),
+                    Version.of(processValue(attributes.getValue("version"))),
                     processValue(attributes.getValue("classifier")),
                     moduleType);
             var activeStr = processValue(attributes.getValue("active"));

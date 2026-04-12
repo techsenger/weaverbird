@@ -16,6 +16,7 @@
 
 package com.techsenger.alpha.core.api.module;
 
+import com.techsenger.toolkit.core.version.Version;
 import java.util.Objects;
 
 /**
@@ -28,13 +29,13 @@ public class DefaultModuleArtifact implements ModuleArtifact {
 
     private final String artifactId;
 
-    private final String version;
+    private final Version version;
 
     private final String classifier;
 
     private final ModuleType type;
 
-    public DefaultModuleArtifact(String groupId, String artifactId, String version, String classifier,
+    public DefaultModuleArtifact(String groupId, String artifactId, Version version, String classifier,
             ModuleType type) {
         this.groupId = groupId;
         this.artifactId = artifactId;
@@ -54,7 +55,7 @@ public class DefaultModuleArtifact implements ModuleArtifact {
     }
 
     @Override
-    public String getVersion() {
+    public Version getVersion() {
         return version;
     }
 
@@ -109,25 +110,6 @@ public class DefaultModuleArtifact implements ModuleArtifact {
         }
         //activity is not considered!
         return true;
-    }
-
-    @Override
-    public String getFileName() {
-        String stringType = "jar";
-        if (this.type != null) {
-            stringType = this.type.toString().toLowerCase();
-        }
-        String clsfr = "";
-        if (this.classifier != null) {
-            clsfr = "-" + this.classifier;
-        }
-        var fileName = this.artifactId
-                + "-"
-                + version
-                + clsfr
-                + "."
-                + stringType;
-        return fileName;
     }
 
     @Override

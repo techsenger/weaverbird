@@ -16,10 +16,11 @@
 
 package com.techsenger.alpha.core.impl.module;
 
-import com.techsenger.alpha.core.api.module.ModuleDescriptor;
+import com.techsenger.alpha.core.api.module.DefaultModuleArtifact;
+import com.techsenger.alpha.core.api.module.ModuleConfig;
 import com.techsenger.alpha.core.api.module.ModuleDirective;
 import com.techsenger.alpha.core.api.module.ModuleType;
-import com.techsenger.alpha.core.api.module.DefaultModuleArtifact;
+import com.techsenger.toolkit.core.version.Version;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -27,7 +28,7 @@ import java.util.List;
  *
  * @author Pavel Castornii
  */
-public final class DefaultModuleDescriptor extends DefaultModuleArtifact implements ModuleDescriptor {
+public final class DefaultModuleConfig extends DefaultModuleArtifact implements ModuleConfig {
 
     /**
      * If activator = "enabled" this is true if activator = "disabled" this is false.
@@ -40,7 +41,7 @@ public final class DefaultModuleDescriptor extends DefaultModuleArtifact impleme
 
     private boolean nativeAccessEnabled = false;
 
-    public DefaultModuleDescriptor(String groupId, String artifactId, String version, String classifier,
+    public DefaultModuleConfig(String groupId, String artifactId, Version version, String classifier,
             ModuleType type) {
         super(groupId, artifactId, version, classifier, type);
     }
@@ -52,15 +53,6 @@ public final class DefaultModuleDescriptor extends DefaultModuleArtifact impleme
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    @Override
-    public Path getResolvedPath() {
-        return resolvedPath;
-    }
-
-    public void setResolvedPath(Path resolvedPath) {
-        this.resolvedPath = resolvedPath;
     }
 
     @Override

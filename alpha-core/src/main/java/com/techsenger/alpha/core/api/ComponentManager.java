@@ -79,6 +79,16 @@ public interface ComponentManager {
      */
     ComponentConfig addComponent(String xmlConfig) throws ComponentException;
 
+
+    /**
+     * Adds a component with the specified configuration and writes its XML to disk.
+     *
+     * @param config
+     * @throws ComponentException
+     * @return the xml config of the component
+     */
+    String addComponent(ComponentConfig config) throws ComponentException;
+
     /**
      * Resolves a component by providing all its modules presence in repo.
      *
@@ -290,6 +300,16 @@ public interface ComponentManager {
      * @return the config of the component
      */
     ComponentConfig installComponent(String xmlConfig, MessagePrinter printer) throws ComponentException;
+
+    /**
+     * Installs a component (adds and resolves it).
+     *
+     * @param config the config of the component
+     * @param printer
+     * @throws ComponentException
+     * @return the xml config of the component
+     */
+    String installComponent(ComponentConfig config, MessagePrinter printer) throws ComponentException;
 
     /**
      * Starts a component (deploys and activates it).

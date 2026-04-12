@@ -42,8 +42,8 @@ public final class GuiDemo {
         var settings = FrameworkSettings.builder()
                 .repoChecksumEnabled(false)
                 .application(app -> app
-                        .name("gui-demo")
-                        .version(Version.parse("1.0.0")))
+                    .name("gui-demo")
+                    .version(Version.of("1.0.0")))
                 .build();
         var framework = FrameworkFactory.create(settings, rootPath);
         var componentManager = framework.getComponentManager();

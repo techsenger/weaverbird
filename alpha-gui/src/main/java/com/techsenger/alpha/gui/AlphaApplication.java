@@ -32,6 +32,7 @@ import com.techsenger.tabshell.material.theme.AtlantaFxTheme;
 import com.techsenger.toolkit.fx.color.ColorUtils;
 import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -64,8 +65,7 @@ public class AlphaApplication extends Application {
         var shellView = new DefaultShellFxView<>(this, stage, stylesheets);
         var context = new DefaultShellContext(createSettings(), new InMemoryHistoryManager(), getHostServices());
         var shellPresenter = new DefaultShellPresenter<>(shellView, context);
-        shellPresenter.setOnClose(() ->
-                Thread.startVirtualThread(() -> ModuleActivatorProvider.getFramework().shutdown()));
+        shellPresenter.setOnClose(() -> Platform.exit());
 
         shellPresenter.initialize();
         shellView.setTitle("Alpha Framework");

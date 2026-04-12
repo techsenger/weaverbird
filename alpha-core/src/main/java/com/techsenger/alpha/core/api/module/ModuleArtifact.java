@@ -16,6 +16,7 @@
 
 package com.techsenger.alpha.core.api.module;
 
+import com.techsenger.toolkit.core.version.Version;
 import java.io.Serializable;
 
 /**
@@ -23,6 +24,24 @@ import java.io.Serializable;
  * @author Pavel Castornii
  */
 public interface ModuleArtifact extends Serializable {
+
+    static String resolveFileName(ModuleArtifact artifact) {
+        String stringType = "jar";
+        if (artifact.getType() != null) {
+            stringType = artifact.getType().toString().toLowerCase();
+        }
+        String clsfr = "";
+        if (artifact.getClassifier() != null) {
+            clsfr = "-" + artifact.getClassifier();
+        }
+        var fileName = artifact.getArtifactId()
+                + "-"
+                + artifact.getVersion()
+                + clsfr
+                + "."
+                + stringType;
+        return fileName;
+    }
 
     /**
      * Returns group id.
@@ -40,7 +59,7 @@ public interface ModuleArtifact extends Serializable {
      * Returns version.
      * @return
      */
-    String getVersion();
+    Version getVersion();
 
     /**
      * Sometimes modules needs classifier in repo, for example, 'linux' classifier for javafx modules.
@@ -53,10 +72,4 @@ public interface ModuleArtifact extends Serializable {
      * @return
      */
     ModuleType getType();
-
-    /**
-     * This method returns artifactId-version.type, if type is null, then jar is used.
-     * @return
-     */
-    String getFileName();
 }

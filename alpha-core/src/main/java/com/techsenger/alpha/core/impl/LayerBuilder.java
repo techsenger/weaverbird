@@ -25,7 +25,6 @@ import com.techsenger.alpha.core.api.module.ModuleDirective;
 import com.techsenger.alpha.core.api.module.ModuleType;
 import com.techsenger.alpha.core.api.module.ResolvedModuleDirective;
 import com.techsenger.alpha.core.impl.component.DefaultComponent;
-import com.techsenger.alpha.core.impl.module.DefaultModuleDescriptor;
 import com.techsenger.alpha.core.impl.module.DefaultResolvedModuleDirective;
 import com.techsenger.alpha.core.impl.war.WarModuleFinder;
 import com.techsenger.toolkit.core.jpms.ModuleUtils;
@@ -36,6 +35,7 @@ import java.lang.module.ModuleReference;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -154,17 +154,17 @@ class LayerBuilder {
      */
     private void findJarAndWarModulePaths(final DefaultComponent component, final List<Path> jarModulePaths,
             final List<Path> warModulePaths) {
-        component.getDescriptor().getConfig().getModules().forEach(descriptor -> {
-            if (descriptor.getResolvedPath() == null) {
-                ((DefaultModuleDescriptor) descriptor).setResolvedPath(
-                        framework.getPathManager().getPathResolver().resolveModule(descriptor));
-            }
-            if (descriptor.getType() == null || descriptor.getType() == ModuleType.JAR) {
-                jarModulePaths.add(descriptor.getResolvedPath().toAbsolutePath());
-            } else if (descriptor.getType() == ModuleType.WAR) {
-                warModulePaths.add(descriptor.getResolvedPath().toAbsolutePath());
+        var modulePaths = new ArrayList<Path>();
+        component.getDescriptor().setModulePaths(Collections.unmodifiableList(modulePaths));
+        component.getDescriptor().getConfig().getModules().forEach(module -> {
+            var path = framework.getPathManager() .getPathResolver().resolveModule(module);
+            modulePaths.add(path);
+            if (module.getType() == null || module.getType() == ModuleType.JAR) {
+                jarModulePaths.add(path.toAbsolutePath());
+            } else if (module.getType() == ModuleType.WAR) {
+                warModulePaths.add(path.toAbsolutePath());
             } else {
-                throw new IllegalArgumentException("Unknown module type=" + descriptor.getType());
+                throw new IllegalArgumentException("Unknown module type=" + module.getType());
             }
         });
     }

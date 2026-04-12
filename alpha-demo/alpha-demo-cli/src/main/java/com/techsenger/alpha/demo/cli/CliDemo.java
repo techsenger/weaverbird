@@ -43,8 +43,8 @@ public final class CliDemo {
         var settings = FrameworkSettings.builder()
                 .repoChecksumEnabled(false)
                 .application(app -> app
-                        .name("cli-demo")
-                        .version(Version.parse("1.0.0")))
+                    .name("cli-demo")
+                    .version(Version.of("1.0.0")))
                 .build();
 
         var framework = FrameworkFactory.create(settings, rootPath);

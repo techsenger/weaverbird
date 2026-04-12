@@ -24,8 +24,6 @@ final class Xml {
 
     public static final String REGISTRY_TAG = "Registry";
 
-    public static final String SUCCESSFUL_ATTRIBUTE = "successful";
-
     public static final String ADDED_COMPONENTS_TAG = "AddedComponents";
 
     public static final String RESOLVED_COMPONENTS_TAG = "ResolvedComponents";

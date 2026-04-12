@@ -17,10 +17,10 @@
 package com.techsenger.alpha.core.impl;
 
 import com.techsenger.alpha.core.api.Framework;
-import com.techsenger.alpha.core.api.component.ComponentConfig;
+import com.techsenger.alpha.core.api.component.ComponentDescriptor;
+import com.techsenger.alpha.core.api.module.ModuleArtifact;
 import com.techsenger.alpha.core.impl.component.DefaultComponent;
 import com.techsenger.alpha.core.impl.module.DefaultModuleContext;
-import com.techsenger.alpha.core.impl.module.DefaultModuleDescriptor;
 import com.techsenger.alpha.core.spi.module.ModuleActivator;
 import com.techsenger.alpha.core.spi.module.ModuleContext;
 import com.techsenger.toolkit.core.jpms.ModuleUtils;
@@ -57,22 +57,21 @@ class ModuleActivatorManager {
         List<ModuleActivator> orderedActivators;
         Map<Module, ModuleContext> moduleContextsByModule = new HashMap<>();
         var activatorsByModule = findActivators(layer);
-        for (var moduleDescriptor : component.getDescriptor().getConfig().getModules()) {
+        for (var moduleConfig : component.getDescriptor().getConfig().getModules()) {
             //module context we create only for those modules which activator is enabled.
-            if (moduleDescriptor.isActive()) {
-                var module = component.getModule(moduleDescriptor);
+            if (moduleConfig.isActive()) {
+                var module = component.getModule(moduleConfig);
                 moduleContextsByModule.put(module, new DefaultModuleContext(framework, component));
                 ModuleActivator activator = activatorsByModule.get(module);
                 if (activator != null) {
                     unorderedActivators.add(activator);
                 } else {
-                    throw new Exception("Module " + moduleDescriptor.getFileName()
+                    throw new Exception("Module " + ModuleArtifact.resolveFileName(moduleConfig)
                             + " has no activator but it is active in component configuration");
                 }
             }
         }
-        orderedActivators = sortActivatorsByModuleOrder(unorderedActivators,
-                component.getDescriptor().getConfig(), layer);
+        orderedActivators = sortActivatorsByModuleOrder(unorderedActivators, component.getDescriptor(), layer);
         //we need to start activator with their layer classloader, but not of the alpha
         for (ModuleActivator activator : orderedActivators) {
             Module activatorModule = activator.getClass().getModule();
@@ -112,7 +111,7 @@ class ModuleActivatorManager {
      * @return ordered activators or empty list
      */
     private List<ModuleActivator> sortActivatorsByModuleOrder(final List<ModuleActivator> activators,
-            final ComponentConfig config, final ModuleLayer layer) throws IOException {
+            final ComponentDescriptor component, final ModuleLayer layer) throws IOException {
         //we use here module name.
         List<ModuleActivator> result = new ArrayList<>();
         Map<String, ModuleActivator> moduleActivatorsByModuleName = new HashMap<>();
@@ -123,15 +122,13 @@ class ModuleActivatorManager {
         for (ResolvedModule module : layer.configuration().modules()) {
             modulePathsByName.put(module.name(), ModuleUtils.getPath(module));
         }
-        for (var m : config.getModules()) {
+
+        for (var i = 0; i < component.getConfig().getModules().size(); i++) {
+            var m = component.getConfig().getModules().get(i);
+            var resolvedPath = component.getModulePaths().get(i);
             if (m.isActive()) {
-                //module path using module descriptor
-                if (m.getResolvedPath() == null) {
-                    ((DefaultModuleDescriptor) m).setResolvedPath(framework.getPathManager()
-                            .getPathResolver().resolveModule(m));
-                }
                 for (var entry : modulePathsByName.entrySet()) {
-                    if (Files.isSameFile(m.getResolvedPath(), entry.getValue())) {
+                    if (Files.isSameFile(resolvedPath, entry.getValue())) {
                         //if same path, we can match module descriptor to jpms module.
                         ModuleActivator activator = moduleActivatorsByModuleName.get(entry.getKey());
                         if (activator != null) {

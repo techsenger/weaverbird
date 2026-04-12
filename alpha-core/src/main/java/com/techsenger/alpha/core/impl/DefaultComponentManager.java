@@ -26,14 +26,16 @@ import com.techsenger.alpha.core.api.component.ComponentConfigUtils;
 import com.techsenger.alpha.core.api.component.ComponentDescriptor;
 import com.techsenger.alpha.core.api.component.ComponentException;
 import com.techsenger.alpha.core.api.component.ComponentObserver;
+import com.techsenger.alpha.core.api.component.ParentConfig;
 import com.techsenger.alpha.core.api.component.UnknownComponentException;
 import com.techsenger.alpha.core.api.message.MessagePrinter;
 import com.techsenger.alpha.core.api.module.ModuleArtifact;
-import com.techsenger.alpha.core.api.module.ModuleDescriptor;
+import com.techsenger.alpha.core.api.module.ModuleConfig;
 import com.techsenger.alpha.core.api.registry.ComponentEntry;
 import com.techsenger.alpha.core.api.state.ComponentsState;
 import com.techsenger.alpha.core.api.state.DefaultComponentsState;
 import com.techsenger.alpha.core.impl.component.ConfigXmlReader;
+import com.techsenger.alpha.core.impl.component.ConfigXmlWriter;
 import com.techsenger.alpha.core.impl.component.DefaultComponent;
 import com.techsenger.alpha.core.impl.component.DefaultComponentDescriptor;
 import com.techsenger.alpha.core.impl.registry.DefaultRegistry;
@@ -42,6 +44,7 @@ import com.techsenger.toolkit.core.version.Version;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -147,26 +150,23 @@ public class DefaultComponentManager implements ComponentManager {
         } catch (Exception ex) {
             throw new ComponentException("Error reading provided XML configuration", ex);
         }
-        if (getRegistry().isComponentAdded(config.getName(), config.getVersion())) {
-            throw new ComponentException(StringUtils.format("Component {}{}{} is already added",
-                    config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion()));
-        }
-        var finalConfig = config;
-        notifyObservers((o) -> o.onAdding(finalConfig), null);
-        var fileManager = new ComponentFileManager(framework.getPathManager(), this.configInfo, this.configUtils);
-        try {
-            fileManager.addComponent(config, xmlConfig);
-        } catch (Exception ex) {
-            throw new ComponentException(StringUtils.format("Error adding component {}{}{} with XML configuration",
-                    config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion()), ex);
-        }
-        getRegistry().getModifiableAddedComponents().add(new ComponentEntry(config));
-        getRegistry().save();
-        notifyObservers((o) -> o.onAdded(finalConfig), null);
-        logger.info("Added component {}{}{} with XML configuration; total added components: {}", config.getName(),
-                Constants.NAME_VERSION_SEPARATOR, config.getVersion(),
-                getRegistry().getModifiableAddedComponents().size());
+        addComponent(config, xmlConfig);
         return config;
+    }
+
+    @Override
+    public synchronized String addComponent(ComponentConfig config) throws ComponentException {
+        ConfigXmlWriter xmlWriter = new ConfigXmlWriter();
+        String xmlConfig = null;
+        try {
+            var writer = new StringWriter();
+            xmlWriter.write(config, writer);
+            xmlConfig = writer.toString();
+        } catch (Exception ex) {
+            throw new ComponentException("Error writing provided configuration", ex);
+        }
+        addComponent(config, xmlConfig);
+        return xmlConfig;
     }
 
     @Override
@@ -247,6 +247,7 @@ public class DefaultComponentManager implements ComponentManager {
                 parentDescriptors.add(provideDescriptor(parentAlias));
             }
         }
+        matchParents(parentDescriptors, config.getParents());
         final DefaultComponentDescriptor descriptor = new DefaultComponentDescriptor(this, config, alias,
                 ++componentIdCounter, parentDescriptors, useParentClassLoader);
         DefaultComponent component = new DefaultComponent(descriptor);
@@ -269,6 +270,22 @@ public class DefaultComponentManager implements ComponentManager {
             logger.error("Error deploying component {}{}{}", config.getName(), Constants.NAME_VERSION_SEPARATOR,
                     config.getVersion(), ex);
             return null;
+        }
+    }
+
+    private void matchParents(List<DefaultComponentDescriptor> descriptors, List<ParentConfig> configs)
+            throws ComponentException {
+        if (descriptors.isEmpty() && configs.isEmpty()) {
+            return;
+        }
+        if (descriptors.size() != configs.size()) {
+            throw new ComponentException("The provided parents don't match the parents in the configuration");
+        }
+        var providedConfigs = descriptors.stream().map(d -> d.getConfig()).toList();
+        var notMatched = ConfigMatcher.findFirstUnsatisfied(providedConfigs, configs);
+        if (notMatched != null) {
+            throw new ComponentException(StringUtils.format("Didn't find parent - {}{}{} " + notMatched.getName(),
+                    Constants.NAME_VERSION_SEPARATOR, notMatched.getVersion()));
         }
     }
 
@@ -436,13 +453,13 @@ public class DefaultComponentManager implements ComponentManager {
             }
         }
         //now we need to find the modules that are used by other installed components
-        Set<ModuleDescriptor> otherConfigModules = new HashSet<>();
+        Set<ModuleConfig> otherConfigModules = new HashSet<>();
         for (var otherConfig : otherResolvedConfigs) {
             for (var module : otherConfig.getModules()) {
                 otherConfigModules.add(module);
             }
         }
-        List<ModuleDescriptor> unresolvedModules = new ArrayList<>();
+        List<ModuleConfig> unresolvedModules = new ArrayList<>();
         //now we can find modules that must be uninstalled
         for (var module : config.getModules()) {
             if (!otherConfigModules.contains(module)) {
@@ -505,6 +522,13 @@ public class DefaultComponentManager implements ComponentManager {
         var config = addComponent(xmlConfig);
         resolveComponent(config, printer);
         return config;
+    }
+
+    @Override
+    public String installComponent(ComponentConfig config, MessagePrinter printer) throws ComponentException {
+        var xmlConfig = addComponent(config);
+        resolveComponent(config, printer);
+        return xmlConfig;
     }
 
     @Override
@@ -667,6 +691,28 @@ public class DefaultComponentManager implements ComponentManager {
 
     public synchronized void removeListener(ComponentListener listener) {
         this.listeners.remove(listener);
+    }
+
+    private void addComponent(ComponentConfig config, String xmlConfig) throws ComponentException {
+        if (getRegistry().isComponentAdded(config.getName(), config.getVersion())) {
+            throw new ComponentException(StringUtils.format("Component {}{}{} is already added",
+                    config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion()));
+        }
+        var finalConfig = config;
+        notifyObservers((o) -> o.onAdding(finalConfig), null);
+        var fileManager = new ComponentFileManager(framework.getPathManager(), this.configInfo, this.configUtils);
+        try {
+            fileManager.addComponent(config, xmlConfig);
+        } catch (Exception ex) {
+            throw new ComponentException(StringUtils.format("Error adding component {}{}{} with XML configuration",
+                    config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion()), ex);
+        }
+        getRegistry().getModifiableAddedComponents().add(new ComponentEntry(config));
+        getRegistry().save();
+        notifyObservers((o) -> o.onAdded(finalConfig), null);
+        logger.info("Added component {}{}{} with XML configuration; total added components: {}", config.getName(),
+                Constants.NAME_VERSION_SEPARATOR, config.getVersion(),
+                getRegistry().getModifiableAddedComponents().size());
     }
 
     /**

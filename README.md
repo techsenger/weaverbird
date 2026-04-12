@@ -50,12 +50,11 @@ include:
 Techsenger Alpha is a framework designed to work with module layers. The framework resides in the boot layer and handles
 all the work of managing the other layers. To facilitate this, the concept of a component is introduced.
 
-A component is a logical part of the system that can be dynamically added or removed. Each component is deployed in
-a separate module layer and has a clearly defined lifecycle. The configuration of a component is specified via an XML
-file (with plans to add a ConfigBuilder), which describes the component's modules (groupId, artifactId, version),
-module directives (opens, reads, exports, etc.), repositories from which modules can be loaded, and other information.
-For flexibility, the XML configuration supports properties, the `if` and `choose-when` constructs and EL
-(Expression Language).
+A component is a logical part of the system that can be dynamically added or removed. Each component is deployed in a
+separate module layer and has a clearly defined lifecycle. The configuration of a component is specified via a `Builder`
+or an XML, which describes the component's modules (groupId, artifactId, version), module directives
+(opens, reads, exports, etc.), repositories from which modules can be loaded, and other related information.
+For flexibility, the XML configuration supports properties, if and choose-when constructs, and EL (Expression Language).
 
 All loaded modules are stored in the framework's internal repository, which is by default a Maven repository.
 
@@ -277,11 +276,33 @@ configuration. During deactivation, they are called in reverse order (the last a
 
 #### Configuration <a name="usage-component-config"></a>
 
-At the moment, the configuration is set using an XML file. In the future, `ConfigBuilder` is planned to be added.
+The configuration can be set using a `Builder` or an XML.
 
-A configuration template with all supported tags:
-
+```java
+var config = ComponentConfig.builder()
+        .title("The Best Foo")
+        .name("foo")
+        .version(Version.of("1.0.0"))
+        .metadata("License", "Apache 2")
+        .repositories(
+            r -> r.name("local").url("file://...."),
+            r -> r.name("central").url("https://repo1.maven.org/maven2/")
+        )
+        .parents(
+            p -> p.name(...).version(...).versionMatch(VersionMatch.MAJOR)
+        )
+        .modules(
+            m -> m.groupId(...).artifactId(....).version(...).classifier(fxClsfr).active(...)
+                .directives(
+                    d -> d.type(...).pkg(...).layer(...).module(...)
+                )
+        )
+        .build();
 ```
+
+A XML configuration template with all supported tags:
+
+```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <Configuration title="The Best Foo" name="foo" version="1.0.0" type="notBar">
     <Metadata>
@@ -289,8 +310,13 @@ A configuration template with all supported tags:
     </Metadata>
 
     <Repositories>
+        <Repository name="local" url="file://...."/>
         <Repository name="central" url="https://repo1.maven.org/maven2/"/>
     </Repositories>
+
+    <Parents>
+        <Parent name="... " version="..." versionMatch="major/minor/patch"/>
+    </Parents>
 
     <Choose>
         <When test="${info['os.family'] == 'linux'}">

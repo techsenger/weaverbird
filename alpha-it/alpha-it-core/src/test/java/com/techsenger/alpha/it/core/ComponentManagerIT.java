@@ -76,8 +76,8 @@ public class ComponentManagerIT {
         var settings = FrameworkSettings.builder()
                 .repoChecksumEnabled(false)
                 .application(app -> app
-                        .name("core-test")
-                        .version(Version.parse("1.0.0")))
+                    .name("core-test")
+                    .version(Version.of("1.0.0")))
                 .build();
         framework = FrameworkFactory.create(settings, tempFwPath);
         componentManager = framework.getComponentManager();

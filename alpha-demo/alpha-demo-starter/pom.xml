@@ -53,6 +53,24 @@
                             </modules>
                         </configuration>
                     </execution>
+                    <!-- after build without clean for dev purposes -->
+                    <execution>
+                        <id>update</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                        <configuration>
+                            <path>${project.build.directory}/framework</path>
+                            <modules>
+                                <module>
+                                    <groupId>com.techsenger.alpha.demo</groupId>
+                                    <artifactId>alpha-demo-starter</artifactId>
+                                    <version>${project.version}</version>
+                                </module>
+                            </modules>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

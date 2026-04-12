@@ -19,8 +19,10 @@ package com.techsenger.alpha.core.impl.component;
 import com.techsenger.alpha.core.api.ComponentManager;
 import com.techsenger.alpha.core.api.component.ComponentConfig;
 import com.techsenger.alpha.core.api.component.ComponentDescriptor;
+import com.techsenger.alpha.core.api.module.ModuleType;
 import com.techsenger.toolkit.core.Recursive;
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -47,6 +49,10 @@ public class DefaultComponentDescriptor implements Serializable, ComponentDescri
     private final List<DefaultComponentDescriptor> parents;
 
     private final boolean parentClassLoaderUsed;
+
+    private Boolean containsWarModules = null;
+
+    private List<Path> modulePaths;
 
     public DefaultComponentDescriptor(ComponentManager componentManager, ComponentConfig config, String alias,
             Integer id, List<DefaultComponentDescriptor> parents, boolean parentClassLoaderUsed) {
@@ -145,5 +151,28 @@ public class DefaultComponentDescriptor implements Serializable, ComponentDescri
 
     public void setActivated(boolean activated) {
         this.activated = activated;
+    }
+
+    @Override
+    public boolean containsWarModules() {
+        if (this.containsWarModules != null) {
+            return this.containsWarModules;
+        }
+        this.containsWarModules = false;
+        for (var m : this.config.getModules()) {
+            if (m.getType() == ModuleType.WAR) {
+                this.containsWarModules = true;
+                break;
+            }
+        }
+        return this.containsWarModules;
+    }
+
+    public List<Path> getModulePaths() {
+        return modulePaths;
+    }
+
+    public void setModulePaths(List<Path> modulePaths) {
+        this.modulePaths = modulePaths;
     }
 }
