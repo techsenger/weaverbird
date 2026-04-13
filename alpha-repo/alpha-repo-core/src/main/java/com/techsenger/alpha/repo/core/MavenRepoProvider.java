@@ -26,6 +26,7 @@ import com.techsenger.reposium.core.ArtifactDescriptor;
 import com.techsenger.reposium.core.DefaultArtifactDescriptor;
 import com.techsenger.reposium.core.MavenRepo;
 import com.techsenger.toolkit.core.SingletonFactory;
+import com.techsenger.toolkit.core.version.Version;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +109,7 @@ public class MavenRepoProvider implements RepoService {
         return new DefaultArtifactDescriptor(
                         artifactor.getGroupId(),
                         artifactor.getArtifactId(),
-                        artifactor.getVersion(),
+                        artifactor.getVersion().toString(),
                         artifactor.getClassifier(),
                         artifactor.getType().toString().toLowerCase());
     }
@@ -117,7 +118,7 @@ public class MavenRepoProvider implements RepoService {
         return new DefaultModuleArtifact(
                         descriptor.getGroupId(),
                         descriptor.getArtifactId(),
-                        descriptor.getVersion(),
+                        Version.of(descriptor.getVersion()),
                         descriptor.getClassifier(),
                         ModuleType.valueOf(descriptor.getType().toUpperCase()));
     }
