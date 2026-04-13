@@ -21,7 +21,6 @@ import com.techsenger.alpha.core.api.FrameworkFactory;
 import com.techsenger.alpha.core.api.FrameworkSettings;
 import com.techsenger.alpha.core.api.SystemProperties;
 import com.techsenger.alpha.core.api.component.ComponentConfig;
-import com.techsenger.alpha.core.api.component.VersionMatch;
 import com.techsenger.alpha.core.api.message.SystemMessagePrinter;
 import com.techsenger.toolkit.core.version.Version;
 import java.nio.file.Paths;
@@ -50,9 +49,6 @@ public final class StarterDemo {
             .repositories(
                 r -> r.name("central").url("https://repo1.maven.org/maven2")
             )
-            .parents(
-                p -> p.name(APP_NAME).version(APP_VERSION).versionMatch(VersionMatch.PATCH)
-            )
             .modules(
                 m -> m.groupId("com.google.code.gson").artifactId("gson").version(Version.of("2.10"))
             )
@@ -64,9 +60,6 @@ public final class StarterDemo {
                 <Repositories>
                     <Repository name="central" url="https://repo1.maven.org/maven2/"/>
                 </Repositories>
-                <Parents>
-                    <Parent name="starter-demo" version="1.0.0" versionMatch="patch"/>
-                </Parents>
                 <Modules>
                     <Module groupId="com.google.code.gson" artifactId="gson" version="2.10"/>
                 </Modules>

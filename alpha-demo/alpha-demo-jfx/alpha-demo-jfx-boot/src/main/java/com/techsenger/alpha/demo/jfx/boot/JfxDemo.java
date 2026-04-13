@@ -20,7 +20,6 @@ import com.techsenger.alpha.core.api.FrameworkFactory;
 import com.techsenger.alpha.core.api.FrameworkSettings;
 import com.techsenger.alpha.core.api.SystemProperties;
 import com.techsenger.alpha.core.api.component.ComponentConfig;
-import com.techsenger.alpha.core.api.component.VersionMatch;
 import com.techsenger.alpha.core.api.message.SystemMessagePrinter;
 import com.techsenger.toolkit.core.PropertiesUtils;
 import com.techsenger.toolkit.core.os.OperatingSystem;
@@ -83,9 +82,6 @@ public final class JfxDemo {
                 .repositories(
                     r -> r.name("local").url(projectProperties.getProperty("localRepo")),
                     r -> r.name("central").url(CENTRAL_REPO)
-                )
-                .parents(
-                    p -> p.name(APP_NAME).version(APP_VERSION).versionMatch(VersionMatch.PATCH)
                 )
                 .modules(
                     m -> m.groupId("org.openjfx").artifactId("javafx-base")
