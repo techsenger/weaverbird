@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.core.spi.repo;
 
-import com.techsenger.weaverbird.core.api.message.MessagePrinter;
+import com.techsenger.weaverbird.core.api.module.ArtifactEventListener;
 import com.techsenger.weaverbird.core.api.module.ModuleArtifact;
 import java.io.IOException;
 import java.util.List;
@@ -31,34 +31,41 @@ public interface RepoService {
     /**
      * Resolves artifact in local repo using remote repos.
      *
+     * @param remoteReposByName
      * @param artifact
+     * @param listener
      * @return true if was installed and false, if not.
      */
-    boolean resolve(Map<String, String> remoteReposByName, ModuleArtifact artifact, MessagePrinter printer);
+    boolean resolve(Map<String, String> remoteReposByName, ModuleArtifact artifact, ArtifactEventListener listener);
 
     /**
      * Resolves artifacts in local repo using remote repos.
      *
+     * @param remoteReposByName
      * @param artifacts
+     * @param listener
      * @return true if was installed and false, if not.
      */
-    boolean resolve(Map<String, String> remoteReposByName, List<ModuleArtifact> artifacts, MessagePrinter printer);
+    boolean resolve(Map<String, String> remoteReposByName, List<ModuleArtifact> artifacts,
+            ArtifactEventListener listener);
+
     /**
      * Unresolves/deletes artifact in local repo.
      *
      * @param artifact
-     * @param printer
-     * @return true if was uninstalled and false, if not.
+     * @param listener
+     * @return true if was deleted and false, if not.
      */
-    boolean unresolve(ModuleArtifact artifact, MessagePrinter printer);
+    boolean unresolve(ModuleArtifact artifact, ArtifactEventListener listener);
 
     /**
      * Unresolves/deletes artifacts in local repo.
      *
-     * @param printer
-     * @return true if was uninstalled and false, if not.
+     * @param artifacts
+     * @param listener
+     * @return true if was deleted and false, if not.
      */
-    boolean unresolve(List<ModuleArtifact> artifacts, MessagePrinter printer);
+    boolean unresolve(List<ModuleArtifact> artifacts, ArtifactEventListener listener);
 
     /**
      * Scans repo and returns artifacts of all found war/jar files.

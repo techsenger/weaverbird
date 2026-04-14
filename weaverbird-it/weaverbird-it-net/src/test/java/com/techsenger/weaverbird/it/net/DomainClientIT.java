@@ -21,7 +21,6 @@ import com.techsenger.toolkit.http.exceptions.ServerException;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.core.api.FrameworkFactory;
 import com.techsenger.weaverbird.core.api.FrameworkSettings;
-import com.techsenger.weaverbird.core.api.message.LoggerMessagePrinter;
 import com.techsenger.weaverbird.it.shared.ServerSettings;
 import com.techsenger.weaverbird.it.shared.TestUtils;
 import com.techsenger.weaverbird.net.client.api.ClientService;
@@ -89,8 +88,7 @@ public class DomainClientIT {
         framework = FrameworkFactory.create(settings, tempFwPath);
         var componentManager = framework.getComponentManager();
         componentManager.startComponent("weaverbird-repo", framework.getVersion());
-        componentManager.resolveComponent("weaverbird-server", framework.getVersion(),
-                new LoggerMessagePrinter(logger));
+        componentManager.resolveComponent("weaverbird-server", framework.getVersion(), null);
         componentManager.startComponent("weaverbird-server", framework.getVersion());
         clientService = ClientServiceFactory.create();
         sessionInfo = clientService.openSession("test", ServerSettings.HOST, ServerSettings.PORT,

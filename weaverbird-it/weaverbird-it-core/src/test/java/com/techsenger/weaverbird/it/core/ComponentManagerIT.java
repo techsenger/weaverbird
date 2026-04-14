@@ -16,14 +16,16 @@
 
 package com.techsenger.weaverbird.it.core;
 
+import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.ComponentManager;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.core.api.FrameworkFactory;
 import com.techsenger.weaverbird.core.api.FrameworkSettings;
 import com.techsenger.weaverbird.core.api.component.UnknownComponentException;
 import com.techsenger.weaverbird.core.api.message.LoggerMessagePrinter;
+import com.techsenger.weaverbird.core.api.message.MessageArtifactEventListener;
+import com.techsenger.weaverbird.core.api.message.MessagePrinter;
 import com.techsenger.weaverbird.it.shared.TestUtils;
-import com.techsenger.toolkit.core.version.Version;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,6 +52,8 @@ import org.slf4j.LoggerFactory;
 public class ComponentManagerIT {
 
     private static final Logger logger = LoggerFactory.getLogger(ComponentManagerIT.class);
+
+    private static final MessagePrinter printer = new LoggerMessagePrinter(logger);
 
     private static final String SERVER_COMPONENT = "weaverbird-server";
 
@@ -92,38 +96,41 @@ public class ComponentManagerIT {
     @Test
     public void resolveComponent_existingComponent_componentResolvedSuccessfully() throws Exception {
         var resolvedCount = framework.getRegistry().getResolvedComponents().size();
-        componentManager.resolveComponent(SERVER_COMPONENT, framework.getVersion(), new LoggerMessagePrinter(logger));
+        var listener = new MessageArtifactEventListener(printer, true);
+        componentManager.resolveComponent(SERVER_COMPONENT, framework.getVersion(), listener);
         assertThat(framework.getRegistry().getResolvedComponents()).hasSize(resolvedCount + 1);
     }
 
     @Test
     public void resolveComponent_unknownComponent_exceptionThrown() throws Exception {
+        var listener = new MessageArtifactEventListener(printer, true);
         assertThatThrownBy(() ->
-            componentManager.resolveComponent(UNKNOWN_COMPONENT, framework.getVersion(),
-                    new LoggerMessagePrinter(logger)))
+            componentManager.resolveComponent(UNKNOWN_COMPONENT, framework.getVersion(), listener))
             .isInstanceOf(UnknownComponentException.class);
     }
 
     @Test
     public void unresolveComponent_existingComponent_componentResolvedSuccessfully() throws Exception {
-        componentManager.resolveComponent(SERVER_COMPONENT, framework.getVersion(), new LoggerMessagePrinter(logger));
+        componentManager.resolveComponent(SERVER_COMPONENT, framework.getVersion(),
+                new MessageArtifactEventListener(printer, true));
         var resolvedCount = framework.getRegistry().getResolvedComponents().size();
-        componentManager.unresolveComponent(SERVER_COMPONENT, framework.getVersion(), new LoggerMessagePrinter(logger));
+        componentManager.unresolveComponent(SERVER_COMPONENT, framework.getVersion(),
+                new MessageArtifactEventListener(printer, false));
         assertThat(framework.getRegistry().getResolvedComponents()).hasSize(resolvedCount - 1);
     }
 
     @Test
     public void unresolveComponent_unknownComponent_exceptionThrown() throws Exception {
         assertThatThrownBy(() ->
-            componentManager.resolveComponent(UNKNOWN_COMPONENT, framework.getVersion(),
-                    new LoggerMessagePrinter(logger)))
+            componentManager.unresolveComponent(UNKNOWN_COMPONENT, framework.getVersion(),
+                    new MessageArtifactEventListener(printer, false)))
             .isInstanceOf(UnknownComponentException.class);
     }
 
     @Test
     public void deployComponent_existingComponent_componentDeployedSuccessfully() throws Exception {
         componentManager.resolveComponent(SERVER_COMPONENT, framework.getVersion(),
-                new LoggerMessagePrinter(logger));
+                new MessageArtifactEventListener(printer, true));
         var deployedComponentCount = componentManager.getComponents().size();
         componentManager.deployComponent(SERVER_COMPONENT, framework.getVersion());
         assertThat(componentManager.getComponents()).hasSize(deployedComponentCount + 1);
@@ -139,7 +146,7 @@ public class ComponentManagerIT {
     @Test
     public void undeployComponent_existingComponent_componentDeployedSuccessfully() throws Exception {
         componentManager.resolveComponent(SERVER_COMPONENT, framework.getVersion(),
-                new LoggerMessagePrinter(logger));
+                new MessageArtifactEventListener(printer, true));
         var descriptor = componentManager.deployComponent(SERVER_COMPONENT, framework.getVersion());
         var deployedComponentCount = componentManager.getComponents().size();
         componentManager.undeployComponent(descriptor);
@@ -158,7 +165,7 @@ public class ComponentManagerIT {
         var xmlConfigLines = readFile("activator-config.xml");
         var xmlConfig = String.join("\n", xmlConfigLines);
         var config = componentManager.addComponent(xmlConfig);
-        componentManager.resolveComponent(config, new LoggerMessagePrinter(logger));
+        componentManager.resolveComponent(config, new MessageArtifactEventListener(printer, true));
         var probe = ActivatorProbeProvider.provider();
         probe.reset();
         var descriptor = componentManager.startComponent(config.getName(), config.getVersion());

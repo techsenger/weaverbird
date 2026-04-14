@@ -114,7 +114,9 @@ public class DefaultModuleArtifact implements ModuleArtifact {
 
     @Override
     public String toString() {
-        return "DefaultModuleArtifact{" + "groupId=" + groupId + ", artifactId=" + artifactId
-                + ", version=" + version + ", classifier=" + classifier + ", type=" + type + '}';
+        if (classifier != null && !classifier.isEmpty()) {
+            return groupId + ":" + artifactId + ":" + version + ":" + classifier + ":" + type.toString().toLowerCase();
+        }
+        return groupId + ":" + artifactId + ":" + version + ":" + type.toString().toLowerCase();
     }
 }

@@ -16,16 +16,17 @@
 
 package com.techsenger.weaverbird.demo.jfx.boot;
 
-import com.techsenger.weaverbird.core.api.FrameworkFactory;
-import com.techsenger.weaverbird.core.api.FrameworkSettings;
-import com.techsenger.weaverbird.core.api.SystemProperties;
-import com.techsenger.weaverbird.core.api.component.ComponentConfig;
-import com.techsenger.weaverbird.core.api.message.SystemMessagePrinter;
 import com.techsenger.toolkit.core.PropertiesUtils;
 import com.techsenger.toolkit.core.os.OperatingSystem;
 import com.techsenger.toolkit.core.os.OsUtils;
 import com.techsenger.toolkit.core.version.Version;
+import com.techsenger.weaverbird.core.api.FrameworkFactory;
+import com.techsenger.weaverbird.core.api.FrameworkSettings;
+import com.techsenger.weaverbird.core.api.SystemProperties;
+import com.techsenger.weaverbird.core.api.component.ComponentConfig;
+import com.techsenger.weaverbird.core.api.module.ModuleArtifact;
 import java.nio.file.Paths;
+import com.techsenger.weaverbird.core.api.module.ArtifactEventListener;
 
 /**
  * This demo shows how to run JavaFX.
@@ -97,14 +98,24 @@ public final class JfxDemo {
                 .build();
 
         // Starting components
-        var messagePrinter = new SystemMessagePrinter();
+        var listener = new ArtifactEventListener() {
+            @Override
+            public void onStarted(ModuleArtifact artifact) {
+                System.out.println("Resolving: " + artifact);
+            }
+
+            @Override
+            public void onFinished(ModuleArtifact artifact) {
+                System.out.println("Resolved: " + artifact);
+            }
+        };
         var componentManager = framework.getComponentManager();
         System.out.println("Starting repo (it is already resolved)");
         componentManager.startComponent("weaverbird-repo", framework.getVersion());
 
         if (!framework.getRegistry().isComponentAdded(COMPONENT_NAME, COMPONENT_VERSION)) {
             System.out.println("Installing JFX component:");
-            var xml = componentManager.installComponent(config, messagePrinter);
+            var xml = componentManager.installComponent(config, listener);
             System.out.println(xml);
         }
         System.out.println("Starting " + COMPONENT_NAME);

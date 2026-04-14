@@ -16,14 +16,15 @@
 
 package com.techsenger.weaverbird.demo.starter;
 
+import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.ComponentManager;
 import com.techsenger.weaverbird.core.api.FrameworkFactory;
 import com.techsenger.weaverbird.core.api.FrameworkSettings;
 import com.techsenger.weaverbird.core.api.SystemProperties;
 import com.techsenger.weaverbird.core.api.component.ComponentConfig;
-import com.techsenger.weaverbird.core.api.message.SystemMessagePrinter;
-import com.techsenger.toolkit.core.version.Version;
+import com.techsenger.weaverbird.core.api.module.ModuleArtifact;
 import java.nio.file.Paths;
+import com.techsenger.weaverbird.core.api.module.ArtifactEventListener;
 
 /**
  * A simple starter that demonstrates basic operations with components.
@@ -75,17 +76,28 @@ public final class StarterDemo {
                     .version(APP_VERSION))
                 .build();
         var framework = FrameworkFactory.create(settings, frameworkPath);
-        var messagePrinter = new SystemMessagePrinter();
         var componentManager = framework.getComponentManager();
 
         System.out.println("Starting repo (it is already resolved)");
         componentManager.startComponent("weaverbird-repo", framework.getVersion());
         listComponents(componentManager);
 
+        var listener = new ArtifactEventListener() {
+            @Override
+            public void onStarted(ModuleArtifact artifact) {
+                System.out.println("Resolving: " + artifact);
+            }
+
+            @Override
+            public void onFinished(ModuleArtifact artifact) {
+                System.out.println("Resolved: " + artifact);
+            }
+        };
+
         System.out.println("\nInstalling and starting custom component");
         if (!framework.getRegistry().isComponentAdded(COMPONENT_NAME, COMPONENT_VERSION)) {
             // you can install a new component using java config or xml config
-            var xml = componentManager.installComponent(COMPONENT_CONFIG, messagePrinter);
+            var xml = componentManager.installComponent(COMPONENT_CONFIG, listener);
             // or using xml
             // var config = componentManager.installComponent(COMPONENT_CONFIG_XML, messagePrinter);
 

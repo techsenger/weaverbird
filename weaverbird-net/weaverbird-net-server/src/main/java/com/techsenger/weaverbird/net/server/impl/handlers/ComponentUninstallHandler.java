@@ -16,15 +16,16 @@
 
 package com.techsenger.weaverbird.net.server.impl.handlers;
 
+import com.techsenger.weaverbird.core.api.message.MessageArtifactEventListener;
+import com.techsenger.toolkit.http.handler.AbstractEndpointHandler;
+import com.techsenger.toolkit.http.handler.Endpoint;
+import com.techsenger.toolkit.http.response.Response;
 import com.techsenger.weaverbird.core.api.message.InMemoryMessagePrinter;
 import com.techsenger.weaverbird.net.server.spi.FrameworkRequestContext;
 import com.techsenger.weaverbird.net.shared.ComponentUninstallRequest;
 import com.techsenger.weaverbird.net.shared.ComponentUninstallResponse;
 import com.techsenger.weaverbird.net.shared.DefaultComponentConfigDto;
 import com.techsenger.weaverbird.net.shared.Endpoints;
-import com.techsenger.toolkit.http.handler.AbstractEndpointHandler;
-import com.techsenger.toolkit.http.handler.Endpoint;
-import com.techsenger.toolkit.http.response.Response;
 
 /**
  *
@@ -41,8 +42,9 @@ public class ComponentUninstallHandler extends AbstractEndpointHandler<Framework
     @Override
     public Response handle(FrameworkRequestContext context, ComponentUninstallRequest request) throws Exception {
         var printer = new InMemoryMessagePrinter();
+        var listener = new MessageArtifactEventListener(printer, false);
         var config = context.getFramework().getComponentManager().uninstallComponent(request.getName(),
-                request.getVersion(), printer);
+                request.getVersion(), listener);
         return new ComponentUninstallResponse(DefaultComponentConfigDto.of(config), printer.getMessages());
     }
 

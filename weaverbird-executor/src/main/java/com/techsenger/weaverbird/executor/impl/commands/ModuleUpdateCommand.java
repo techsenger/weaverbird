@@ -17,6 +17,9 @@
 package com.techsenger.weaverbird.executor.impl.commands;
 
 import com.beust.jcommander.Parameter;
+import com.techsenger.toolkit.core.StringUtils;
+import com.techsenger.toolkit.core.version.Version;
+import com.techsenger.weaverbird.core.api.message.MessageArtifactEventListener;
 import com.techsenger.weaverbird.core.api.message.MessagePrinter;
 import com.techsenger.weaverbird.core.api.module.DefaultModuleArtifact;
 import com.techsenger.weaverbird.core.api.module.ModuleType;
@@ -27,8 +30,6 @@ import com.techsenger.weaverbird.executor.spi.LocalCommand;
 import com.techsenger.weaverbird.executor.spi.ParameterUtils;
 import com.techsenger.weaverbird.executor.spi.RemoteCommand;
 import com.techsenger.weaverbird.net.client.api.DomainClient;
-import com.techsenger.toolkit.core.StringUtils;
-import com.techsenger.toolkit.core.version.Version;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -103,9 +104,10 @@ public class ModuleUpdateCommand extends AbstractCommand {
         if (context.isExecutionLocal()) {
             var framework = context.getFramework();
             var repoService = framework.getRepoService();
-            repoService.unresolve(artifact, printer);
+            repoService.unresolve(artifact, new MessageArtifactEventListener(printer, false));
             printer.printlnMessage(message);
-            framework.getRepoService().resolve(remoteReposByName, artifact, printer);
+            framework.getRepoService().resolve(remoteReposByName, artifact,
+                    new MessageArtifactEventListener(printer, true));
         } else {
             var client = new DomainClient(context.getClient(), context.getSession());
             client.unresolveModule(artifact);

@@ -16,14 +16,15 @@
 
 package com.techsenger.weaverbird.executor.impl.commands;
 
+import com.techsenger.toolkit.core.StringUtils;
 import com.techsenger.weaverbird.core.api.Constants;
+import com.techsenger.weaverbird.core.api.message.MessageArtifactEventListener;
 import com.techsenger.weaverbird.core.api.message.MessagePrinter;
 import com.techsenger.weaverbird.executor.api.CommandContext;
 import com.techsenger.weaverbird.executor.spi.CommandMeta;
 import com.techsenger.weaverbird.executor.spi.LocalCommand;
 import com.techsenger.weaverbird.executor.spi.RemoteCommand;
 import com.techsenger.weaverbird.net.client.api.DomainClient;
-import com.techsenger.toolkit.core.StringUtils;
 
 /**
  *
@@ -43,7 +44,8 @@ public class ComponentUnresolveCommand extends AbstractComponentNameVerCommand {
     @Override
     public void execute(CommandContext context, MessagePrinter printer) throws Exception {
         if (context.isExecutionLocal()) {
-            context.getFramework().getComponentManager().unresolveComponent(getName(), getVersion(), printer);
+            var listener = new MessageArtifactEventListener(printer, false);
+            context.getFramework().getComponentManager().unresolveComponent(getName(), getVersion(), listener);
         } else {
             var client = new DomainClient(context.getClient(), context.getSession());
             client.unresolveComponent(getName(), getVersion());

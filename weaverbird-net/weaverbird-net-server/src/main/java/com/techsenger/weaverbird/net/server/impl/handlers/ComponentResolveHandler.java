@@ -16,15 +16,16 @@
 
 package com.techsenger.weaverbird.net.server.impl.handlers;
 
+import com.techsenger.weaverbird.core.api.message.MessageArtifactEventListener;
+import com.techsenger.toolkit.http.handler.AbstractEndpointHandler;
+import com.techsenger.toolkit.http.handler.Endpoint;
+import com.techsenger.toolkit.http.response.Response;
 import com.techsenger.weaverbird.core.api.message.InMemoryMessagePrinter;
 import com.techsenger.weaverbird.net.server.spi.FrameworkRequestContext;
 import com.techsenger.weaverbird.net.shared.ComponentResolveRequest;
 import com.techsenger.weaverbird.net.shared.ComponentResolveResponse;
 import com.techsenger.weaverbird.net.shared.DefaultComponentConfigDto;
 import com.techsenger.weaverbird.net.shared.Endpoints;
-import com.techsenger.toolkit.http.handler.AbstractEndpointHandler;
-import com.techsenger.toolkit.http.handler.Endpoint;
-import com.techsenger.toolkit.http.response.Response;
 
 /**
  *
@@ -40,8 +41,9 @@ public class ComponentResolveHandler extends AbstractEndpointHandler<FrameworkRe
     @Override
     public Response handle(FrameworkRequestContext context, ComponentResolveRequest request) throws Exception {
         var printer = new InMemoryMessagePrinter();
+        var listener = new MessageArtifactEventListener(printer, true);
         var config = context.getFramework().getComponentManager().resolveComponent(request.getName(),
-                request.getVersion(), printer);
+                request.getVersion(), listener);
         return new ComponentResolveResponse(DefaultComponentConfigDto.of(config), printer.getMessages());
     }
 

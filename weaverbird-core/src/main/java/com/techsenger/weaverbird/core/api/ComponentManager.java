@@ -16,6 +16,7 @@
 
 package com.techsenger.weaverbird.core.api;
 
+import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.component.Component;
 import com.techsenger.weaverbird.core.api.component.ComponentConfig;
 import com.techsenger.weaverbird.core.api.component.ComponentConfigInfo;
@@ -23,9 +24,8 @@ import com.techsenger.weaverbird.core.api.component.ComponentConfigUtils;
 import com.techsenger.weaverbird.core.api.component.ComponentDescriptor;
 import com.techsenger.weaverbird.core.api.component.ComponentException;
 import com.techsenger.weaverbird.core.api.component.UnknownComponentException;
-import com.techsenger.weaverbird.core.api.message.MessagePrinter;
+import com.techsenger.weaverbird.core.api.module.ArtifactEventListener;
 import com.techsenger.weaverbird.core.api.state.ComponentsState;
-import com.techsenger.toolkit.core.version.Version;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
@@ -94,12 +94,12 @@ public interface ComponentManager {
      *
      * @param name
      * @param version
-     * @param printer
+     * @param listener
      * @throws ComponentException
      * @throws UnknownComponentException
      * @return the config of the component
      */
-    ComponentConfig resolveComponent(String name, Version version, MessagePrinter printer)
+    ComponentConfig resolveComponent(String name, Version version, ArtifactEventListener listener)
             throws ComponentException, UnknownComponentException;
 
     /**
@@ -108,7 +108,7 @@ public interface ComponentManager {
      * @param config
      * @throws ComponentException
      */
-    void resolveComponent(ComponentConfig config, MessagePrinter printer) throws ComponentException;
+    void resolveComponent(ComponentConfig config, ArtifactEventListener listener) throws ComponentException;
 
      /**
      * Deploys a component by creating a JPMS layer with all its modules.
@@ -245,22 +245,22 @@ public interface ComponentManager {
      *
      * @param name
      * @param version
-     * @param printer
+     * @param listener
      * @return the config of the component
      * @throws ComponentException
      * @throws UnknownComponentException
      */
-    ComponentConfig unresolveComponent(String name, Version version, MessagePrinter printer)
+    ComponentConfig unresolveComponent(String name, Version version, ArtifactEventListener listener)
             throws ComponentException, UnknownComponentException;
 
     /**
      * Unresolves a component by removing all its modules from repo.
      *
      * @param config.
-     * @param printer
+     * @param listener
      * @throws ComponentException
      */
-    void unresolveComponent(ComponentConfig config, MessagePrinter printer) throws ComponentException;
+    void unresolveComponent(ComponentConfig config, ArtifactEventListener listener) throws ComponentException;
 
     /**
      * Removes a component by removing all component files from framework directory.
@@ -285,31 +285,31 @@ public interface ComponentManager {
      * Installs a component (adds and resolves it).
      *
      * @param path the path to component distro archive
-     * @param printer
+     * @param listener
      * @throws ComponentException
      * @return the config of the component
      */
-    ComponentConfig installComponent(Path path, MessagePrinter printer) throws ComponentException;
+    ComponentConfig installComponent(Path path, ArtifactEventListener listener) throws ComponentException;
 
     /**
      * Installs a component (adds and resolves it).
      *
      * @param xmlConfig the content of the xml configuration.
-     * @param printer
+     * @param listener
      * @throws ComponentException
      * @return the config of the component
      */
-    ComponentConfig installComponent(String xmlConfig, MessagePrinter printer) throws ComponentException;
+    ComponentConfig installComponent(String xmlConfig, ArtifactEventListener listener) throws ComponentException;
 
     /**
      * Installs a component (adds and resolves it).
      *
      * @param config the config of the component
-     * @param printer
+     * @param listener
      * @throws ComponentException
      * @return the xml config of the component
      */
-    String installComponent(ComponentConfig config, MessagePrinter printer) throws ComponentException;
+    String installComponent(ComponentConfig config, ArtifactEventListener listener) throws ComponentException;
 
     /**
      * Starts a component (deploys and activates it).
@@ -399,22 +399,22 @@ public interface ComponentManager {
      *
      * @param name
      * @param version
-     * @param printer
+     * @param listener
      * @return the config of the component
      * @throws ComponentException
      * @throws UnknownComponentException
      */
-    ComponentConfig uninstallComponent(String name, Version version, MessagePrinter printer)
+    ComponentConfig uninstallComponent(String name, Version version, ArtifactEventListener listener)
             throws ComponentException, UnknownComponentException;
 
     /**
      * Uninstalls a component (unresolves and removes it).
      *
      * @param config.
-     * @param printer
+     * @param listener
      * @throws ComponentException
      */
-    void uninstallComponent(ComponentConfig config, MessagePrinter printer) throws ComponentException;
+    void uninstallComponent(ComponentConfig config, ArtifactEventListener listener) throws ComponentException;
 
     /**
      * Returns references to all deployed and activated components.

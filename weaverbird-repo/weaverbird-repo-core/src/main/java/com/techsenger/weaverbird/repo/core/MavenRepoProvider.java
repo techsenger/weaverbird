@@ -16,21 +16,21 @@
 
 package com.techsenger.weaverbird.repo.core;
 
+import com.techsenger.reposium.core.MavenRepo;
+import com.techsenger.toolkit.core.SingletonFactory;
+import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.Framework;
-import com.techsenger.weaverbird.core.api.message.MessagePrinter;
+import com.techsenger.weaverbird.core.api.module.ArtifactEventListener;
 import com.techsenger.weaverbird.core.api.module.DefaultModuleArtifact;
 import com.techsenger.weaverbird.core.api.module.ModuleArtifact;
 import com.techsenger.weaverbird.core.api.module.ModuleType;
 import com.techsenger.weaverbird.core.spi.repo.RepoService;
-import com.techsenger.reposium.core.ArtifactDescriptor;
-import com.techsenger.reposium.core.DefaultArtifactDescriptor;
-import com.techsenger.reposium.core.MavenRepo;
-import com.techsenger.toolkit.core.SingletonFactory;
-import com.techsenger.toolkit.core.version.Version;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
 
 /**
  *
@@ -55,23 +55,19 @@ public class MavenRepoProvider implements RepoService {
 
     @Override
     public boolean resolve(Map<String, String> remoteReposByName, ModuleArtifact artifact,
-            MessagePrinter printer) {
-        return this.resolve(remoteReposByName, List.of(artifact), printer);
+            ArtifactEventListener listener) {
+        return this.resolve(remoteReposByName, List.of(artifact), listener);
     }
 
     @Override
     public boolean resolve(Map<String, String> remoteReposByName, List<ModuleArtifact> artifacts,
-            MessagePrinter printer) {
-        List<ArtifactDescriptor> descriptors = artifacts.stream()
-                .map(d -> artifactToDescriptor(d))
+            ArtifactEventListener listener) {
+        List<Artifact> rArtifacts = artifacts.stream()
+                .map(d -> moduleToArtifact(d))
                 .collect(Collectors.toList());
         var checksumEnabled = framework.getSettings().isRepoChecksumEnabled();
         var localRepo = framework.getPathManager().getRepositoryDirectory();
-        com.techsenger.reposium.core.MessagePrinter mp = null;
-        if (printer != null) {
-            mp = (message) -> printer.printlnMessage(message);
-        }
-        return mavenRepo.resolve(localRepo, remoteReposByName, checksumEnabled, descriptors, mp);
+        return mavenRepo.resolve(localRepo, remoteReposByName, checksumEnabled, rArtifacts, createListener(listener));
     }
 
     @Override
@@ -79,47 +75,61 @@ public class MavenRepoProvider implements RepoService {
         var localRepo = framework.getPathManager().getRepositoryDirectory();
         return mavenRepo.scanRepo(localRepo)
                 .stream()
-                .map(a -> descriptorToArtifact(a))
+                .map(a -> artifactToModule(a))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public boolean unresolve(ModuleArtifact artifact, MessagePrinter printer) {
-        return this.unresolve(List.of(artifact), printer);
+    public boolean unresolve(ModuleArtifact artifact, ArtifactEventListener listener) {
+        return this.unresolve(List.of(artifact), listener);
     }
 
     @Override
-    public boolean unresolve(List<ModuleArtifact> artifacts, MessagePrinter printer) {
+    public boolean unresolve(List<ModuleArtifact> artifacts, ArtifactEventListener listener) {
         var localRepo = framework.getPathManager().getRepositoryDirectory();
-        List<ArtifactDescriptor> descriptors = artifacts.stream()
-                .map(d -> artifactToDescriptor(d))
+        List<Artifact> rArtifacts = artifacts.stream()
+                .map(d -> moduleToArtifact(d))
                 .collect(Collectors.toList());
-        com.techsenger.reposium.core.MessagePrinter mp = null;
-        if (printer != null) {
-            mp = (message) -> printer.printlnMessage(message);
-        }
-        return mavenRepo.unresolve(localRepo, descriptors, mp);
+        return mavenRepo.unresolve(localRepo, rArtifacts, createListener(listener));
     }
 
     void setFramework(Framework framework) {
         this.framework = framework;
     }
 
-    private ArtifactDescriptor artifactToDescriptor(ModuleArtifact artifactor) {
-        return new DefaultArtifactDescriptor(
-                        artifactor.getGroupId(),
-                        artifactor.getArtifactId(),
-                        artifactor.getVersion().toString(),
-                        artifactor.getClassifier(),
-                        artifactor.getType().toString().toLowerCase());
+    private Artifact moduleToArtifact(ModuleArtifact artifact) {
+        return new DefaultArtifact(
+                artifact.getGroupId(),
+                artifact.getArtifactId(),
+                artifact.getClassifier(),
+                artifact.getType().toString().toLowerCase(),
+                artifact.getVersion().toString());
     }
 
-    private ModuleArtifact descriptorToArtifact(ArtifactDescriptor descriptor) {
+    private ModuleArtifact artifactToModule(Artifact artifact) {
         return new DefaultModuleArtifact(
-                        descriptor.getGroupId(),
-                        descriptor.getArtifactId(),
-                        Version.of(descriptor.getVersion()),
-                        descriptor.getClassifier(),
-                        ModuleType.valueOf(descriptor.getType().toUpperCase()));
+                artifact.getGroupId(),
+                artifact.getArtifactId(),
+                Version.of(artifact.getVersion()),
+                artifact.getClassifier(),
+                ModuleType.valueOf(artifact.getExtension().toUpperCase()));
+    }
+
+    private com.techsenger.reposium.core.ArtifactEventListener createListener(ArtifactEventListener l) {
+        if (l == null) {
+            return null;
+        } else {
+            return new com.techsenger.reposium.core.ArtifactEventListener() {
+                @Override
+                public void onStarted(Artifact artifact) {
+                    l.onStarted(artifactToModule(artifact));
+                }
+
+                @Override
+                public void onFinished(Artifact artifact) {
+                    l.onFinished(artifactToModule(artifact));
+                }
+            };
+        }
     }
 }

@@ -16,12 +16,13 @@
 
 package com.techsenger.weaverbird.executor.impl.commands;
 
+import com.techsenger.toolkit.core.StringUtils;
 import com.techsenger.weaverbird.core.api.Constants;
+import com.techsenger.weaverbird.core.api.message.MessageArtifactEventListener;
 import com.techsenger.weaverbird.core.api.message.MessagePrinter;
 import com.techsenger.weaverbird.executor.api.CommandContext;
 import com.techsenger.weaverbird.executor.spi.CommandMeta;
 import com.techsenger.weaverbird.executor.spi.LocalCommand;
-import com.techsenger.toolkit.core.StringUtils;
 import java.nio.file.Paths;
 
 
@@ -41,7 +42,8 @@ public class ComponentInstallCommand extends ComponentAddCommand {
     @Override
     public void execute(final CommandContext context, MessagePrinter printer) throws Exception {
         var path = Paths.get(getPath());
-        var config = context.getFramework().getComponentManager().installComponent(path, printer);
+        var listener = new MessageArtifactEventListener(printer, true);
+        var config = context.getFramework().getComponentManager().installComponent(path, listener);
         printer.printlnMessage(StringUtils.format("Component {}{}{} installed from {}",
                 config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion(), path));
     }

@@ -30,7 +30,7 @@ import com.techsenger.weaverbird.core.api.component.ComponentException;
 import com.techsenger.weaverbird.core.api.component.ComponentObserver;
 import com.techsenger.weaverbird.core.api.component.ParentConfig;
 import com.techsenger.weaverbird.core.api.component.UnknownComponentException;
-import com.techsenger.weaverbird.core.api.message.MessagePrinter;
+import com.techsenger.weaverbird.core.api.module.ArtifactEventListener;
 import com.techsenger.weaverbird.core.api.module.ModuleArtifact;
 import com.techsenger.weaverbird.core.api.module.ModuleConfig;
 import com.techsenger.weaverbird.core.api.registry.ComponentEntry;
@@ -170,15 +170,15 @@ public class DefaultComponentManager implements ComponentManager {
     }
 
     @Override
-    public synchronized ComponentConfig resolveComponent(String name, Version version, MessagePrinter printer)
-            throws ComponentException, UnknownComponentException {
+    public synchronized ComponentConfig resolveComponent(String name, Version version,
+            ArtifactEventListener listener) throws ComponentException, UnknownComponentException {
         var config = readConfig(name, version);
-        resolveComponent(config, printer);
+        resolveComponent(config, listener);
         return config;
     }
 
     @Override
-    public synchronized void resolveComponent(ComponentConfig config, MessagePrinter printer)
+    public synchronized void resolveComponent(ComponentConfig config, ArtifactEventListener listener)
             throws ComponentException {
         //check if component is not resolved yet.
         if (getRegistry().isComponentResolved(config.getName(), config.getVersion())) {
@@ -197,7 +197,7 @@ public class DefaultComponentManager implements ComponentManager {
             notifyObservers((o) -> o.onResolving(config), null);
             Map<String, String> reposByName = new LinkedHashMap<>(); //keeping order!
             config.getRepositories().forEach(r -> reposByName.put(r.getName(), r.getUrl()));
-            resolved = repoService.resolve(reposByName, (List<ModuleArtifact>) (List<?>) config.getModules(), printer);
+            resolved = repoService.resolve(reposByName, (List<ModuleArtifact>) (List<?>) config.getModules(), listener);
         }
         if (resolved) {
             getRegistry().getModifiableResolvedComponents().add(new ComponentEntry(config));
@@ -419,15 +419,15 @@ public class DefaultComponentManager implements ComponentManager {
     }
 
     @Override
-    public synchronized ComponentConfig unresolveComponent(String name, Version version, MessagePrinter printer)
-            throws ComponentException, UnknownComponentException {
+    public synchronized ComponentConfig unresolveComponent(String name, Version version,
+            ArtifactEventListener listener) throws ComponentException, UnknownComponentException {
         var config = readConfig(name, version);
-        unresolveComponent(config, printer);
+        unresolveComponent(config, listener);
         return config;
     }
 
     @Override
-    public synchronized void unresolveComponent(ComponentConfig config, MessagePrinter printer)
+    public synchronized void unresolveComponent(ComponentConfig config, ArtifactEventListener listener)
             throws ComponentException {
         //check if component is not resolved yet.
         var regEntryIndex = getRegistry().getModifiableResolvedComponents().indexOf(new ComponentEntry(config));
@@ -471,7 +471,7 @@ public class DefaultComponentManager implements ComponentManager {
             result = true;
         } else {
             notifyObservers((o) -> o.onUnresolving(config), null);
-            result = repoService.unresolve((List) unresolvedModules, printer);
+            result = repoService.unresolve((List) unresolvedModules, listener);
             notifyObservers((o) -> o.onUnresolved(config), null);
         }
         if (result) {
@@ -510,24 +510,26 @@ public class DefaultComponentManager implements ComponentManager {
     }
 
     @Override
-    public synchronized ComponentConfig installComponent(Path path, MessagePrinter printer) throws ComponentException {
+    public synchronized ComponentConfig installComponent(Path path, ArtifactEventListener listener)
+            throws ComponentException {
         var config = addComponent(path);
-        resolveComponent(config, printer);
+        resolveComponent(config, listener);
         return config;
     }
 
     @Override
-    public synchronized ComponentConfig installComponent(String xmlConfig, MessagePrinter printer)
+    public synchronized ComponentConfig installComponent(String xmlConfig, ArtifactEventListener listener)
             throws ComponentException {
         var config = addComponent(xmlConfig);
-        resolveComponent(config, printer);
+        resolveComponent(config, listener);
         return config;
     }
 
     @Override
-    public String installComponent(ComponentConfig config, MessagePrinter printer) throws ComponentException {
+    public String installComponent(ComponentConfig config, ArtifactEventListener listener)
+            throws ComponentException {
         var xmlConfig = addComponent(config);
-        resolveComponent(config, printer);
+        resolveComponent(config, listener);
         return xmlConfig;
     }
 
@@ -586,16 +588,16 @@ public class DefaultComponentManager implements ComponentManager {
 
     @Override
     public synchronized ComponentConfig uninstallComponent(final String name, final Version version,
-            MessagePrinter printer) throws ComponentException, UnknownComponentException  {
+            ArtifactEventListener listener) throws ComponentException, UnknownComponentException  {
         var config = readConfig(name, version);
-        uninstallComponent(config, printer);
+        uninstallComponent(config, listener);
         return config;
     }
 
     @Override
-    public synchronized void uninstallComponent(final ComponentConfig config, MessagePrinter printer)
+    public synchronized void uninstallComponent(final ComponentConfig config, ArtifactEventListener listener)
             throws ComponentException  {
-        unresolveComponent(config, printer);
+        unresolveComponent(config, listener);
         removeComponent(config);
     }
 

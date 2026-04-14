@@ -16,15 +16,16 @@
 
 package com.techsenger.weaverbird.net.server.impl.handlers;
 
+import com.techsenger.weaverbird.core.api.message.MessageArtifactEventListener;
+import com.techsenger.toolkit.http.handler.AbstractEndpointHandler;
+import com.techsenger.toolkit.http.handler.Endpoint;
+import com.techsenger.toolkit.http.response.Response;
 import com.techsenger.weaverbird.core.api.message.InMemoryMessagePrinter;
 import com.techsenger.weaverbird.net.server.spi.FrameworkRequestContext;
 import com.techsenger.weaverbird.net.shared.ComponentInstallRequest;
 import com.techsenger.weaverbird.net.shared.ComponentInstallResponse;
 import com.techsenger.weaverbird.net.shared.DefaultComponentConfigDto;
 import com.techsenger.weaverbird.net.shared.Endpoints;
-import com.techsenger.toolkit.http.handler.AbstractEndpointHandler;
-import com.techsenger.toolkit.http.handler.Endpoint;
-import com.techsenger.toolkit.http.response.Response;
 
 /**
  *
@@ -40,7 +41,8 @@ public class ComponentInstallHandler extends AbstractEndpointHandler<FrameworkRe
     @Override
     public Response handle(FrameworkRequestContext context, ComponentInstallRequest request) throws Exception {
         var printer = new InMemoryMessagePrinter();
-        var config = context.getFramework().getComponentManager().installComponent(request.getXmlConfig(), printer);
+        var listener = new MessageArtifactEventListener(printer, true);
+        var config = context.getFramework().getComponentManager().installComponent(request.getXmlConfig(), listener);
         return new ComponentInstallResponse(DefaultComponentConfigDto.of(config), printer.getMessages());
     }
 

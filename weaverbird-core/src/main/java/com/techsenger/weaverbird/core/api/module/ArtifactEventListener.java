@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-module com.techsenger.weaverbird.repo.core {
-    requires com.techsenger.reposium.core;
-    requires com.techsenger.toolkit.core;
-    requires org.slf4j;
-    requires com.techsenger.weaverbird.core;
-    requires org.apache.maven.resolver;
+package com.techsenger.weaverbird.core.api.module;
 
-    provides com.techsenger.weaverbird.core.spi.repo.RepoService
-            with com.techsenger.weaverbird.repo.core.MavenRepoProvider;
-    provides com.techsenger.weaverbird.core.spi.module.ModuleActivator
-            with com.techsenger.weaverbird.repo.core.ModuleActivatorProvider;
+/**
+ *
+ * @author Pavel Castornii
+ */
+public interface ArtifactEventListener {
+
+    void onStarted(ModuleArtifact artifact);
+
+    void onFinished(ModuleArtifact artifact);
 }
-
