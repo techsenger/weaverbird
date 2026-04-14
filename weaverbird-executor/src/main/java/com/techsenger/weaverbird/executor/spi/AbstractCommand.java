@@ -41,7 +41,7 @@ public abstract  class AbstractCommand implements Command {
      * Continue on fail.
      */
     @Parameter(names = {"--continue-on-fail"}, required = false,
-            description = "allows program to execute next command if this command has given an error, "
+            description = "allows the program to execute next command if this command fails, "
             + "default is false")
     private boolean continueOnFail = false;
 

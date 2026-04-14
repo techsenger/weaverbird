@@ -17,6 +17,9 @@
 package com.techsenger.weaverbird.executor.impl.commands;
 
 import com.beust.jcommander.Parameter;
+import com.techsenger.toolkit.ascii.table.AsciiTableUtils;
+import com.techsenger.toolkit.ascii.table.ColumnWidth;
+import com.techsenger.toolkit.core.model.ModuleModel;
 import com.techsenger.weaverbird.core.api.Constants;
 import com.techsenger.weaverbird.core.api.message.MessagePrinter;
 import com.techsenger.weaverbird.executor.api.CommandContext;
@@ -25,9 +28,6 @@ import com.techsenger.weaverbird.executor.spi.CommandMeta;
 import com.techsenger.weaverbird.executor.spi.LocalCommand;
 import com.techsenger.weaverbird.executor.spi.RemoteCommand;
 import com.techsenger.weaverbird.net.client.api.DomainClient;
-import com.techsenger.toolkit.ascii.table.AsciiTableUtils;
-import com.techsenger.toolkit.ascii.table.ColumnWidth;
-import com.techsenger.toolkit.core.model.ModuleModel;
 import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 import java.util.List;
@@ -45,11 +45,11 @@ import java.util.stream.Collectors;
 public class ModuleListCommand extends AbstractCommand {
 
     @Parameter(names = {"-s", "--standard"}, required = false,
-            description = "sets if it is necessary to show standard modules of Java SE and Java JDK")
+            description = "specifies whether to show standard modules of Java SE and Java JDK")
     private boolean standardRequired = false;
 
     @Parameter(names = {"-v", "--version"}, required = false,
-            description = "sets if it is necessary to show module versions")
+            description = "specifies whether to show module versions")
     private boolean versionIncluded = false;
 
     @Override
