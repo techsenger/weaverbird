@@ -88,9 +88,9 @@ The framework can be used for programs that:
 
 ### GUI Demo <a name="demo-gui"></a>
 
-<img width="1200" height="800" alt="Weaverbird GUI" src="https://github.com/user-attachments/assets/d7b99f7f-eae9-4528-b66b-463d9968ca93" />
+<img width="1200" height="800" alt="Weaverbird GUI" src="https://github.com/user-attachments/assets/d7b99f7f-eae9-4528-b66b-463d9968ca93" /><br>
 
-<img width="1200" height="800" alt="Weaverbird GUI layer diagram" src="https://github.com/user-attachments/assets/b543d5c4-ff60-4c27-bdf2-3ad2bdc824a7" />
+<img width="1200" height="800" alt="Weaverbird GUI layer diagram" src="https://github.com/user-attachments/assets/ac9cf773-7615-47f0-8b57-8d58df260e49" /><br>
 
 <img width="1200" height="800" alt="Weaverbird GUI module diagram" src="https://github.com/user-attachments/assets/c02dabee-320f-4723-a767-4ecf0d45628c" />
 
