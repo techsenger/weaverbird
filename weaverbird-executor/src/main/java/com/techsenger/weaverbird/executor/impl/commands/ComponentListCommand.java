@@ -17,6 +17,8 @@
 package com.techsenger.weaverbird.executor.impl.commands;
 
 import com.beust.jcommander.Parameter;
+import com.techsenger.toolkit.ascii.table.AsciiTableUtils;
+import com.techsenger.toolkit.ascii.table.ColumnWidth;
 import com.techsenger.weaverbird.core.api.component.ComponentConfigDto;
 import com.techsenger.weaverbird.core.api.component.ComponentDescriptorDto;
 import com.techsenger.weaverbird.core.api.message.MessagePrinter;
@@ -26,8 +28,6 @@ import com.techsenger.weaverbird.executor.spi.CommandMeta;
 import com.techsenger.weaverbird.executor.spi.LocalCommand;
 import com.techsenger.weaverbird.executor.spi.RemoteCommand;
 import com.techsenger.weaverbird.net.client.api.DomainClient;
-import com.techsenger.toolkit.ascii.table.AsciiTableUtils;
-import com.techsenger.toolkit.ascii.table.ColumnWidth;
 import de.vandermeer.asciitable.AsciiTable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -164,7 +164,9 @@ public class ComponentListCommand extends AbstractCommand {
             columns.add(String.valueOf(++index));
             columns.add(descriptor.getConfig().getName());
             columns.add(descriptor.getConfig().getVersion().getFull());
-            columns.add(descriptor.getConfig().getType());
+            var type = descriptor.getConfig().getType();
+            type = type == null ? "" : type;
+            columns.add(type);
             columns.add(String.valueOf(descriptor.getId()));
             if (descriptor.getAlias() != null) {
                 columns.add(descriptor.getAlias());
