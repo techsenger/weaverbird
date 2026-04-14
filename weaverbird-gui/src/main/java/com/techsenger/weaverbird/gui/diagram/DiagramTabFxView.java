@@ -16,17 +16,18 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.weaverbird.core.api.model.ComponentLayerModel;
-import com.techsenger.weaverbird.net.client.api.ClientService;
-import com.techsenger.weaverbird.net.client.api.ClientSession;
 import com.techsenger.tabshell.core.ShellFxView;
 import com.techsenger.tabshell.core.tab.AbstractTabFxView;
 import com.techsenger.tabshell.material.style.StyleClasses;
+import com.techsenger.weaverbird.core.api.model.ComponentLayerModel;
+import com.techsenger.weaverbird.net.client.api.ClientService;
+import com.techsenger.weaverbird.net.client.api.ClientSession;
 import java.util.List;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -88,7 +89,9 @@ public class DiagramTabFxView<P extends DiagramTabPresenter<?, ?>> extends Abstr
 
     private final ImageView imageView = new ImageView();
 
-    private final ScrollPane scrollPane = new ScrollPane(imageView);
+    private final StackPane imageContainer = new StackPane(imageView);
+
+    private final ScrollPane scrollPane = new ScrollPane(imageContainer);
 
     public DiagramTabFxView(ShellFxView<?> shell) {
         super(shell);
@@ -141,12 +144,12 @@ public class DiagramTabFxView<P extends DiagramTabPresenter<?, ?>> extends Abstr
         getContentBox().getChildren().add(scrollPane);
     }
 
-//    @Override
-//    protected void bind() {
-//        super.bind();
-//        zoomLevelComboBox.valueProperty().bindBidirectional(viewModel.zoomLevelProperty());
-//        viewModel.zoomLevelIndexProperty().bind(zoomLevelComboBox.getSelectionModel().selectedIndexProperty());
-//    }
+    @Override
+    protected void bind() {
+        super.bind();
+        imageContainer.minWidthProperty().bind(scrollPane.viewportBoundsProperty().map(b -> b.getWidth()));
+        imageContainer.minHeightProperty().bind(scrollPane.viewportBoundsProperty().map(b -> b.getHeight()));
+    }
 
     @Override
     protected void addHandlers() {
