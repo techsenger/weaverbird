@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration title="Weaverbird Server HTTP" name="weaverbird-server" version="${project.version}">
+    <Repositories>
+        <Repository name="local" url="file://${settings.localRepository}"/>
+        <Repository name="central" url="${maven.central.url}"/>
+    </Repositories>
+
+    <Modules>
+        <!--### TOOLS ###-->
+        <Module groupId="com.google.code.gson" artifactId="gson" version="${bom.gson.version}">
+            <!--
+                Gson requires reflective access to java.time classes for serialization/deserialization.
+                Since java.base is in the boot layer and JPMS does not provide access to the boot layer
+                controller, we use a relay approach: java.base opens java.time to the framework core module
+                via the add-opens at JVM startup, and the core module relays the access to Gson using
+                Module.addOpens().
+            -->
+            <Directives>
+                <Directive type="requestsOpen" layer="weaverbird-framework:${project.version}" module="java.base" package="java.time"/>
+            </Directives>
+        </Module>
+
+        <!--### WEAVERBIRD ###-->
+        <Module groupId="com.techsenger.weaverbird.net" artifactId="weaverbird-net-shared" version="${project.version}"/>
+        <Module groupId="com.techsenger.weaverbird.net" artifactId="weaverbird-net-server" version="${project.version}" active="true"/>
+        <Module groupId="com.techsenger.toolkit" artifactId="toolkit-http" version="${bom.toolkit.version}"/>
+
+        <!-- SECURITY CONTEXT FACTORY STUB! DON'T USE IN PRODUCTION! TESTS AND DEMO PURPOSES ONLY! -->
+        <Module groupId="com.techsenger.weaverbird.assembly" artifactId="weaverbird-assembly-security" version="${project.version}"/>
+    </Modules>
+</Configuration>
+

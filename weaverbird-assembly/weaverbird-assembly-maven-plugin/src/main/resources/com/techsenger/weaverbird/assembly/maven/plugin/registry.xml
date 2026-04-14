@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- AUTO-GENERATED FILE — DO NOT EDIT -->
+<Registry>
+    <AddedComponents>
+        <Component name="weaverbird-repo" version="${project.version}"/>
+        <Component name="weaverbird-server" version="${project.version}"/>
+        <Component name="weaverbird-cli" version="${project.version}"/>
+        <Component name="weaverbird-gui" version="${project.version}"/>
+    </AddedComponents>
+    <ResolvedComponents>
+        <Component name="weaverbird-repo" version="${project.version}"/>
+    </ResolvedComponents>
+</Registry>

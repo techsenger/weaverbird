@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.techsenger.weaverbird.demo</groupId>
+        <artifactId>weaverbird-demo</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.techsenger.weaverbird.demo</groupId>
+    <artifactId>weaverbird-demo-cli</artifactId>
+    <packaging>jar</packaging>
+    <name>Weaverbird - Demo CLI</name>
+    <description>A demo of a standalone application with a CLI console</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.weaverbird</groupId>
+            <artifactId>weaverbird-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.weaverbird</groupId>
+            <artifactId>weaverbird-cli</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.toolkit</groupId>
+            <artifactId>toolkit-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.expressly</groupId>
+            <artifactId>expressly</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.techsenger.weaverbird.assembly</groupId>
+                <artifactId>weaverbird-assembly-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>assemble-distro</goal>
+                        </goals>
+                        <configuration>
+                            <path>${project.build.directory}/framework</path>
+                            <mainClass>com.techsenger.weaverbird.demo.cli/com.techsenger.weaverbird.demo.cli.CliDemo</mainClass>
+                            <modules>
+                                <module>
+                                    <groupId>com.techsenger.weaverbird.demo</groupId>
+                                    <artifactId>weaverbird-demo-cli</artifactId>
+                                    <version>${project.version}</version>
+                                    <onModulePath>true</onModulePath>
+                                </module>
+                            </modules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

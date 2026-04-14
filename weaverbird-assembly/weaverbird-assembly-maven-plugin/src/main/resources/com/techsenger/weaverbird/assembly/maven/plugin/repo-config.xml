@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration title="Weaverbird Repo" name="weaverbird-repo" version="${project.version}">
+    <Repositories>
+        <Repository name="local" url="file://${settings.localRepository}"/>
+        <Repository name="central" url="${maven.central.url}"/>
+    </Repositories>
+
+    <Modules>
+        <!--### TOOLS ###-->
+        <Module groupId="commons-codec" artifactId="commons-codec" version="${commons.codec.version}"/>
+        <Module groupId="org.apache.httpcomponents" artifactId="httpclient" version="${apache.httpclient.version}"/>
+        <Module groupId="org.apache.httpcomponents" artifactId="httpcore" version="${apache.httpcore.version}"/>
+        <Module groupId="org.codehaus.plexus" artifactId="plexus-interpolation" version="${plexus.interpolation.version}" />
+        <Module groupId="org.codehaus.plexus" artifactId="plexus-utils" version="${plexus.utils.version}"/>
+        <Module groupId="org.apache.commons" artifactId="commons-lang3" version="${commons.lang.version}"/>
+
+        <!--### MAVEN ###-->
+        <Module groupId="org.apache.maven" artifactId="maven-resolver-provider" version="${mvn.version}"/>
+        <Module groupId="com.techsenger.weaverbird.repo" artifactId="weaverbird-repo-external" version="${project.version}"/>
+
+        <!--### MAVEN-RESOLVER ###-->
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-api" version="${bom.maven.resolver.version}"/>
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-connector-basic" version="${bom.maven.resolver.version}"/>
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-impl" version="${bom.maven.resolver.version}"/>
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-spi" version="${bom.maven.resolver.version}"/>
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-transport-file" version="${bom.maven.resolver.version}"/>
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-transport-http" version="${bom.maven.resolver.version}"/>
+        <Module groupId="org.apache.maven.resolver" artifactId="maven-resolver-util" version="${bom.maven.resolver.version}"/>
+
+        <!--### REPOSIUM ###-->
+        <Module groupId="com.techsenger.reposium" artifactId="reposium-core" version="${bom.reposium.version}"/>
+
+        <!--### WEAVERBIRD ###-->
+        <Module groupId="com.techsenger.weaverbird.repo" artifactId="weaverbird-repo-core" version="${project.version}" active="true"/>
+    </Modules>
+</Configuration>
+

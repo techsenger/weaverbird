@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.techsenger.weaverbird.assembly</groupId>
+        <artifactId>weaverbird-assembly</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.techsenger.weaverbird.assembly</groupId>
+    <artifactId>weaverbird-assembly-maven-plugin</artifactId>
+    <packaging>maven-plugin</packaging>
+    <name>Weaverbird - Assembly Plugin</name>
+    <description>A maven plugin that assembles binary framework</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.techsenger.toolkit</groupId>
+            <artifactId>toolkit-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+        </dependency>
+        <!-- not used, only for compilation order -->
+        <dependency>
+            <groupId>com.techsenger.weaverbird.net</groupId>
+            <artifactId>weaverbird-net-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.weaverbird.net</groupId>
+            <artifactId>weaverbird-net-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.weaverbird.repo</groupId>
+            <artifactId>weaverbird-repo-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.weaverbird.repo</groupId>
+            <artifactId>weaverbird-repo-external</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.weaverbird.assembly</groupId>
+            <artifactId>weaverbird-assembly-security</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>${maven.plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+
+
+
+
+

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.techsenger.weaverbird.it</groupId>
+        <artifactId>weaverbird-it</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.techsenger.weaverbird.it</groupId>
+    <artifactId>weaverbird-it-net</artifactId>
+    <packaging>jar</packaging>
+    <name>Weaverbird - IT Net</name>
+    <description>Integration tests for client-server interaction</description>
+
+    <properties>
+        <failsafe.plugin.arguments>--add-opens java.base/java.time=com.techsenger.weaverbird.core --enable-native-access=com.techsenger.weaverbird.core</failsafe.plugin.arguments>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.techsenger.toolkit</groupId>
+            <artifactId>toolkit-http</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.weaverbird</groupId>
+            <artifactId>weaverbird-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.weaverbird.net</groupId>
+            <artifactId>weaverbird-net-shared</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.weaverbird.net</groupId>
+            <artifactId>weaverbird-net-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.weaverbird.net</groupId>
+            <artifactId>weaverbird-net-server</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.weaverbird.it</groupId>
+            <artifactId>weaverbird-it-shared</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.techsenger.weaverbird.assembly</groupId>
+            <artifactId>weaverbird-assembly-security</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.expressly</groupId>
+            <artifactId>expressly</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.techsenger.weaverbird.assembly</groupId>
+                <artifactId>weaverbird-assembly-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>assemble-runtime</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <path>${project.build.directory}/framework</path>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

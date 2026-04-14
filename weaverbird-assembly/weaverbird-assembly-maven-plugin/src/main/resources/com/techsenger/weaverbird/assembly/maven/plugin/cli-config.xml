@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration title="Weaverbird CLI" name="weaverbird-cli" version="${project.version}">
+    <Repositories>
+        <Repository name="local" url="file://${settings.localRepository}"/>
+        <Repository name="central" url="${maven.central.url}"/>
+    </Repositories>
+
+    <Modules>
+        <!--### ASCII TABLE ###-->
+        <Module groupId="de.vandermeer" artifactId="asciitable" version="${bom.asciitable.version}"/>
+        <Module groupId="de.vandermeer" artifactId="skb-interfaces" version="${bom.skb-interfaces.version}"/>
+        <Module groupId="de.vandermeer" artifactId="ascii-utf-themes" version="${ascii.themes.version}"/>
+        <Module groupId="org.antlr" artifactId="ST4" version="${bom.st4.version}"/>
+        <Module groupId="org.apache.commons" artifactId="commons-lang3" version="${commons.lang.version}"/>
+
+        <!--### TOOLS ###-->
+        <Module groupId="org.jline" artifactId="jline" version="${bom.jline.version}" nativeAccessEnabled="true"/>
+        <Module groupId="com.techsenger.toolkit" artifactId="toolkit-ascii" version="${bom.toolkit.version}"/>
+        <Module groupId="com.techsenger.toolkit" artifactId="toolkit-http" version="${bom.toolkit.version}"/>
+        <Module groupId="com.beust" artifactId="jcommander" version="${bom.jcommander.version}"/>
+        <Module groupId="com.google.code.gson" artifactId="gson" version="${bom.gson.version}">
+            <!--
+                Gson requires reflective access to java.time classes for serialization/deserialization.
+                Since java.base is in the boot layer and JPMS does not provide access to the boot layer
+                controller, we use a relay approach: java.base opens java.time to the framework core module
+                via the add-opens at JVM startup, and the core module relays the access to Gson using
+                Module.addOpens().
+            -->
+            <Directives>
+                <Directive type="requestsOpen" layer="weaverbird-framework:${project.version}" module="java.base" package="java.time"/>
+            </Directives>
+        </Module>
+
+        <!--### WEAVERBIRD ###-->
+        <Module groupId="com.techsenger.weaverbird.net" artifactId="weaverbird-net-shared" version="${project.version}"/>
+        <Module groupId="com.techsenger.weaverbird.net" artifactId="weaverbird-net-client" version="${project.version}"/>
+        <Module groupId="com.techsenger.weaverbird" artifactId="weaverbird-executor" version="${project.version}"/>
+        <Module groupId="com.techsenger.weaverbird" artifactId="weaverbird-cli" version="${project.version}" active="true"/>
+    </Modules>
+</Configuration>

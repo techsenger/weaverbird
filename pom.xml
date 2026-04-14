@@ -7,12 +7,12 @@
         <version>1.7.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.techsenger.alpha</groupId>
-    <artifactId>alpha</artifactId>
+    <groupId>com.techsenger.weaverbird</groupId>
+    <artifactId>weaverbird</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Alpha</name>
-    <description>Techsenger Alpha Framework</description>
+    <name>Weaverbird</name>
+    <description>A framework for dynamically creating and deploying modular components using ModuleLayer</description>
 
     <licenses>
         <license>
@@ -21,17 +21,17 @@
         </license>
     </licenses>
 
-    <url>https://github.com/techsenger/alpha</url>
+    <url>https://github.com/techsenger/weaverbird</url>
 
     <scm>
-        <connection>scm:git:https://github.com/techsenger/alpha.git</connection>
-        <developerConnection>scm:git:https://github.com/techsenger/alpha.git</developerConnection>
-        <url>https://github.com/techsenger/alpha</url>
+        <connection>scm:git:https://github.com/techsenger/weaverbird.git</connection>
+        <developerConnection>scm:git:https://github.com/techsenger/weaverbird.git</developerConnection>
+        <url>https://github.com/techsenger/weaverbird</url>
     </scm>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/techsenger/alpha/issues</url>
+        <url>https://github.com/techsenger/weaverbird/issues</url>
     </issueManagement>
 
     <developers>
@@ -57,7 +57,7 @@
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
         <failsafe.plugin.version>3.5.5</failsafe.plugin.version>
-        <publishing.plugin.exclusions>alpha-it,alpha-it-shared,alpha-it-activator,alpha-it-core,alpha-it-net,alpha-demo,alpha-demo-cli,alpha-demo-gui,alpha-demo-starter,alpha-demo-jfx,alpha-demo-jfx-boot,alpha-demo-jfx-core</publishing.plugin.exclusions>
+        <publishing.plugin.exclusions>weaverbird-it,weaverbird-it-shared,weaverbird-it-activator,weaverbird-it-core,weaverbird-it-net,weaverbird-demo,weaverbird-demo-cli,weaverbird-demo-gui,weaverbird-demo-starter,weaverbird-demo-jfx,weaverbird-demo-jfx-boot,weaverbird-demo-jfx-core</publishing.plugin.exclusions>
         <maven.central.url>https://repo1.maven.org/maven2/</maven.central.url>
         <maven.plugin.version>3.15.2</maven.plugin.version>
         <osp-bom.version>1.8.0-SNAPSHOT</osp-bom.version>
@@ -78,15 +78,15 @@
     </properties>
 
     <modules>
-        <module>alpha-core</module>
-        <module>alpha-repo</module>
-        <module>alpha-net</module>
-        <module>alpha-executor</module>
-        <module>alpha-cli</module>
-        <module>alpha-gui</module>
-        <module>alpha-assembly</module>
-        <module>alpha-it</module>
-        <module>alpha-demo</module>
+        <module>weaverbird-core</module>
+        <module>weaverbird-repo</module>
+        <module>weaverbird-net</module>
+        <module>weaverbird-executor</module>
+        <module>weaverbird-cli</module>
+        <module>weaverbird-gui</module>
+        <module>weaverbird-assembly</module>
+        <module>weaverbird-it</module>
+        <module>weaverbird-demo</module>
     </modules>
 
     <dependencyManagement>
@@ -101,43 +101,43 @@
 
             <!--### APLHA ###-->
             <dependency>
-                <groupId>com.techsenger.alpha</groupId>
-                <artifactId>alpha-core</artifactId>
+                <groupId>com.techsenger.weaverbird</groupId>
+                <artifactId>weaverbird-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.techsenger.alpha.net</groupId>
-                <artifactId>alpha-net-shared</artifactId>
+                <groupId>com.techsenger.weaverbird.net</groupId>
+                <artifactId>weaverbird-net-shared</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.techsenger.alpha.net</groupId>
-                <artifactId>alpha-net-client</artifactId>
+                <groupId>com.techsenger.weaverbird.net</groupId>
+                <artifactId>weaverbird-net-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.techsenger.alpha.net</groupId>
-                <artifactId>alpha-net-server</artifactId>
+                <groupId>com.techsenger.weaverbird.net</groupId>
+                <artifactId>weaverbird-net-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.techsenger.alpha</groupId>
-                <artifactId>alpha-executor</artifactId>
+                <groupId>com.techsenger.weaverbird</groupId>
+                <artifactId>weaverbird-executor</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.techsenger.alpha</groupId>
-                <artifactId>alpha-cli</artifactId>
+                <groupId>com.techsenger.weaverbird</groupId>
+                <artifactId>weaverbird-cli</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.techsenger.alpha</groupId>
-                <artifactId>alpha-gui</artifactId>
+                <groupId>com.techsenger.weaverbird</groupId>
+                <artifactId>weaverbird-gui</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.techsenger.alpha.assembly</groupId>
-                <artifactId>alpha-assembly-security</artifactId>
+                <groupId>com.techsenger.weaverbird.assembly</groupId>
+                <artifactId>weaverbird-assembly-security</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -150,13 +150,13 @@
 
             <!--### MAVEN REPO ###-->
             <dependency>
-                <groupId>com.techsenger.alpha.repo</groupId>
-                <artifactId>alpha-repo-core</artifactId>
+                <groupId>com.techsenger.weaverbird.repo</groupId>
+                <artifactId>weaverbird-repo-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.techsenger.alpha.repo</groupId>
-                <artifactId>alpha-repo-external</artifactId>
+                <groupId>com.techsenger.weaverbird.repo</groupId>
+                <artifactId>weaverbird-repo-external</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

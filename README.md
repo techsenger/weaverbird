@@ -1,6 +1,6 @@
-# Techsenger Alpha
+# Techsenger Weaverbird
 
-Techsenger Alpha is a framework built on top of the Java Platform Module System (JPMS) that manages modular components
+Techsenger Weaverbird is a framework built on top of the Java Platform Module System (JPMS) that manages modular components
 through dynamic module layers. It provides a powerful API and versatile interfaces (CLI/GUI) with multiple built-in
 commands — helping developers efficiently build and manage modular systems.
 
@@ -47,8 +47,8 @@ include:
 * Hierarchy - layers form a graph and can use modules from parent layers.
 * Dynamic configuration - layers can be dynamically added and removed (except the boot layer).
 
-Techsenger Alpha is a framework designed to work with module layers. The framework resides in the boot layer and handles
-all the work of managing the other layers. To facilitate this, the concept of a component is introduced.
+Techsenger Weaverbird is a framework designed to work with module layers. The framework resides in the boot layer and
+handles all the work of managing the other layers. To facilitate this, the concept of a component is introduced.
 
 A component is a logical part of the system that can be dynamically added or removed. Each component is deployed in a
 separate module layer and has a clearly defined lifecycle. The configuration of a component is specified via a `Builder`
@@ -60,9 +60,6 @@ All loaded modules are stored in the framework's internal repository, which is b
 
 The code within a component is started and stopped using activators — special services invoked by the framework during
 the activation or deactivation of the component.
-
-The framework operates in three modes: `standalone`, `client`, and `server`. The last two modes allow you to connect to
-already running Alpha frameworks.
 
 You can interact with the framework either through the API or through the text command mechanism. Text commands are a
 convenient way to work with the framework. By default, about 40 commands are provided for working with components,
@@ -86,10 +83,10 @@ The framework can be used for programs that:
 ## Demo <a name="demo"></a>
 
 ### CLI Demo <a name="demo-cli"></a>
-![Alpha CLI](./cli-demo.gif)
+![Weaverbird CLI](./cli-demo.gif)
 
 ### GUI Demo <a name="demo-gui"></a>
-![Alpha GUI](./gui-demo.gif)
+![Weaverbird GUI](./gui-demo.gif)
 
 ## Usage <a name="usage"></a>
 
@@ -138,7 +135,7 @@ config
 #### Registry <a name="usage-framework-registry"></a>
 
 The framework stores data about the installation and components in a registry, which is located in the file
-`data/alpha-registry.xml`. If the client and server are located in the same folder, as in the `alpha-demo-net` example,
+`data/weaverbird-registry.xml`. If the client and server are located in the same folder, as in the `weaverbird-demo-net` example,
 both the client and server instances of the framework use this file.
 
 #### Boot <a name="usage-framework-boot"></a>
@@ -367,7 +364,7 @@ it may be necessary to add extra directives.
 
 The layer attribute allows specifying the module's layer. If this attribute is not specified, the layer of this
 component is used. To specify the framework and component layer, either the name `foo` or the name and version
-`foo:1.0.0` is used. The name of the layer where the framework is located is `alpha-framework`.
+`foo:1.0.0` is used. The name of the layer where the framework is located is `weaverbird-framework`.
 
 The difference between the directives `opens`, `reads`, `exports` and the directives `requestsOpen`, `requestsRead`,
 `requestsExport` is that the former are applied directly to the module specified in the `Module` tag, while the latter
@@ -392,12 +389,12 @@ configuration will open `java.time` from `java.base` to Gson:
 ```xml
 <Module groupId="com.google.code.gson" artifactId="gson" version="${bom.gson.version}">
     <Directives>
-        <Directive type="requestsOpen" layer="alpha-framework:${project.version}" module="java.base" package="java.time"/>
+        <Directive type="requestsOpen" layer="weaverbird-framework:${project.version}" module="java.base" package="java.time"/>
     </Directives>
 </Module>
 ```
 
-For a specific example of working with directives, see the configuration of the demo component — `alpha-gui`.
+For a specific example of working with directives, see the configuration of the demo component — `weaverbird-gui`.
 
 #### Events <a name="usage-component-events"></a>
 
@@ -420,7 +417,7 @@ There are two solutions to this problem:
 ### Remote Control <a name="usage-remote-control"></a>
 
 The framework provides out-of-the-box support for remote management over HTTP. To understand how to work with it, you
-can refer to the integration test configuration in the `alpha-it-net` module.
+can refer to the integration test configuration in the `weaverbird-it-net` module.
 
 It is important to note that the data channel is not encrypted. When deploying the client and server on different
 hosts, you must ensure traffic protection using a VPN or an SSH tunnel.
@@ -520,7 +517,7 @@ Currently, the memory log retains all messages until it is cleared, so it cannot
 intended solely for testing and debugging purposes.
 
 By default, the memory log is not active. To enable it, you must set the parameter
-`com.techsenger.alpha.core.log.memory` to `true` in the `.sh` / `.bat` scripts.
+`com.techsenger.weaverbird.core.log.memory` to `true` in the `.sh` / `.bat` scripts.
 
 #### Diagrams <a name="usage-gui-diagrams"></a>
 
@@ -578,9 +575,9 @@ Example:
 
 ```xml
 <plugin>
-    <groupId>com.techsenger.alpha.assembly</groupId>
-    <artifactId>alpha-assembly-maven-plugin</artifactId>
-    <version>${alpha.version}</version>
+    <groupId>com.techsenger.weaverbird.assembly</groupId>
+    <artifactId>weaverbird-assembly-maven-plugin</artifactId>
+    <version>${weaverbird.version}</version>
     <executions>
         <execution>
             <phase>verify</phase>
@@ -617,9 +614,9 @@ and managing modular components:
 
 ```
 <dependency>
-    <groupId>com.techsenger.alpha</groupId>
-    <artifactId>alpha-core</artifactId>
-    <version>${alpha.version}</version>
+    <groupId>com.techsenger.weaverbird</groupId>
+    <artifactId>weaverbird-core</artifactId>
+    <version>${weaverbird.version}</version>
 </dependency>
 ```
 
@@ -627,8 +624,8 @@ and managing modular components:
 
 To build the framework use standard Git and Maven commands:
 
-    git clone https://github.com/techsenger/alpha
-    cd alpha
+    git clone https://github.com/techsenger/weaverbird
+    cd weaverbird
     mvn clean install
 
 ## Running Demo <a name="running-demo"></a>
@@ -640,7 +637,7 @@ Information on how to run a specific `Demo.java` is provided in the Javadoc of t
 
 ## License <a name="license"></a>
 
-Techsenger Alpha is licensed under the Apache License, Version 2.0.
+Techsenger Weaverbird is licensed under the Apache License, Version 2.0.
 
 ## Contributing <a name="contributing"></a>
 

@@ -1,0 +1,49 @@
+/*
+ * Copyright 2018-2026 Pavel Castornii.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.techsenger.weaverbird.net.server.impl.handlers;
+
+import com.techsenger.weaverbird.core.api.message.InMemoryMessagePrinter;
+import com.techsenger.weaverbird.net.server.spi.FrameworkRequestContext;
+import com.techsenger.weaverbird.net.shared.ComponentUninstallRequest;
+import com.techsenger.weaverbird.net.shared.ComponentUninstallResponse;
+import com.techsenger.weaverbird.net.shared.DefaultComponentConfigDto;
+import com.techsenger.weaverbird.net.shared.Endpoints;
+import com.techsenger.toolkit.http.handler.AbstractEndpointHandler;
+import com.techsenger.toolkit.http.handler.Endpoint;
+import com.techsenger.toolkit.http.response.Response;
+
+/**
+ *
+ * @author Pavel Castornii
+ */
+@Endpoint(Endpoints.COMPONENT_UNINSTALL)
+public class ComponentUninstallHandler extends AbstractEndpointHandler<FrameworkRequestContext,
+        ComponentUninstallRequest> {
+
+    public ComponentUninstallHandler() {
+        super(ComponentUninstallRequest.class);
+    }
+
+    @Override
+    public Response handle(FrameworkRequestContext context, ComponentUninstallRequest request) throws Exception {
+        var printer = new InMemoryMessagePrinter();
+        var config = context.getFramework().getComponentManager().uninstallComponent(request.getName(),
+                request.getVersion(), printer);
+        return new ComponentUninstallResponse(DefaultComponentConfigDto.of(config), printer.getMessages());
+    }
+
+}
