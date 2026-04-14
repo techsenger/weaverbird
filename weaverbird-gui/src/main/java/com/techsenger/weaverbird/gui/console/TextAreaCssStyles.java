@@ -32,10 +32,10 @@ public final class TextAreaCssStyles {
             .of(CSS_ATTRIBUTE, "-fx-fill: -color-danger-5;");
 
     protected static final StyleAttributeMap COMMAND = StyleAttributeMap
-            .of(CSS_ATTRIBUTE, "-fx-fill: -color-accent-5;");
+            .of(CSS_ATTRIBUTE, "-fx-font-weight: bold");
 
     protected static final StyleAttributeMap DEFAULT = StyleAttributeMap
-            .of(CSS_ATTRIBUTE, "-fx-fill: -color-fg-default;");
+            .of(CSS_ATTRIBUTE, "-fx-fill: -color-fg-default; -fx-font-weight: normal;");
 
     private TextAreaCssStyles() {
         // empty
