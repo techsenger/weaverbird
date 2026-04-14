@@ -286,10 +286,10 @@ var config = ComponentConfig.builder()
             r -> r.name("central").url("https://repo1.maven.org/maven2/")
         )
         .parents(
-            p -> p.name(...).version(...).versionMatch(VersionMatch.MAJOR)
+            p -> p.name(...).version(...).versionMatch(...)
         )
         .modules(
-            m -> m.groupId(...).artifactId(....).version(...).classifier(fxClsfr).active(...)
+            m -> m.groupId(...).artifactId(...).version(...).classifier(...).active(...)
                 .directives(
                     d -> d.type(...).pkg(...).layer(...).module(...)
                 )
