@@ -20,4 +20,6 @@ module com.techsenger.weaverbird.demo.gui  {
     requires com.techsenger.toolkit.core;
     requires jakarta.el;
     requires org.glassfish.expressly;
+
+    opens com.techsenger.weaverbird.demo.gui to com.techsenger.toolkit.core;
 }

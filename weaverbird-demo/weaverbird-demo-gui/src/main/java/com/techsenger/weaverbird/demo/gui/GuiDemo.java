@@ -16,13 +16,14 @@
 
 package com.techsenger.weaverbird.demo.gui;
 
+import com.techsenger.toolkit.core.PropertiesUtils;
+import com.techsenger.toolkit.core.os.OperatingSystem;
+import com.techsenger.toolkit.core.os.OsUtils;
+import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.core.api.FrameworkFactory;
 import com.techsenger.weaverbird.core.api.FrameworkSettings;
 import com.techsenger.weaverbird.core.api.SystemProperties;
-import com.techsenger.toolkit.core.os.OperatingSystem;
-import com.techsenger.toolkit.core.os.OsUtils;
-import com.techsenger.toolkit.core.version.Version;
 import java.nio.file.Paths;
 
 /**
@@ -36,6 +37,7 @@ public final class GuiDemo {
      */
     public static void main(String[] args) throws Exception {
         var rootPath = Paths.get(System.getProperty(SystemProperties.ROOT_PATH));
+        var props = PropertiesUtils.read(GuiDemo.class, "project-info.properties");
 
         // Checksum is disabled because artifacts resolved from the local Maven repository
         // do not have checksum files when installed via "mvn install"
@@ -43,7 +45,7 @@ public final class GuiDemo {
                 .repoChecksumEnabled(false)
                 .application(app -> app
                     .name("gui-demo")
-                    .version(Version.of("1.0.0")))
+                    .version(Version.of(props.getProperty("version"))))
                 .build();
         var framework = FrameworkFactory.create(settings, rootPath);
         var componentManager = framework.getComponentManager();
