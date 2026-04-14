@@ -36,7 +36,7 @@ public class ModuleActivatorProvider implements ModuleActivator {
 
     @Override
     public void activate(ModuleContext context) throws Exception {
-
+        framework = context.getFramework();
         // JavaFX Application.launch() blocks the calling thread until the application exits.
         // To prevent blocking the activator, we start it in a separate not daemon thread.
         var thread = new Thread(() -> {
