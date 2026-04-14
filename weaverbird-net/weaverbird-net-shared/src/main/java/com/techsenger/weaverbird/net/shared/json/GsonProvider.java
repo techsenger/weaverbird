@@ -18,13 +18,17 @@ package com.techsenger.weaverbird.net.shared.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
+import com.techsenger.toolkit.core.model.ModuleModel;
 import com.techsenger.weaverbird.core.api.model.ComponentModuleModel;
 import com.techsenger.weaverbird.core.api.model.DefaultLayersInfo;
 import com.techsenger.weaverbird.core.api.model.LayersInfo;
 import com.techsenger.weaverbird.core.api.state.ComponentsState;
 import com.techsenger.weaverbird.core.api.state.DefaultComponentsState;
-import com.techsenger.toolkit.core.model.ModuleModel;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,15 +53,19 @@ public final class GsonProvider {
         if (gson == null) {
             gson = new GsonBuilder()
                     .serializeNulls()
+                    .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>)
+                        (src, type, ctx) -> new JsonPrimitive(src.toString()))
+                    .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>)
+                        (json, type, ctx) -> LocalDateTime.parse(json.getAsString()))
                     .registerTypeAdapterFactory(new BindingTypeAdapterFactory(
-                                    new TypeToken<LayersInfo>() { },
-                                    new TypeToken<DefaultLayersInfo>() { }))
+                        new TypeToken<LayersInfo>() { },
+                        new TypeToken<DefaultLayersInfo>() { }))
                     .registerTypeAdapterFactory(new BindingTypeAdapterFactory(
-                                    new TypeToken<ModuleModel>() { },
-                                    new TypeToken<ComponentModuleModel>() { }))
+                        new TypeToken<ModuleModel>() { },
+                        new TypeToken<ComponentModuleModel>() { }))
                     .registerTypeAdapterFactory(new BindingTypeAdapterFactory(
-                                    new TypeToken<ComponentsState>() { },
-                                    new TypeToken<DefaultComponentsState>() { }))
+                        new TypeToken<ComponentsState>() { },
+                        new TypeToken<DefaultComponentsState>() { }))
                     .create();
         }
     }
