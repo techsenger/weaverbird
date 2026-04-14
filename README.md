@@ -84,7 +84,7 @@ The framework can be used for programs that:
 
 ### CLI Demo <a name="demo-cli"></a>
 
-<img width="1209" height="811" alt="Weaverbird CLI" src="https://github.com/user-attachments/assets/30416f70-9626-4abd-b025-8e0afced622f" />
+<img width="1209" height="811" alt="Weaverbird CLI" src="https://github.com/user-attachments/assets/f6dfcc1d-a674-45cd-89e6-fa5ed7a5b6ee" />
 
 ### GUI Demo <a name="demo-gui"></a>
 
@@ -92,7 +92,9 @@ The framework can be used for programs that:
 
 <img width="1200" height="800" alt="Weaverbird GUI layer diagram" src="https://github.com/user-attachments/assets/ac9cf773-7615-47f0-8b57-8d58df260e49" /><br>
 
-<img width="1200" height="800" alt="Weaverbird GUI module diagram" src="https://github.com/user-attachments/assets/c02dabee-320f-4723-a767-4ecf0d45628c" />
+<img width="1200" height="800" alt="Weaverbird GUI module diagram" src="https://github.com/user-attachments/assets/c02dabee-320f-4723-a767-4ecf0d45628c" /><br>
+
+<img width="1200" height="800" alt="Weaverbird GUI dialog" src="https://github.com/user-attachments/assets/f367ef3b-c938-4c27-afa5-f221e85b2b3e" />
 
 ## Usage <a name="usage"></a>
 
