@@ -26,6 +26,7 @@ java -agentlib:jdwp=transport=dt_socket,address=7700,server=y,suspend=n \
     -Djava.net.preferIPv4Stack=true \
     -Djava.io.tmpdir="$ROOT_PATH/temp" \
     -Dfile.encoding=UTF-8 \
+    -Djavafx.enablePreview=true \
     --add-modules ALL-DEFAULT \
     --add-modules org.apache.logging.log4j,org.apache.logging.log4j.jul \
     --add-opens java.base/java.time=com.techsenger.weaverbird.core \

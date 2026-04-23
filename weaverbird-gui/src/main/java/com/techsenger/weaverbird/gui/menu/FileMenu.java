@@ -17,10 +17,8 @@
 package com.techsenger.weaverbird.gui.menu;
 
 import com.techsenger.tabshell.material.menu.DefaultMenuGroupName;
-import com.techsenger.tabshell.material.menu.DefaultMenuItemName;
 import com.techsenger.tabshell.material.menu.DefaultMenuName;
 import com.techsenger.tabshell.material.menu.MenuGroupName;
-import com.techsenger.tabshell.material.menu.MenuItemName;
 import com.techsenger.tabshell.material.menu.MenuName;
 
 /**
@@ -32,12 +30,6 @@ public interface FileMenu {
     MenuName NAME = new DefaultMenuName();
 
     MenuGroupName MAIN = new DefaultMenuGroupName("Main");
-
-    MenuItemName CONSOLE = new DefaultMenuItemName();
-
-    MenuItemName DIAGRAM = new DefaultMenuItemName();
-
-    MenuItemName SETTINGS = new DefaultMenuItemName();
 
 //    MenuKey NEW = new MenuKey();
 //

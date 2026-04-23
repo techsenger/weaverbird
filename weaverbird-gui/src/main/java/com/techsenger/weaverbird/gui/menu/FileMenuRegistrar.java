@@ -16,6 +16,16 @@
 
 package com.techsenger.weaverbird.gui.menu;
 
+import com.techsenger.tabshell.core.ShellFxView;
+import com.techsenger.tabshell.core.menu.AbstractMenuItemHandler;
+import com.techsenger.tabshell.core.menu.MenuItemHandler;
+import com.techsenger.tabshell.core.registry.AbstractControlRegistrar;
+import com.techsenger.tabshell.core.registry.ControlFactory;
+import com.techsenger.tabshell.layout.tabhost.TabHostFxView;
+import com.techsenger.tabshell.material.icon.FontIconView;
+import com.techsenger.tabshell.material.menu.ManagedMenu;
+import com.techsenger.tabshell.material.menu.ManagedMenuGroup;
+import com.techsenger.tabshell.material.menu.ManagedMenuItem;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.gui.console.ConsoleTabFxView;
 import com.techsenger.weaverbird.gui.console.ConsoleTabPresenter;
@@ -24,15 +34,6 @@ import com.techsenger.weaverbird.gui.diagram.DiagramTabPresenter;
 import com.techsenger.weaverbird.gui.style.ConsoleIcons;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientServiceFactory;
-import com.techsenger.tabshell.core.CoreComponents;
-import com.techsenger.tabshell.core.ShellFxView;
-import com.techsenger.tabshell.core.registry.AbstractControlRegistrar;
-import com.techsenger.tabshell.core.registry.ControlFactory;
-import com.techsenger.tabshell.layout.tabhost.TabHostFxView;
-import com.techsenger.tabshell.material.icon.FontIconView;
-import com.techsenger.tabshell.material.menu.NamedMenu;
-import com.techsenger.tabshell.material.menu.NamedMenuGroup;
-import com.techsenger.tabshell.material.menu.NamedMenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -65,53 +66,61 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
     }
 
     protected void registerMenu() {
-        ControlFactory<NamedMenu> f = (v) -> {
-            return new NamedMenu(FileMenu.NAME, "_File", 0);
+        ControlFactory<ShellFxView<?>, ManagedMenu> f = (v) -> {
+            return new ManagedMenu(FileMenu.NAME, "_File", 0);
         };
-        addRegistration(getRegistry().registerMenu(CoreComponents.SHELL, null, f));
+        addRegistration(getRegistry().mainMenu().registerMenu(null, f));
     }
 
     private void registerMainGroup() {
-        ControlFactory<NamedMenuGroup> f = (v) -> new NamedMenuGroup(FileMenu.MAIN, 100);
-        addRegistration(getRegistry().registerMenuGroup(CoreComponents.SHELL, FileMenu.NAME, f));
+        ControlFactory<ShellFxView<?>, ManagedMenuGroup> f = (v) -> new ManagedMenuGroup(FileMenu.MAIN, 100);
+        addRegistration(getRegistry().mainMenu().registerMenuGroup(FileMenu.NAME, f));
     }
 
     private void registerConsoleItem() {
-        ControlFactory<NamedMenuItem> f = (v) -> {
-            var item = new NamedMenuItem(FileMenu.CONSOLE, false, false, false, "C_onsole", 100);
+        ControlFactory<ShellFxView<?>, ManagedMenuItem> f = (v) -> {
+            var item = new ManagedMenuItem("C_onsole", 100);
             item.setGraphic(new FontIconView(ConsoleIcons.CONSOLE));
             item.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-            item.setOnAction((e) -> {
-                var shell = (ShellFxView<?>) v;
-                var consoleView = new ConsoleTabFxView<>(shell);
-                var consolePresenter = new ConsoleTabPresenter<>(consoleView, framework, client, null);
-                consolePresenter.initialize();
-                TabHostFxView<?> workspace = (TabHostFxView<?>) shell.getComposer().getWorkspace();
-                workspace.getComposer().addTab(consoleView);
-            });
-            return item;
+            var handler = new AbstractMenuItemHandler<ShellFxView<?>>(item, shell) {
 
+                @Override
+                public void onAction() {
+                    var shell = getComponent();
+                    var consoleView = new ConsoleTabFxView<>(shell);
+                    var consolePresenter = new ConsoleTabPresenter<>(consoleView, framework, client, null);
+                    consolePresenter.initialize();
+                    TabHostFxView<?> workspace = (TabHostFxView<?>) shell.getComposer().getWorkspace();
+                    workspace.getComposer().addTab(consoleView);
+                }
+            };
+            MenuItemHandler.setHandler(item, handler);
+            return item;
         };
-        addRegistration(getRegistry().registerMenuItem(CoreComponents.SHELL, FileMenu.MAIN, f));
+        addRegistration(getRegistry().mainMenu().registerMenuItem(FileMenu.MAIN, f));
     }
 
     private void registerDiagramItem() {
-        ControlFactory<NamedMenuItem> f = (v) -> {
-            var item = new NamedMenuItem(FileMenu.DIAGRAM, false, false, false, "D_iagrams", 200);
+        ControlFactory<ShellFxView<?>, ManagedMenuItem> f = (v) -> {
+            var item = new ManagedMenuItem("D_iagrams", 200);
             item.setGraphic(new FontIconView(ConsoleIcons.DIAGRAMS));
             item.setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN));
-            item.setOnAction((e) -> {
-                var shell = (ShellFxView<?>) v;
-                var diagramView = new DiagramTabFxView<>(shell);
-                var diagramPresenter = new DiagramTabPresenter<>(diagramView, framework, client, null);
-                diagramPresenter.initialize();
-                TabHostFxView<?> workspace = (TabHostFxView<?>) shell.getComposer().getWorkspace();
-                workspace.getComposer().addTab(diagramView);
-            });
+            var handler = new AbstractMenuItemHandler<ShellFxView<?>>(item, shell) {
+                @Override
+                public void onAction() {
+                    var shell = getComponent();
+                    var diagramView = new DiagramTabFxView<>(shell);
+                    var diagramPresenter = new DiagramTabPresenter<>(diagramView, framework, client, null);
+                    diagramPresenter.initialize();
+                    TabHostFxView<?> workspace = (TabHostFxView<?>) shell.getComposer().getWorkspace();
+                    workspace.getComposer().addTab(diagramView);
+                }
+            };
+            MenuItemHandler.setHandler(item, handler);
             return item;
 
         };
-        addRegistration(getRegistry().registerMenuItem(CoreComponents.SHELL, FileMenu.MAIN, f));
+        addRegistration(getRegistry().mainMenu().registerMenuItem(FileMenu.MAIN, f));
     }
 
 //    private void registerSettingsItem() {
