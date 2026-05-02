@@ -16,12 +16,6 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.weaverbird.core.api.message.Message;
-import com.techsenger.weaverbird.core.api.message.MessageType;
-import com.techsenger.weaverbird.executor.api.command.CommandInfo;
-import com.techsenger.weaverbird.executor.api.command.ParameterDescriptor;
-import com.techsenger.weaverbird.net.client.api.ClientService;
-import com.techsenger.weaverbird.net.client.api.ClientSession;
 import com.techsenger.tabshell.core.ShellFxView;
 import com.techsenger.tabshell.core.tab.AbstractTabFxView;
 import com.techsenger.tabshell.material.Anchors;
@@ -29,6 +23,12 @@ import com.techsenger.tabshell.material.style.StyleClasses;
 import com.techsenger.tabshell.material.style.StyleUtils;
 import com.techsenger.tabshell.material.theme.AtlantaFxTheme;
 import com.techsenger.toolkit.fx.utils.NodeUtils;
+import com.techsenger.weaverbird.core.api.message.Message;
+import com.techsenger.weaverbird.core.api.message.MessageType;
+import com.techsenger.weaverbird.executor.api.command.CommandInfo;
+import com.techsenger.weaverbird.executor.api.command.ParameterDescriptor;
+import com.techsenger.weaverbird.net.client.api.ClientService;
+import com.techsenger.weaverbird.net.client.api.ClientSession;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,7 +53,7 @@ import jfx.incubator.scene.control.richtext.model.StyleAttributeMap;
  *
  * @author Pavel Castornii
  */
-public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends AbstractTabFxView<P>
+public class ConsoleTabFxView<P extends ConsoleTabPresenter<?>> extends AbstractTabFxView<P>
         implements ConsoleTabView {
 
     private static final class CssRichTextArea extends RichTextArea {
@@ -76,7 +76,7 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?, ?>> extends Abstr
         }
     };
 
-    protected class Composer extends AbstractTabFxView<P>.Composer implements ConsoleTabComposer {
+    protected class Composer extends AbstractTabFxView<P>.Composer implements ConsoleTabView.Composer {
 
         private final ConsoleTabFxView<P> view = ConsoleTabFxView.this;
 

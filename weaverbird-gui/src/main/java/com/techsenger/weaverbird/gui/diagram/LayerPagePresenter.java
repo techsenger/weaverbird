@@ -18,7 +18,6 @@ package com.techsenger.weaverbird.gui.diagram;
 
 import com.techsenger.patternfx.mvp.Descriptor;
 import com.techsenger.tabshell.core.page.AbstractPagePresenter;
-import com.techsenger.tabshell.core.page.PageComposer;
 import com.techsenger.tabshell.core.page.PageItem;
 import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 
@@ -26,8 +25,7 @@ import com.techsenger.weaverbird.gui.WeaverbirdComponents;
  *
  * @author Pavel Castornii
  */
-public class LayerPagePresenter<V extends LayerPageView, C extends PageComposer>
-        extends AbstractPagePresenter<V, C> implements LayerPagePort {
+public class LayerPagePresenter<V extends LayerPageView> extends AbstractPagePresenter<V> implements LayerPagePort {
 
     private final LayerConfig layer;
 

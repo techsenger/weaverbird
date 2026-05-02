@@ -17,11 +17,11 @@
 package com.techsenger.weaverbird.gui.console;
 
 import atlantafx.base.theme.Styles;
-import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarFxView;
-import com.techsenger.weaverbird.gui.style.ConsoleIcons;
 import com.techsenger.tabshell.material.icon.FontIconView;
 import com.techsenger.tabshell.material.style.StyleClasses;
 import com.techsenger.toolkit.fx.Spacer;
+import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarFxView;
+import com.techsenger.weaverbird.gui.style.ConsoleIcons;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
@@ -31,7 +31,7 @@ import javafx.scene.control.Tooltip;
  *
  * @author Pavel Castornii
  */
-public class ConsoleToolBarFxView<P extends ConsoleToolBarPresenter<?, ?>> extends AbstractSessionToolBarFxView<P>
+public class ConsoleToolBarFxView<P extends ConsoleToolBarPresenter<?>> extends AbstractSessionToolBarFxView<P>
         implements ConsoleToolBarView {
 
     private final Button clearButton = new Button(null, new FontIconView(ConsoleIcons.CLEAR));

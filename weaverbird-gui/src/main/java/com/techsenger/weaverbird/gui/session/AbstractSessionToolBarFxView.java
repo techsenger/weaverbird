@@ -17,11 +17,11 @@
 package com.techsenger.weaverbird.gui.session;
 
 import atlantafx.base.theme.Styles;
-import com.techsenger.weaverbird.gui.style.ConsoleIcons;
-import com.techsenger.weaverbird.net.client.api.ClientSession;
 import com.techsenger.tabshell.core.area.AbstractAreaFxView;
 import com.techsenger.tabshell.material.icon.FontIconView;
 import com.techsenger.tabshell.material.style.StyleClasses;
+import com.techsenger.weaverbird.gui.style.ConsoleIcons;
+import com.techsenger.weaverbird.net.client.api.ClientSession;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
@@ -35,7 +35,7 @@ import javafx.scene.layout.Priority;
  *
  * @author Pavel Castornii
  */
-public abstract class AbstractSessionToolBarFxView<P extends AbstractSessionToolBarPresenter<?, ?>>
+public abstract class AbstractSessionToolBarFxView<P extends AbstractSessionToolBarPresenter<?>>
         extends AbstractAreaFxView<P> implements SessionToolBarView {
 
     private final Label sessionLabel = new Label("Session");

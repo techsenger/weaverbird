@@ -16,10 +16,9 @@
 
 package com.techsenger.weaverbird.gui.session;
 
+import com.techsenger.tabshell.core.area.AbstractAreaPresenter;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
-import com.techsenger.tabshell.core.area.AbstractAreaPresenter;
-import com.techsenger.tabshell.core.area.AreaComposer;
 import java.util.Comparator;
 import java.util.List;
 
@@ -27,8 +26,8 @@ import java.util.List;
  *
  * @author Pavel Castornii
  */
-public abstract class AbstractSessionToolBarPresenter<V extends SessionToolBarView, C extends AreaComposer>
-        extends AbstractAreaPresenter<V, C> {
+public abstract class AbstractSessionToolBarPresenter<V extends SessionToolBarView>
+        extends AbstractAreaPresenter<V> {
 
     private final ClientService client;
 

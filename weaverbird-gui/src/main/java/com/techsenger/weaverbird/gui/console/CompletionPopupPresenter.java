@@ -23,7 +23,6 @@ import com.techsenger.patternfx.mvp.Descriptor;
 import com.techsenger.tabshell.core.CloseCheckResult;
 import com.techsenger.tabshell.core.ClosePreparationResult;
 import com.techsenger.tabshell.core.popup.AbstractPopupPresenter;
-import com.techsenger.tabshell.core.popup.PopupComposer;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -34,8 +33,8 @@ import com.techsenger.weaverbird.gui.WeaverbirdComponents;
  *
  * @author Pavel Castornii
  */
-public class CompletionPopupPresenter<V extends CompletionPopupView, C extends PopupComposer>
-        extends AbstractPopupPresenter<V, C> implements CompletionPopupPort {
+public class CompletionPopupPresenter<V extends CompletionPopupView> extends AbstractPopupPresenter<V>
+        implements CompletionPopupPort {
 
     private final Collection<CommandInfo> commands;
 

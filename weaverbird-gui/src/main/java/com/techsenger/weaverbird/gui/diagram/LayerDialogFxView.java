@@ -35,7 +35,7 @@ import javafx.scene.layout.VBox;
  *
  * @author Pavel Castornii
  */
-public class LayerDialogFxView<P extends LayerDialogPresenter<?, ?>> extends AbstractDialogFxView<P>
+public class LayerDialogFxView<P extends LayerDialogPresenter<?>> extends AbstractDialogFxView<P>
         implements LayerDialogView {
 
     private final Button resetButton = new Button("Reset");
@@ -44,7 +44,7 @@ public class LayerDialogFxView<P extends LayerDialogPresenter<?, ?>> extends Abs
 
     private final ResultButton okButton = new ResultButton(LayerDialogButtons.OK, "OK");
 
-    protected class Composer extends AbstractDialogFxView<P>.Composer implements LayerDialogComposer {
+    protected class Composer extends AbstractDialogFxView<P>.Composer implements LayerDialogView.Composer {
 
         private List<LayerConfig> layerConfgs;
 

@@ -16,19 +16,18 @@
 
 package com.techsenger.weaverbird.gui.console;
 
+import com.techsenger.patternfx.mvp.Descriptor;
+import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarPresenter;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
-import com.techsenger.patternfx.mvp.Descriptor;
-import com.techsenger.tabshell.core.area.AreaComposer;
-import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 
 /**
  *
  * @author Pavel Castornii
  */
-public class ConsoleToolBarPresenter<V extends ConsoleToolBarView, C extends AreaComposer>
-        extends AbstractSessionToolBarPresenter<V, C> implements ConsoleToolBarPort {
+public class ConsoleToolBarPresenter<V extends ConsoleToolBarView> extends AbstractSessionToolBarPresenter<V>
+        implements ConsoleToolBarPort {
 
     private final ConsoleToolBarAwarePort toolBarAware;
 

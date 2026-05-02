@@ -38,7 +38,7 @@ import jfx.incubator.scene.control.richtext.model.StyleAttributeMap;
  *
  * @author Pavel Castornii
  */
-public class CompletionPopupFxView<P extends CompletionPopupPresenter<?, ?>>
+public class CompletionPopupFxView<P extends CompletionPopupPresenter<?>>
         extends AbstractPopupFxView<P> implements CompletionPopupView {
 
     private final ListView<CompletionItem<?>> listView = new ListView<>();

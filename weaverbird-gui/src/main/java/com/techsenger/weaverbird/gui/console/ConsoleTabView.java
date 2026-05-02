@@ -16,8 +16,13 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.weaverbird.core.api.message.Message;
 import com.techsenger.tabshell.core.tab.TabView;
+import com.techsenger.weaverbird.core.api.message.Message;
+import com.techsenger.weaverbird.executor.api.command.CommandInfo;
+import com.techsenger.weaverbird.executor.api.command.ParameterDescriptor;
+import com.techsenger.weaverbird.net.client.api.ClientService;
+import com.techsenger.weaverbird.net.client.api.ClientSession;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import javafx.scene.text.Font;
@@ -27,6 +32,26 @@ import javafx.scene.text.Font;
  * @author Pavel Castornii
  */
 public interface ConsoleTabView extends TabView {
+
+    interface Composer extends TabView.Composer {
+
+        void setClient(ClientService client);
+
+        void setSession(ClientSession session);
+
+        ConsoleToolBarPort getToolBarPort();
+
+        void addCommandPopup(Collection<CommandInfo> commands, boolean sessionExists, String token, int offset);
+
+        void addParameterPopup(List<ParameterDescriptor> parameters,  String token, int offset);
+
+        CompletionPopupPort getPopupPort();
+
+        void removePopup();
+    }
+
+    @Override
+    Composer getComposer();
 
     void setMonospaceFont(Font font);
 

@@ -17,11 +17,11 @@
 package com.techsenger.weaverbird.gui.diagram;
 
 import atlantafx.base.theme.Styles;
-import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarFxView;
-import com.techsenger.weaverbird.gui.style.ConsoleIcons;
 import com.techsenger.tabshell.material.icon.FontIconView;
 import com.techsenger.tabshell.material.style.StyleClasses;
 import com.techsenger.toolkit.fx.Spacer;
+import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarFxView;
+import com.techsenger.weaverbird.gui.style.ConsoleIcons;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
@@ -34,7 +34,7 @@ import javafx.scene.control.Tooltip;
  *
  * @author Pavel Castornii
  */
-public class DiagramToolBarFxView<P extends DiagramToolBarPresenter<?, ?>> extends AbstractSessionToolBarFxView<P>
+public class DiagramToolBarFxView<P extends DiagramToolBarPresenter<?>> extends AbstractSessionToolBarFxView<P>
         implements DiagramToolBarView {
 
     private final Button layerDiagramButton = new Button(null, new FontIconView(ConsoleIcons.LAYER_DIAGRAMS));

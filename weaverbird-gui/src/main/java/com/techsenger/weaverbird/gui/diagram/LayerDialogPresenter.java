@@ -16,11 +16,12 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.weaverbird.core.api.model.ComponentLayerModel;
 import com.techsenger.patternfx.mvp.Descriptor;
 import com.techsenger.tabshell.core.CloseCheckResult;
 import com.techsenger.tabshell.core.ClosePreparationResult;
 import com.techsenger.tabshell.core.dialog.AbstractDialogPresenter;
+import com.techsenger.weaverbird.core.api.model.ComponentLayerModel;
+import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,14 +29,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 
 /**
  *
  * @author Pavel Castornii
  */
-public class LayerDialogPresenter<V extends LayerDialogView, C extends LayerDialogComposer>
-        extends AbstractDialogPresenter<V, C> implements LayerDialogPort {
+public class LayerDialogPresenter<V extends LayerDialogView> extends AbstractDialogPresenter<V>
+        implements LayerDialogPort {
 
     private final List<LayerConfig> layerConfigs;
 
@@ -58,7 +58,7 @@ public class LayerDialogPresenter<V extends LayerDialogView, C extends LayerDial
             this.previousLayerConfigsById = null;
         }
         this.layerConfigs = createLayerConfigs(layerModels);
-        getComposer().setLayerConfigs(this.layerConfigs);
+        getView().getComposer().setLayerConfigs(this.layerConfigs);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class LayerDialogPresenter<V extends LayerDialogView, C extends LayerDial
             }
         }
         // and only now update all initialized pages
-        for (var p : getComposer().getPageHost().getComposer().getPagePorts()) {
+        for (var p : getView().getComposer().getPageHost().getComposer().getPagePorts()) {
             LayerPagePort pagePort = (LayerPagePort) p;
             pagePort.reset();
         }

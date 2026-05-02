@@ -34,10 +34,10 @@ import javafx.scene.layout.VBox;
  *
  * @author Pavel Castornii
  */
-public class DiagramTabFxView<P extends DiagramTabPresenter<?, ?>> extends AbstractTabFxView<P>
+public class DiagramTabFxView<P extends DiagramTabPresenter<?>> extends AbstractTabFxView<P>
         implements DiagramTabView {
 
-    protected class Composer extends AbstractTabFxView<P>.Composer implements DiagramTabComposer {
+    protected class Composer extends AbstractTabFxView<P>.Composer implements DiagramTabView.Composer {
 
         private final DiagramTabFxView<P> view = DiagramTabFxView.this;
 

@@ -20,7 +20,6 @@ import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarPresenter;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
 import com.techsenger.patternfx.mvp.Descriptor;
-import com.techsenger.tabshell.core.area.AreaComposer;
 import java.util.List;
 import javafx.collections.FXCollections;
 import com.techsenger.weaverbird.gui.WeaverbirdComponents;
@@ -29,8 +28,7 @@ import com.techsenger.weaverbird.gui.WeaverbirdComponents;
  *
  * @author Pavel Castornii
  */
-public class DiagramToolBarPresenter<V extends DiagramToolBarView, C extends AreaComposer>
-        extends AbstractSessionToolBarPresenter<V, C> {
+public class DiagramToolBarPresenter<V extends DiagramToolBarView> extends AbstractSessionToolBarPresenter<V> {
 
     private final DiagramToolBarAwarePort toolBarAware;
 

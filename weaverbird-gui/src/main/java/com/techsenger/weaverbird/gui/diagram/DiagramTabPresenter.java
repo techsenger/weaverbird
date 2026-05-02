@@ -16,17 +16,18 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
+import com.techsenger.patternfx.mvp.Descriptor;
+import com.techsenger.tabshell.core.CloseCheckResult;
+import com.techsenger.tabshell.core.ClosePreparationResult;
+import com.techsenger.tabshell.core.tab.AbstractTabPresenter;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.core.api.model.LayersInfo;
+import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 import com.techsenger.weaverbird.gui.settings.ConsoleSettings;
 import com.techsenger.weaverbird.gui.style.ConsoleIcons;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
 import com.techsenger.weaverbird.net.client.api.DomainClient;
-import com.techsenger.patternfx.mvp.Descriptor;
-import com.techsenger.tabshell.core.CloseCheckResult;
-import com.techsenger.tabshell.core.ClosePreparationResult;
-import com.techsenger.tabshell.core.tab.AbstractTabPresenter;
 import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -39,14 +40,13 @@ import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 
 /**
  *
  * @author Pavel Castornii
  */
-public class DiagramTabPresenter<V extends DiagramTabView, C extends DiagramTabComposer>
-        extends AbstractTabPresenter<V, C> implements DiagramToolBarAwarePort {
+public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractTabPresenter<V>
+        implements DiagramToolBarAwarePort {
 
     private static final Logger logger = LoggerFactory.getLogger(DiagramTabPresenter.class);
 
@@ -71,8 +71,8 @@ public class DiagramTabPresenter<V extends DiagramTabView, C extends DiagramTabC
         this.framework = framework;
         this.client = client;
         this.session = session;
-        getComposer().setClient(client);
-        getComposer().setSession(session);
+        getView().getComposer().setClient(client);
+        getView().getComposer().setSession(session);
     }
 
     @Override
@@ -133,7 +133,7 @@ public class DiagramTabPresenter<V extends DiagramTabView, C extends DiagramTabC
             this.previousLayersInfo = layersInfo;
 
             var layersByComponentId = layersInfo.getLayersById();
-            var dialog = getComposer().openLayerDialog(new ArrayList<>(layersByComponentId.values()),
+            var dialog = getView().getComposer().openLayerDialog(new ArrayList<>(layersByComponentId.values()),
                     previousLayerConfigs);
             dialog.setResultAction((b) -> {
                 if (b == LayerDialogButtons.OK) {

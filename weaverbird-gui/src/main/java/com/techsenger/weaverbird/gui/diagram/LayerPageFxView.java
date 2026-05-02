@@ -42,7 +42,7 @@ import javafx.scene.layout.VBox;
  *
  * @author Pavel Castornii
  */
-public class LayerPageFxView<P extends LayerPagePresenter<?, ?>> extends AbstractPageFxView<P>
+public class LayerPageFxView<P extends LayerPagePresenter<?>> extends AbstractPageFxView<P>
         implements LayerPageView {
 
     private static final Object SELECT_ALL_CHECK_BOX = new Object();

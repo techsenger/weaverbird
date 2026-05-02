@@ -16,6 +16,12 @@
 
 package com.techsenger.weaverbird.gui.console;
 
+import com.techsenger.patternfx.mvp.Descriptor;
+import com.techsenger.tabshell.core.CloseCheckResult;
+import com.techsenger.tabshell.core.ClosePreparationResult;
+import com.techsenger.tabshell.core.UiExecutor;
+import com.techsenger.tabshell.core.settings.SettingsSubscription;
+import com.techsenger.tabshell.core.tab.AbstractTabPresenter;
 import com.techsenger.weaverbird.core.api.Constants;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.core.api.message.DefaultMessage;
@@ -25,15 +31,10 @@ import com.techsenger.weaverbird.executor.api.CommandExecutor;
 import com.techsenger.weaverbird.executor.api.CommandExecutorFactory;
 import com.techsenger.weaverbird.executor.api.CommandSyntax;
 import com.techsenger.weaverbird.executor.api.command.Commands;
+import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 import com.techsenger.weaverbird.gui.style.ConsoleIcons;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
-import com.techsenger.patternfx.mvp.Descriptor;
-import com.techsenger.tabshell.core.CloseCheckResult;
-import com.techsenger.tabshell.core.ClosePreparationResult;
-import com.techsenger.tabshell.core.UiExecutor;
-import com.techsenger.tabshell.core.settings.SettingsSubscription;
-import com.techsenger.tabshell.core.tab.AbstractTabPresenter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,14 +42,13 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 
 /**
  *
  * @author Pavel Castornii
  */
-public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabComposer>
-        extends AbstractTabPresenter<V, C> implements CompletionPopupAwarePort, ConsoleToolBarAwarePort {
+public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractTabPresenter<V>
+        implements CompletionPopupAwarePort, ConsoleToolBarAwarePort {
 
     /**
      * Input without prompt. Contains the information about the current token (next to caret).
@@ -132,8 +132,9 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
 
     public ConsoleTabPresenter(V view, Framework framework, ClientService client, ClientSession session) {
         super(view);
-        getComposer().setClient(client);
-        getComposer().setSession(session);
+        var composer = getView().getComposer();
+        composer.setClient(client);
+        composer.setSession(session);
         CommandExecutor ex = null;
         try {
             ex = CommandExecutorFactory.create(framework, client);
@@ -169,7 +170,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
 
     @Override
     public void onPopupClose() {
-        getComposer().removePopup();
+        getView().getComposer().removePopup();
         getView().requestFocus();
     }
 
@@ -228,9 +229,10 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
     }
 
     protected void onElementSubmitted() {
-        var popup = getComposer().getPopupPort();
+        var composer = getView().getComposer();
+        var popup = composer.getPopupPort();
         addElement(popup.getType(), popup.getSelectedItemText());
-        getComposer().removePopup();
+        composer.removePopup();
         getView().requestFocus();
     }
 
@@ -251,7 +253,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
         if (processingCommand) {
             var commands = executor.getCommandsByName().values();
             var sessionExists = executor.getCommandContext().getSession() != null;
-            getComposer().addCommandPopup(commands, sessionExists, elementToken, offset);
+            getView().getComposer().addCommandPopup(commands, sessionExists, elementToken, offset);
         } else {
             var splits = this.input.text.trim().split(Pattern.quote(" "));
             var cmd = splits[0].trim();
@@ -260,7 +262,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
             }
             var command = executor.getCommandsByName().get(cmd);
             if (command != null) {
-                getComposer().addParameterPopup(command.getParameters(), elementToken, offset);
+                getView().getComposer().addParameterPopup(command.getParameters(), elementToken, offset);
             }
         }
     }
@@ -270,7 +272,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
     }
 
     protected void onCopyAvailable(boolean value) {
-        getComposer().getToolBarPort().onCopyAvailable(value);
+        getView().getComposer().getToolBarPort().onCopyAvailable(value);
     }
 
     protected void onCommandsSubmitted(String paragraph, int width) {
@@ -295,7 +297,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
                 });
                 var newSession = executor.getCommandContext().getSession();
                 if (!Objects.equals(oldSession, newSession)) {
-                    UiExecutor.execute(() -> getComposer().getToolBarPort().updateSession(newSession));
+                    UiExecutor.execute(() -> getView().getComposer().getToolBarPort().updateSession(newSession));
                 }
                 updatePrompt();
                 // syncSessionBarAndContext(null);
@@ -318,7 +320,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
     }
 
     protected void onTextInput(String paragraph) {
-        var popup = getComposer().getPopupPort();
+        var popup = getView().getComposer().getPopupPort();
         if (popup == null) {
             return;
         }
@@ -332,7 +334,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
     }
 
     protected void onMoveUp() {
-        var popup = getComposer().getPopupPort();
+        var popup = getView().getComposer().getPopupPort();
         if (popup == null) {
             scrollHistoryUp();
         } else {
@@ -341,7 +343,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
     }
 
     protected void onMoveDown() {
-        var popup = getComposer().getPopupPort();
+        var popup = getView().getComposer().getPopupPort();
         if (popup == null) {
             scrollHistoryDown();
         } else {
@@ -404,7 +406,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView, C extends ConsoleTabC
         }
         var newInput = oldInput + (element == null ? "" : element + " ");
         getView().updateInput(newInput);
-        getComposer().removePopup();
+        getView().getComposer().removePopup();
         getView().requestFocus();
         this.input = null;
     }

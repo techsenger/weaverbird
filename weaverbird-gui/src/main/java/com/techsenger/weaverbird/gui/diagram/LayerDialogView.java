@@ -17,6 +17,8 @@
 package com.techsenger.weaverbird.gui.diagram;
 
 import com.techsenger.tabshell.core.dialog.DialogView;
+import com.techsenger.tabshell.layout.pagehost.PageHostPort;
+import java.util.List;
 
 /**
  *
@@ -24,4 +26,13 @@ import com.techsenger.tabshell.core.dialog.DialogView;
  */
 public interface LayerDialogView extends DialogView {
 
+    interface Composer extends DialogView.Composer {
+
+        void setLayerConfigs(List<LayerConfig> layerConfigs);
+
+        PageHostPort getPageHost();
+    }
+
+    @Override
+    Composer getComposer();
 }
