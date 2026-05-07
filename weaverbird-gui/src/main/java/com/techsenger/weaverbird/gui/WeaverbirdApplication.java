@@ -80,6 +80,7 @@ public class WeaverbirdApplication extends Application {
         fileRegistrar.register();
 
         shellView.upgradeMenuBar();
+        stage.show();
     }
 
 }
