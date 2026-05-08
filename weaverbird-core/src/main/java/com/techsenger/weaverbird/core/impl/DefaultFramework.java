@@ -22,6 +22,7 @@ import com.techsenger.weaverbird.core.api.ComponentManager;
 import com.techsenger.weaverbird.core.api.Constants;
 import com.techsenger.weaverbird.core.api.DefaultPathManager;
 import com.techsenger.weaverbird.core.api.Framework;
+import com.techsenger.weaverbird.core.api.FrameworkContext;
 import com.techsenger.weaverbird.core.api.FrameworkSettings;
 import com.techsenger.weaverbird.core.api.JvmInspector;
 import com.techsenger.weaverbird.core.api.LogManager;
@@ -51,6 +52,8 @@ public class DefaultFramework implements Framework {
     private static final String LAYER_NAME = "weaverbird-framework";
 
     private final FrameworkSettings settings;
+
+    private final FrameworkContext context = new DefaultFrameworkContext();
 
     /**
      * Log manager.
@@ -117,6 +120,11 @@ public class DefaultFramework implements Framework {
     @Override
     public FrameworkSettings getSettings() {
         return settings;
+    }
+
+    @Override
+    public FrameworkContext getContext() {
+        return context;
     }
 
     @Override

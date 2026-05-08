@@ -16,9 +16,9 @@
 
 package com.techsenger.weaverbird.core.api;
 
+import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.registry.Registry;
 import com.techsenger.weaverbird.core.spi.repo.RepoService;
-import com.techsenger.toolkit.core.version.Version;
 
 /**
  *
@@ -35,6 +35,11 @@ public interface Framework {
      * Returns the framework settings.
      */
     FrameworkSettings getSettings();
+
+    /**
+     * Returns the framework context.
+     */
+    FrameworkContext getContext();
 
     /**
      * Returns the component manager.
