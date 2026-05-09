@@ -153,7 +153,7 @@ and the logging modules. In addition, the boot layer must contain a module that 
 — in a distribution this is the main application module, and in integration tests this is the test module itself.
 
 There are two ways to populate the boot layer with the required modules. If the JVM is launched via `.sh`/`.bat`
-scripts, the module path is configured by the scripts automatically. The `assemble-distro` goal of the Assembly Maven
+scripts, the module path is configured by the scripts automatically. The `assemble-dist` goal of the Assembly Maven
 Plugin handles this by generating the scripts with the correct module path.
 
 If the JVM is launched via Maven plugins (`exec-maven-plugin`, `maven-failsafe-plugin`, etc.), Maven takes care of
@@ -555,7 +555,7 @@ The plugin provides the following goals:
 
 * `assemble-runtime` — used for integration testing. It produces a minimal set of files required to run the framework.
   The execution is skipped if the specified `path` already exists.
-* `assemble-distro` — creates a full distribution, including `.sh`/`.bat` scripts and the default Log4j2 configuration.
+* `assemble-dist` — creates a full distribution, including `.sh`/`.bat` scripts and the default Log4j2 configuration.
   The execution is skipped if the specified `path` already exists.
 * `update` — intended for development purposes. It updates the repository with the specified modules in an existing
   distribution, avoiding full reassembly on every change. The execution is skipped if the specified `path` doesn't exist.
@@ -572,7 +572,7 @@ Configuration Parameters for the `assemble-runtime` and `assemble-update` goals:
 | `module/type` | No | `jar` | Module type |
 | `module/classifier` | No | - | Module Classifier |
 
-Additional configuration parameters for the `assemble-distro` goal:
+Additional configuration parameters for the `assemble-dist` goal:
 
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
@@ -590,7 +590,7 @@ Example:
         <execution>
             <phase>verify</phase>
             <goals>
-                <goal>assemble-distro</goal>
+                <goal>assemble-dist</goal>
             </goals>
             <configuration>
                 <path>${project.build.directory}/framework</path>

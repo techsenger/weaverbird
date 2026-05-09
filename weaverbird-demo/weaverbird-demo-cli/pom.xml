@@ -50,7 +50,7 @@
                     <execution>
                         <phase>verify</phase>
                         <goals>
-                            <goal>assemble-distro</goal>
+                            <goal>assemble-dist</goal>
                         </goals>
                         <configuration>
                             <path>${project.build.directory}/framework</path>

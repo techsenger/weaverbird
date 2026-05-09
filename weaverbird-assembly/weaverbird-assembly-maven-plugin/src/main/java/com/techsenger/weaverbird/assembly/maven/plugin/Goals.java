@@ -37,7 +37,7 @@ public final class Goals {
      *
      * <p>If the provided path already exists, execution is skipped.
      */
-    public static final String ASSEMBLE_DISTRO = "assemble-distro";
+    public static final String ASSEMBLE_DIST = "assemble-dist";
 
     /**
      * Updates the repository with the specified modules in an existing framework runtime or distribution. This goal is

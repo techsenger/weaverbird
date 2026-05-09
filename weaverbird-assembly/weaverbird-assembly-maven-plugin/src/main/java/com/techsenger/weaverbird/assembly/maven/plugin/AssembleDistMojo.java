@@ -35,8 +35,8 @@ import org.eclipse.aether.artifact.Artifact;
  *
  * @author Pavel Castornii
  */
-@Mojo(name = Goals.ASSEMBLE_DISTRO)
-public class AssembleDistroMojo extends AbstractAssembleMojo {
+@Mojo(name = Goals.ASSEMBLE_DIST)
+public class AssembleDistMojo extends AbstractAssembleMojo {
 
     @Parameter(required = true)
     private String mainClass;
