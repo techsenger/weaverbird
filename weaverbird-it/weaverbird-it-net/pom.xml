@@ -107,6 +107,12 @@
                 </executions>
                 <configuration>
                     <path>${project.build.directory}/framework</path>
+                    <components>
+                        <component>weaverbird-repo</component>
+                        <component>weaverbird-server</component>
+                        <component>weaverbird-cli</component>
+                        <component>weaverbird-gui</component>
+                    </components>
                 </configuration>
             </plugin>
         </plugins>

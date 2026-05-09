@@ -43,6 +43,9 @@
                         <configuration>
                             <path>${project.build.directory}/framework</path>
                             <mainClass>com.techsenger.weaverbird.demo.starter/com.techsenger.weaverbird.demo.starter.StarterDemo</mainClass>
+                            <components>
+                                <component>weaverbird-repo</component>
+                            </components>
                             <modules>
                                 <module>
                                     <groupId>com.techsenger.weaverbird.demo</groupId>

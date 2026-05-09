@@ -25,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -75,6 +76,9 @@ public abstract class AbstractAssembleMojo extends AbstractBaseMojo {
      */
     private final List<Artifact> modulePathModules = new ArrayList<>();
 
+    @Parameter(required = true)
+    private Set<String> components;
+
     List<Artifact> getModulePathModules() {
         return modulePathModules;
     }
@@ -89,27 +93,35 @@ public abstract class AbstractAssembleMojo extends AbstractBaseMojo {
     void createConfig() throws Exception {
         var configPath = getPath().resolve("config");
 
-        var repoDirPath = configPath.resolve("weaverbird-repo").resolve(project.getVersion());
-        Files.createDirectories(repoDirPath);
-        var repoConfig = readFileToStr("repo-config.xml");
-        FileUtils.writeFile(repoDirPath.resolve("configuration.xml"), repoConfig, StandardCharsets.UTF_8);
+        if (components.contains("weaverbird-repo")) {
+            var repoDirPath = configPath.resolve("weaverbird-repo").resolve(project.getVersion());
+            Files.createDirectories(repoDirPath);
+            var repoConfig = readFileToStr("repo-config.xml");
+            FileUtils.writeFile(repoDirPath.resolve("configuration.xml"), repoConfig, StandardCharsets.UTF_8);
+        }
 
-        var serverDirPath = configPath.resolve("weaverbird-server").resolve(project.getVersion());
-        Files.createDirectories(serverDirPath);
-        var serverConfig = readFileToStr("server-config.xml");
-        FileUtils.writeFile(serverDirPath.resolve("configuration.xml"), serverConfig, StandardCharsets.UTF_8);
-        var serverSettings = readFileToStr("server-settings.xml");
-        FileUtils.writeFile(serverDirPath.resolve("settings.xml"), serverSettings, StandardCharsets.UTF_8);
+        if (components.contains("weaverbird-server")) {
+            var serverDirPath = configPath.resolve("weaverbird-server").resolve(project.getVersion());
+            Files.createDirectories(serverDirPath);
+            var serverConfig = readFileToStr("server-config.xml");
+            FileUtils.writeFile(serverDirPath.resolve("configuration.xml"), serverConfig, StandardCharsets.UTF_8);
+            var serverSettings = readFileToStr("server-settings.xml");
+            FileUtils.writeFile(serverDirPath.resolve("settings.xml"), serverSettings, StandardCharsets.UTF_8);
+        }
 
-        var cliDirPath = configPath.resolve("weaverbird-cli").resolve(project.getVersion());
-        Files.createDirectories(cliDirPath);
-        var cliConfig = readFileToStr("cli-config.xml");
-        FileUtils.writeFile(cliDirPath.resolve("configuration.xml"), cliConfig, StandardCharsets.UTF_8);
+        if (components.contains("weaverbird-cli")) {
+            var cliDirPath = configPath.resolve("weaverbird-cli").resolve(project.getVersion());
+            Files.createDirectories(cliDirPath);
+            var cliConfig = readFileToStr("cli-config.xml");
+            FileUtils.writeFile(cliDirPath.resolve("configuration.xml"), cliConfig, StandardCharsets.UTF_8);
+        }
 
-        var guiDirPath = configPath.resolve("weaverbird-gui").resolve(project.getVersion());
-        Files.createDirectories(guiDirPath);
-        var guiConfig = readFileToStr("gui-config.xml");
-        FileUtils.writeFile(guiDirPath.resolve("configuration.xml"), guiConfig, StandardCharsets.UTF_8);
+        if (components.contains("weaverbird-gui")) {
+            var guiDirPath = configPath.resolve("weaverbird-gui").resolve(project.getVersion());
+            Files.createDirectories(guiDirPath);
+            var guiConfig = readFileToStr("gui-config.xml");
+            FileUtils.writeFile(guiDirPath.resolve("configuration.xml"), guiConfig, StandardCharsets.UTF_8);
+        }
     }
 
     void createRepo(boolean modulePathSupported) throws Exception {

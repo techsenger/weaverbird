@@ -99,6 +99,10 @@
                 </executions>
                 <configuration>
                     <path>${project.build.directory}/framework</path>
+                    <components>
+                        <component>weaverbird-repo</component>
+                        <component>weaverbird-server</component>
+                    </components>
                 </configuration>
             </plugin>
         </plugins>

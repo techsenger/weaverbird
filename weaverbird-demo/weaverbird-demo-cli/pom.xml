@@ -55,6 +55,11 @@
                         <configuration>
                             <path>${project.build.directory}/framework</path>
                             <mainClass>com.techsenger.weaverbird.demo.cli/com.techsenger.weaverbird.demo.cli.CliDemo</mainClass>
+                            <components>
+                                <component>weaverbird-repo</component>
+                                <component>weaverbird-server</component>
+                                <component>weaverbird-cli</component>
+                            </components>
                             <modules>
                                 <module>
                                     <groupId>com.techsenger.weaverbird.demo</groupId>

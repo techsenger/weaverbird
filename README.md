@@ -560,12 +560,13 @@ The plugin provides the following goals:
 * `update` — intended for development purposes. It updates the repository with the specified modules in an existing
   distribution, avoiding full reassembly on every change. The execution is skipped if the specified `path` doesn't exist.
 
-Configuration Parameters for the `assemble-runtime` and `assemble-update` goals:
+Common parameters for `assemble-runtime` and `assemble-dist`:
 
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
-| `path` | Yes | - | Path to the root framework directory where the distribution will be assembled or updated |
-| `modules` | No | - | For `assemble-runtime`: the list of additional JPMS modules to resolve and include in the repository in addition to the minimal set of required modules. For `assemble-update`: the list of modules in the repository to update. |
+| `path` | Yes | - | Path to the root framework directory where the runtime/distribution will be assembled |
+| `components` | Yes | - | The list of components that will be added to the runtime/distribution |
+| `modules` | No | - | The list of additional JPMS modules to resolve and include in the repository in addition to the minimal set of required modules. |
 | `module/groupId` | Yes | - | Module group ID |
 | `module/artifactId` | Yes | - | Module artifact ID |
 | `module/version` | Yes | - | Module version |
@@ -577,7 +578,20 @@ Additional configuration parameters for the `assemble-dist` goal:
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
 | `mainClass` | Yes | - | Main class in the format `module/fully.qualified.ClassName`, used only in `.sh`/`.bat` scripts|
+| `scriptName` | No | `framework` | The name of the `.sh`/`.bat` scripts|
 | `module/onModulePath` | No | `false` | If `true`, the module will be added to the `--module-path` in `.sh`/`.bat` scripts |
+
+Parameters for `update` goal:
+
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| `path` | Yes | - | Path to the root framework directory where the modules will be updated |
+| `modules` | No | - | The list of modules in the repository to update. |
+| `module/groupId` | Yes | - | Module group ID |
+| `module/artifactId` | Yes | - | Module artifact ID |
+| `module/version` | Yes | - | Module version |
+| `module/type` | No | `jar` | Module type |
+| `module/classifier` | No | - | Module Classifier |
 
 Example:
 
@@ -595,6 +609,9 @@ Example:
             <configuration>
                 <path>${project.build.directory}/framework</path>
                 <mainClass>com.myapp/com.myapp.Main</mainClass>
+                <components>
+                    <component>weaverbird-repo</component>
+                </components>
                 <modules>
                     <module>
                         <groupId>com.myapp</groupId>

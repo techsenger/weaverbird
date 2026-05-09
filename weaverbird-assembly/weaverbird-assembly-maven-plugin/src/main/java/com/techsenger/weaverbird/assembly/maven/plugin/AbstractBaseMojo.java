@@ -49,8 +49,6 @@ public abstract class AbstractBaseMojo extends AbstractMojo {
     @Parameter(required = false)
     private List<ModuleItem> modules;
 
-    private List<String> components;
-
     @Component
     private RepositorySystem repoSystem;
 

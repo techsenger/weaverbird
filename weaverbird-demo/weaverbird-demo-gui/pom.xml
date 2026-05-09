@@ -57,6 +57,11 @@
                         <configuration>
                             <path>${project.build.directory}/framework</path>
                             <mainClass>com.techsenger.weaverbird.demo.gui/com.techsenger.weaverbird.demo.gui.GuiDemo</mainClass>
+                            <components>
+                                <component>weaverbird-repo</component>
+                                <component>weaverbird-server</component>
+                                <component>weaverbird-gui</component>
+                            </components>
                             <modules>
                                 <module>
                                     <groupId>com.techsenger.weaverbird.demo</groupId>

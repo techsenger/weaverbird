@@ -41,6 +41,9 @@ public class AssembleDistMojo extends AbstractAssembleMojo {
     @Parameter(required = true)
     private String mainClass;
 
+    @Parameter(required = false, defaultValue = "framework")
+    private String scriptName;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
@@ -69,8 +72,8 @@ public class AssembleDistMojo extends AbstractAssembleMojo {
             shModulePath += "MODULE_PATH=\"$MODULE_PATH:$REPO_PATH" + resolvePath(artifact, false) + "\"" + s;
             batModulePath += "set \"MODULE_PATH=!MODULE_PATH!%REPO_PATH%" + resolvePath(artifact, true) +  ";\"" + s;
         }
-        createOsScript(shModulePath, "framework.sh", binPath);
-        createOsScript(batModulePath, "framework.bat", binPath);
+        createOsScript(shModulePath, ".sh", binPath);
+        createOsScript(batModulePath, ".bat", binPath);
     }
 
     private void addLoggerConfig() throws Exception {
@@ -79,13 +82,13 @@ public class AssembleDistMojo extends AbstractAssembleMojo {
         FileUtils.writeFile(config.resolve("log4j2.xml"), logConfigContent, StandardCharsets.UTF_8);
     }
 
-    private void createOsScript(String modulePath, String fileName, Path binPath) throws Exception {
+    private void createOsScript(String modulePath, String ext, Path binPath) throws Exception {
         var properties = new Properties();
         properties.put("modulepath", modulePath);
         properties.put("mainClass", mainClass);
-        var shContent = String.join(System.lineSeparator(), readFile(fileName));
+        var shContent = String.join(System.lineSeparator(), readFile("framework" + ext));
         shContent = interpolate(shContent, properties);
-        var shPath = binPath.resolve(fileName);
+        var shPath = binPath.resolve(scriptName + ext);
         FileUtils.writeFile(shPath, shContent, StandardCharsets.UTF_8);
         shPath.toFile().setExecutable(true);
     }
