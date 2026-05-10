@@ -9,7 +9,7 @@
         <!--### ASCII TABLE ###-->
         <Module groupId="de.vandermeer" artifactId="asciitable" version="${bom.asciitable.version}"/>
         <Module groupId="de.vandermeer" artifactId="skb-interfaces" version="${bom.skb-interfaces.version}"/>
-        <Module groupId="de.vandermeer" artifactId="ascii-utf-themes" version="${ascii.themes.version}"/>
+        <Module groupId="de.vandermeer" artifactId="ascii-utf-themes" version="${bom.ascii.themes.version}"/>
         <Module groupId="org.antlr" artifactId="ST4" version="${bom.st4.version}"/>
         <Module groupId="org.apache.commons" artifactId="commons-lang3" version="${commons.lang.version}"/>
 

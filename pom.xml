@@ -65,7 +65,6 @@
         <mvn.version>3.8.1</mvn.version>
         <javafx.version>26</javafx.version>
         <exec.plugin.version>3.6.3</exec.plugin.version>
-        <ascii.themes.version>0.0.1</ascii.themes.version>
 
         <!--### dependencies that are not in BOM ###-->
         <commons.codec.version>1.11</commons.codec.version>
