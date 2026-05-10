@@ -37,17 +37,9 @@ module com.techsenger.weaverbird.gui {
     requires net.sourceforge.plantuml;
 
     exports com.techsenger.weaverbird.gui;
-//    exports com.techsenger.weaverbird.console.gui.log;
-//    exports com.techsenger.weaverbird.console.gui.shell;
-//    exports com.techsenger.weaverbird.console.gui.style;
-//    exports com.techsenger.weaverbird.console.gui.utils;
+    exports com.techsenger.weaverbird.gui.console;
+    exports com.techsenger.weaverbird.gui.diagram;
 
-//    opens com.techsenger.weaverbird.console.gui.diagram to javafx.base;
-//    opens com.techsenger.weaverbird.console.gui.settings to jakarta.xml.bind;
-//    opens com.techsenger.weaverbird.console.gui.style;
-
-//    provides com.techsenger.weaverbird.spi.console.ConsoleService
-//            with com.techsenger.weaverbird.console.gui.ConsoleProvider;
     provides com.techsenger.weaverbird.core.spi.module.ModuleActivator
             with com.techsenger.weaverbird.gui.ModuleActivatorProvider;
 }
