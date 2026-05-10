@@ -91,14 +91,14 @@ public class AssembleDistMojo extends AbstractAssembleMojo {
         if (jvmArgs != null) {
             StringBuilder builder = new StringBuilder();
             for (var arg : jvmArgs) {
-                if (builder.length() > 0) {
-                    builder.append("\n");
-                }
+                builder.append("\n");
                 builder.append("    ");
                 builder.append(arg);
                 builder.append(jvmArgSep);
             }
             properties.put("jvmArgs", builder.toString());
+        } else {
+            properties.put("jvmArgs", "");
         }
         var shContent = String.join(System.lineSeparator(), readFile("framework" + ext));
         shContent = interpolate(shContent, properties);

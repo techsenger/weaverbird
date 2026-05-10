@@ -23,8 +23,7 @@ java ^
     -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager ^
     -Dorg.jboss.logging.provider=log4j ^
     -Djava.io.tmpdir=%ROOT_PATH%\temp ^
-    -Dfile.encoding=UTF-8 ^
-${jvmArgs}
+    -Dfile.encoding=UTF-8 ^${jvmArgs}
     --add-modules ALL-DEFAULT ^
     --add-modules org.apache.logging.log4j,org.apache.logging.log4j.jul ^
     --add-opens java.base/java.time=com.techsenger.weaverbird.core ^
