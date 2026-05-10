@@ -3,7 +3,7 @@ org.apache.httpcomponents:httpclient:${apache.httpclient.version}
 org.apache.httpcomponents:httpcore:${apache.httpcore.version}
 org.codehaus.plexus:plexus-interpolation:${plexus.interpolation.version}
 org.codehaus.plexus:plexus-utils:${plexus.utils.version}
-org.apache.commons:commons-lang3:${commons.lang.version}
+org.apache.commons:commons-lang3:${bom.commons.lang.version}
 commons-logging:commons-logging:${commons.logging.version}
 org.apache.maven:maven-resolver-provider:${mvn.version}
 com.techsenger.weaverbird.repo:weaverbird-repo-external:${project.version}

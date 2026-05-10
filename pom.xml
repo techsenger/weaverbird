@@ -72,7 +72,6 @@
         <apache.httpcore.version>4.4.13</apache.httpcore.version>
         <plexus.interpolation.version>1.25</plexus.interpolation.version>
         <plexus.utils.version>3.2.1</plexus.utils.version>
-        <commons.lang.version>3.8.1</commons.lang.version>
         <commons.logging.version>1.2</commons.logging.version>
     </properties>
 

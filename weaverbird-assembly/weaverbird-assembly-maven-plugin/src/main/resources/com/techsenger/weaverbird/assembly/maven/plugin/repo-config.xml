@@ -12,7 +12,7 @@
         <Module groupId="org.apache.httpcomponents" artifactId="httpcore" version="${apache.httpcore.version}"/>
         <Module groupId="org.codehaus.plexus" artifactId="plexus-interpolation" version="${plexus.interpolation.version}" />
         <Module groupId="org.codehaus.plexus" artifactId="plexus-utils" version="${plexus.utils.version}"/>
-        <Module groupId="org.apache.commons" artifactId="commons-lang3" version="${commons.lang.version}"/>
+        <Module groupId="org.apache.commons" artifactId="commons-lang3" version="${bom.commons.lang.version}"/>
 
         <!--### MAVEN ###-->
         <Module groupId="org.apache.maven" artifactId="maven-resolver-provider" version="${mvn.version}"/>
