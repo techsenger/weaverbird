@@ -560,13 +560,15 @@ The plugin provides the following goals:
 * `update` — intended for development purposes. It updates the repository with the specified modules in an existing
   distribution, avoiding full reassembly on every change. The execution is skipped if the specified `path` doesn't exist.
 
-Common parameters for `assemble-runtime` and `assemble-dist`:
+Common configuration parameters for `assemble-runtime` and `assemble-dist` goals:
 
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
 | `path` | Yes | - | Path to the root framework directory where the runtime/distribution will be assembled |
 | `components` | Yes | - | The list of components that will be added to the runtime/distribution |
+| `components/component` | Yes | - | The component that will be added to the runtime/distribution |
 | `modules` | No | - | The list of additional JPMS modules to resolve and include in the repository in addition to the minimal set of required modules. |
+| `modules/module` | Yes | - | The JPMS module to resolve and include in the repository in addition to the minimal set of required modules. |
 | `module/groupId` | Yes | - | Module group ID |
 | `module/artifactId` | Yes | - | Module artifact ID |
 | `module/version` | Yes | - | Module version |
@@ -579,14 +581,17 @@ Additional configuration parameters for the `assemble-dist` goal:
 |-----------|----------|---------|-------------|
 | `mainClass` | Yes | - | Main class in the format `module/fully.qualified.ClassName`, used only in `.sh`/`.bat` scripts|
 | `scriptName` | No | `framework` | The name of the `.sh`/`.bat` scripts|
+| `jvmArgs` | No | - | The JVM arguments used in `.sh`/`.bat` scripts|
+| `jvmArgs/jvmArg` | Yes | - | The JVM argument used in `.sh`/`.bat` scripts|
 | `module/onModulePath` | No | `false` | If `true`, the module will be added to the `--module-path` in `.sh`/`.bat` scripts |
 
-Parameters for `update` goal:
+Configuration parameters for `update` goal:
 
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
 | `path` | Yes | - | Path to the root framework directory where the modules will be updated |
 | `modules` | No | - | The list of modules in the repository to update. |
+| `modules/module` | Yes | - | The module in the repository to update. |
 | `module/groupId` | Yes | - | Module group ID |
 | `module/artifactId` | Yes | - | Module artifact ID |
 | `module/version` | Yes | - | Module version |
@@ -609,6 +614,9 @@ Example:
             <configuration>
                 <path>${project.build.directory}/framework</path>
                 <mainClass>com.myapp/com.myapp.Main</mainClass>
+                <jvmArgs>
+                    <jvmArg>-agentlib:jdwp=transport=dt_socket,address=7700,server=y,suspend=n</jvmArg>
+                </jvmArgs>
                 <components>
                     <component>weaverbird-repo</component>
                 </components>

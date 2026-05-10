@@ -57,6 +57,10 @@
                         <configuration>
                             <path>${project.build.directory}/framework</path>
                             <mainClass>com.techsenger.weaverbird.demo.gui/com.techsenger.weaverbird.demo.gui.GuiDemo</mainClass>
+                            <jvmArgs>
+                                <jvmArg>-agentlib:jdwp=transport=dt_socket,address=7700,server=y,suspend=n</jvmArg>
+                                <jvmArg>-Djavafx.enablePreview=true</jvmArg>
+                            </jvmArgs>
                             <components>
                                 <component>weaverbird-repo</component>
                                 <component>weaverbird-server</component>

@@ -21,6 +21,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -41,6 +42,9 @@ public class AssembleDistMojo extends AbstractAssembleMojo {
 
     @Parameter(required = false, defaultValue = "framework")
     private String scriptName;
+
+    @Parameter(required = false)
+    private List<String> jvmArgs;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -70,8 +74,8 @@ public class AssembleDistMojo extends AbstractAssembleMojo {
             shModulePath += "MODULE_PATH=\"$MODULE_PATH:$REPO_PATH" + resolvePath(artifact, false) + "\"" + s;
             batModulePath += "set \"MODULE_PATH=!MODULE_PATH!%REPO_PATH%" + resolvePath(artifact, true) +  ";\"" + s;
         }
-        createOsScript(shModulePath, ".sh", binPath);
-        createOsScript(batModulePath, ".bat", binPath);
+        createOsScript(shModulePath, ".sh", " \\", binPath);
+        createOsScript(batModulePath, ".bat", " ^", binPath);
     }
 
     private void addLoggerConfig() throws Exception {
@@ -80,10 +84,22 @@ public class AssembleDistMojo extends AbstractAssembleMojo {
         FileUtils.writeFile(config.resolve("log4j2.xml"), logConfigContent, StandardCharsets.UTF_8);
     }
 
-    private void createOsScript(String modulePath, String ext, Path binPath) throws Exception {
+    private void createOsScript(String modulePath, String ext, String jvmArgSep, Path binPath) throws Exception {
         var properties = new Properties();
         properties.put("modulepath", modulePath);
         properties.put("mainClass", mainClass);
+        if (jvmArgs != null) {
+            StringBuilder builder = new StringBuilder();
+            for (var arg : jvmArgs) {
+                if (builder.length() > 0) {
+                    builder.append("\n");
+                }
+                builder.append("    ");
+                builder.append(arg);
+                builder.append(jvmArgSep);
+            }
+            properties.put("jvmArgs", builder.toString());
+        }
         var shContent = String.join(System.lineSeparator(), readFile("framework" + ext));
         shContent = interpolate(shContent, properties);
         var shPath = binPath.resolve(scriptName + ext);

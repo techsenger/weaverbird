@@ -55,6 +55,9 @@
                         <configuration>
                             <path>${project.build.directory}/framework</path>
                             <mainClass>com.techsenger.weaverbird.demo.cli/com.techsenger.weaverbird.demo.cli.CliDemo</mainClass>
+                            <jvmArgs>
+                                <jvmArg>-agentlib:jdwp=transport=dt_socket,address=7700,server=y,suspend=n</jvmArg>
+                            </jvmArgs>
                             <components>
                                 <component>weaverbird-repo</component>
                                 <component>weaverbird-server</component>
