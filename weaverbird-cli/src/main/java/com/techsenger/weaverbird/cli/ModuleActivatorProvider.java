@@ -39,6 +39,7 @@ public class ModuleActivatorProvider implements ModuleActivator {
             this.console.setClosing(true);
         } else {
             this.console.getLoopThread().interrupt();
+            this.console.getLoopThread().join();
             this.console.close();
         }
         this.console = null;

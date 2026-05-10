@@ -108,7 +108,7 @@ public class Console {
                         return this.lineReader.readLine(description);
                     }
                 };
-                while (true) {
+                while (!Thread.currentThread().isInterrupted()) {
                     var session = commandContext.getSession();
                     if (session != null) {
                         this.sessionPrompt = buildSessionPrompt(session);
