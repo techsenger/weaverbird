@@ -24,12 +24,16 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.interpolation.PropertiesBasedValueSource;
+import org.codehaus.plexus.interpolation.RegexBasedInterpolator;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.artifact.DefaultArtifact;
 
@@ -38,6 +42,14 @@ import org.eclipse.aether.artifact.DefaultArtifact;
  * @author Pavel Castornii
  */
 public abstract class AbstractAssembleMojo extends AbstractBaseMojo {
+
+    private static final String REPO_COMPONENT = "weaverbird-repo";
+
+    private static final String SERVER_COMPONENT = "weaverbird-server";
+
+    private static final String CLI_COMPONENT = "weaverbird-cli";
+
+    private static final String GUI_COMPONENT = "weaverbird-gui";
 
     static List<String> readFile(String fileName) throws IOException {
         try (InputStream is = AbstractAssembleMojo.class.getResourceAsStream(fileName);
@@ -77,7 +89,12 @@ public abstract class AbstractAssembleMojo extends AbstractBaseMojo {
     private final List<Artifact> modulePathModules = new ArrayList<>();
 
     @Parameter(required = true)
-    private Set<String> components;
+    private List<String> components;
+
+    /**
+     * Use only via {@link #getComponentSet()}.
+     */
+    private Set<String> componentSet;
 
     List<Artifact> getModulePathModules() {
         return modulePathModules;
@@ -87,21 +104,35 @@ public abstract class AbstractAssembleMojo extends AbstractBaseMojo {
         var dataPath = getPath().resolve("data");
         Files.createDirectories(dataPath);
         var registry = readFileToStr("registry.xml");
+        StringBuilder builder = new StringBuilder();
+        for (var c : components) {
+            addComponent(builder, c);
+        }
+        var addedComponents = builder.toString();
+        builder.setLength(0);
+        var resolvedComponents = "";
+        if (getComponentSet().contains(REPO_COMPONENT)) {
+            addComponent(builder, REPO_COMPONENT);
+            resolvedComponents = builder.toString();
+        }
+        var properties = new Properties();
+        properties.put("addedComponents", addedComponents);
+        properties.put("resolvedComponents", resolvedComponents);
+        registry = interpolate(registry, properties);
         FileUtils.writeFile(dataPath.resolve("weaverbird-registry.xml"), registry, StandardCharsets.UTF_8);
     }
 
     void createConfig() throws Exception {
         var configPath = getPath().resolve("config");
-
-        if (components.contains("weaverbird-repo")) {
-            var repoDirPath = configPath.resolve("weaverbird-repo").resolve(project.getVersion());
+        if (getComponentSet().contains(REPO_COMPONENT)) {
+            var repoDirPath = configPath.resolve(REPO_COMPONENT).resolve(project.getVersion());
             Files.createDirectories(repoDirPath);
             var repoConfig = readFileToStr("repo-config.xml");
             FileUtils.writeFile(repoDirPath.resolve("configuration.xml"), repoConfig, StandardCharsets.UTF_8);
         }
 
-        if (components.contains("weaverbird-server")) {
-            var serverDirPath = configPath.resolve("weaverbird-server").resolve(project.getVersion());
+        if (getComponentSet().contains(SERVER_COMPONENT)) {
+            var serverDirPath = configPath.resolve(SERVER_COMPONENT).resolve(project.getVersion());
             Files.createDirectories(serverDirPath);
             var serverConfig = readFileToStr("server-config.xml");
             FileUtils.writeFile(serverDirPath.resolve("configuration.xml"), serverConfig, StandardCharsets.UTF_8);
@@ -109,15 +140,15 @@ public abstract class AbstractAssembleMojo extends AbstractBaseMojo {
             FileUtils.writeFile(serverDirPath.resolve("settings.xml"), serverSettings, StandardCharsets.UTF_8);
         }
 
-        if (components.contains("weaverbird-cli")) {
-            var cliDirPath = configPath.resolve("weaverbird-cli").resolve(project.getVersion());
+        if (getComponentSet().contains(CLI_COMPONENT)) {
+            var cliDirPath = configPath.resolve(CLI_COMPONENT).resolve(project.getVersion());
             Files.createDirectories(cliDirPath);
             var cliConfig = readFileToStr("cli-config.xml");
             FileUtils.writeFile(cliDirPath.resolve("configuration.xml"), cliConfig, StandardCharsets.UTF_8);
         }
 
-        if (components.contains("weaverbird-gui")) {
-            var guiDirPath = configPath.resolve("weaverbird-gui").resolve(project.getVersion());
+        if (getComponentSet().contains(GUI_COMPONENT)) {
+            var guiDirPath = configPath.resolve(GUI_COMPONENT).resolve(project.getVersion());
             Files.createDirectories(guiDirPath);
             var guiConfig = readFileToStr("gui-config.xml");
             FileUtils.writeFile(guiDirPath.resolve("configuration.xml"), guiConfig, StandardCharsets.UTF_8);
@@ -141,14 +172,41 @@ public abstract class AbstractAssembleMojo extends AbstractBaseMojo {
             resolveProvidedModules(session, null);
         }
 
-        var repoComponentArtifacts = readArtifacts("repo-modules.txt");
-        for (var a : repoComponentArtifacts) {
-            resolveModule(a, session);
+        if (getComponentSet().contains(REPO_COMPONENT)) {
+            var repoComponentArtifacts = readArtifacts("repo-modules.txt");
+            for (var a : repoComponentArtifacts) {
+                resolveModule(a, session);
+            }
         }
     }
 
     void createTemp() throws Exception {
         var tempPath = getPath().resolve("temp");
         Files.createDirectories(tempPath);
+    }
+
+    String interpolate(String content, Properties properties) throws Exception {
+        RegexBasedInterpolator interpolator = new RegexBasedInterpolator();
+        interpolator.addValueSource(new PropertiesBasedValueSource(properties));
+        interpolator.addValueSource(new PropertiesBasedValueSource(System.getProperties()));
+        return interpolator.interpolate(content);
+    }
+
+    private Set<String> getComponentSet() {
+        if (this.componentSet == null) {
+            this.componentSet = new HashSet<>(components);
+        }
+        return componentSet;
+    }
+
+    private void addComponent(StringBuilder builder, String name) {
+        if (builder.length() > 0) {
+            builder.append("\n");
+        }
+        builder.append("        <Component name=\"");
+        builder.append(name);
+        builder.append("\" version=\"");
+        builder.append(project.getVersion());
+        builder.append("\"/>");
     }
 }

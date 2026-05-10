@@ -27,8 +27,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.codehaus.plexus.interpolation.PropertiesBasedValueSource;
-import org.codehaus.plexus.interpolation.RegexBasedInterpolator;
 import org.eclipse.aether.artifact.Artifact;
 
 /**
@@ -91,13 +89,6 @@ public class AssembleDistMojo extends AbstractAssembleMojo {
         var shPath = binPath.resolve(scriptName + ext);
         FileUtils.writeFile(shPath, shContent, StandardCharsets.UTF_8);
         shPath.toFile().setExecutable(true);
-    }
-
-    private String interpolate(String content, Properties properties) throws Exception {
-        RegexBasedInterpolator interpolator = new RegexBasedInterpolator();
-        interpolator.addValueSource(new PropertiesBasedValueSource(properties));
-        interpolator.addValueSource(new PropertiesBasedValueSource(System.getProperties()));
-        return interpolator.interpolate(content);
     }
 
     public String resolvePath(Artifact artifact, boolean windows) {
