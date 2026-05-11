@@ -32,12 +32,12 @@ import com.techsenger.weaverbird.gui.console.ConsoleTabPresenter;
 import com.techsenger.weaverbird.gui.diagram.DiagramTabFxView;
 import com.techsenger.weaverbird.gui.diagram.DiagramTabPresenter;
 import com.techsenger.weaverbird.gui.settings.ConsoleSettings;
+import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientServiceFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 
 /**
  *
@@ -70,7 +70,7 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
         ControlFactory<ShellFxView<?>, ManagedMenu> f = (v) -> {
             return new ManagedMenu(FileMenu.NAME, "_File", 0);
         };
-        addRegistration(getRegistry().mainMenu().registerMenu(null, f));
+        addRegistration(getRegistry().mainMenu().registerMenu(f));
     }
 
     private void registerMainGroup() {
