@@ -39,6 +39,8 @@ module com.techsenger.weaverbird.gui {
     exports com.techsenger.weaverbird.gui;
     exports com.techsenger.weaverbird.gui.console;
     exports com.techsenger.weaverbird.gui.diagram;
+    exports com.techsenger.weaverbird.gui.settings;
+    exports com.techsenger.weaverbird.gui.style;
 
     provides com.techsenger.weaverbird.core.spi.module.ModuleActivator
             with com.techsenger.weaverbird.gui.ModuleActivatorProvider;

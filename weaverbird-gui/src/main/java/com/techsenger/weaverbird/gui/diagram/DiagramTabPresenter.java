@@ -23,8 +23,7 @@ import com.techsenger.tabshell.core.tab.AbstractTabPresenter;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.core.api.model.LayersInfo;
 import com.techsenger.weaverbird.gui.WeaverbirdComponents;
-import com.techsenger.weaverbird.gui.settings.ConsoleSettings;
-import com.techsenger.weaverbird.gui.style.ConsoleIcons;
+import com.techsenger.weaverbird.gui.settings.DiagramSettings;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
 import com.techsenger.weaverbird.net.client.api.DomainClient;
@@ -40,6 +39,7 @@ import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 
 /**
  *
@@ -56,6 +56,8 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractTabPr
 
     private ClientSession session;
 
+    private final DiagramSettings settings;
+
     private String previousSessionUuid;
 
     private List<LayerConfig> previousLayerConfigs;
@@ -66,11 +68,13 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractTabPr
 
     private Image diagram;
 
-    public DiagramTabPresenter(V view, Framework framework, ClientService client, ClientSession session) {
+    public DiagramTabPresenter(V view, Framework framework, ClientService client,
+            ClientSession session, DiagramSettings settings) {
         super(view);
         this.framework = framework;
         this.client = client;
         this.session = session;
+        this.settings = settings;
         getView().getComposer().setClient(client);
         getView().getComposer().setSession(session);
     }
@@ -139,10 +143,10 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractTabPr
                 if (b == LayerDialogButtons.OK) {
                     try {
                         this.previousLayerConfigs = dialog.getLayerConfigs();
-                        ConsoleSettings settings = (ConsoleSettings) getShell().getContext().getSettings();
-                        var generator = new LayerDiagramGenerator(previousLayerConfigs, settings);
+                        var shellSettings = getShell().getContext().getSettings();
+                        var generator = new LayerDiagramGenerator(previousLayerConfigs, shellSettings, settings);
                         var code = generator.generate();
-                        this.diagram = createDiagram(code, settings);
+                        this.diagram = createDiagram(code);
                         if (this.diagram != null) {
                             getView().setDiagram(this.diagram);
                             getView().setDiagramSize(calculateDiagramWidth(), calculateDiagramHeight());
@@ -178,12 +182,12 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractTabPr
     protected void postInitialize() {
         super.postInitialize();
         setTitle("Diagrams");
-        setIcon(ConsoleIcons.DIAGRAMS);
+        setIcon(WeaverbirdIcons.DIAGRAMS);
     }
 
-    private Image createDiagram(String code, ConsoleSettings settings) throws InterruptedException, IOException {
+    private Image createDiagram(String code) throws InterruptedException, IOException {
         if (System.getProperty("PLANTUML_LIMIT_SIZE") == null) {
-            var limitSize = settings.getDiagram().getLimitSize();
+            var limitSize = settings.getLimitSize();
             System.setProperty("PLANTUML_LIMIT_SIZE", String.valueOf(limitSize)); //by default image width limit is 4096
         }
         SourceStringReader reader = new SourceStringReader(code);

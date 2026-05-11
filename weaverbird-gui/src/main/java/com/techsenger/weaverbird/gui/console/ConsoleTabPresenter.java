@@ -32,7 +32,6 @@ import com.techsenger.weaverbird.executor.api.CommandExecutorFactory;
 import com.techsenger.weaverbird.executor.api.CommandSyntax;
 import com.techsenger.weaverbird.executor.api.command.Commands;
 import com.techsenger.weaverbird.gui.WeaverbirdComponents;
-import com.techsenger.weaverbird.gui.style.ConsoleIcons;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
 import java.util.ArrayList;
@@ -42,6 +41,7 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 
 /**
  *
@@ -208,7 +208,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractTabPr
     protected void postInitialize() {
         super.postInitialize();
         setTitle("Console");
-        setIcon(ConsoleIcons.CONSOLE);
+        setIcon(WeaverbirdIcons.CONSOLE);
         updatePrompt();
         showPrompt();
         getView().requestFocus();

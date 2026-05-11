@@ -30,7 +30,7 @@ import com.techsenger.weaverbird.gui.menu.FileMenuRegistrar;
 import com.techsenger.weaverbird.gui.settings.ConsoleSettings;
 import com.techsenger.weaverbird.gui.settings.LayoutEngine;
 import com.techsenger.weaverbird.gui.settings.LineType;
-import com.techsenger.weaverbird.gui.style.ConsoleIcons;
+import com.techsenger.weaverbird.gui.style.WeaverbirdStylesheets;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -61,7 +61,7 @@ public class WeaverbirdApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         var stylesheets = new ArrayList<Stylesheet>(IconStylesheetFactory.forAll());
-        stylesheets.add(new Stylesheet(ConsoleIcons.class.getResource("icons.css")));
+        stylesheets.addAll(WeaverbirdStylesheets.getAll());
 
         var shellView = new DefaultShellFxView<>(this, stage, stylesheets);
         var context = new DefaultShellContext(createSettings(), new InMemoryHistoryManager(), getHostServices());

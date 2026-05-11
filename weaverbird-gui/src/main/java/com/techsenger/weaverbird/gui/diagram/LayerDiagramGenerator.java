@@ -16,6 +16,11 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
+import com.techsenger.tabshell.core.settings.Settings;
+import com.techsenger.toolkit.core.model.ConfigurationModel;
+import com.techsenger.toolkit.core.model.ModuleModel;
+import com.techsenger.toolkit.core.model.ResolvedModuleModel;
+import com.techsenger.toolkit.fx.color.ColorUtils;
 import com.techsenger.weaverbird.core.api.Constants;
 import com.techsenger.weaverbird.core.api.model.ComponentLayerModel;
 import com.techsenger.weaverbird.core.api.model.ComponentModuleModel;
@@ -23,12 +28,8 @@ import com.techsenger.weaverbird.core.api.model.ModuleDirectiveModel;
 import static com.techsenger.weaverbird.core.api.module.DirectiveType.EXPORTS;
 import static com.techsenger.weaverbird.core.api.module.DirectiveType.OPENS;
 import static com.techsenger.weaverbird.core.api.module.DirectiveType.READS;
-import com.techsenger.weaverbird.gui.settings.ConsoleSettings;
+import com.techsenger.weaverbird.gui.settings.DiagramSettings;
 import com.techsenger.weaverbird.gui.settings.LayoutEngine;
-import com.techsenger.toolkit.core.model.ConfigurationModel;
-import com.techsenger.toolkit.core.model.ModuleModel;
-import com.techsenger.toolkit.core.model.ResolvedModuleModel;
-import com.techsenger.toolkit.fx.color.ColorUtils;
 import java.lang.module.ModuleDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -86,23 +87,26 @@ class LayerDiagramGenerator {
 
     private final List<LayerConfig> layerConfigs;
 
-    private final ConsoleSettings settings;
+    private final Settings shellSettings;
 
-    LayerDiagramGenerator(List<LayerConfig> layerConfigs, ConsoleSettings settings) {
+    private final DiagramSettings diagramSettings;
+
+    LayerDiagramGenerator(List<LayerConfig> layerConfigs, Settings shellSettings,
+            DiagramSettings diagramSettings) {
         this.layerConfigs = layerConfigs;
-        this.settings = settings;
+        this.shellSettings = shellSettings;
+        this.diagramSettings = diagramSettings;
     }
 
     String generate() {
         int borderColor;
-        var palette = settings.getAppearance().getTheme().getPalette();
-        if (settings.getAppearance().getTheme().isDark()) {
+        var palette = shellSettings.getAppearance().getTheme().getPalette();
+        if (shellSettings.getAppearance().getTheme().isDark()) {
             borderColor = palette.getBase4Color();
         } else {
             borderColor = palette.getBase5Color();
         }
         StringBuilder code = new StringBuilder();
-        var diagramSettings = settings.getDiagram();
         code.append("@startuml");
         code.append(EOL);
         if (diagramSettings.getLayoutEngine() == LayoutEngine.SMETANA) {
@@ -114,7 +118,7 @@ class LayerDiagramGenerator {
         code.append("skinparam defaultFontColor " + ColorUtils.toHex(palette.getDefaultFgColor()));
         code.append(EOL);
         code.append("skinparam defaultFontSize "
-                + Math.round(this.settings.getAppearance().getRegularFont().getSize()));
+                + Math.round(this.shellSettings.getAppearance().getRegularFont().getSize()));
         code.append(EOL);
         code.append("skinparam BackgroundColor #00000000"); //+ ColorUtils.toHex(palette.getDefaultBgColor()));
         code.append(EOL);
@@ -155,7 +159,7 @@ class LayerDiagramGenerator {
                 code.append(layerConfig.getLayer().getId());
                 code.append("] ");
                 if (layerConfig.isColored()) {
-                    code.append(ColorUtils.toHex(settings.getDiagram().getLayerColor()));
+                    code.append(ColorUtils.toHex(diagramSettings.getLayerColor()));
                 }
                 var moduleCode = new StringBuilder();
                 for (var moduleConfig : layerConfig.getModules()) {
@@ -186,7 +190,7 @@ class LayerDiagramGenerator {
                         moduleCode.append("]");
                         if (moduleConfig.isColored()) {
                             moduleCode.append(" ");
-                            moduleCode.append(ColorUtils.toHex(settings.getDiagram().getModuleColor()));
+                            moduleCode.append(ColorUtils.toHex(diagramSettings.getModuleColor()));
                         }
                         var packageInfoById = this.includedPackagesByModule.get(moduleConfig.getModule());
                         if (packageInfoById != null) {

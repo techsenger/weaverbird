@@ -31,12 +31,13 @@ import com.techsenger.weaverbird.gui.console.ConsoleTabFxView;
 import com.techsenger.weaverbird.gui.console.ConsoleTabPresenter;
 import com.techsenger.weaverbird.gui.diagram.DiagramTabFxView;
 import com.techsenger.weaverbird.gui.diagram.DiagramTabPresenter;
-import com.techsenger.weaverbird.gui.style.ConsoleIcons;
+import com.techsenger.weaverbird.gui.settings.ConsoleSettings;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientServiceFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 
 /**
  *
@@ -80,7 +81,7 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
     private void registerConsoleItem() {
         ControlFactory<ShellFxView<?>, ManagedMenuItem> f = (v) -> {
             var item = new ManagedMenuItem("C_onsole", 100);
-            item.setGraphic(new FontIconView(ConsoleIcons.CONSOLE));
+            item.setGraphic(new FontIconView(WeaverbirdIcons.CONSOLE));
             item.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
             var handler = new AbstractMenuItemHandler<ShellFxView<?>>(item, shell) {
 
@@ -103,14 +104,16 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
     private void registerDiagramItem() {
         ControlFactory<ShellFxView<?>, ManagedMenuItem> f = (v) -> {
             var item = new ManagedMenuItem("D_iagrams", 200);
-            item.setGraphic(new FontIconView(ConsoleIcons.DIAGRAMS));
+            item.setGraphic(new FontIconView(WeaverbirdIcons.DIAGRAMS));
             item.setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN));
             var handler = new AbstractMenuItemHandler<ShellFxView<?>>(item, shell) {
                 @Override
                 public void onAction() {
                     var shell = getComponent();
                     var diagramView = new DiagramTabFxView<>(shell);
-                    var diagramPresenter = new DiagramTabPresenter<>(diagramView, framework, client, null);
+                    ConsoleSettings consoleSettings = (ConsoleSettings) shell.getPresenter().getContext().getSettings();
+                    var diagramPresenter = new DiagramTabPresenter<>(diagramView, framework, client, null,
+                            consoleSettings.getDiagram());
                     diagramPresenter.initialize();
                     TabHostFxView<?> workspace = (TabHostFxView<?>) shell.getComposer().getWorkspace();
                     workspace.getComposer().addTab(diagramView);
@@ -127,7 +130,7 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
 //        ControlFactory<KeyedMenuItem> f = (v) -> {
 //            var tabShellView = (TabShellView<?>) v;
 //            var item = new KeyedMenuItem(FileMenuKeys.SETTINGS, false, false, false, "_Settings",
-//                    new FontIconView(ConsoleIcons.SETTINGS));
+//                    new FontIconView(WeaverbirdIcons.SETTINGS));
 //            item.setOnAction((e) -> {
 //                var viewModel =
 //                        new SettingsDialogViewModel((ConsoleSettings) tabShellView.getViewModel().getSettings(),

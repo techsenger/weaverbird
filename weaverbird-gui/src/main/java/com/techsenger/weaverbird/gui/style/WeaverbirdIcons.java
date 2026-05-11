@@ -22,7 +22,7 @@ import com.techsenger.tabshell.material.icon.StyleFontIcon;
  *
  * @author Pavel Castornii
  */
-public interface ConsoleIcons {
+public interface WeaverbirdIcons {
 
 //    String XML_FILE = "console-xml-file-icon";
 //

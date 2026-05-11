@@ -44,7 +44,10 @@ public abstract class AbstractSessionToolBarPresenter<V extends SessionToolBarVi
     @Override
     protected void postInitialize() {
         super.postInitialize();
-        setSessions(getClientSessions());
+        var clientSessions = getClientSessions();
+        if (clientSessions != null) {
+            setSessions(clientSessions);
+        }
         setSession(session);
     }
 
@@ -58,7 +61,10 @@ public abstract class AbstractSessionToolBarPresenter<V extends SessionToolBarVi
     }
 
     protected void onRefresh() {
-        setSessions(getClientSessions());
+        var clientSessions = getClientSessions();
+        if (clientSessions != null) {
+            setSessions(clientSessions);
+        }
         setSession(session);
     }
 
@@ -68,6 +74,9 @@ public abstract class AbstractSessionToolBarPresenter<V extends SessionToolBarVi
     }
 
     protected List<ClientSession> getClientSessions() {
+        if (this.client == null) {
+            return null;
+        }
         var sessions = client.getSessionsByName().values().stream()
                 .sorted(Comparator.comparing(ClientSession::getName)).toList();
         return sessions;

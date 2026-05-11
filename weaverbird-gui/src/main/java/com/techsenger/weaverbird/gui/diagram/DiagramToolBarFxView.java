@@ -21,7 +21,6 @@ import com.techsenger.tabshell.material.icon.FontIconView;
 import com.techsenger.tabshell.material.style.StyleClasses;
 import com.techsenger.toolkit.fx.Spacer;
 import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarFxView;
-import com.techsenger.weaverbird.gui.style.ConsoleIcons;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
@@ -29,6 +28,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
+import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 
 /**
  *
@@ -37,13 +37,13 @@ import javafx.scene.control.Tooltip;
 public class DiagramToolBarFxView<P extends DiagramToolBarPresenter<?>> extends AbstractSessionToolBarFxView<P>
         implements DiagramToolBarView {
 
-    private final Button layerDiagramButton = new Button(null, new FontIconView(ConsoleIcons.LAYER_DIAGRAMS));
+    private final Button layerDiagramButton = new Button(null, new FontIconView(WeaverbirdIcons.LAYER_DIAGRAMS));
 
     private final ComboBox<String> zoomLevelComboBox = new ComboBox<>();
 
-    private final Button zoomOutButton = new Button(null, new FontIconView(ConsoleIcons.ZOOM_OUT));
+    private final Button zoomOutButton = new Button(null, new FontIconView(WeaverbirdIcons.ZOOM_OUT));
 
-    private final Button zoomInButton = new Button(null, new FontIconView(ConsoleIcons.ZOOM_IN));
+    private final Button zoomInButton = new Button(null, new FontIconView(WeaverbirdIcons.ZOOM_IN));
 
     @Override
     public void setZoomLevels(List<String> levels) {
