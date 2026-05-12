@@ -42,14 +42,6 @@ public interface ComponentConfigDto {
     Version getVersion();
 
     /**
-     * Returns the human-readable name of the component, for example, "Archive Plugin". Title is never used
-     * in commands.
-     *
-     * @return
-     */
-    String getTitle();
-
-    /**
      * Returns the type of the component.
      *
      * @return

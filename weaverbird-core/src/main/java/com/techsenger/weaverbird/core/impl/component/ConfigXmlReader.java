@@ -16,6 +16,7 @@
 
 package com.techsenger.weaverbird.core.impl.component;
 
+import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.component.ComponentConfig;
 import com.techsenger.weaverbird.core.api.component.ComponentConfigInfo;
 import com.techsenger.weaverbird.core.api.component.ComponentConfigUtils;
@@ -29,7 +30,6 @@ import com.techsenger.weaverbird.core.api.module.ModuleType;
 import com.techsenger.weaverbird.core.impl.module.DefaultModuleConfig;
 import com.techsenger.weaverbird.core.impl.module.DefaultModuleDirective;
 import com.techsenger.weaverbird.core.impl.repo.DefaultRepositoryConfig;
-import com.techsenger.toolkit.core.version.Version;
 import jakarta.el.ELProcessor;
 import java.io.IOException;
 import java.io.InputStream;
@@ -334,7 +334,6 @@ public class ConfigXmlReader {
         }
 
         private void processConfigTag(Attributes attributes) throws SAXException {
-            var title = processValue(attributes.getValue("title"));
             var name = processValue(attributes.getValue("name"));
             if (name == null) {
                 throw new SAXException("The name of the component was not set");
@@ -344,7 +343,7 @@ public class ConfigXmlReader {
                 throw new SAXException("The version of the component was not set");
             }
             var componentType = processValue(attributes.getValue("type"));
-            this.config = new DefaultComponentConfig(title, name, Version.of(version), componentType);
+            this.config = new DefaultComponentConfig(name, Version.of(version), componentType);
             config.setMetadata(Collections.unmodifiableMap(metadata));
             config.setRepositories(Collections.unmodifiableList(repositories));
             config.setParents(Collections.unmodifiableList(parents));

@@ -16,6 +16,7 @@
 
 package com.techsenger.weaverbird.core.api.component;
 
+import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.module.DirectiveType;
 import com.techsenger.weaverbird.core.api.module.ModuleConfig;
 import com.techsenger.weaverbird.core.api.module.ModuleDirective;
@@ -25,7 +26,6 @@ import com.techsenger.weaverbird.core.impl.component.DefaultParentConfig;
 import com.techsenger.weaverbird.core.impl.module.DefaultModuleConfig;
 import com.techsenger.weaverbird.core.impl.module.DefaultModuleDirective;
 import com.techsenger.weaverbird.core.impl.repo.DefaultRepositoryConfig;
-import com.techsenger.toolkit.core.version.Version;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -40,7 +40,6 @@ import java.util.function.Consumer;
  */
 public final class ComponentConfigBuilder {
 
-    private String title;
     private String name;
     private Version version;
     private String type;
@@ -50,11 +49,6 @@ public final class ComponentConfigBuilder {
     private final List<ModuleConfig> modules = new ArrayList<>();
 
     ComponentConfigBuilder() { }
-
-    public ComponentConfigBuilder title(String title) {
-        this.title = title;
-        return this;
-    }
 
     public ComponentConfigBuilder name(String name) {
         this.name = name;
@@ -114,7 +108,7 @@ public final class ComponentConfigBuilder {
     public ComponentConfig build() {
         Objects.requireNonNull(name, "Name is required");
         Objects.requireNonNull(version, "Version is required");
-        var config = new DefaultComponentConfig(title, name, version, type);
+        var config = new DefaultComponentConfig(name, version, type);
         config.setMetadata(metadata);
         config.setRepositories(repositories);
         config.setParents(Collections.unmodifiableList(parents));

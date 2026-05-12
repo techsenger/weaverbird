@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Configuration title="Weaverbird Server HTTP" name="weaverbird-server" version="${project.version}">
+<Configuration name="weaverbird-server" version="${project.version}">
     <Repositories>
         <Repository name="local" url="file://${settings.localRepository}"/>
         <Repository name="central" url="${maven.central.url}"/>

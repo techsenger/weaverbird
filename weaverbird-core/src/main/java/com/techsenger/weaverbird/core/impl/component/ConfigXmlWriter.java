@@ -65,7 +65,6 @@ public final class ConfigXmlWriter {
 
     private void writeConfiguration(TransformerHandler handler, ComponentConfig config) throws SAXException {
         var attrs = new AttributesImpl();
-        addAttributeIfNotNull(attrs, "title", config.getTitle());
         addAttributeIfNotNull(attrs, "name", config.getName());
         addAttributeIfNotNull(attrs, "version", config.getVersion() != null
                 ? config.getVersion().toString() : null);

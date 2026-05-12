@@ -16,9 +16,9 @@
 
 package com.techsenger.weaverbird.net.shared;
 
+import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.component.ComponentConfig;
 import com.techsenger.weaverbird.core.api.component.ComponentConfigDto;
-import com.techsenger.toolkit.core.version.Version;
 
 /**
  *
@@ -34,7 +34,6 @@ public class DefaultComponentConfigDto implements ComponentConfigDto {
         dto.name = config.getName();
         dto.fullName = config.getFullName();
         dto.version = config.getVersion();
-        dto.title = config.getTitle();
         dto.type = config.getType();
         return dto;
     }
@@ -44,8 +43,6 @@ public class DefaultComponentConfigDto implements ComponentConfigDto {
     private String fullName;
 
     private Version version;
-
-    private String title;
 
     private String type;
 
@@ -77,15 +74,6 @@ public class DefaultComponentConfigDto implements ComponentConfigDto {
     }
 
     @Override
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
     public String getType() {
         return type;
     }
@@ -93,7 +81,4 @@ public class DefaultComponentConfigDto implements ComponentConfigDto {
     public void setType(String type) {
         this.type = type;
     }
-
-
-
 }

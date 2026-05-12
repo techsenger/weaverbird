@@ -285,7 +285,6 @@ The configuration can be set using a `Builder` or an XML.
 
 ```java
 var config = ComponentConfig.builder()
-        .title("The Best Foo")
         .name("foo")
         .version(Version.of("1.0.0"))
         .metadata("License", "Apache 2")
@@ -309,7 +308,7 @@ A XML configuration template with all supported tags:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
-<Configuration title="The Best Foo" name="foo" version="1.0.0" type="notBar">
+<Configuration name="foo" version="1.0.0" type="notBar">
     <Metadata>
         <Entry key="License" value="Apache 2"/>
     </Metadata>

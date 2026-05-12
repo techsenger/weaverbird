@@ -22,9 +22,9 @@ import com.techsenger.weaverbird.core.api.FrameworkFactory;
 import com.techsenger.weaverbird.core.api.FrameworkSettings;
 import com.techsenger.weaverbird.core.api.SystemProperties;
 import com.techsenger.weaverbird.core.api.component.ComponentConfig;
+import com.techsenger.weaverbird.core.api.module.ArtifactEventListener;
 import com.techsenger.weaverbird.core.api.module.ModuleArtifact;
 import java.nio.file.Paths;
-import com.techsenger.weaverbird.core.api.module.ArtifactEventListener;
 
 /**
  * A simple starter that demonstrates basic operations with components.
@@ -44,7 +44,6 @@ public final class StarterDemo {
     private static final Version COMPONENT_VERSION = Version.of("2.0.0");
 
     private static final ComponentConfig COMPONENT_CONFIG = ComponentConfig.builder()
-            .title("Custom Component")
             .name(COMPONENT_NAME)
             .version(COMPONENT_VERSION)
             .repositories(
@@ -57,7 +56,7 @@ public final class StarterDemo {
 
     private static final String COMPONENT_CONFIG_XML =
             """
-            <Configuration title="Custom Component" name="custom-component" version="2.0.0" type="base">
+            <Configuration name="custom-component" version="2.0.0" type="base">
                 <Repositories>
                     <Repository name="central" url="https://repo1.maven.org/maven2/"/>
                 </Repositories>

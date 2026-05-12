@@ -16,12 +16,12 @@
 
 package com.techsenger.weaverbird.core.impl;
 
+import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.component.ComponentConfig;
 import com.techsenger.weaverbird.core.api.component.ParentConfig;
 import com.techsenger.weaverbird.core.api.component.RepositoryConfig;
 import com.techsenger.weaverbird.core.api.component.VersionMatch;
 import com.techsenger.weaverbird.core.api.module.ModuleConfig;
-import com.techsenger.toolkit.core.version.Version;
 import java.util.List;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,11 +68,6 @@ class ConfigMatcherTest {
 
         @Override
         public String getFullName() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public String getTitle() {
             throw new UnsupportedOperationException();
         }
 

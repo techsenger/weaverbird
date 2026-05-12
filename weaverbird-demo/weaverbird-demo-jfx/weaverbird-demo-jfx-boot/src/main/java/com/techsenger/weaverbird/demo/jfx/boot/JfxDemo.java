@@ -24,9 +24,9 @@ import com.techsenger.weaverbird.core.api.FrameworkFactory;
 import com.techsenger.weaverbird.core.api.FrameworkSettings;
 import com.techsenger.weaverbird.core.api.SystemProperties;
 import com.techsenger.weaverbird.core.api.component.ComponentConfig;
+import com.techsenger.weaverbird.core.api.module.ArtifactEventListener;
 import com.techsenger.weaverbird.core.api.module.ModuleArtifact;
 import java.nio.file.Paths;
-import com.techsenger.weaverbird.core.api.module.ArtifactEventListener;
 
 /**
  * This demo shows how to run JavaFX.
@@ -77,7 +77,6 @@ public final class JfxDemo {
 
         // Component config
         var config = ComponentConfig.builder()
-                .title("JFX Component")
                 .name(COMPONENT_NAME)
                 .version(COMPONENT_VERSION)
                 .repositories(

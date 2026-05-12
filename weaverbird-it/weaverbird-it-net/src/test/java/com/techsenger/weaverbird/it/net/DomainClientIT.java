@@ -48,7 +48,7 @@ public class DomainClientIT {
 
     private static final String TEST_COMPONENT_XML = """
             <?xml version="1.0" encoding="UTF-8" ?>
-            <Configuration title="Test Component" name="test-comp" version="1.0.0" type="test">
+            <Configuration name="test-comp" version="1.0.0" type="test">
                 <Repositories>
                     <Repository name="central" url="https://repo1.maven.org/maven2/"/>
                 </Repositories>

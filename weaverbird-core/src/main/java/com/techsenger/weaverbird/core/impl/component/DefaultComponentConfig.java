@@ -16,12 +16,12 @@
 
 package com.techsenger.weaverbird.core.impl.component;
 
+import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.Constants;
 import com.techsenger.weaverbird.core.api.component.ComponentConfig;
 import com.techsenger.weaverbird.core.api.component.ParentConfig;
 import com.techsenger.weaverbird.core.api.component.RepositoryConfig;
 import com.techsenger.weaverbird.core.api.module.ModuleConfig;
-import com.techsenger.toolkit.core.version.Version;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +32,6 @@ import java.util.Objects;
  * @author Pavel Castornii
  */
 public class DefaultComponentConfig implements ComponentConfig {
-
-    private final String title;
 
     private final String name;
 
@@ -49,16 +47,10 @@ public class DefaultComponentConfig implements ComponentConfig {
 
     private List<ModuleConfig> modules;
 
-    public DefaultComponentConfig(String title, String name, Version version, String type) {
-        this.title = title;
+    public DefaultComponentConfig(String name, Version version, String type) {
         this.name = name;
         this.version = version;
         this.type = type;
-    }
-
-    @Override
-    public String getTitle() {
-        return title;
     }
 
     @Override

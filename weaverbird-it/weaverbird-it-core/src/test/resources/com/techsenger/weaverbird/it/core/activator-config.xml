@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Configuration title="IT Activator" name="weaverbird-it-activator" version="${project.version}" type="base">
+<Configuration name="weaverbird-it-activator" version="${project.version}" type="base">
     <Repositories>
         <Repository name="local" url="file://${settings.localRepository}"/>
     </Repositories>
