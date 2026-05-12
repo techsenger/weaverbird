@@ -16,7 +16,6 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.tabshell.core.settings.Settings;
 import com.techsenger.toolkit.core.model.ConfigurationModel;
 import com.techsenger.toolkit.core.model.ModuleModel;
 import com.techsenger.toolkit.core.model.ResolvedModuleModel;
@@ -41,6 +40,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.techsenger.tabshell.core.settings.ShellSettings;
 
 /**
  *
@@ -87,11 +87,11 @@ class LayerDiagramGenerator {
 
     private final List<LayerConfig> layerConfigs;
 
-    private final Settings shellSettings;
+    private final ShellSettings shellSettings;
 
     private final DiagramSettings diagramSettings;
 
-    LayerDiagramGenerator(List<LayerConfig> layerConfigs, Settings shellSettings,
+    LayerDiagramGenerator(List<LayerConfig> layerConfigs, ShellSettings shellSettings,
             DiagramSettings diagramSettings) {
         this.layerConfigs = layerConfigs;
         this.shellSettings = shellSettings;

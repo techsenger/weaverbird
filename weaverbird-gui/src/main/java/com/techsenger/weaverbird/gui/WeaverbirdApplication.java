@@ -20,6 +20,7 @@ import com.techsenger.tabshell.core.DefaultShellContext;
 import com.techsenger.tabshell.core.DefaultShellFxView;
 import com.techsenger.tabshell.core.DefaultShellPresenter;
 import com.techsenger.tabshell.core.history.InMemoryHistoryManager;
+import com.techsenger.tabshell.core.registry.ControlRegistry;
 import com.techsenger.tabshell.icons.IconStylesheetFactory;
 import com.techsenger.tabshell.layout.tabhost.TabHostFxView;
 import com.techsenger.tabshell.layout.tabhost.TabHostPresenter;
@@ -63,7 +64,7 @@ public class WeaverbirdApplication extends Application {
         var stylesheets = new ArrayList<Stylesheet>(IconStylesheetFactory.forAll());
         stylesheets.addAll(WeaverbirdStylesheets.getAll());
 
-        var shellView = new DefaultShellFxView<>(this, stage, stylesheets);
+        var shellView = new DefaultShellFxView<>(this, stage, stylesheets, new ControlRegistry());
         var context = new DefaultShellContext(createSettings(), new InMemoryHistoryManager(), getHostServices());
         var shellPresenter = new DefaultShellPresenter<>(shellView, context);
         shellPresenter.setOnClose(() -> Platform.exit());

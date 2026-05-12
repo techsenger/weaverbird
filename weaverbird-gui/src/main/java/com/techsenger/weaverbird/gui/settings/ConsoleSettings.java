@@ -18,13 +18,13 @@ package com.techsenger.weaverbird.gui.settings;
 
 import com.techsenger.tabshell.core.settings.AppearanceSettings;
 import com.techsenger.tabshell.core.settings.DefaultAppearanceSettings;
-import com.techsenger.tabshell.core.settings.Settings;
+import com.techsenger.tabshell.core.settings.ShellSettings;
 
 /**
  *
  * @author Pavel Castornii
  */
-public class ConsoleSettings implements Settings {
+public class ConsoleSettings implements ShellSettings {
 
     private final AppearanceSettings appearance = new DefaultAppearanceSettings();
 
