@@ -16,10 +16,9 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
+import com.techsenger.patternfx.mvp.ComponentDescriptor;
 import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarPresenter;
-import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
-import com.techsenger.patternfx.mvp.Descriptor;
 import java.util.List;
 import javafx.collections.FXCollections;
 import com.techsenger.weaverbird.gui.WeaverbirdComponents;
@@ -39,10 +38,9 @@ public class DiagramToolBarPresenter<V extends DiagramToolBarView> extends Abstr
 
     private String zoomLevel;
 
-    public DiagramToolBarPresenter(V view, ClientService client, ClientSession session,
-            DiagramToolBarAwarePort toolBarAware) {
-        super(view, client, session);
-        this.toolBarAware = toolBarAware;
+    public DiagramToolBarPresenter(V view, DiagramToolBarParams params) {
+        super(view, params);
+        this.toolBarAware = params.getToolBarAware();
     }
 
     public List<String> getZoomLevels() {
@@ -54,8 +52,8 @@ public class DiagramToolBarPresenter<V extends DiagramToolBarView> extends Abstr
     }
 
     @Override
-    protected Descriptor createDescriptor() {
-        return new Descriptor(WeaverbirdComponents.DIAGRAM_TOOL_BAR);
+    protected ComponentDescriptor createDescriptor() {
+        return new ComponentDescriptor(WeaverbirdComponents.DIAGRAM_TOOL_BAR);
     }
 
     @Override

@@ -28,8 +28,10 @@ import com.techsenger.tabshell.material.menu.ManagedMenuGroup;
 import com.techsenger.tabshell.material.menu.ManagedMenuItem;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.gui.console.ConsoleTabFxView;
+import com.techsenger.weaverbird.gui.console.ConsoleTabParams;
 import com.techsenger.weaverbird.gui.console.ConsoleTabPresenter;
 import com.techsenger.weaverbird.gui.diagram.DiagramTabFxView;
+import com.techsenger.weaverbird.gui.diagram.DiagramTabParams;
 import com.techsenger.weaverbird.gui.diagram.DiagramTabPresenter;
 import com.techsenger.weaverbird.gui.settings.ConsoleSettings;
 import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
@@ -89,7 +91,8 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
                 public void onAction() {
                     var shell = getComponent();
                     var consoleView = new ConsoleTabFxView<>(shell);
-                    var consolePresenter = new ConsoleTabPresenter<>(consoleView, framework, client, null);
+                    var params = new ConsoleTabParams(framework, client, null);
+                    var consolePresenter = new ConsoleTabPresenter<>(consoleView, params);
                     consolePresenter.initialize();
                     TabHostFxView<?> workspace = (TabHostFxView<?>) shell.getComposer().getWorkspace();
                     workspace.getComposer().addTab(consoleView);
@@ -112,8 +115,8 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
                     var shell = getComponent();
                     var diagramView = new DiagramTabFxView<>(shell);
                     ConsoleSettings consoleSettings = (ConsoleSettings) shell.getPresenter().getContext().getSettings();
-                    var diagramPresenter = new DiagramTabPresenter<>(diagramView, framework, client, null,
-                            consoleSettings.getDiagram());
+                    var params = new DiagramTabParams(framework, client, null, consoleSettings.getDiagram());
+                    var diagramPresenter = new DiagramTabPresenter<>(diagramView, params);
                     diagramPresenter.initialize();
                     TabHostFxView<?> workspace = (TabHostFxView<?>) shell.getComposer().getWorkspace();
                     workspace.getComposer().addTab(diagramView);

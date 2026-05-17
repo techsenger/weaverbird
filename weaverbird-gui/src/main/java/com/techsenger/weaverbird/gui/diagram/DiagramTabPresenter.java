@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.patternfx.mvp.Descriptor;
+import com.techsenger.patternfx.mvp.ComponentDescriptor;
 import com.techsenger.tabshell.core.CloseCheckResult;
 import com.techsenger.tabshell.core.ClosePreparationResult;
 import com.techsenger.tabshell.core.tab.AbstractTabPresenter;
@@ -24,6 +24,7 @@ import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.core.api.model.LayersInfo;
 import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 import com.techsenger.weaverbird.gui.settings.DiagramSettings;
+import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
 import com.techsenger.weaverbird.net.client.api.DomainClient;
@@ -39,7 +40,6 @@ import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 
 /**
  *
@@ -68,13 +68,12 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractTabPr
 
     private Image diagram;
 
-    public DiagramTabPresenter(V view, Framework framework, ClientService client,
-            ClientSession session, DiagramSettings settings) {
-        super(view);
-        this.framework = framework;
-        this.client = client;
-        this.session = session;
-        this.settings = settings;
+    public DiagramTabPresenter(V view, DiagramTabParams params) {
+        super(view, params);
+        this.framework = params.getFramework();
+        this.client = params.getClient();
+        this.session = params.getSession();
+        this.settings = params.getSettings();
         getView().getComposer().setClient(client);
         getView().getComposer().setSession(session);
     }
@@ -174,8 +173,8 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractTabPr
     }
 
     @Override
-    protected Descriptor createDescriptor() {
-        return new Descriptor(WeaverbirdComponents.DIAGRAM_TAB);
+    protected ComponentDescriptor createDescriptor() {
+        return new ComponentDescriptor(WeaverbirdComponents.DIAGRAM_TAB);
     }
 
     @Override

@@ -35,10 +35,10 @@ public abstract class AbstractSessionToolBarPresenter<V extends SessionToolBarVi
 
     private ClientSession session;
 
-    public AbstractSessionToolBarPresenter(V view, ClientService client, ClientSession session) {
-        super(view);
-        this.client = client;
-        this.session = session;
+    public AbstractSessionToolBarPresenter(V view, SessionToolBarParams params) {
+        super(view, params);
+        this.client = params.getClient();
+        this.session = params.getSession();
     }
 
     @Override

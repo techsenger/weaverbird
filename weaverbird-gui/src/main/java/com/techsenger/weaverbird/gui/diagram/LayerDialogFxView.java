@@ -21,6 +21,7 @@ import com.techsenger.tabshell.core.page.DefaultPageDescriptor;
 import com.techsenger.tabshell.core.page.PageDescriptor;
 import com.techsenger.tabshell.core.page.PageItem;
 import com.techsenger.tabshell.layout.pagehost.PageHostFxView;
+import com.techsenger.tabshell.layout.pagehost.PageHostParams;
 import com.techsenger.tabshell.layout.pagehost.PageHostPort;
 import com.techsenger.tabshell.layout.pagehost.PageHostPresenter;
 import com.techsenger.tabshell.material.button.ResultButton;
@@ -60,7 +61,6 @@ public class LayerDialogFxView<P extends LayerDialogPresenter<?>> extends Abstra
             super.compose();
 
             pageHost = createPageHost();
-            pageHost.getPresenter().initialize();
             pageHost.setDividerPosition(0.275);
             getModifiableChildren().add(pageHost);
             getContentBox().getChildren().add(pageHost.getNode());
@@ -69,7 +69,6 @@ public class LayerDialogFxView<P extends LayerDialogPresenter<?>> extends Abstra
             var pages = layerConfgs.stream().map(c ->
                     (PageDescriptor) new DefaultPageDescriptor(c.getName(), (item) -> {
                         var page = createPage(item, c);
-                        page.getPresenter().initialize();
                         return page;
                     })).toList();
             pageHost.getComposer().setPages(pages);
@@ -83,13 +82,17 @@ public class LayerDialogFxView<P extends LayerDialogPresenter<?>> extends Abstra
 
         protected PageHostFxView<?> createPageHost() {
             var view = new PageHostFxView<>();
-            var presenter = new PageHostPresenter<>(view, () -> null);
+            var params = new PageHostParams(null);
+            var presenter = new PageHostPresenter<>(view, params);
+            presenter.initialize();
             return view;
         }
 
         protected LayerPageFxView<?> createPage(PageItem item, LayerConfig layer) {
             var view = new LayerPageFxView<>();
-            var presenter = new LayerPagePresenter<>(view, item, layer);
+            var params = new LayerPageParams(item, layer);
+            var presenter = new LayerPagePresenter<>(view, params);
+            presenter.initialize();
             return view;
         }
     }

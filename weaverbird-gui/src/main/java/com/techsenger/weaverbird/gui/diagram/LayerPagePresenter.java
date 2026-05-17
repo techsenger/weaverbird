@@ -16,9 +16,8 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.patternfx.mvp.Descriptor;
+import com.techsenger.patternfx.mvp.ComponentDescriptor;
 import com.techsenger.tabshell.core.page.AbstractPagePresenter;
-import com.techsenger.tabshell.core.page.PageItem;
 import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 
 /**
@@ -29,9 +28,9 @@ public class LayerPagePresenter<V extends LayerPageView> extends AbstractPagePre
 
     private final LayerConfig layer;
 
-    public LayerPagePresenter(V view, PageItem item, LayerConfig layer) {
-        super(view, item);
-        this.layer = layer;
+    public LayerPagePresenter(V view, LayerPageParams params) {
+        super(view, params);
+        this.layer = params.getLayer();
     }
 
     @Override
@@ -41,8 +40,8 @@ public class LayerPagePresenter<V extends LayerPageView> extends AbstractPagePre
     }
 
     @Override
-    protected Descriptor createDescriptor() {
-        return new Descriptor(WeaverbirdComponents.LAYER_PAGE);
+    protected ComponentDescriptor createDescriptor() {
+        return new ComponentDescriptor(WeaverbirdComponents.LAYER_PAGE);
     }
 
     @Override

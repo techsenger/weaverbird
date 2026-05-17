@@ -107,7 +107,6 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?>> extends Abstract
         public void compose() {
             super.compose();
             this.toolBar = createToolBar(client, session);
-            this.toolBar.getPresenter().initialize();
             getModifiableChildren().add(this.toolBar);
             view.getContentBox().getChildren().add(0, toolBar.getNode());
         }
@@ -115,7 +114,6 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?>> extends Abstract
         @Override
         public void addCommandPopup(Collection<CommandInfo> commands, boolean sessionExists, String token, int offset) {
             this.completionPopup = createCommandPopup(commands, sessionExists, token);
-            this.completionPopup.getPresenter().initialize();
             var topLeft = calculatePopupPosition(offset);
             addPopup(this.completionPopup, Anchors.topLeft(topLeft.getY(), topLeft.getX()));
         }
@@ -123,7 +121,6 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?>> extends Abstract
         @Override
         public void addParameterPopup(List<ParameterDescriptor> parameters, String token, int offset) {
             this.completionPopup = createParameterPopup(parameters, token);
-            this.completionPopup.getPresenter().initialize();
             var topLeft = calculatePopupPosition(offset);
             addPopup(this.completionPopup, Anchors.topLeft(topLeft.getY(), topLeft.getX()));
         }
@@ -145,21 +142,29 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?>> extends Abstract
 
         protected ConsoleToolBarFxView<?> createToolBar(ClientService client, ClientSession session) {
             var view = new ConsoleToolBarFxView<>();
-            var presenter = new ConsoleToolBarPresenter<>(view, client, session, getPresenter());
+            var params = new ConsoleToolBarParams(client, session, getPresenter());
+            var presenter = new ConsoleToolBarPresenter<>(view, params);
+            presenter.initialize();
             return view;
         }
 
         protected CompletionPopupFxView<?> createCommandPopup(Collection<CommandInfo> commands,
                 boolean sessionExists, String token) {
             var view = new CompletionPopupFxView<>();
-            var presenter = new CompletionPopupPresenter<>(view, commands, sessionExists, token, getPresenter());
+            var params = new CompletionPopupParams(commands, sessionExists, null, token,
+                    getPresenter());
+            var presenter = new CompletionPopupPresenter<>(view, params);
+            presenter.initialize();
             return view;
         }
 
-        protected CompletionPopupFxView<?> createParameterPopup(List<ParameterDescriptor> params,
+        protected CompletionPopupFxView<?> createParameterPopup(List<ParameterDescriptor> parameterDescriptors,
                 String token) {
             var view = new CompletionPopupFxView<>();
-            var presenter = new CompletionPopupPresenter<>(view, params, token, getPresenter());
+            var params = new CompletionPopupParams(null, false, parameterDescriptors, token,
+                    getPresenter());
+            var presenter = new CompletionPopupPresenter<>(view, params);
+            presenter.initialize();
             return view;
         }
 

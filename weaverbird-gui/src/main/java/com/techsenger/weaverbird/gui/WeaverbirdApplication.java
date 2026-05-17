@@ -18,7 +18,9 @@ package com.techsenger.weaverbird.gui;
 
 import com.techsenger.tabshell.core.DefaultShellContext;
 import com.techsenger.tabshell.core.DefaultShellFxView;
+import com.techsenger.tabshell.core.DefaultShellParams;
 import com.techsenger.tabshell.core.DefaultShellPresenter;
+import com.techsenger.tabshell.core.area.AreaParams;
 import com.techsenger.tabshell.core.history.InMemoryHistoryManager;
 import com.techsenger.tabshell.core.registry.ControlRegistry;
 import com.techsenger.tabshell.icons.IconStylesheetFactory;
@@ -66,14 +68,14 @@ public class WeaverbirdApplication extends Application {
 
         var shellView = new DefaultShellFxView<>(this, stage, stylesheets, new ControlRegistry());
         var context = new DefaultShellContext(createSettings(), new InMemoryHistoryManager(), getHostServices());
-        var shellPresenter = new DefaultShellPresenter<>(shellView, context);
-        shellPresenter.setOnClose(() -> Platform.exit());
-
+        var shellParams = new DefaultShellParams(context);
+        var shellPresenter = new DefaultShellPresenter<>(shellView, shellParams);
         shellPresenter.initialize();
+        shellPresenter.setOnClose(() -> Platform.exit());
         shellView.setTitle("Weaverbird Framework");
 
         var workspaceView = new TabHostFxView<>(true);
-        var workspacePresenter = new TabHostPresenter<>(workspaceView);
+        var workspacePresenter = new TabHostPresenter<>(workspaceView, new AreaParams());
         workspacePresenter.initialize();
         shellView.getComposer().addWorkspace(workspaceView);
 

@@ -16,14 +16,13 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.patternfx.mvp.Descriptor;
+import com.techsenger.patternfx.mvp.ComponentDescriptor;
 import com.techsenger.tabshell.core.CloseCheckResult;
 import com.techsenger.tabshell.core.ClosePreparationResult;
 import com.techsenger.tabshell.core.UiExecutor;
 import com.techsenger.tabshell.core.settings.SettingsSubscription;
 import com.techsenger.tabshell.core.tab.AbstractTabPresenter;
 import com.techsenger.weaverbird.core.api.Constants;
-import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.core.api.message.DefaultMessage;
 import com.techsenger.weaverbird.core.api.message.Message;
 import com.techsenger.weaverbird.core.api.message.MessageType;
@@ -32,7 +31,6 @@ import com.techsenger.weaverbird.executor.api.CommandExecutorFactory;
 import com.techsenger.weaverbird.executor.api.CommandSyntax;
 import com.techsenger.weaverbird.executor.api.command.Commands;
 import com.techsenger.weaverbird.gui.WeaverbirdComponents;
-import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,14 +128,14 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractTabPr
      */
     private volatile int commandIndex = -1;
 
-    public ConsoleTabPresenter(V view, Framework framework, ClientService client, ClientSession session) {
-        super(view);
+    public ConsoleTabPresenter(V view, ConsoleTabParams params) {
+        super(view, params);
         var composer = getView().getComposer();
-        composer.setClient(client);
-        composer.setSession(session);
+        composer.setClient(params.getClient());
+        composer.setSession(params.getSession());
         CommandExecutor ex = null;
         try {
-            ex = CommandExecutorFactory.create(framework, client);
+            ex = CommandExecutorFactory.create(params.getFramework(), params.getClient());
         } catch (Exception e) {
             logger.error("{} Error creating executor", getDescriptor().getLogPrefix(), e);
         }
@@ -145,8 +143,8 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractTabPr
     }
 
     @Override
-    protected Descriptor createDescriptor() {
-        return new Descriptor(WeaverbirdComponents.CONSOLE_TAB);
+    protected ComponentDescriptor createDescriptor() {
+        return new ComponentDescriptor(WeaverbirdComponents.CONSOLE_TAB);
     }
 
     @Override

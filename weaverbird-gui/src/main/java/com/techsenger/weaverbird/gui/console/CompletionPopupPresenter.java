@@ -16,18 +16,18 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.weaverbird.executor.api.CommandSyntax;
-import com.techsenger.weaverbird.executor.api.command.CommandInfo;
-import com.techsenger.weaverbird.executor.api.command.ParameterDescriptor;
-import com.techsenger.patternfx.mvp.Descriptor;
+import com.techsenger.patternfx.mvp.ComponentDescriptor;
 import com.techsenger.tabshell.core.CloseCheckResult;
 import com.techsenger.tabshell.core.ClosePreparationResult;
 import com.techsenger.tabshell.core.popup.AbstractPopupPresenter;
+import com.techsenger.weaverbird.executor.api.CommandSyntax;
+import com.techsenger.weaverbird.executor.api.command.CommandInfo;
+import com.techsenger.weaverbird.executor.api.command.ParameterDescriptor;
+import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
-import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 
 /**
  *
@@ -52,34 +52,23 @@ public class CompletionPopupPresenter<V extends CompletionPopupView> extends Abs
 
     private final boolean sessionExists;
 
-    public CompletionPopupPresenter(V view, Collection<CommandInfo> commands, boolean sessionExists, String token,
-            CompletionPopupAwarePort owner) {
-        this(view, commands, sessionExists, null, token, owner);
-    }
-
-    public CompletionPopupPresenter(V view, List<ParameterDescriptor> params, String token,
-            CompletionPopupAwarePort owner) {
-        this(view, null, false, params, token, owner);
-    }
-
-    private CompletionPopupPresenter(V view, Collection<CommandInfo> commands, boolean sessionExists,
-            List<ParameterDescriptor> params, String token, CompletionPopupAwarePort popupAware) {
-        super(view, false);
-        this.commands = commands;
-        this.parameters = params;
+    public CompletionPopupPresenter(V view, CompletionPopupParams params) {
+        super(view, params);
+        this.commands = params.getCommands();
+        this.parameters = params.getParameterDescriptors();
         if (commands != null) {
             this.type = CompletionType.COMMAND;
         } else {
             this.type = CompletionType.PARAMETER;
         }
-        this.popupAware = popupAware;
-        this.token = token;
-        this.sessionExists = sessionExists;
+        this.popupAware = params.getPopupAware();
+        this.token = params.getToken();
+        this.sessionExists = params.isSessionExists();
     }
 
     @Override
-    protected Descriptor createDescriptor() {
-        return new Descriptor(WeaverbirdComponents.COMPLETION_POPUP);
+    protected ComponentDescriptor createDescriptor() {
+        return new ComponentDescriptor(WeaverbirdComponents.COMPLETION_POPUP);
     }
 
     @Override

@@ -59,7 +59,6 @@ public class DiagramTabFxView<P extends DiagramTabPresenter<?>> extends Abstract
         public LayerDialogPort openLayerDialog(List<ComponentLayerModel> layerModels,
                 List<LayerConfig> previousLayerConfigs) {
             var dialog = createDialog(layerModels, previousLayerConfigs);
-            dialog.getPresenter().initialize();
             addDialog(dialog);
             return dialog.getPresenter();
         }
@@ -68,21 +67,24 @@ public class DiagramTabFxView<P extends DiagramTabPresenter<?>> extends Abstract
         public void compose() {
             super.compose();
             var toolBar = createToolBar();
-            toolBar.getPresenter().initialize();
             view.getModifiableChildren().add(toolBar);
             view.getContentBox().getChildren().add(0, toolBar.getNode());
         }
 
         protected DiagramToolBarFxView<?> createToolBar() {
             var view = new DiagramToolBarFxView<>();
-            var presenter = new DiagramToolBarPresenter<>(view, client, session, getPresenter());
+            var params = new DiagramToolBarParams(client, session, getPresenter());
+            var presenter = new DiagramToolBarPresenter<>(view, params);
+            presenter.initialize();
             return view;
         }
 
         protected LayerDialogFxView<?> createDialog(List<ComponentLayerModel> layerModels,
                 List<LayerConfig> previousLayerConfigs) {
             var view = new LayerDialogFxView<>();
-            var presenter = new LayerDialogPresenter<>(view, layerModels, previousLayerConfigs);
+            var params = new LayerDialogParams(layerModels, previousLayerConfigs);
+            var presenter = new LayerDialogPresenter<>(view, params);
+            presenter.initialize();
             return view;
         }
     }

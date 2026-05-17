@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.patternfx.mvp.Descriptor;
+import com.techsenger.patternfx.mvp.ComponentDescriptor;
 import com.techsenger.tabshell.core.CloseCheckResult;
 import com.techsenger.tabshell.core.ClosePreparationResult;
 import com.techsenger.tabshell.core.dialog.AbstractDialogPresenter;
@@ -45,19 +45,16 @@ public class LayerDialogPresenter<V extends LayerDialogView> extends AbstractDia
      * Constructor.
      *
      * @param view
-     * @param layerModels
-     * @param previousLayerConfigs can differ from current components. For example, there can be new components in the
-     * current configuration or even the same components but with new modules (for example, after component restart).
      */
-    public LayerDialogPresenter(V view, List<ComponentLayerModel> layerModels, List<LayerConfig> previousLayerConfigs) {
-        super(view);
-        if (previousLayerConfigs != null) {
-            this.previousLayerConfigsById = previousLayerConfigs.stream()
+    public LayerDialogPresenter(V view, LayerDialogParams params) {
+        super(view, params);
+        if (params.getPreviousLayerConfigs() != null) {
+            this.previousLayerConfigsById = params.getPreviousLayerConfigs().stream()
                     .collect(Collectors.toMap(c -> c.getLayer().getId(), c -> c));
         } else {
             this.previousLayerConfigsById = null;
         }
-        this.layerConfigs = createLayerConfigs(layerModels);
+        this.layerConfigs = createLayerConfigs(params.getLayerModels());
         getView().getComposer().setLayerConfigs(this.layerConfigs);
     }
 
@@ -67,8 +64,8 @@ public class LayerDialogPresenter<V extends LayerDialogView> extends AbstractDia
     }
 
     @Override
-    protected Descriptor createDescriptor() {
-        return new Descriptor(WeaverbirdComponents.LAYER_DIALOG);
+    protected ComponentDescriptor createDescriptor() {
+        return new ComponentDescriptor(WeaverbirdComponents.LAYER_DIALOG);
     }
 
     @Override
