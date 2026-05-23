@@ -18,7 +18,6 @@ package com.techsenger.weaverbird.repo.core;
 
 import com.techsenger.reposium.core.MavenRepo;
 import com.techsenger.toolkit.core.SingletonFactory;
-import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.core.api.module.ArtifactEventListener;
 import com.techsenger.weaverbird.core.api.module.DefaultModuleArtifact;
@@ -110,7 +109,7 @@ public class MavenRepoProvider implements RepoService {
         return new DefaultModuleArtifact(
                 artifact.getGroupId(),
                 artifact.getArtifactId(),
-                Version.of(artifact.getVersion()),
+                artifact.getVersion(),
                 artifact.getClassifier(),
                 ModuleType.valueOf(artifact.getExtension().toUpperCase()));
     }

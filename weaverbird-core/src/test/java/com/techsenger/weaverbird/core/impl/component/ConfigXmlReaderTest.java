@@ -18,7 +18,6 @@ package com.techsenger.weaverbird.core.impl.component;
 
 import com.techsenger.weaverbird.core.api.component.ComponentConfigInfo;
 import com.techsenger.weaverbird.core.api.module.ModuleConfig;
-import com.techsenger.toolkit.core.version.Version;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -117,7 +116,7 @@ public class ConfigXmlReaderTest {
     private void assertModule(ModuleConfig module, int index, String classifier) {
         assertThat(module.getGroupId()).isEqualTo("group" + index);
         assertThat(module.getArtifactId()).isEqualTo("artifact" + index);
-        assertThat(module.getVersion()).isEqualTo(Version.of(index + ".0.0"));
+        assertThat(module.getVersion()).isEqualTo(index + ".0.0");
         assertThat(module.getClassifier()).isEqualTo(classifier);
     }
 }

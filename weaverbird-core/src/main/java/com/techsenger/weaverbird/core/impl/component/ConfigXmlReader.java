@@ -359,7 +359,7 @@ public class ConfigXmlReader {
             this.module = new DefaultModuleConfig(
                     processValue(attributes.getValue("groupId")),
                     processValue(attributes.getValue("artifactId")),
-                    Version.of(processValue(attributes.getValue("version"))),
+                    processValue(attributes.getValue("version")),
                     processValue(attributes.getValue("classifier")),
                     moduleType);
             var activeStr = processValue(attributes.getValue("active"));

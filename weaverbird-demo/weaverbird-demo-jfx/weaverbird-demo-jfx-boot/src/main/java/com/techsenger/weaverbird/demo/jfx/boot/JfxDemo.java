@@ -47,7 +47,7 @@ public final class JfxDemo {
 
     private static final String CENTRAL_REPO = "https://repo1.maven.org/maven2/";
 
-    private static final Version JFX_VERSION = Version.of("26");
+    private static final String JFX_VERSION = "26";
 
     public static void main(String[] args) throws Exception {
         // Framework
@@ -91,7 +91,7 @@ public final class JfxDemo {
                     m -> m.groupId("org.openjfx").artifactId("javafx-graphics")
                             .version(JFX_VERSION).classifier(fxClsfr),
                     m -> m.groupId("com.techsenger.weaverbird.demo.jfx").artifactId("weaverbird-demo-jfx-core")
-                            .version(Version.of(projectProperties.getProperty("version")))
+                            .version(projectProperties.getProperty("version"))
                             .active(true) // the module is active!
                 )
                 .build();

@@ -20,7 +20,6 @@ import com.techsenger.weaverbird.core.api.module.DefaultModuleArtifact;
 import com.techsenger.weaverbird.core.api.module.ModuleConfig;
 import com.techsenger.weaverbird.core.api.module.ModuleDirective;
 import com.techsenger.weaverbird.core.api.module.ModuleType;
-import com.techsenger.toolkit.core.version.Version;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public final class DefaultModuleConfig extends DefaultModuleArtifact implements 
 
     private boolean nativeAccessEnabled = false;
 
-    public DefaultModuleConfig(String groupId, String artifactId, Version version, String classifier,
+    public DefaultModuleConfig(String groupId, String artifactId, String version, String classifier,
             ModuleType type) {
         super(groupId, artifactId, version, classifier, type);
     }

@@ -50,7 +50,7 @@ public final class StarterDemo {
                 r -> r.name("central").url("https://repo1.maven.org/maven2")
             )
             .modules(
-                m -> m.groupId("com.google.code.gson").artifactId("gson").version(Version.of("2.10"))
+                m -> m.groupId("com.google.code.gson").artifactId("gson").version("2.10")
             )
             .build();
 

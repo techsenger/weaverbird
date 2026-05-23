@@ -180,7 +180,7 @@ public final class ComponentConfigBuilder {
 
         private String groupId;
         private String artifactId;
-        private Version version;
+        private String version;
         private String classifier;
         private ModuleType type = ModuleType.JAR;
         private boolean active = false;
@@ -199,7 +199,7 @@ public final class ComponentConfigBuilder {
             return this;
         }
 
-        public ModuleBuilder version(Version version) {
+        public ModuleBuilder version(String version) {
             this.version = version;
             return this;
         }

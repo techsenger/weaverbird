@@ -16,7 +16,6 @@
 
 package com.techsenger.weaverbird.core.api.module;
 
-import com.techsenger.toolkit.core.version.Version;
 import java.util.Objects;
 
 /**
@@ -29,13 +28,13 @@ public class DefaultModuleArtifact implements ModuleArtifact {
 
     private final String artifactId;
 
-    private final Version version;
+    private final String version;
 
     private final String classifier;
 
     private final ModuleType type;
 
-    public DefaultModuleArtifact(String groupId, String artifactId, Version version, String classifier,
+    public DefaultModuleArtifact(String groupId, String artifactId, String version, String classifier,
             ModuleType type) {
         this.groupId = groupId;
         this.artifactId = artifactId;
@@ -55,7 +54,7 @@ public class DefaultModuleArtifact implements ModuleArtifact {
     }
 
     @Override
-    public Version getVersion() {
+    public String getVersion() {
         return version;
     }
 

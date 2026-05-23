@@ -18,7 +18,6 @@ package com.techsenger.weaverbird.executor.impl.commands;
 
 import com.beust.jcommander.Parameter;
 import com.techsenger.toolkit.core.StringUtils;
-import com.techsenger.toolkit.core.version.Version;
 import com.techsenger.weaverbird.core.api.message.MessageArtifactEventListener;
 import com.techsenger.weaverbird.core.api.message.MessagePrinter;
 import com.techsenger.weaverbird.core.api.module.DefaultModuleArtifact;
@@ -99,7 +98,7 @@ public class ModuleUpdateCommand extends AbstractCommand {
         if (this.type != null) {
             t = ModuleType.valueOf(type.toUpperCase());
         }
-        var artifact = new DefaultModuleArtifact(groupId, artifactId, Version.of(version), classifier, t);
+        var artifact = new DefaultModuleArtifact(groupId, artifactId, version, classifier, t);
         String message = "Module was uninstalled";
         if (context.isExecutionLocal()) {
             var framework = context.getFramework();

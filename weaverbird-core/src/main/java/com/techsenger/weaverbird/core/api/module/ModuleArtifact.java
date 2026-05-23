@@ -16,7 +16,6 @@
 
 package com.techsenger.weaverbird.core.api.module;
 
-import com.techsenger.toolkit.core.version.Version;
 import java.io.Serializable;
 
 /**
@@ -59,7 +58,7 @@ public interface ModuleArtifact extends Serializable {
      * Returns version.
      * @return
      */
-    Version getVersion();
+    String getVersion();
 
     /**
      * Sometimes modules needs classifier in repo, for example, 'linux' classifier for javafx modules.
