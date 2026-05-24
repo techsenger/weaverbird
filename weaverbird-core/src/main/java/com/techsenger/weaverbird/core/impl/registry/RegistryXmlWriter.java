@@ -42,7 +42,7 @@ class RegistryXmlWriter {
     public void write(final Path path) throws XMLStreamException, IOException {
         var headerComment = "THIS FILE IS GENERATED AUTOMATICALLY. DON'T MODIFY THIS FILE MANUALLY!";
         XMLStreamWriter rawStreamWriter = XMLOutputFactory.newInstance()
-            .createXMLStreamWriter(Files.newOutputStream(path), "UTF-8");
+                .createXMLStreamWriter(Files.newOutputStream(path), "UTF-8");
         try (var xml = new IndentingXmlStreamWriter(rawStreamWriter)) {
             xml.writeStartDocument("UTF-8", "1.0");
             xml.writeCharacters("\n");
