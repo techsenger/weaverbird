@@ -16,13 +16,11 @@
 
 package com.techsenger.weaverbird.core.impl.registry;
 
+import com.techsenger.toolkit.core.xml.IndentingXmlStreamWriter;
 import com.techsenger.weaverbird.core.api.registry.ComponentEntry;
 import com.techsenger.weaverbird.core.api.registry.Registry;
-import com.techsenger.toolkit.core.file.FileUtils;
-import com.techsenger.toolkit.core.xml.XmlUtils;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import javax.xml.stream.XMLOutputFactory;
@@ -42,27 +40,20 @@ class RegistryXmlWriter {
     }
 
     public void write(final Path path) throws XMLStreamException, IOException {
-        var headerComment = "<!-- THIS FILE IS GENERATED AUTOMATICALLY. DON'T MODIFY THIS FILE MANUALLY! -->";
-        StringWriter stringWriter = new StringWriter();
-        XMLOutputFactory xMLOutputFactory = XMLOutputFactory.newInstance();
-        XMLStreamWriter xmlStreamWriter = xMLOutputFactory.createXMLStreamWriter(stringWriter);
-        xmlStreamWriter.writeStartDocument();
-        xmlStreamWriter.writeStartElement(Xml.REGISTRY_TAG);
-
-        writeComponents(xmlStreamWriter, registry.getAddedComponents(), Xml.ADDED_COMPONENTS_TAG);
-        writeComponents(xmlStreamWriter, registry.getResolvedComponents(), Xml.RESOLVED_COMPONENTS_TAG);
-
-        xmlStreamWriter.writeEndElement();
-        xmlStreamWriter.writeEndDocument();
-
-        xmlStreamWriter.flush();
-        xmlStreamWriter.close();
-
-        String xmlString = stringWriter.getBuffer().toString();
-        stringWriter.close();
-        //transforming
-        xmlString = XmlUtils.transformToTree(xmlString, headerComment);
-        FileUtils.writeFile(path, xmlString, StandardCharsets.UTF_8);
+        var headerComment = "THIS FILE IS GENERATED AUTOMATICALLY. DON'T MODIFY THIS FILE MANUALLY!";
+        XMLStreamWriter rawStreamWriter = XMLOutputFactory.newInstance()
+            .createXMLStreamWriter(Files.newOutputStream(path), "UTF-8");
+        try (var xml = new IndentingXmlStreamWriter(rawStreamWriter)) {
+            xml.writeStartDocument("UTF-8", "1.0");
+            xml.writeCharacters("\n");
+            xml.writeComment(headerComment);
+            xml.writeStartElement(Xml.REGISTRY_TAG);
+            writeComponents(xml, registry.getAddedComponents(), Xml.ADDED_COMPONENTS_TAG);
+            writeComponents(xml, registry.getResolvedComponents(), Xml.RESOLVED_COMPONENTS_TAG);
+            xml.writeEndElement();
+            xml.writeEndDocument();
+            xml.flush();
+        }
     }
 
     private void writeComponents(XMLStreamWriter xmlStreamWriter, List<ComponentEntry> components, String tag)
@@ -70,13 +61,11 @@ class RegistryXmlWriter {
         if (!components.isEmpty()) {
             xmlStreamWriter.writeStartElement(tag);
             for (var component : components) {
-                xmlStreamWriter.writeStartElement(Xml.COMPONENT_TAG);
+                xmlStreamWriter.writeEmptyElement(Xml.COMPONENT_TAG);
                 xmlStreamWriter.writeAttribute(Xml.NAME_ATTRIBUTE, component.getName());
                 xmlStreamWriter.writeAttribute(Xml.VERSION_ATTRIBUTE, component.getVersion().getFull());
-                xmlStreamWriter.writeEndElement();
             }
             xmlStreamWriter.writeEndElement();
         }
     }
-
 }
