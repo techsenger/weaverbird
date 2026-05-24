@@ -45,7 +45,6 @@ class RegistryXmlWriter {
                 .createXMLStreamWriter(Files.newOutputStream(path), "UTF-8");
         try (var xml = new IndentingXmlStreamWriter(rawStreamWriter)) {
             xml.writeStartDocument("UTF-8", "1.0");
-            xml.writeCharacters("\n");
             xml.writeComment(headerComment);
             xml.writeStartElement(Xml.REGISTRY_TAG);
             writeComponents(xml, registry.getAddedComponents(), Xml.ADDED_COMPONENTS_TAG);
