@@ -94,6 +94,14 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractTabPr
     }
 
     @Override
+    public void onSelected(boolean selected) {
+        super.onSelected(selected);
+        if (selected) {
+            getView().requestFocus();
+        }
+    }
+
+    @Override
     public void onLayerDiagram() {
         try {
             LayersInfo layersInfo = null;
