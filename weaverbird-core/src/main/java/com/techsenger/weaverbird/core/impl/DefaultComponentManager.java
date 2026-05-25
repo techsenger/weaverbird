@@ -247,12 +247,12 @@ public class DefaultComponentManager implements ComponentManager {
                 parentDescriptors.add(provideDescriptor(parentAlias));
             }
         }
-        matchParents(parentDescriptors, config.getParents());
-        final DefaultComponentDescriptor descriptor = new DefaultComponentDescriptor(this, config, alias,
-                ++componentIdCounter, parentDescriptors, useParentClassLoader);
-        DefaultComponent component = new DefaultComponent(descriptor);
-        //here we need to check if component modules are not loaded in boot layer...
         try {
+            matchParents(parentDescriptors, config.getParents());
+            final DefaultComponentDescriptor descriptor = new DefaultComponentDescriptor(this, config, alias,
+                    ++componentIdCounter, parentDescriptors, useParentClassLoader);
+            DefaultComponent component = new DefaultComponent(descriptor);
+            //here we need to check if component modules are not loaded in boot layer...
             notifyObservers((o) -> o.onDeploying(config), null); //doesn't throw exceptions
             layerBuilder.build(component);
             componentsById.put(component.getDescriptor().getId(), component);
@@ -267,9 +267,8 @@ public class DefaultComponentManager implements ComponentManager {
                 component.getDescriptor().getId(), this.componentsById.size(), this.componentsState.getId());
             return descriptor;
         } catch (Exception ex) {
-            logger.error("Error deploying component {}{}{}", config.getName(), Constants.NAME_VERSION_SEPARATOR,
-                    config.getVersion(), ex);
-            return null;
+            throw new ComponentException(StringUtils.format("Failed to deploy component {}{}{}", config.getName(),
+                    Constants.NAME_VERSION_SEPARATOR, config.getVersion()), ex);
         }
     }
 
@@ -413,8 +412,8 @@ public class DefaultComponentManager implements ComponentManager {
                 config.getName(), Constants.NAME_VERSION_SEPARATOR, config.getVersion(), descriptor.getId(),
                 this.componentsById.size(), this.componentsState.getId());
         } catch (Exception ex) {
-            logger.error("Error undeploying component {}{}{}", config.getName(), Constants.NAME_VERSION_SEPARATOR,
-                    config.getVersion(), ex);
+            throw new ComponentException(StringUtils.format("Failed to undeploy component {}{}{}", config.getName(),
+                    Constants.NAME_VERSION_SEPARATOR, config.getVersion()), ex);
         }
     }
 
@@ -448,8 +447,9 @@ public class DefaultComponentManager implements ComponentManager {
                     otherResolvedConfigs.add(someConfig);
                 }
             } catch (Exception e) {
-                logger.error("Component {}{}{} is in registry, but its config not found", entry.getName(),
-                        Constants.NAME_VERSION_SEPARATOR, entry.getVersion(), e);
+                throw new ComponentException(StringUtils
+                        .format("Component {}{}{} is in registry, but its config not found", entry.getName(),
+                        Constants.NAME_VERSION_SEPARATOR, entry.getVersion()), e);
             }
         }
         //now we need to find the modules that are used by other installed components
