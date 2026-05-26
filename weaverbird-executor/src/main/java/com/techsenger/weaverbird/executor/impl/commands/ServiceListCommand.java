@@ -60,16 +60,6 @@ public class ServiceListCommand extends AbstractCommand {
 
     @Override
     public void execute(final CommandContext context, MessagePrinter printer) throws Exception {
-        printer.printlnMessage("Services by layer:");
-        AsciiTable table = new AsciiTable();
-        CWC_FixedWidth cwc = AsciiTableUtils.createColumnWidthCalculator(printer.getWidth(),
-                ColumnWidth.chars(5),
-                ColumnWidth.percent(30),
-                ColumnWidth.percent(35),
-                ColumnWidth.percent(35));
-        table.getRenderer().setCWC(cwc);
-        table.setTextAlignment(TextAlignment.LEFT);
-        table.addRule();
         Map<String, List<ModuleModel>> modulesByLayer = null;
         if (context.isExecutionLocal()) {
             modulesByLayer = context.getFramework().getJvmInspector().getModulesInfo()
@@ -81,12 +71,20 @@ public class ServiceListCommand extends AbstractCommand {
 
         int serviceCount = 0;
         for (Map.Entry<String,  List<ModuleModel>> entry : modulesByLayer.entrySet()) {
+            printer.printlnMessage("Layer: " + entry.getKey());
+            AsciiTable table = new AsciiTable();
+            CWC_FixedWidth cwc = AsciiTableUtils.createColumnWidthCalculator(printer.getWidth(),
+                    ColumnWidth.chars(4),
+                    ColumnWidth.percent(30),
+                    ColumnWidth.percent(35),
+                    ColumnWidth.percent(35));
+            table.getRenderer().setCWC(cwc);
+            table.setTextAlignment(TextAlignment.LEFT);
+            table.addRule();
             //sorting by name
             var sortedList = entry.getValue().stream()
                     .sorted((object1, object2) -> object1.getName().compareTo(object2.getName()))
                     .collect(Collectors.toList());
-            table.addRow(null, null, null, "Layer: " + entry.getKey());
-            table.addRule();
             table.addRow("#", "Module", "Uses", "Provides");
             table.addRule();
             for (ModuleModel module : sortedList) {
@@ -130,7 +128,7 @@ public class ServiceListCommand extends AbstractCommand {
                     table.addRule();
                 }
             }
+            printer.printlnMessage(table.render());
         }
-        printer.printlnMessage(table.render());
     }
 }
