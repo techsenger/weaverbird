@@ -76,7 +76,7 @@ public class LayerDialogFxView<P extends LayerDialogPresenter<?>> extends Abstra
         }
 
         @Override
-        public PageHostPort getPageHost() {
+        public PageHostPort getPageHostPort() {
             return this.pageHost == null ? null : this.pageHost.getPresenter();
         }
 

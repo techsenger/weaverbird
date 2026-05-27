@@ -41,13 +41,13 @@ public interface ConsoleTabView extends TabView {
 
         ConsoleToolBarPort getToolBarPort();
 
-        void addCommandPopup(Collection<CommandInfo> commands, boolean sessionExists, String token, int offset);
+        void openCommandPopup(Collection<CommandInfo> commands, boolean sessionExists, String token, int offset);
 
-        void addParameterPopup(List<ParameterDescriptor> parameters,  String token, int offset);
+        void openParameterPopup(List<ParameterDescriptor> parameters,  String token, int offset);
 
         CompletionPopupPort getPopupPort();
 
-        void removePopup();
+        void closePopup();
     }
 
     @Override

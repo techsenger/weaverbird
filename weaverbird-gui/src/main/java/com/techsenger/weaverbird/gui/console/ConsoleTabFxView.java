@@ -112,25 +112,26 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?>> extends Abstract
         }
 
         @Override
-        public void addCommandPopup(Collection<CommandInfo> commands, boolean sessionExists, String token, int offset) {
+        public void openCommandPopup(Collection<CommandInfo> commands, boolean sessionExists, String token,
+                int offset) {
             this.completionPopup = createCommandPopup(commands, sessionExists, token);
             var topLeft = calculatePopupPosition(offset);
             addPopup(this.completionPopup, Anchors.topLeft(topLeft.getY(), topLeft.getX()));
         }
 
         @Override
-        public void addParameterPopup(List<ParameterDescriptor> parameters, String token, int offset) {
+        public void openParameterPopup(List<ParameterDescriptor> parameters, String token, int offset) {
             this.completionPopup = createParameterPopup(parameters, token);
             var topLeft = calculatePopupPosition(offset);
             addPopup(this.completionPopup, Anchors.topLeft(topLeft.getY(), topLeft.getX()));
         }
 
         @Override
-        public void removePopup() {
+        public void closePopup() {
             if (this.completionPopup == null) {
                 return;
             }
-            removePopup(completionPopup);
+            closePopup(completionPopup);
             this.completionPopup = null;
             view.textArea.requestFocus();
         }

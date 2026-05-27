@@ -30,7 +30,7 @@ public interface LayerDialogView extends DialogView {
 
         void setLayerConfigs(List<LayerConfig> layerConfigs);
 
-        PageHostPort getPageHost();
+        PageHostPort getPageHostPort();
     }
 
     @Override

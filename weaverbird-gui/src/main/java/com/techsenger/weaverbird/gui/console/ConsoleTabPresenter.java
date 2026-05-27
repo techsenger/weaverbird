@@ -168,7 +168,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractTabPr
 
     @Override
     public void onPopupClose() {
-        getView().getComposer().removePopup();
+        getView().getComposer().closePopup();
         getView().requestFocus();
     }
 
@@ -218,7 +218,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractTabPr
         updatePrompt();
         showPrompt();
         getView().requestFocus();
-        var settings = getShell().getContext().getSettings().getAppearance();
+        var settings = getView().getComposer().getShellPort().getContext().getSettings().getAppearance();
         getView().setMonospaceFont(settings.getMonospaceFont());
         this.fontSubscription = settings.onMonospaceFontChanged((oldV, newV) -> getView().setMonospaceFont(newV));
         getView().highlightCommands(executor.getCommandsByName().keySet());
@@ -238,7 +238,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractTabPr
         var composer = getView().getComposer();
         var popup = composer.getPopupPort();
         addElement(popup.getType(), popup.getSelectedItemText());
-        composer.removePopup();
+        composer.closePopup();
         getView().requestFocus();
     }
 
@@ -259,7 +259,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractTabPr
         if (processingCommand) {
             var commands = executor.getCommandsByName().values();
             var sessionExists = executor.getCommandContext().getSession() != null;
-            getView().getComposer().addCommandPopup(commands, sessionExists, elementToken, offset);
+            getView().getComposer().openCommandPopup(commands, sessionExists, elementToken, offset);
         } else {
             var splits = this.input.text.trim().split(Pattern.quote(" "));
             var cmd = splits[0].trim();
@@ -268,7 +268,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractTabPr
             }
             var command = executor.getCommandsByName().get(cmd);
             if (command != null) {
-                getView().getComposer().addParameterPopup(command.getParameters(), elementToken, offset);
+                getView().getComposer().openParameterPopup(command.getParameters(), elementToken, offset);
             }
         }
     }
@@ -412,7 +412,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractTabPr
         }
         var newInput = oldInput + (element == null ? "" : element + " ");
         getView().updateInput(newInput);
-        getView().getComposer().removePopup();
+        getView().getComposer().closePopup();
         getView().requestFocus();
         this.input = null;
     }

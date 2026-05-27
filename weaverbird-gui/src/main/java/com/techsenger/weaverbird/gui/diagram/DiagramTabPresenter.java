@@ -150,7 +150,7 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractTabPr
                 if (b == LayerDialogButtons.OK) {
                     try {
                         this.previousLayerConfigs = dialog.getLayerConfigs();
-                        var shellSettings = getShell().getContext().getSettings();
+                        var shellSettings = getView().getComposer().getShellPort().getContext().getSettings();
                         var generator = new LayerDiagramGenerator(previousLayerConfigs, shellSettings, settings);
                         var code = generator.generate();
                         this.diagram = createDiagram(code);
