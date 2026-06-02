@@ -71,7 +71,7 @@ public class WeaverbirdApplication extends Application {
         var shellParams = new DefaultShellParams(context);
         var shellPresenter = new DefaultShellPresenter<>(shellView, shellParams);
         shellPresenter.initialize();
-        shellPresenter.setOnClose(() -> Platform.exit());
+        shellPresenter.setOnClosed(() -> Platform.exit());
         shellView.setTitle("Weaverbird Framework");
 
         var workspaceView = new TabHostFxView<>(true);
