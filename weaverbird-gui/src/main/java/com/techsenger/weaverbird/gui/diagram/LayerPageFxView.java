@@ -122,8 +122,8 @@ public class LayerPageFxView<P extends LayerPagePresenter<?>> extends AbstractPa
         buildTableColumns();
         VBox.setVgrow(table, Priority.ALWAYS);
 
-        main.setPadding(new Insets(0, Spacing.HORIZONTAL, 0, Spacing.HORIZONTAL));
-        this.main.setSpacing(Spacing.VERTICAL_HALF);
+        main.setPadding(new Insets(0, Spacing.getHorizontal(), 0, Spacing.getHorizontal()));
+        this.main.setSpacing(Spacing.getVerticalHalf());
         VBox.setVgrow(this.main, Priority.ALWAYS);
     }
 
@@ -196,7 +196,7 @@ public class LayerPageFxView<P extends LayerPagePresenter<?>> extends AbstractPa
                 createSelectAllCheckBox(ModuleConfigAdapter::requestsProperty, 5, initialValues),
                 createSelectAllCheckBox(ModuleConfigAdapter::coloredProperty, 6, initialValues));
 
-        mainBox.setPadding(new Insets(Spacing.VERTICAL_HALF, 0, 0, 0));
+        mainBox.setPadding(new Insets(Spacing.getVerticalHalf(), 0, 0, 0));
         return mainBox;
     }
 

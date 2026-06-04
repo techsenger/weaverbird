@@ -17,7 +17,6 @@
 package com.techsenger.weaverbird.gui.console;
 
 import com.techsenger.tabshell.core.popup.AbstractPopupFxView;
-import com.techsenger.tabshell.material.style.StyleClasses;
 import com.techsenger.toolkit.fx.utils.ListViewUtils;
 import com.techsenger.toolkit.fx.utils.NodeUtils;
 import java.util.List;
@@ -118,7 +117,6 @@ public class CompletionPopupFxView<P extends CompletionPopupPresenter<?>>
         getContentBox().setMaxSize(CompletionPopupConstants.WIDTH, CompletionPopupConstants.HEIGHT);
         //note - stackpange doesn't include menu bar
 //        StackPane.setMargin(this.getNode(), new Insets(viewModel.getTop(), 0, 0, viewModel.getLeft()));
-        listView.getStyleClass().add(StyleClasses.COMPACT);
         listView.setCellFactory(lv -> {
             ListCell<CompletionItem<?>> cell = new ListCell<>() {
                 @Override
