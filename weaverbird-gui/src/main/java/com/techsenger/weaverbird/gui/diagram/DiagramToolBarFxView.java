@@ -64,12 +64,12 @@ public class DiagramToolBarFxView<P extends DiagramToolBarPresenter<?>> extends 
     protected void build() {
         super.build();
         layerDiagramButton.setTooltip(new Tooltip("Layer Diagram"));
-        layerDiagramButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_M);
+        layerDiagramButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_L);
         zoomLevelComboBox.getStyleClass().add(Styles.DENSE);
         zoomInButton.setTooltip(new Tooltip("Zoom In"));
-        zoomInButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_M);
+        zoomInButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_L);
         zoomOutButton.setTooltip(new Tooltip("Zoom Out"));
-        zoomOutButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_M);
+        zoomOutButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_L);
 
         getNode().getItems().addAll(layerDiagramButton, new Separator(Orientation.VERTICAL),
             zoomOutButton, zoomLevelComboBox, zoomInButton, new Spacer(Orientation.HORIZONTAL),
