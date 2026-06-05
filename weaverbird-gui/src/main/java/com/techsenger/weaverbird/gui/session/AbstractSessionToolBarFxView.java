@@ -20,6 +20,7 @@ import atlantafx.base.theme.Styles;
 import com.techsenger.tabshell.core.area.AbstractAreaFxView;
 import com.techsenger.tabshell.material.icon.FontIconView;
 import com.techsenger.tabshell.material.style.StyleClasses;
+import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
 import java.util.List;
 import javafx.collections.FXCollections;
@@ -29,7 +30,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 
 /**
  *
@@ -70,7 +70,7 @@ public abstract class AbstractSessionToolBarFxView<P extends AbstractSessionTool
         sessionComboBox.setButtonCell(new SessionListCell<ClientSession>());
         sessionComboBox.getStyleClass().add("session");
         HBox.setHgrow(sessionComboBox, Priority.ALWAYS);
-        refreshButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT);
+        refreshButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_M);
 
         toolBar.getStyleClass().add(StyleClasses.BLEND);
         var css = AbstractSessionToolBarFxView.class.getResource("tool-bar.css").toExternalForm();

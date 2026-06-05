@@ -47,6 +47,8 @@
         <Module groupId="com.techsenger.patternfx" artifactId="patternfx-mvp" version="${bom.patternfx.version}"/>
 
         <!--### TABSHELL ###-->
+        <Module groupId="com.helger" artifactId="ph-css" version="${bom.ph.css.version}"/>
+        <Module groupId="com.helger.commons" artifactId="ph-commons" version="${bom.ph.commons.version}"/>
         <Module groupId="io.github.mkpaz" artifactId="atlantafx-base" version="${bom.atlantafx.version}"/>
         <Module groupId="net.java.dev.jna" artifactId="jna" version="${bom.jna.version}"/>
         <Module groupId="net.java.dev.jna" artifactId="jna-platform" version="${bom.jna.version}"/>

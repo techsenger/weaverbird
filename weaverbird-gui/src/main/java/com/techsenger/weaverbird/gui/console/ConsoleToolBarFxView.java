@@ -21,11 +21,11 @@ import com.techsenger.tabshell.material.icon.FontIconView;
 import com.techsenger.tabshell.material.style.StyleClasses;
 import com.techsenger.toolkit.fx.Spacer;
 import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarFxView;
+import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
-import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 
 /**
  *
@@ -58,11 +58,11 @@ public class ConsoleToolBarFxView<P extends ConsoleToolBarPresenter<?>> extends 
     @Override
     protected void build() {
         super.build();
-        clearButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT);
+        clearButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_M);
         clearButton.setTooltip(new Tooltip("Clear"));
-        copyButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT);
+        copyButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_M);
         copyButton.setTooltip(new Tooltip("Copy"));
-        pasteButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT);
+        pasteButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_M);
         pasteButton.setTooltip(new Tooltip("Paste"));
 
         getNode().getItems().addAll(clearButton, new Separator(Orientation.VERTICAL), copyButton, pasteButton,

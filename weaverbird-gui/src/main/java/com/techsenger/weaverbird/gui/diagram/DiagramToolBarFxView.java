@@ -21,6 +21,7 @@ import com.techsenger.tabshell.material.icon.FontIconView;
 import com.techsenger.tabshell.material.style.StyleClasses;
 import com.techsenger.toolkit.fx.Spacer;
 import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarFxView;
+import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
@@ -28,7 +29,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
-import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 
 /**
  *
@@ -64,12 +64,12 @@ public class DiagramToolBarFxView<P extends DiagramToolBarPresenter<?>> extends 
     protected void build() {
         super.build();
         layerDiagramButton.setTooltip(new Tooltip("Layer Diagram"));
-        layerDiagramButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT);
+        layerDiagramButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_M);
         zoomLevelComboBox.getStyleClass().add(Styles.DENSE);
         zoomInButton.setTooltip(new Tooltip("Zoom In"));
-        zoomInButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT);
+        zoomInButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_M);
         zoomOutButton.setTooltip(new Tooltip("Zoom Out"));
-        zoomOutButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT);
+        zoomOutButton.getStyleClass().addAll(StyleClasses.ICON_BUTTON, Styles.FLAT, StyleClasses.SIZE_M);
 
         getNode().getItems().addAll(layerDiagramButton, new Separator(Orientation.VERTICAL),
             zoomOutButton, zoomLevelComboBox, zoomInButton, new Spacer(Orientation.HORIZONTAL),

@@ -26,6 +26,7 @@ import com.techsenger.tabshell.core.registry.ControlRegistry;
 import com.techsenger.tabshell.icons.IconStylesheetFactory;
 import com.techsenger.tabshell.layout.tabhost.TabHostFxView;
 import com.techsenger.tabshell.layout.tabhost.TabHostPresenter;
+import com.techsenger.tabshell.material.style.StyleClasses;
 import com.techsenger.tabshell.material.style.Stylesheet;
 import com.techsenger.tabshell.material.theme.AtlantaFxTheme;
 import com.techsenger.toolkit.fx.color.ColorUtils;
@@ -72,7 +73,8 @@ public class WeaverbirdApplication extends Application {
         var shellPresenter = new DefaultShellPresenter<>(shellView, shellParams);
         shellPresenter.initialize();
         shellPresenter.setOnClosed(() -> Platform.exit());
-        shellView.setTitle("Weaverbird Framework");
+        shellPresenter.setTitle("Weaverbird Framework");
+        shellView.getWindow().getScene().getRoot().getStyleClass().add(StyleClasses.DENSITY_S);
 
         var workspaceView = new TabHostFxView<>(true);
         var workspacePresenter = new TabHostPresenter<>(workspaceView, new AreaParams());
