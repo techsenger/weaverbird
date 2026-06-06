@@ -146,7 +146,7 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractTabPr
             var layersByComponentId = layersInfo.getLayersById();
             var dialog = getView().getComposer().openLayerDialog(new ArrayList<>(layersByComponentId.values()),
                     previousLayerConfigs);
-            dialog.setResultAction((b) -> {
+            dialog.setOnResult((b) -> {
                 if (b == LayerDialogButtons.OK) {
                     try {
                         this.previousLayerConfigs = dialog.getLayerConfigs();
@@ -165,7 +165,7 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractTabPr
                         logger.error("Error creating diagram", ex);
                     }
                 }
-                dialog.requestClose();
+                dialog.closeSafely();
             });
         } catch (Exception ex) {
             logger.error("{} Error getting layers info from server", getDescriptor().getLogPrefix(), ex);
