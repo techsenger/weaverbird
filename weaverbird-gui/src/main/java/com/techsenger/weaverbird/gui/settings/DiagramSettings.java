@@ -16,9 +16,9 @@
 
 package com.techsenger.weaverbird.gui.settings;
 
-import com.techsenger.tabshell.core.settings.SettingsCallback;
-import com.techsenger.tabshell.core.settings.SettingsSubscription;
-import com.techsenger.tabshell.core.settings.SubscriptionUtils;
+import com.techsenger.shellfx.core.settings.SettingsCallback;
+import com.techsenger.shellfx.core.settings.SettingsSubscription;
+import com.techsenger.shellfx.core.settings.SubscriptionUtils;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;

@@ -18,8 +18,8 @@ package com.techsenger.weaverbird.gui.settings;
 //
 //package com.techsenger.weaverbird.console.gui.settings;
 //
-//import com.techsenger.tabshell.core.page.AbstractPageView;
-//import com.techsenger.tabshell.core.style.SizeConstants;
+//import com.techsenger.shellfx.core.page.AbstractPageView;
+//import com.techsenger.shellfx.core.style.SizeConstants;
 //import javafx.scene.control.ColorPicker;
 //import javafx.scene.control.ComboBox;
 //import javafx.scene.control.Label;

@@ -19,9 +19,9 @@ package com.techsenger.weaverbird.gui.utils;
 //package com.techsenger.weaverbird.console.gui.utils;
 //
 //import com.techsenger.weaverbird.console.gui.textstyle.StyledText;
-//import com.techsenger.tabshell.kit.material.textarea.ExtendedTextArea;
-//import com.techsenger.tabshell.kit.material.textarea.RichTextFxUtils;
-//import com.techsenger.tabshell.kit.material.textarea.TextAreaStyle;
+//import com.techsenger.shellfx.kit.material.textarea.ExtendedTextArea;
+//import com.techsenger.shellfx.kit.material.textarea.RichTextFxUtils;
+//import com.techsenger.shellfx.kit.material.textarea.TextAreaStyle;
 //import java.util.Collection;
 //import java.util.List;
 //import java.util.Map;

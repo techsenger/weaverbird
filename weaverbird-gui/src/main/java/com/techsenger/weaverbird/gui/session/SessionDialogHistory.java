@@ -18,7 +18,7 @@ package com.techsenger.weaverbird.gui.session;
 //
 //package com.techsenger.weaverbird.console.gui.session;
 //
-//import com.techsenger.tabshell.kit.dialog.AbstractSimpleDialogHistory;
+//import com.techsenger.shellfx.kit.dialog.AbstractSimpleDialogHistory;
 //
 ///**
 // *

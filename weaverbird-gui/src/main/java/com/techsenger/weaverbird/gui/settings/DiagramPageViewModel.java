@@ -18,8 +18,8 @@ package com.techsenger.weaverbird.gui.settings;
 //
 //package com.techsenger.weaverbird.console.gui.settings;
 //
-//import com.techsenger.tabshell.core.page.AbstractPageViewModel;
-//import com.techsenger.tabshell.core.page.PageKey;
+//import com.techsenger.shellfx.core.page.AbstractPageViewModel;
+//import com.techsenger.shellfx.core.page.PageKey;
 //import javafx.beans.property.IntegerProperty;
 //import javafx.beans.property.ObjectProperty;
 //import javafx.beans.property.SimpleIntegerProperty;

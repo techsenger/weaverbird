@@ -17,11 +17,11 @@
 package com.techsenger.weaverbird.gui.console;
 
 import com.techsenger.patternfx.mvp.ComponentDescriptor;
-import com.techsenger.tabshell.core.CloseCheckResult;
-import com.techsenger.tabshell.core.ClosePreparationResult;
-import com.techsenger.tabshell.core.UiExecutor;
-import com.techsenger.tabshell.core.settings.SettingsSubscription;
-import com.techsenger.tabshell.core.tab.AbstractTabPresenter;
+import com.techsenger.shellfx.core.CloseCheckResult;
+import com.techsenger.shellfx.core.ClosePreparationResult;
+import com.techsenger.shellfx.core.UiExecutor;
+import com.techsenger.shellfx.core.settings.SettingsSubscription;
+import com.techsenger.shellfx.core.tab.AbstractHostTabPresenter;
 import com.techsenger.weaverbird.core.api.Constants;
 import com.techsenger.weaverbird.core.api.message.DefaultMessage;
 import com.techsenger.weaverbird.core.api.message.Message;
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Pavel Castornii
  */
-public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractTabPresenter<V>
+public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostTabPresenter<V>
         implements CompletionPopupAwarePort, ConsoleToolBarAwarePort {
 
     /**

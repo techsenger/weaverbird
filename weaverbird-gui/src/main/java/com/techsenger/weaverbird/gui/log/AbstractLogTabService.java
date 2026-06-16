@@ -18,7 +18,7 @@ package com.techsenger.weaverbird.gui.log;
 //
 //package com.techsenger.weaverbird.console.gui.log;
 //
-//import com.techsenger.tabshell.kit.core.workertab.TabWorker;
+//import com.techsenger.shellfx.kit.core.workertab.TabWorker;
 //import java.util.List;
 //import javafx.concurrent.Service;
 //

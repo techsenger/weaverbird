@@ -16,19 +16,20 @@
 
 package com.techsenger.weaverbird.gui;
 
-import com.techsenger.tabshell.core.DefaultShellContext;
-import com.techsenger.tabshell.core.DefaultShellFxView;
-import com.techsenger.tabshell.core.DefaultShellParams;
-import com.techsenger.tabshell.core.DefaultShellPresenter;
-import com.techsenger.tabshell.core.area.AreaParams;
-import com.techsenger.tabshell.core.history.InMemoryHistoryManager;
-import com.techsenger.tabshell.core.registry.ControlRegistry;
-import com.techsenger.tabshell.icons.IconStylesheetFactory;
-import com.techsenger.tabshell.layout.tabhost.TabHostFxView;
-import com.techsenger.tabshell.layout.tabhost.TabHostPresenter;
-import com.techsenger.tabshell.material.style.StyleClasses;
-import com.techsenger.tabshell.material.style.Stylesheet;
-import com.techsenger.tabshell.material.theme.AtlantaFxTheme;
+import com.techsenger.shellfx.core.DefaultShellContext;
+import com.techsenger.shellfx.core.DefaultShellFxView;
+import com.techsenger.shellfx.core.DefaultShellParams;
+import com.techsenger.shellfx.core.DefaultShellPresenter;
+import com.techsenger.shellfx.core.area.AreaParams;
+import com.techsenger.shellfx.core.history.InMemoryHistoryManager;
+import com.techsenger.shellfx.core.registry.ControlRegistry;
+import com.techsenger.shellfx.core.settings.Density;
+import com.techsenger.shellfx.icons.IconStylesheetFactory;
+import com.techsenger.shellfx.layout.tabhost.TabHostFxView;
+import com.techsenger.shellfx.layout.tabhost.TabHostPresenter;
+import com.techsenger.shellfx.material.style.StyleClasses;
+import com.techsenger.shellfx.material.style.Stylesheet;
+import com.techsenger.shellfx.material.theme.AtlantaFxTheme;
 import com.techsenger.toolkit.fx.color.ColorUtils;
 import com.techsenger.weaverbird.gui.menu.FileMenuRegistrar;
 import com.techsenger.weaverbird.gui.settings.ConsoleSettings;
@@ -53,6 +54,7 @@ public class WeaverbirdApplication extends Application {
         appearance.setRegularFont(Font.font("System", 14));
         appearance.setMonospaceFont(Font.font("Monospace", 14));
         appearance.setTheme(AtlantaFxTheme.CUPERTINO_DARK);
+        appearance.setDensity(Density.S);
         var diagram = settings.getDiagram();
         diagram.setLayoutEngine(LayoutEngine.SMETANA);
         diagram.setLimitSize(10000);
@@ -74,7 +76,7 @@ public class WeaverbirdApplication extends Application {
         shellPresenter.initialize();
         shellPresenter.setOnClosed(() -> Platform.exit());
         shellPresenter.setTitle("Weaverbird Framework");
-        shellView.getWindow().getScene().getRoot().getStyleClass().add(StyleClasses.DENSITY_S);
+        shellView.getStage().getScene().getRoot().getStyleClass().add(StyleClasses.DENSITY_S);
 
         var workspaceView = new TabHostFxView<>(true);
         var workspacePresenter = new TabHostPresenter<>(workspaceView, new AreaParams());

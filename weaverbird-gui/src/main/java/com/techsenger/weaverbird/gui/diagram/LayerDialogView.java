@@ -16,8 +16,8 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.tabshell.core.dialog.DialogView;
-import com.techsenger.tabshell.layout.pagehost.PageHostPort;
+import com.techsenger.shellfx.core.dialog.DialogView;
+import com.techsenger.shellfx.layout.pagehost.PageHostPort;
 import java.util.List;
 
 /**

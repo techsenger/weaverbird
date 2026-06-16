@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.tabshell.core.tab.TabParams;
+import com.techsenger.shellfx.core.tab.HostTabParams;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.gui.settings.DiagramSettings;
 import com.techsenger.weaverbird.net.client.api.ClientService;
@@ -27,7 +27,7 @@ import java.util.Objects;
  *
  * @author Pavel Castornii
  */
-public class DiagramTabParams extends TabParams {
+public class DiagramTabParams extends HostTabParams {
 
     private final Framework framework;
 

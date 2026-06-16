@@ -20,10 +20,10 @@ package com.techsenger.weaverbird.gui.about;
 //
 //import com.techsenger.weaverbird.api.Framework;
 //import com.techsenger.weaverbird.console.gui.keys.ConsoleComponentKeys;
-//import com.techsenger.tabshell.core.dialog.DialogKey;
-//import com.techsenger.tabshell.core.dialog.DialogScope;
-//import com.techsenger.tabshell.core.settings.AppearanceSettings;
-//import com.techsenger.tabshell.kit.dialog.AbstractSimpleDialogViewModel;
+//import com.techsenger.shellfx.core.dialog.DialogKey;
+//import com.techsenger.shellfx.core.dialog.DialogScope;
+//import com.techsenger.shellfx.core.settings.AppearanceSettings;
+//import com.techsenger.shellfx.kit.dialog.AbstractSimpleDialogViewModel;
 //
 ///**
 // *

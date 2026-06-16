@@ -19,14 +19,14 @@ package com.techsenger.weaverbird.gui.menu;
 //package com.techsenger.weaverbird.console.gui.menu;
 //
 //import com.techsenger.weaverbird.console.gui.shell.ShellTabView;
-//import com.techsenger.tabshell.core.TabShellKey;
-//import com.techsenger.tabshell.core.TabShellView;
-//import com.techsenger.tabshell.core.registry.ControlFactory;
-//import com.techsenger.tabshell.core.registry.ControlRegistry;
-//import com.techsenger.tabshell.kit.core.style.CoreIcons;
-//import com.techsenger.tabshell.kit.text.menu.EditMenuKeys;
-//import com.techsenger.tabshell.material.icon.FontIconView;
-//import com.techsenger.tabshell.material.menu.KeyedMenuItem;
+//import com.techsenger.shellfx.core.TabShellKey;
+//import com.techsenger.shellfx.core.TabShellView;
+//import com.techsenger.shellfx.core.registry.ControlFactory;
+//import com.techsenger.shellfx.core.registry.ControlRegistry;
+//import com.techsenger.shellfx.kit.core.style.CoreIcons;
+//import com.techsenger.shellfx.kit.text.menu.EditMenuKeys;
+//import com.techsenger.shellfx.material.icon.FontIconView;
+//import com.techsenger.shellfx.material.menu.KeyedMenuItem;
 //import javafx.scene.input.KeyCode;
 //import javafx.scene.input.KeyCodeCombination;
 //import javafx.scene.input.KeyCombination;
@@ -35,7 +35,7 @@ package com.techsenger.weaverbird.gui.menu;
 // *
 // * @author Pavel Castornii
 // */
-//public class EditMenuRegistrar extends com.techsenger.tabshell.kit.text.menu.EditMenuRegistrar {
+//public class EditMenuRegistrar extends com.techsenger.shellfx.kit.text.menu.EditMenuRegistrar {
 //
 //    public EditMenuRegistrar(ControlRegistry registry) {
 //        super(registry);

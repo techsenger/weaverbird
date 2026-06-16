@@ -23,11 +23,11 @@ package com.techsenger.weaverbird.gui.settings;
 //import com.techsenger.weaverbird.console.gui.keys.ConsoleComponentKeys;
 //import com.techsenger.weaverbird.console.gui.style.ConsoleIcons;
 //import com.techsenger.mvvm4fx.core.HistoryPolicy;
-//import com.techsenger.tabshell.core.dialog.DialogKey;
-//import com.techsenger.tabshell.core.dialog.DialogScope;
-//import com.techsenger.tabshell.core.history.HistoryManager;
-//import com.techsenger.tabshell.kit.dialog.page.AbstractPageDialogViewModel;
-//import com.techsenger.tabshell.material.icon.FontIcon;
+//import com.techsenger.shellfx.core.dialog.DialogKey;
+//import com.techsenger.shellfx.core.dialog.DialogScope;
+//import com.techsenger.shellfx.core.history.HistoryManager;
+//import com.techsenger.shellfx.kit.dialog.page.AbstractPageDialogViewModel;
+//import com.techsenger.shellfx.material.icon.FontIcon;
 //import javafx.scene.text.Font;
 //
 ///**

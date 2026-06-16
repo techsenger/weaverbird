@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.tabshell.core.tab.TabParams;
+import com.techsenger.shellfx.core.tab.HostTabParams;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
@@ -26,7 +26,7 @@ import java.util.Objects;
  *
  * @author Pavel Castornii
  */
-public class ConsoleTabParams extends TabParams {
+public class ConsoleTabParams extends HostTabParams {
 
     private final Framework framework;
 

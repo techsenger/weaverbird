@@ -19,8 +19,8 @@ package com.techsenger.weaverbird.gui.log;
 //package com.techsenger.weaverbird.console.gui.log;
 //
 //import atlantafx.base.theme.Styles;
-//import com.techsenger.tabshell.core.style.SizeConstants;
-//import com.techsenger.tabshell.kit.dialog.AbstractSimpleDialogView;
+//import com.techsenger.shellfx.core.style.SizeConstants;
+//import com.techsenger.shellfx.kit.dialog.AbstractSimpleDialogView;
 //import com.techsenger.toolkit.fx.utils.ButtonUtils;
 //import com.techsenger.toolkit.fx.utils.NodeUtils;
 //import javafx.geometry.Insets;

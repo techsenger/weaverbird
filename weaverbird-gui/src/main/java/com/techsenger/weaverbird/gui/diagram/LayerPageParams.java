@@ -16,8 +16,8 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.tabshell.core.page.PageItem;
-import com.techsenger.tabshell.core.page.PageParams;
+import com.techsenger.shellfx.core.page.PageItem;
+import com.techsenger.shellfx.core.page.PageParams;
 import java.util.Objects;
 
 /**

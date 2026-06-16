@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.tabshell.core.popup.AbstractPopupFxView;
+import com.techsenger.shellfx.core.popup.AbstractPopupFxView;
 import com.techsenger.toolkit.fx.utils.ListViewUtils;
 import com.techsenger.toolkit.fx.utils.NodeUtils;
 import java.util.List;

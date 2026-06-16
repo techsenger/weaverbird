@@ -20,14 +20,14 @@ package com.techsenger.weaverbird.gui.menu;
 //
 //import com.techsenger.weaverbird.console.gui.about.AboutDialogView;
 //import com.techsenger.weaverbird.console.gui.about.AboutDialogViewModel;
-//import com.techsenger.tabshell.core.TabShellKey;
-//import com.techsenger.tabshell.core.TabShellView;
-//import com.techsenger.tabshell.core.registry.AbstractControlRegistrar;
-//import com.techsenger.tabshell.core.registry.ControlFactory;
-//import com.techsenger.tabshell.core.registry.ControlRegistry;
-//import com.techsenger.tabshell.material.menu.KeyedMenu;
-//import com.techsenger.tabshell.material.menu.KeyedMenuGroup;
-//import com.techsenger.tabshell.material.menu.KeyedMenuItem;
+//import com.techsenger.shellfx.core.TabShellKey;
+//import com.techsenger.shellfx.core.TabShellView;
+//import com.techsenger.shellfx.core.registry.AbstractControlRegistrar;
+//import com.techsenger.shellfx.core.registry.ControlFactory;
+//import com.techsenger.shellfx.core.registry.ControlRegistry;
+//import com.techsenger.shellfx.material.menu.KeyedMenu;
+//import com.techsenger.shellfx.material.menu.KeyedMenuGroup;
+//import com.techsenger.shellfx.material.menu.KeyedMenuItem;
 //
 ///**
 // *

@@ -19,10 +19,10 @@ package com.techsenger.weaverbird.gui.settings;
 //package com.techsenger.weaverbird.console.gui.settings;
 //
 //import atlantafx.base.theme.Styles;
-//import com.techsenger.tabshell.core.page.AbstractPageView;
-//import com.techsenger.tabshell.core.style.SizeConstants;
-//import com.techsenger.tabshell.core.theme.TabShellTheme;
-//import com.techsenger.tabshell.core.theme.ThemeStringConverter;
+//import com.techsenger.shellfx.core.page.AbstractPageView;
+//import com.techsenger.shellfx.core.style.SizeConstants;
+//import com.techsenger.shellfx.core.theme.TabShellTheme;
+//import com.techsenger.shellfx.core.theme.ThemeStringConverter;
 //import javafx.scene.control.ComboBox;
 //import javafx.scene.control.Label;
 //import javafx.scene.layout.ColumnConstraints;

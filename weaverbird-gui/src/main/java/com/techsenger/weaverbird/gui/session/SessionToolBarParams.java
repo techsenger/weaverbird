@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.session;
 
-import com.techsenger.tabshell.core.area.AreaParams;
+import com.techsenger.shellfx.core.area.AreaParams;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
 

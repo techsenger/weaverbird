@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.tabshell.core.page.PageView;
+import com.techsenger.shellfx.core.page.PageView;
 
 /**
  *

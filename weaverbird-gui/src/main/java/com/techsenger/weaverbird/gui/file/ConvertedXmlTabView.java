@@ -19,11 +19,11 @@ package com.techsenger.weaverbird.gui.file;
 //package com.techsenger.weaverbird.console.gui.file;
 //
 //import com.techsenger.weaverbird.console.gui.style.ConsoleIcons;
-//import com.techsenger.tabshell.core.tab.AbstractTabView;
-//import com.techsenger.tabshell.core.tab.ComponentTab;
-//import com.techsenger.tabshell.kit.material.textarea.ExtendedTextArea;
-//import com.techsenger.tabshell.kit.material.textarea.RichTextFxUtils;
-//import com.techsenger.tabshell.material.icon.FontIconView;
+//import com.techsenger.shellfx.core.tab.AbstractTabView;
+//import com.techsenger.shellfx.core.tab.ComponentTab;
+//import com.techsenger.shellfx.kit.material.textarea.ExtendedTextArea;
+//import com.techsenger.shellfx.kit.material.textarea.RichTextFxUtils;
+//import com.techsenger.shellfx.material.icon.FontIconView;
 //import javafx.geometry.Insets;
 //import javafx.scene.control.ContextMenu;
 //import javafx.scene.control.MenuItem;

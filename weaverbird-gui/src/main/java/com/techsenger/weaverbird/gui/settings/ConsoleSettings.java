@@ -16,9 +16,9 @@
 
 package com.techsenger.weaverbird.gui.settings;
 
-import com.techsenger.tabshell.core.settings.AppearanceSettings;
-import com.techsenger.tabshell.core.settings.DefaultAppearanceSettings;
-import com.techsenger.tabshell.core.settings.ShellSettings;
+import com.techsenger.shellfx.core.settings.AppearanceSettings;
+import com.techsenger.shellfx.core.settings.DefaultAppearanceSettings;
+import com.techsenger.shellfx.core.settings.ShellSettings;
 
 /**
  *

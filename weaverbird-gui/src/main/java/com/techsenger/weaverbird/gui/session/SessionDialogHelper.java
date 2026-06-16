@@ -19,8 +19,8 @@ package com.techsenger.weaverbird.gui.session;
 //package com.techsenger.weaverbird.console.gui.session;
 //
 //import com.techsenger.mvvm4fx.core.AbstractComponentHelper;
-//import com.techsenger.tabshell.core.dialog.DialogView;
-//import com.techsenger.tabshell.kit.dialog.StandardDialogHelper;
+//import com.techsenger.shellfx.core.dialog.DialogView;
+//import com.techsenger.shellfx.kit.dialog.StandardDialogHelper;
 //
 ///**
 // *

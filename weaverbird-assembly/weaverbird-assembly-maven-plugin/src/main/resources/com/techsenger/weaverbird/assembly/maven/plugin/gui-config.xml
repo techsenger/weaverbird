@@ -54,13 +54,13 @@
         <Module groupId="net.java.dev.jna" artifactId="jna-platform" version="${bom.jna.version}"/>
         <Module groupId="com.techsenger.tabpanepro" artifactId="tabpanepro-core" version="${bom.tabpanepro.version}"/>
         <Module groupId="com.techsenger.stagepro" artifactId="stagepro-core" version="${bom.stagepro.version}"/>
-        <Module groupId="com.techsenger.tabshell" artifactId="tabshell-icons" version="${bom.tabshell.version}"/>
-        <Module groupId="com.techsenger.tabshell" artifactId="tabshell-material" version="${bom.tabshell.version}"/>
-        <Module groupId="com.techsenger.tabshell" artifactId="tabshell-core" version="${bom.tabshell.version}"/>
-        <Module groupId="com.techsenger.tabshell" artifactId="tabshell-shared" version="${bom.tabshell.version}"/>
-        <Module groupId="com.techsenger.tabshell" artifactId="tabshell-storage" version="${bom.tabshell.version}"/>
-        <Module groupId="com.techsenger.tabshell" artifactId="tabshell-dialogs" version="${bom.tabshell.version}"/>
-        <Module groupId="com.techsenger.tabshell" artifactId="tabshell-layout" version="${bom.tabshell.version}"/>
+        <Module groupId="com.techsenger.shellfx" artifactId="shellfx-icons" version="${bom.shellfx.version}"/>
+        <Module groupId="com.techsenger.shellfx" artifactId="shellfx-material" version="${bom.shellfx.version}"/>
+        <Module groupId="com.techsenger.shellfx" artifactId="shellfx-core" version="${bom.shellfx.version}"/>
+        <Module groupId="com.techsenger.shellfx" artifactId="shellfx-shared" version="${bom.shellfx.version}"/>
+        <Module groupId="com.techsenger.shellfx" artifactId="shellfx-storage" version="${bom.shellfx.version}"/>
+        <Module groupId="com.techsenger.shellfx" artifactId="shellfx-dialogs" version="${bom.shellfx.version}"/>
+        <Module groupId="com.techsenger.shellfx" artifactId="shellfx-layout" version="${bom.shellfx.version}"/>
 
         <!--### UML ###-->
         <Module groupId="net.sourceforge.plantuml" artifactId="plantuml-asl" version="${bom.plantuml.version}"/>

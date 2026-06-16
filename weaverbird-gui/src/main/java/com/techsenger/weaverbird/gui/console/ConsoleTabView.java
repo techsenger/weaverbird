@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.tabshell.core.tab.TabView;
+import com.techsenger.shellfx.core.tab.HostTabView;
 import com.techsenger.weaverbird.core.api.message.Message;
 import com.techsenger.weaverbird.executor.api.command.CommandInfo;
 import com.techsenger.weaverbird.executor.api.command.ParameterDescriptor;
@@ -31,9 +31,9 @@ import javafx.scene.text.Font;
  *
  * @author Pavel Castornii
  */
-public interface ConsoleTabView extends TabView {
+public interface ConsoleTabView extends HostTabView {
 
-    interface Composer extends TabView.Composer {
+    interface Composer extends HostTabView.Composer {
 
         void setClient(ClientService client);
 

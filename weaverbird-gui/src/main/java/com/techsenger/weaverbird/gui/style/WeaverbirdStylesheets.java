@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.style;
 
-import com.techsenger.tabshell.material.style.Stylesheet;
+import com.techsenger.shellfx.material.style.Stylesheet;
 import java.util.List;
 
 /**

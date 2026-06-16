@@ -17,8 +17,8 @@
 package com.techsenger.weaverbird.gui.diagram;
 
 import atlantafx.base.theme.Styles;
-import com.techsenger.tabshell.core.page.AbstractPageFxView;
-import com.techsenger.tabshell.material.style.Spacing;
+import com.techsenger.shellfx.core.page.AbstractPageFxView;
+import com.techsenger.shellfx.material.style.Spacing;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

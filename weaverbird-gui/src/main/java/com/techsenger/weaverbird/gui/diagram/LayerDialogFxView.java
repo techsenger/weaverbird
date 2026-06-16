@@ -16,16 +16,16 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.tabshell.core.dialog.AbstractDialogFxView;
-import com.techsenger.tabshell.core.page.DefaultPageDescriptor;
-import com.techsenger.tabshell.core.page.PageDescriptor;
-import com.techsenger.tabshell.core.page.PageItem;
-import com.techsenger.tabshell.layout.pagehost.PageHostFxView;
-import com.techsenger.tabshell.layout.pagehost.PageHostParams;
-import com.techsenger.tabshell.layout.pagehost.PageHostPort;
-import com.techsenger.tabshell.layout.pagehost.PageHostPresenter;
-import com.techsenger.tabshell.material.button.ResultButton;
-import com.techsenger.tabshell.material.button.ResultButtonName;
+import com.techsenger.shellfx.core.dialog.AbstractDialogFxView;
+import com.techsenger.shellfx.core.page.DefaultPageDescriptor;
+import com.techsenger.shellfx.core.page.PageDescriptor;
+import com.techsenger.shellfx.core.page.PageItem;
+import com.techsenger.shellfx.layout.pagehost.PageHostFxView;
+import com.techsenger.shellfx.layout.pagehost.PageHostParams;
+import com.techsenger.shellfx.layout.pagehost.PageHostPort;
+import com.techsenger.shellfx.layout.pagehost.PageHostPresenter;
+import com.techsenger.shellfx.material.button.ResultButton;
+import com.techsenger.shellfx.material.button.ResultButtonName;
 import java.util.List;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -130,7 +130,7 @@ public class LayerDialogFxView<P extends LayerDialogPresenter<?>> extends Abstra
     protected void build() {
         super.build();
         registerButtons(cancelButton, okButton);
-        getRightButtonBox().getChildren().addAll(resetButton);
+        getRightBottomBox().getChildren().addAll(resetButton);
         getContentBox().setPadding(Insets.EMPTY);
     }
 

@@ -21,7 +21,7 @@ package com.techsenger.weaverbird.gui.log;
 //import com.techsenger.weaverbird.console.gui.textstyle.StyledText;
 //import com.techsenger.weaverbird.console.gui.utils.FileLogFragment;
 //import com.techsenger.weaverbird.console.gui.utils.FileLogParser;
-//import com.techsenger.tabshell.kit.core.file.FileInfo;
+//import com.techsenger.shellfx.kit.core.file.FileInfo;
 //import java.io.BufferedReader;
 //import java.io.FileReader;
 //import java.nio.file.Path;

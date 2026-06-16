@@ -23,11 +23,11 @@ module com.techsenger.weaverbird.gui {
     requires com.techsenger.weaverbird.net.client;
     requires com.techsenger.patternfx.core;
     requires com.techsenger.patternfx.mvp;
-    requires com.techsenger.tabshell.material;
-    requires com.techsenger.tabshell.core;
-    requires com.techsenger.tabshell.icons;
-    requires com.techsenger.tabshell.shared;
-    requires com.techsenger.tabshell.layout;
+    requires com.techsenger.shellfx.material;
+    requires com.techsenger.shellfx.core;
+    requires com.techsenger.shellfx.icons;
+    requires com.techsenger.shellfx.shared;
+    requires com.techsenger.shellfx.layout;
     requires javafx.base;
     requires javafx.controls;
     requires javafx.graphics;

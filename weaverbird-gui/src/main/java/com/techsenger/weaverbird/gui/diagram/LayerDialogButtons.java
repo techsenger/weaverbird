@@ -16,8 +16,8 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.tabshell.material.button.DefaultResultButtonName;
-import com.techsenger.tabshell.material.button.ResultButtonName;
+import com.techsenger.shellfx.material.button.DefaultResultButtonName;
+import com.techsenger.shellfx.material.button.ResultButtonName;
 
 /**
  *

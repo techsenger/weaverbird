@@ -19,9 +19,9 @@ package com.techsenger.weaverbird.gui.log;
 //package com.techsenger.weaverbird.console.gui.log;
 //
 //import com.techsenger.weaverbird.console.gui.keys.ConsoleComponentKeys;
-//import com.techsenger.tabshell.core.dialog.DialogKey;
-//import com.techsenger.tabshell.core.dialog.DialogScope;
-//import com.techsenger.tabshell.kit.dialog.AbstractSimpleDialogViewModel;
+//import com.techsenger.shellfx.core.dialog.DialogKey;
+//import com.techsenger.shellfx.core.dialog.DialogScope;
+//import com.techsenger.shellfx.kit.dialog.AbstractSimpleDialogViewModel;
 //import java.util.List;
 //import javafx.beans.property.ObjectProperty;
 //import javafx.beans.property.SimpleObjectProperty;

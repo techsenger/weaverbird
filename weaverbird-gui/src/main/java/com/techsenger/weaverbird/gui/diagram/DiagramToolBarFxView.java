@@ -17,8 +17,8 @@
 package com.techsenger.weaverbird.gui.diagram;
 
 import atlantafx.base.theme.Styles;
-import com.techsenger.tabshell.material.icon.FontIconView;
-import com.techsenger.tabshell.material.style.StyleClasses;
+import com.techsenger.shellfx.material.icon.FontIconView;
+import com.techsenger.shellfx.material.style.StyleClasses;
 import com.techsenger.toolkit.fx.Spacer;
 import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarFxView;
 import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;

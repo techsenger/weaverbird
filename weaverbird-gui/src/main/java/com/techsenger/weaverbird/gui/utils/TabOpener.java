@@ -27,7 +27,7 @@ package com.techsenger.weaverbird.gui.utils;
 //import com.techsenger.weaverbird.console.gui.log.MemoryLogTabViewModel;
 //import com.techsenger.weaverbird.console.gui.shell.ShellTabView;
 //import com.techsenger.weaverbird.console.gui.shell.ShellTabViewModel;
-//import com.techsenger.tabshell.core.TabShellView;
+//import com.techsenger.shellfx.core.TabShellView;
 //
 ///**
 // *

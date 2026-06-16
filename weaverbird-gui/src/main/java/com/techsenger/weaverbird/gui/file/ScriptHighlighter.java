@@ -19,7 +19,7 @@ package com.techsenger.weaverbird.gui.file;
 //package com.techsenger.weaverbird.console.gui.file;
 //
 //import com.techsenger.weaverbird.api.Framework;
-//import com.techsenger.tabshell.kit.material.textarea.TextAreaStyle;
+//import com.techsenger.shellfx.kit.material.textarea.TextAreaStyle;
 //import java.util.Collection;
 //import java.util.Collections;
 //import java.util.List;

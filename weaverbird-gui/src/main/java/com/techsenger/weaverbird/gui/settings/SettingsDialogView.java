@@ -18,9 +18,9 @@ package com.techsenger.weaverbird.gui.settings;
 //
 //package com.techsenger.weaverbird.console.gui.settings;
 //
-//import com.techsenger.tabshell.core.page.PageView;
-//import com.techsenger.tabshell.core.style.SizeConstants;
-//import com.techsenger.tabshell.kit.dialog.page.AbstractPageDialogView;
+//import com.techsenger.shellfx.core.page.PageView;
+//import com.techsenger.shellfx.core.style.SizeConstants;
+//import com.techsenger.shellfx.kit.dialog.page.AbstractPageDialogView;
 //import com.techsenger.toolkit.fx.utils.ButtonUtils;
 //import com.techsenger.toolkit.fx.utils.NodeUtils;
 //import java.util.ArrayList;

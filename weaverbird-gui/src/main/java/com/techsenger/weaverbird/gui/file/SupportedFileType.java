@@ -18,7 +18,7 @@ package com.techsenger.weaverbird.gui.file;
 //
 //package com.techsenger.weaverbird.console.gui.file;
 //
-//import com.techsenger.tabshell.kit.core.file.FileType;
+//import com.techsenger.shellfx.kit.core.file.FileType;
 //import javafx.stage.FileChooser;
 //
 ///**

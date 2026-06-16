@@ -18,10 +18,10 @@ package com.techsenger.weaverbird.gui.settings;
 //
 //package com.techsenger.weaverbird.console.gui.settings;
 //
-//import com.techsenger.tabshell.core.page.AbstractPageViewModel;
-//import com.techsenger.tabshell.core.page.PageKey;
-//import com.techsenger.tabshell.core.theme.TabShellTheme;
-//import com.techsenger.tabshell.kit.core.settings.Settings;
+//import com.techsenger.shellfx.core.page.AbstractPageViewModel;
+//import com.techsenger.shellfx.core.page.PageKey;
+//import com.techsenger.shellfx.core.theme.TabShellTheme;
+//import com.techsenger.shellfx.kit.core.settings.Settings;
 //import java.util.EnumSet;
 //import java.util.stream.Collectors;
 //import java.util.stream.IntStream;

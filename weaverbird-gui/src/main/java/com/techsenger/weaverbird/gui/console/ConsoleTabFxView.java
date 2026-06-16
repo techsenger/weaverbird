@@ -16,12 +16,12 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.tabshell.core.ShellFxView;
-import com.techsenger.tabshell.core.tab.AbstractTabFxView;
-import com.techsenger.tabshell.material.Anchors;
-import com.techsenger.tabshell.material.style.StyleClasses;
-import com.techsenger.tabshell.material.style.StyleUtils;
-import com.techsenger.tabshell.material.theme.AtlantaFxTheme;
+import com.techsenger.shellfx.core.ShellFxView;
+import com.techsenger.shellfx.core.tab.AbstractHostTabFxView;
+import com.techsenger.shellfx.material.Anchors;
+import com.techsenger.shellfx.material.style.StyleClasses;
+import com.techsenger.shellfx.material.style.StyleUtils;
+import com.techsenger.shellfx.material.theme.AtlantaFxTheme;
 import com.techsenger.toolkit.fx.utils.NodeUtils;
 import com.techsenger.weaverbird.core.api.message.Message;
 import com.techsenger.weaverbird.core.api.message.MessageType;
@@ -53,7 +53,7 @@ import jfx.incubator.scene.control.richtext.model.StyleAttributeMap;
  *
  * @author Pavel Castornii
  */
-public class ConsoleTabFxView<P extends ConsoleTabPresenter<?>> extends AbstractTabFxView<P>
+public class ConsoleTabFxView<P extends ConsoleTabPresenter<?>> extends AbstractHostTabFxView<P>
         implements ConsoleTabView {
 
     private static final class CssRichTextArea extends RichTextArea {
@@ -76,7 +76,7 @@ public class ConsoleTabFxView<P extends ConsoleTabPresenter<?>> extends Abstract
         }
     };
 
-    protected class Composer extends AbstractTabFxView<P>.Composer implements ConsoleTabView.Composer {
+    protected class Composer extends AbstractHostTabFxView<P>.Composer implements ConsoleTabView.Composer {
 
         private final ConsoleTabFxView<P> view = ConsoleTabFxView.this;
 

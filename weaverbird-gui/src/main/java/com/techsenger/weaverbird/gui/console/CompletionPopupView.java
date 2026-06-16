@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.tabshell.core.popup.PopupView;
+import com.techsenger.shellfx.core.popup.PopupView;
 import java.util.List;
 
 /**

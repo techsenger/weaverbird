@@ -51,24 +51,24 @@
             <artifactId>patternfx-mvp</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.techsenger.tabshell</groupId>
-            <artifactId>tabshell-material</artifactId>
+            <groupId>com.techsenger.shellfx</groupId>
+            <artifactId>shellfx-material</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.techsenger.tabshell</groupId>
-            <artifactId>tabshell-core</artifactId>
+            <groupId>com.techsenger.shellfx</groupId>
+            <artifactId>shellfx-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.techsenger.tabshell</groupId>
-            <artifactId>tabshell-icons</artifactId>
+            <groupId>com.techsenger.shellfx</groupId>
+            <artifactId>shellfx-icons</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.techsenger.tabshell</groupId>
-            <artifactId>tabshell-shared</artifactId>
+            <groupId>com.techsenger.shellfx</groupId>
+            <artifactId>shellfx-shared</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.techsenger.tabshell</groupId>
-            <artifactId>tabshell-layout</artifactId>
+            <groupId>com.techsenger.shellfx</groupId>
+            <artifactId>shellfx-layout</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>

@@ -19,8 +19,8 @@ package com.techsenger.weaverbird.gui.file;
 //package com.techsenger.weaverbird.console.gui.file;
 //
 //import com.techsenger.weaverbird.console.gui.keys.ConsoleComponentKeys;
-//import com.techsenger.tabshell.core.tab.AbstractTabViewModel;
-//import com.techsenger.tabshell.core.tab.TabKey;
+//import com.techsenger.shellfx.core.tab.AbstractTabViewModel;
+//import com.techsenger.shellfx.core.tab.TabKey;
 //import javafx.beans.property.ReadOnlyStringProperty;
 //import javafx.beans.property.SimpleStringProperty;
 //import javafx.beans.property.StringProperty;

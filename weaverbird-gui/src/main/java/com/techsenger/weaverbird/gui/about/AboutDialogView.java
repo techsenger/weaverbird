@@ -18,8 +18,8 @@ package com.techsenger.weaverbird.gui.about;
 //
 //package com.techsenger.weaverbird.console.gui.about;
 //
-//import com.techsenger.tabshell.core.style.SizeConstants;
-//import com.techsenger.tabshell.kit.dialog.AbstractSimpleDialogView;
+//import com.techsenger.shellfx.core.style.SizeConstants;
+//import com.techsenger.shellfx.kit.dialog.AbstractSimpleDialogView;
 //import com.techsenger.toolkit.fx.utils.NodeUtils;
 //import java.awt.Desktop;
 //import java.awt.EventQueue;

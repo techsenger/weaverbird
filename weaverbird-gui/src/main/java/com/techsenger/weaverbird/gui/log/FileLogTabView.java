@@ -18,8 +18,8 @@ package com.techsenger.weaverbird.gui.log;
 //
 //package com.techsenger.weaverbird.console.gui.log;
 //
-//import com.techsenger.tabshell.core.TabShellView;
-//import com.techsenger.tabshell.kit.material.textarea.ExtendedTextArea;
+//import com.techsenger.shellfx.core.TabShellView;
+//import com.techsenger.shellfx.kit.material.textarea.ExtendedTextArea;
 //
 ///**
 // *

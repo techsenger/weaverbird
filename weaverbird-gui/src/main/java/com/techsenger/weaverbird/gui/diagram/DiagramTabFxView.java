@@ -16,9 +16,9 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.tabshell.core.ShellFxView;
-import com.techsenger.tabshell.core.tab.AbstractTabFxView;
-import com.techsenger.tabshell.material.style.StyleClasses;
+import com.techsenger.shellfx.core.ShellFxView;
+import com.techsenger.shellfx.core.tab.AbstractHostTabFxView;
+import com.techsenger.shellfx.material.style.StyleClasses;
 import com.techsenger.weaverbird.core.api.model.ComponentLayerModel;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
@@ -34,10 +34,10 @@ import javafx.scene.layout.VBox;
  *
  * @author Pavel Castornii
  */
-public class DiagramTabFxView<P extends DiagramTabPresenter<?>> extends AbstractTabFxView<P>
+public class DiagramTabFxView<P extends DiagramTabPresenter<?>> extends AbstractHostTabFxView<P>
         implements DiagramTabView {
 
-    protected class Composer extends AbstractTabFxView<P>.Composer implements DiagramTabView.Composer {
+    protected class Composer extends AbstractHostTabFxView<P>.Composer implements DiagramTabView.Composer {
 
         private final DiagramTabFxView<P> view = DiagramTabFxView.this;
 
@@ -67,7 +67,7 @@ public class DiagramTabFxView<P extends DiagramTabPresenter<?>> extends Abstract
         public void compose() {
             super.compose();
             var toolBar = createToolBar();
-            view.getModifiableChildren().add(toolBar);
+            getModifiableChildren().add(toolBar);
             view.getContentBox().getChildren().add(0, toolBar.getNode());
         }
 
@@ -82,7 +82,8 @@ public class DiagramTabFxView<P extends DiagramTabPresenter<?>> extends Abstract
         protected LayerDialogFxView<?> createDialog(List<ComponentLayerModel> layerModels,
                 List<LayerConfig> previousLayerConfigs) {
             var view = new LayerDialogFxView<>();
-            var params = new LayerDialogParams(layerModels, previousLayerConfigs);
+            var params = new LayerDialogParams(getShellPort().getContext().getSettings().getAppearance(),
+                    layerModels, previousLayerConfigs);
             var presenter = new LayerDialogPresenter<>(view, params);
             presenter.initialize();
             return view;

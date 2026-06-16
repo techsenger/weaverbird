@@ -40,7 +40,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.techsenger.tabshell.core.settings.ShellSettings;
+import com.techsenger.shellfx.core.settings.ShellSettings;
 
 /**
  *

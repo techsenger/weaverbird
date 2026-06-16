@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.tabshell.core.popup.PopupParams;
+import com.techsenger.shellfx.core.popup.PopupParams;
 import com.techsenger.weaverbird.executor.api.command.CommandInfo;
 import com.techsenger.weaverbird.executor.api.command.ParameterDescriptor;
 import java.util.Collection;

@@ -20,9 +20,9 @@ package com.techsenger.weaverbird.gui.log;
 //
 //import com.techsenger.weaverbird.console.gui.style.ConsoleIcons;
 //import com.techsenger.mvvm4fx.core.ComponentHelper;
-//import com.techsenger.tabshell.core.TabShellView;
-//import com.techsenger.tabshell.kit.material.textarea.ExtendedTextArea;
-//import com.techsenger.tabshell.material.icon.FontIconView;
+//import com.techsenger.shellfx.core.TabShellView;
+//import com.techsenger.shellfx.kit.material.textarea.ExtendedTextArea;
+//import com.techsenger.shellfx.material.icon.FontIconView;
 //import javafx.scene.control.Button;
 //import javafx.scene.control.ToggleButton;
 //

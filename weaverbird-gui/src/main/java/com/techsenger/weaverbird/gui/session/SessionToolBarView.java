@@ -17,7 +17,7 @@
 package com.techsenger.weaverbird.gui.session;
 
 import com.techsenger.weaverbird.net.client.api.ClientSession;
-import com.techsenger.tabshell.core.area.AreaView;
+import com.techsenger.shellfx.core.area.AreaView;
 import java.util.List;
 
 /**

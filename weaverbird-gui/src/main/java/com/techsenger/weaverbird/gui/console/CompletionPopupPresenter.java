@@ -17,9 +17,9 @@
 package com.techsenger.weaverbird.gui.console;
 
 import com.techsenger.patternfx.mvp.ComponentDescriptor;
-import com.techsenger.tabshell.core.CloseCheckResult;
-import com.techsenger.tabshell.core.ClosePreparationResult;
-import com.techsenger.tabshell.core.popup.AbstractPopupPresenter;
+import com.techsenger.shellfx.core.CloseCheckResult;
+import com.techsenger.shellfx.core.ClosePreparationResult;
+import com.techsenger.shellfx.core.popup.AbstractPopupPresenter;
 import com.techsenger.weaverbird.executor.api.CommandSyntax;
 import com.techsenger.weaverbird.executor.api.command.CommandInfo;
 import com.techsenger.weaverbird.executor.api.command.ParameterDescriptor;

@@ -17,9 +17,9 @@
 package com.techsenger.weaverbird.gui.diagram;
 
 import com.techsenger.patternfx.mvp.ComponentDescriptor;
-import com.techsenger.tabshell.core.CloseCheckResult;
-import com.techsenger.tabshell.core.ClosePreparationResult;
-import com.techsenger.tabshell.core.tab.AbstractTabPresenter;
+import com.techsenger.shellfx.core.CloseCheckResult;
+import com.techsenger.shellfx.core.ClosePreparationResult;
+import com.techsenger.shellfx.core.tab.AbstractHostTabPresenter;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.core.api.model.LayersInfo;
 import com.techsenger.weaverbird.gui.WeaverbirdComponents;
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Pavel Castornii
  */
-public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractTabPresenter<V>
+public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractHostTabPresenter<V>
         implements DiagramToolBarAwarePort {
 
     private static final Logger logger = LoggerFactory.getLogger(DiagramTabPresenter.class);

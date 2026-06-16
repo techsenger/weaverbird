@@ -17,7 +17,7 @@
 package com.techsenger.weaverbird.gui.diagram;
 
 import com.techsenger.patternfx.mvp.ComponentDescriptor;
-import com.techsenger.tabshell.core.page.AbstractPagePresenter;
+import com.techsenger.shellfx.core.page.AbstractPagePresenter;
 import com.techsenger.weaverbird.gui.WeaverbirdComponents;
 
 /**

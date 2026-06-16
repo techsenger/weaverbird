@@ -18,7 +18,7 @@ package com.techsenger.weaverbird.gui.file;
 //
 //package com.techsenger.weaverbird.console.gui.file;
 //
-//import com.techsenger.tabshell.kit.text.viewer.ViewerTabHelper;
+//import com.techsenger.shellfx.kit.text.viewer.ViewerTabHelper;
 //
 ///**
 // *

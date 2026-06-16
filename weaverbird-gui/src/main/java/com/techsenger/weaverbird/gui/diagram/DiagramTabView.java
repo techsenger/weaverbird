@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.tabshell.core.tab.TabView;
+import com.techsenger.shellfx.core.tab.HostTabView;
 import com.techsenger.weaverbird.core.api.model.ComponentLayerModel;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
@@ -27,9 +27,9 @@ import javafx.scene.image.Image;
  *
  * @author Pavel Castornii
  */
-public interface DiagramTabView extends TabView {
+public interface DiagramTabView extends HostTabView {
 
-    interface Composer extends TabView.Composer {
+    interface Composer extends HostTabView.Composer {
 
         void setClient(ClientService client);
 

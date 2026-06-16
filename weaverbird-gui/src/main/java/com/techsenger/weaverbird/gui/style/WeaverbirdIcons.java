@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui.style;
 
-import com.techsenger.tabshell.material.icon.StyleFontIcon;
+import com.techsenger.shellfx.material.icon.StyleFontIcon;
 
 /**
  *

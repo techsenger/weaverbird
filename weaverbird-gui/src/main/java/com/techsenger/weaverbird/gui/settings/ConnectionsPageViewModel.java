@@ -19,8 +19,8 @@ package com.techsenger.weaverbird.gui.settings;
 //package com.techsenger.weaverbird.console.gui.settings;
 //
 //import com.techsenger.weaverbird.api.net.session.Protocol;
-//import com.techsenger.tabshell.core.page.AbstractPageViewModel;
-//import com.techsenger.tabshell.core.page.PageKey;
+//import com.techsenger.shellfx.core.page.AbstractPageViewModel;
+//import com.techsenger.shellfx.core.page.PageKey;
 //import java.util.ArrayList;
 //import javafx.beans.property.ObjectProperty;
 //import javafx.beans.property.SimpleObjectProperty;
