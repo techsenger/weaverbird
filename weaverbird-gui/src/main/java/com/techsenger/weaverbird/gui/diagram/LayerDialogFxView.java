@@ -25,7 +25,6 @@ import com.techsenger.shellfx.layout.pagehost.PageHostParams;
 import com.techsenger.shellfx.layout.pagehost.PageHostPort;
 import com.techsenger.shellfx.layout.pagehost.PageHostPresenter;
 import com.techsenger.shellfx.material.button.ResultButton;
-import com.techsenger.shellfx.material.button.ResultButtonName;
 import java.util.List;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -112,16 +111,6 @@ public class LayerDialogFxView<P extends LayerDialogPresenter<?>> extends Abstra
     }
 
     @Override
-    public void setRightButtons(ResultButtonName... names) {
-        super.setRightButtons(names);
-        makeButtonsEqualWidth();
-    }
-
-    protected void makeButtonsEqualWidth() {
-        makeEqualWidth(getRightButtons(false));
-    }
-
-    @Override
     protected Composer createComposer() {
         return new LayerDialogFxView<P>.Composer();
     }
@@ -130,6 +119,7 @@ public class LayerDialogFxView<P extends LayerDialogPresenter<?>> extends Abstra
     protected void build() {
         super.build();
         registerButtons(cancelButton, okButton);
+        getButtonWidthGroup().add(cancelButton, okButton);
         getRightBottomBox().getChildren().addAll(resetButton);
         getContentBox().setPadding(Insets.EMPTY);
     }
