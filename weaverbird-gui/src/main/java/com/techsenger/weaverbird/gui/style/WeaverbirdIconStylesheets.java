@@ -23,17 +23,17 @@ import java.util.List;
  *
  * @author Pavel Castornii
  */
-public final class WeaverbirdStylesheets {
+public final class WeaverbirdIconStylesheets {
 
-    private static final List<Stylesheet> stylesheets = List.of(
-            new Stylesheet(WeaverbirdStylesheets.class.getResource("icons.css"))
+    private static final List<Stylesheet> stylesheets =
+            List.of(new Stylesheet(WeaverbirdIconStylesheets.class.getResource("icons.css"))
     );
 
     public static List<Stylesheet> getAll() {
         return stylesheets;
     }
 
-    private WeaverbirdStylesheets() {
+    private WeaverbirdIconStylesheets() {
         // empty
     }
 }

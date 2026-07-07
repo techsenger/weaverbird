@@ -25,18 +25,19 @@ import com.techsenger.shellfx.core.history.InMemoryHistoryManager;
 import com.techsenger.shellfx.core.registry.ControlRegistry;
 import com.techsenger.shellfx.core.settings.Density;
 import com.techsenger.shellfx.icons.IconStylesheetFactory;
+import com.techsenger.shellfx.icons.MdiIconFont;
 import com.techsenger.shellfx.layout.tabhost.TabHostFxView;
 import com.techsenger.shellfx.layout.tabhost.TabHostPresenter;
+import com.techsenger.shellfx.material.icon.FontIconView;
+import com.techsenger.shellfx.material.style.IconStylesheets;
 import com.techsenger.shellfx.material.style.StyleClasses;
-import com.techsenger.shellfx.material.style.Stylesheet;
 import com.techsenger.shellfx.material.theme.AtlantaFxTheme;
 import com.techsenger.toolkit.fx.color.ColorUtils;
 import com.techsenger.weaverbird.gui.menu.FileMenuRegistrar;
 import com.techsenger.weaverbird.gui.settings.ConsoleSettings;
 import com.techsenger.weaverbird.gui.settings.LayoutEngine;
 import com.techsenger.weaverbird.gui.settings.LineType;
-import com.techsenger.weaverbird.gui.style.WeaverbirdStylesheets;
-import java.util.ArrayList;
+import com.techsenger.weaverbird.gui.style.WeaverbirdIconStylesheets;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.text.Font;
@@ -66,10 +67,11 @@ public class WeaverbirdApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        var stylesheets = new ArrayList<Stylesheet>(IconStylesheetFactory.forAll());
-        stylesheets.addAll(WeaverbirdStylesheets.getAll());
+        FontIconView.setDefaultIconFont(MdiIconFont.INSTANCE.getFamily());
+        IconStylesheets.addAll(IconStylesheetFactory.forAll());
+        IconStylesheets.addAll(WeaverbirdIconStylesheets.getAll());
 
-        var shellView = new DefaultShellFxView<>(this, stage, stylesheets, new ControlRegistry());
+        var shellView = new DefaultShellFxView<>(this, stage, null, new ControlRegistry());
         var context = new DefaultShellContext(createSettings(), new InMemoryHistoryManager(), getHostServices());
         var shellParams = new DefaultShellParams(context);
         var shellPresenter = new DefaultShellPresenter<>(shellView, shellParams);
