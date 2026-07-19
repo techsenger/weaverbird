@@ -85,7 +85,7 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
             var item = new ManagedMenuItem("C_onsole", 100);
             item.setGraphic(new FontIconView(WeaverbirdIcons.CONSOLE));
             item.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-            var handler = new AbstractMenuItemHandler<ShellFxView<?>>(item, shell) {
+            var handler = new AbstractMenuItemHandler<ShellFxView<?>, ManagedMenuItem>(shell, item) {
 
                 @Override
                 public void onAction() {
@@ -109,7 +109,7 @@ public class FileMenuRegistrar extends AbstractControlRegistrar {
             var item = new ManagedMenuItem("D_iagrams", 200);
             item.setGraphic(new FontIconView(WeaverbirdIcons.DIAGRAMS));
             item.setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN));
-            var handler = new AbstractMenuItemHandler<ShellFxView<?>>(item, shell) {
+            var handler = new AbstractMenuItemHandler<ShellFxView<?>, ManagedMenuItem>(shell, item) {
                 @Override
                 public void onAction() {
                     var shell = getComponent();
