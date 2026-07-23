@@ -23,12 +23,12 @@ import com.techsenger.shellfx.core.DefaultShellPresenter;
 import com.techsenger.shellfx.core.area.AreaParams;
 import com.techsenger.shellfx.core.history.InMemoryHistoryManager;
 import com.techsenger.shellfx.core.registry.ControlRegistry;
-import com.techsenger.shellfx.core.settings.Density;
+import com.techsenger.shellfx.icons.Fonts;
 import com.techsenger.shellfx.icons.IconStylesheetFactory;
-import com.techsenger.shellfx.icons.MdiIconFont;
 import com.techsenger.shellfx.layout.tabhost.TabHostFxView;
 import com.techsenger.shellfx.layout.tabhost.TabHostPresenter;
 import com.techsenger.shellfx.material.icon.FontIconView;
+import com.techsenger.shellfx.material.style.Density;
 import com.techsenger.shellfx.material.style.IconStylesheets;
 import com.techsenger.shellfx.material.style.StyleClasses;
 import com.techsenger.shellfx.material.theme.AtlantaFxTheme;
@@ -67,7 +67,7 @@ public class WeaverbirdApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FontIconView.setDefaultIconFont(MdiIconFont.INSTANCE.getFamily());
+        FontIconView.setDefaultIconFont(Fonts.MATERIAL_DESIGN_ICONS.getFamily());
         IconStylesheets.addAll(IconStylesheetFactory.forAll());
         IconStylesheets.addAll(WeaverbirdIconStylesheets.getAll());
 
