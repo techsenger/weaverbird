@@ -18,6 +18,7 @@ package com.techsenger.weaverbird.gui.session;
 
 import com.techsenger.patternfx.mvvm.ChildComposer;
 import com.techsenger.shellfx.core.area.AbstractAreaViewModel;
+import com.techsenger.shellfx.material.RequestSetter;
 import com.techsenger.toolkit.fx.value.ObservableSource;
 import com.techsenger.toolkit.fx.value.SimpleObservableSource;
 import com.techsenger.weaverbird.net.client.api.ClientService;
@@ -103,6 +104,7 @@ public abstract class AbstractSessionToolBarViewModel<C extends ChildComposer> e
      *
      * @param session the session to select
      */
+    @RequestSetter
     protected void setSession(ClientSession session) {
         var clientSessions = fetchClientSessions();
         if (clientSessions != null) {
