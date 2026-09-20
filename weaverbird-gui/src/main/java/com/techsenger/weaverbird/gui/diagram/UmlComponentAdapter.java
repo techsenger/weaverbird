@@ -49,13 +49,10 @@ abstract class UmlComponentAdapter {
         colored.set(component.isColored());
 
         colored.addListener(autoIncludeListener);
+        autoExclude(colored);
 
         included.addListener((obs, o, v) -> component.setIncluded(v));
         colored.addListener((obs, o, v) -> component.setColored(v));
-    }
-
-    public ChangeListener<Boolean> getAutoIncludeListener() {
-        return autoIncludeListener;
     }
 
     public String getName() {
@@ -94,13 +91,21 @@ abstract class UmlComponentAdapter {
         return colored;
     }
 
-    public void update() {
-        name.set(component.getName());
-        included.set(component.isIncluded());
-        colored.set(component.isColored());
+    protected ChangeListener<Boolean> getAutoIncludeListener() {
+        return autoIncludeListener;
     }
 
-    protected AbstractUmlComponent getComponent() {
-        return component;
+    /**
+     * Clears {@code property} whenever this component becomes excluded, since a directive or coloring flag is
+     * meaningless for a module that is not included in the diagram.
+     *
+     * @param property the directive or coloring flag to clear on exclusion
+     */
+    protected final void autoExclude(BooleanProperty property) {
+        included.addListener((obs, oldV, newV) -> {
+            if (!newV) {
+                property.set(false);
+            }
+        });
     }
 }

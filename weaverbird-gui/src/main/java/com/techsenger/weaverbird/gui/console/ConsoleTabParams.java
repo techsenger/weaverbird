@@ -53,7 +53,7 @@ public class ConsoleTabParams extends HostTabParams {
     }
 
     @Override
-    protected void validate() {
+    public void validate() {
         super.validate();
         Objects.requireNonNull(framework);
     }

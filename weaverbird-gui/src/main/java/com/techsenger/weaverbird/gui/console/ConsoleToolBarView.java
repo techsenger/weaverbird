@@ -16,15 +16,64 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.weaverbird.gui.session.SessionToolBarView;
+import atlantafx.base.theme.Styles;
+import com.techsenger.shellfx.material.icon.FontIconView;
+import com.techsenger.shellfx.material.style.StyleClasses;
+import com.techsenger.toolkit.fx.Spacer;
+import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarView;
+import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
+import javafx.geometry.Orientation;
+import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
+import javafx.scene.control.Tooltip;
 
 /**
- *
+ * @param <VM> the ViewModel type
  * @author Pavel Castornii
  */
-public interface ConsoleToolBarView extends SessionToolBarView {
+public class ConsoleToolBarView<VM extends ConsoleToolBarViewModel<?>> extends AbstractSessionToolBarView<VM> {
 
-    void updateCopyDisabled(boolean disabled);
+    private final Button clearButton = new Button(null, new FontIconView(WeaverbirdIcons.CLEAR));
 
-    void updatePasteDisabled(boolean disabled);
+    private final Button copyButton = new Button(null, new FontIconView(WeaverbirdIcons.COPY));
+
+    private final Button pasteButton = new Button(null, new FontIconView(WeaverbirdIcons.PASTE));
+
+    public ConsoleToolBarView(VM viewModel) {
+        super(viewModel);
+    }
+
+    @Override
+    public void requestFocus() {
+        // the console toolbar itself never takes focus
+    }
+
+    @Override
+    protected void build() {
+        super.build();
+        clearButton.getStyleClass().addAll(Styles.FLAT, StyleClasses.SIZE_L);
+        clearButton.setTooltip(new Tooltip("Clear"));
+        copyButton.getStyleClass().addAll(Styles.FLAT, StyleClasses.SIZE_L);
+        copyButton.setTooltip(new Tooltip("Copy"));
+        pasteButton.getStyleClass().addAll(Styles.FLAT, StyleClasses.SIZE_L);
+        pasteButton.setTooltip(new Tooltip("Paste"));
+
+        getNode().getItems().addAll(clearButton, new Separator(Orientation.VERTICAL), copyButton, pasteButton,
+                new Spacer(Orientation.HORIZONTAL), getSessionLabel(), getSessionComboBox(), getRefreshButton());
+    }
+
+    @Override
+    protected void bind() {
+        super.bind();
+        copyButton.disableProperty().bind(getViewModel().copyDisabledProperty());
+        pasteButton.disableProperty().bind(getViewModel().pasteDisabledProperty());
+    }
+
+    @Override
+    protected void addHandlers() {
+        super.addHandlers();
+        clearButton.setOnAction(e -> getViewModel().onClear());
+        copyButton.setOnAction(e -> getViewModel().onCopy());
+        pasteButton.setOnAction(e -> getViewModel().onPaste());
+    }
 }

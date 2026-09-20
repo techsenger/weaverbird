@@ -22,7 +22,7 @@ module com.techsenger.weaverbird.gui {
     requires com.techsenger.weaverbird.executor;
     requires com.techsenger.weaverbird.net.client;
     requires com.techsenger.patternfx.core;
-    requires com.techsenger.patternfx.mvp;
+    requires com.techsenger.patternfx.mvvm;
     requires com.techsenger.shellfx.material;
     requires com.techsenger.shellfx.core;
     requires com.techsenger.shellfx.icons;

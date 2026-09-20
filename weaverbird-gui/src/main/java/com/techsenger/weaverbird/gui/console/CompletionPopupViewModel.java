@@ -18,7 +18,11 @@ package com.techsenger.weaverbird.gui.console;
 
 import com.techsenger.shellfx.core.CloseCheckResult;
 import com.techsenger.shellfx.core.ClosePreparationResult;
-import com.techsenger.shellfx.core.popup.AbstractPopupPresenter;
+import com.techsenger.shellfx.core.popup.AbstractPopupViewModel;
+import com.techsenger.shellfx.core.popup.PopupComposer;
+import com.techsenger.toolkit.core.Pair;
+import com.techsenger.toolkit.fx.value.ObservableSource;
+import com.techsenger.toolkit.fx.value.SimpleObservableSource;
 import com.techsenger.weaverbird.executor.api.CommandSyntax;
 import com.techsenger.weaverbird.executor.api.command.CommandInfo;
 import com.techsenger.weaverbird.executor.api.command.ParameterDescriptor;
@@ -26,13 +30,26 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
- *
+ * @param <C> the composer type
  * @author Pavel Castornii
  */
-public class CompletionPopupPresenter<V extends CompletionPopupView> extends AbstractPopupPresenter<V>
+public class CompletionPopupViewModel<C extends PopupComposer> extends AbstractPopupViewModel<C>
         implements CompletionPopupPort {
+
+    private final ObservableList<CompletionItem<?>> modifiableItems = FXCollections.observableArrayList();
+
+    private final ObservableList<CompletionItem<?>> items =
+            FXCollections.unmodifiableObservableList(modifiableItems);
+
+    private final ReadOnlyObjectWrapper<CompletionItem<?>> item = new ReadOnlyObjectWrapper<>();
+
+    private final ObservableSource<Pair<CompletionItem<?>, Direction>> itemSource = new SimpleObservableSource<>();
 
     private final Collection<CommandInfo> commands;
 
@@ -42,23 +59,15 @@ public class CompletionPopupPresenter<V extends CompletionPopupView> extends Abs
 
     private final CompletionPopupAwarePort popupAware;
 
-    private List<CompletionItem<?>> items;
-
-    private CompletionItem<?> selectedItem;
-
-    private String token;
-
     private final boolean sessionExists;
 
-    public CompletionPopupPresenter(V view, CompletionPopupParams params) {
-        super(view, params);
+    private final String token;
+
+    public CompletionPopupViewModel(CompletionPopupParams params) {
+        super(params);
         this.commands = params.getCommands();
         this.parameters = params.getParameterDescriptors();
-        if (commands != null) {
-            this.type = CompletionType.COMMAND;
-        } else {
-            this.type = CompletionType.PARAMETER;
-        }
+        this.type = this.commands != null ? CompletionType.COMMAND : CompletionType.PARAMETER;
         this.popupAware = params.getPopupAware();
         this.token = params.getToken();
         this.sessionExists = params.isSessionExists();
@@ -78,13 +87,24 @@ public class CompletionPopupPresenter<V extends CompletionPopupView> extends Abs
         return type;
     }
 
-    public List<CompletionItem<?>> getItems() {
-        return this.items;
+    /**
+     * Returns an unmodifiable list of items.
+     */
+    public ObservableList<CompletionItem<?>> getItems() {
+        return items;
+    }
+
+    public CompletionItem<?> getItem() {
+        return item.get();
+    }
+
+    public ReadOnlyObjectProperty<CompletionItem<?>> itemProperty() {
+        return item.getReadOnlyProperty();
     }
 
     @Override
-    public String getSelectedItemText() {
-        return getItemText(selectedItem);
+    public String getItemText() {
+        return getItemText(getItem());
     }
 
     @Override
@@ -98,48 +118,37 @@ public class CompletionPopupPresenter<V extends CompletionPopupView> extends Abs
 
     @Override
     public void moveUp() {
-        getView().selectPrevious();
+        var index = items.indexOf(getItem());
+        if (index > 0) {
+            itemSource.next(new Pair<>(items.get(index - 1), Direction.UP));
+        }
     }
 
     @Override
     public void moveDown() {
-        getView().selectNext();
+        var index = items.indexOf(getItem());
+        if (index + 1 < items.size()) {
+            itemSource.next(new Pair<>(items.get(index + 1), Direction.DOWN));
+        }
     }
 
     @Override
     protected void postInitialize() {
         super.postInitialize();
-        if (this.type == CompletionType.COMMAND) {
-            setItems(createCommandItems(this.token));
-        } else {
-            setItems(createParameterItems(token));
-        }
-    }
-
-    protected void onItemSelected(CompletionItem<?> item) {
-        this.selectedItem = item;
-        if (this.selectedItem != null) {
-            if (this.type == CompletionType.COMMAND) {
-                var command = ((CompletionItem<CommandInfo>) item).getElement();
-                getView().displayInfo(command.getDescription(), command.getModuleName());
-            } else {
-                var parameter = ((CompletionItem<ParameterDescriptor>) item).getElement();
-                getView().displayInfo(parameter.getDescription(), parameter.isRequired(), parameter.getShortName());
-            }
-        }
+        updateItems(token);
     }
 
     protected void onItemSubmitted(CompletionItem<?> item) {
-        this.popupAware.onElementSubmitted(type, getItemText(item));
+        popupAware.onElementSubmitted(type, getItemText(item));
     }
 
     protected void onClose() {
-        this.popupAware.onPopupClose();
+        popupAware.onPopupClose();
     }
 
-    protected void setItems(List<CompletionItem<?>> items) {
-        this.items = items;
-        getView().updateItems(items);
+    private void setItems(List<CompletionItem<?>> items) {
+        modifiableItems.setAll(items);
+        itemSource.next(new Pair<>(items.isEmpty() ? null : items.getFirst(), Direction.NONE));
     }
 
     private List<CompletionItem<?>> createCommandItems(String token) {
@@ -177,5 +186,13 @@ public class CompletionPopupPresenter<V extends CompletionPopupView> extends Abs
             ParameterDescriptor param = (ParameterDescriptor) item.getElement();
             return param.isMain() ? null : param.getLongName();
         }
+    }
+
+    ReadOnlyObjectWrapper<CompletionItem<?>> itemWrapper() {
+        return item;
+    }
+
+    ObservableSource<Pair<CompletionItem<?>, Direction>> itemSource() {
+        return itemSource;
     }
 }

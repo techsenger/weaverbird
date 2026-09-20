@@ -38,7 +38,7 @@ public class LayerPageParams extends PageParams {
     }
 
     @Override
-    protected void validate() {
+    public void validate() {
         super.validate();
         Objects.requireNonNull(layer);
     }

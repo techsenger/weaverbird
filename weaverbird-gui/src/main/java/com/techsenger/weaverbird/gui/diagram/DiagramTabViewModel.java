@@ -18,7 +18,7 @@ package com.techsenger.weaverbird.gui.diagram;
 
 import com.techsenger.shellfx.core.CloseCheckResult;
 import com.techsenger.shellfx.core.ClosePreparationResult;
-import com.techsenger.shellfx.core.tab.AbstractHostTabPresenter;
+import com.techsenger.shellfx.core.tab.AbstractHostTabViewModel;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.core.api.model.LayersInfo;
 import com.techsenger.weaverbird.gui.settings.DiagramSettings;
@@ -33,6 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.image.Image;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -41,21 +45,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * @param <C> the composer type
  * @author Pavel Castornii
  */
-public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractHostTabPresenter<V>
+public class DiagramTabViewModel<C extends DiagramTabComposer> extends AbstractHostTabViewModel<C>
         implements DiagramToolBarAwarePort {
 
-    private static final Logger logger = LoggerFactory.getLogger(DiagramTabPresenter.class);
+    private static final Logger logger = LoggerFactory.getLogger(DiagramTabViewModel.class);
+
+    private final ReadOnlyObjectWrapper<Image> diagram = new ReadOnlyObjectWrapper<>();
+
+    private final ReadOnlyDoubleWrapper diagramWidth = new ReadOnlyDoubleWrapper();
+
+    private final ReadOnlyDoubleWrapper diagramHeight = new ReadOnlyDoubleWrapper();
 
     private final Framework framework;
 
     private final ClientService client;
 
-    private ClientSession session;
-
     private final DiagramSettings settings;
+
+    private ClientSession session;
 
     private String previousSessionUuid;
 
@@ -65,20 +75,17 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractHostT
 
     private int zoomLevel;
 
-    private Image diagram;
-
-    private double diagramWidth;
-
-    private double diagramHeight;
-
-    public DiagramTabPresenter(V view, DiagramTabParams params) {
-        super(view, params);
+    public DiagramTabViewModel(DiagramTabParams params) {
+        super(params);
         this.framework = params.getFramework();
         this.client = params.getClient();
         this.session = params.getSession();
         this.settings = params.getSettings();
-        getView().getComposer().setClient(client);
-        getView().getComposer().setSession(session);
+        selectedProperty().addListener((ov, oldV, newV) -> {
+            if (newV) {
+                requestFocus();
+            }
+        });
     }
 
     @Override
@@ -97,23 +104,27 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractHostT
     }
 
     public Image getDiagram() {
-        return this.diagram;
+        return diagram.get();
+    }
+
+    public ReadOnlyObjectProperty<Image> diagramProperty() {
+        return diagram.getReadOnlyProperty();
     }
 
     public double getDiagramWidth() {
-        return this.diagramWidth;
+        return diagramWidth.get();
+    }
+
+    public ReadOnlyDoubleProperty diagramWidthProperty() {
+        return diagramWidth.getReadOnlyProperty();
     }
 
     public double getDiagramHeight() {
-        return this.diagramHeight;
+        return diagramHeight.get();
     }
 
-    @Override
-    public void onSelected(boolean selected) {
-        super.onSelected(selected);
-        if (selected) {
-            getView().requestFocus();
-        }
+    public ReadOnlyDoubleProperty diagramHeightProperty() {
+        return diagramHeight.getReadOnlyProperty();
     }
 
     @Override
@@ -159,21 +170,20 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractHostT
             this.previousLayersInfo = layersInfo;
 
             var layersByComponentId = layersInfo.getLayersById();
-            var dialog = getView().getComposer().openLayerDialog(new ArrayList<>(layersByComponentId.values()),
+            var appearance = getShellContext().getSettings().getAppearance();
+            var params = new LayerDialogParams(appearance, new ArrayList<>(layersByComponentId.values()),
                     previousLayerConfigs);
+            var dialog = getComposer().openLayerDialog(params);
             dialog.setOnResult((b) -> {
                 if (b == LayerDialogButtons.OK) {
                     try {
                         this.previousLayerConfigs = dialog.getLayerConfigs();
-                        var shellSettings = getView().getComposer().getShellPort().getContext().getSettings();
+                        var shellSettings = getShellContext().getSettings();
                         var generator = new LayerDiagramGenerator(previousLayerConfigs, shellSettings, settings);
                         var code = generator.generate();
                         setDiagram(createDiagram(code));
-                        if (this.diagram != null) {
+                        if (getDiagram() != null) {
                             setDiagramSize(calculateDiagramWidth(), calculateDiagramHeight());
-                            // getView().setDiagramSize();
-                            // setFitSizes(zoomLevel.get());
-                            // this.contentModified.set(true);
                         }
                     } catch (Exception ex) {
                         logger.error("Error creating diagram", ex);
@@ -189,7 +199,7 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractHostT
     @Override
     public void onZoomLevelChanged(int level) {
         this.zoomLevel = level;
-        if (this.diagram != null) {
+        if (getDiagram() != null) {
             setDiagramSize(calculateDiagramWidth(), calculateDiagramHeight());
         }
     }
@@ -201,27 +211,26 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractHostT
         setIcon(WeaverbirdIcons.DIAGRAMS);
     }
 
-    protected void setDiagram(Image diagram) {
-        if (Objects.equals(this.diagram, diagram)) {
+    private void setDiagram(Image diagram) {
+        if (Objects.equals(getDiagram(), diagram)) {
             return;
         }
-        this.diagram = diagram;
-        getView().updateDiagram(diagram);
+        this.diagram.set(diagram);
     }
 
-    protected void setDiagramSize(double diagramWidth, double diagramHeight) {
-        if (this.diagramWidth == diagramWidth && this.diagramHeight == diagramHeight) {
+    private void setDiagramSize(double diagramWidth, double diagramHeight) {
+        if (getDiagramWidth() == diagramWidth && getDiagramHeight() == diagramHeight) {
             return;
         }
-        this.diagramWidth = diagramWidth;
-        this.diagramHeight = diagramHeight;
-        getView().updateDiagramSize(diagramWidth, diagramHeight);
+        this.diagramWidth.set(diagramWidth);
+        this.diagramHeight.set(diagramHeight);
     }
 
     private Image createDiagram(String code) throws InterruptedException, IOException {
         if (System.getProperty("PLANTUML_LIMIT_SIZE") == null) {
             var limitSize = settings.getLimitSize();
-            System.setProperty("PLANTUML_LIMIT_SIZE", String.valueOf(limitSize)); //by default image width limit is 4096
+            //by default image width limit is 4096
+            System.setProperty("PLANTUML_LIMIT_SIZE", String.valueOf(limitSize));
         }
         SourceStringReader reader = new SourceStringReader(code);
         PipedInputStream in = new PipedInputStream();
@@ -230,7 +239,7 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractHostT
         var thread = new Thread(() -> {
             try {
                 //desc gives entities count, for example: (144 entities)
-                String desc = reader.outputImage(out, new FileFormatOption(FileFormat.PNG)).getDescription();
+                reader.outputImage(out, new FileFormatOption(FileFormat.PNG)).getDescription();
             } catch (Exception ex) {
                 logger.error("Error writing diagram to stream");
             }
@@ -244,21 +253,34 @@ public class DiagramTabPresenter<V extends DiagramTabView> extends AbstractHostT
     }
 
     private double calculateDiagramWidth() {
-        if (this.diagram == null) {
+        if (getDiagram() == null) {
             return 0;
         }
         double k = this.zoomLevel / 100.0;
-        var width = this.diagram.getWidth() * k;
-        return width;
+        return getDiagram().getWidth() * k;
     }
 
     private double calculateDiagramHeight() {
-        if (this.diagram == null) {
+        if (getDiagram() == null) {
             return 0;
         }
         double k = this.zoomLevel / 100.0;
-        var height = this.diagram.getHeight() * k;
-        return height;
+        return getDiagram().getHeight() * k;
     }
 
+    /**
+     * Returns the client this diagram tab was opened with, read by {@link DiagramTabComposer#compose()} when
+     * creating the toolbar. Direct invocation by user code outside the composer is undefined behavior.
+     */
+    ClientService getClient() {
+        return client;
+    }
+
+    /**
+     * Returns the session this diagram tab was opened with, read by {@link DiagramTabComposer#compose()} when
+     * creating the toolbar. Direct invocation by user code outside the composer is undefined behavior.
+     */
+    ClientSession getInitialSession() {
+        return session;
+    }
 }

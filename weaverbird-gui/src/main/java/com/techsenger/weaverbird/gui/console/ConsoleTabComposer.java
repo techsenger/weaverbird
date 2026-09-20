@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package com.techsenger.weaverbird.gui.diagram;
+package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.shellfx.core.dialog.FullDialogPort;
-import java.util.List;
+import com.techsenger.shellfx.core.tab.HostTabComposer;
 
 /**
- *
  * @author Pavel Castornii
  */
-public interface LayerDialogPort extends FullDialogPort {
+public interface ConsoleTabComposer extends HostTabComposer {
 
-    List<LayerConfig> getLayerConfigs();
+    ConsoleToolBarPort getToolBarPort();
+
+    void openCommandPopup(CompletionPopupParams params, int offset);
+
+    void openParameterPopup(CompletionPopupParams params, int offset);
+
+    CompletionPopupPort getPopupPort();
+
+    void closePopup();
 }

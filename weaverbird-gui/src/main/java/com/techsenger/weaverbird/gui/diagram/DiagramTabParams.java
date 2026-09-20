@@ -62,7 +62,7 @@ public class DiagramTabParams extends HostTabParams {
     }
 
     @Override
-    protected void validate() {
+    public void validate() {
         super.validate();
         Objects.requireNonNull(framework);
         Objects.requireNonNull(settings);

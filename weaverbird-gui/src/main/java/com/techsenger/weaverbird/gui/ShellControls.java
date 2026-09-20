@@ -16,7 +16,7 @@
 
 package com.techsenger.weaverbird.gui;
 
-import com.techsenger.shellfx.core.ShellFxView;
+import com.techsenger.shellfx.core.ShellView;
 import com.techsenger.shellfx.material.menu.DefaultMenuGroupName;
 import com.techsenger.shellfx.material.menu.DefaultMenuName;
 import com.techsenger.shellfx.material.menu.MenuGroupName;
@@ -31,9 +31,9 @@ public final class ShellControls {
 
     public static final class FileMenu {
 
-        public static final MenuName<ShellFxView<?>> NAME = createName();
+        public static final MenuName<ShellView<?>> NAME = createName();
 
-        public static final MenuGroupName<ShellFxView<?>> MAIN = createGroupName("Main");
+        public static final MenuGroupName<ShellView<?>> MAIN = createGroupName("Main");
 
         private FileMenu() {
             // empty
@@ -41,17 +41,17 @@ public final class ShellControls {
     }
 
     /**
-     * The group File menu registers into, and that {@link com.techsenger.shellfx.core.DefaultShellFxView} treats
+     * The group File menu registers into, and that {@link com.techsenger.shellfx.core.DefaultShellView} treats
      * as the top-level group of its own menu bar.
      */
-    public static final MenuGroupName<ShellFxView<?>> MAIN_MENU_GROUP = createGroupName("MainMenuGroup");
+    public static final MenuGroupName<ShellView<?>> MAIN_MENU_GROUP = createGroupName("MainMenuGroup");
 
-    private static MenuName<ShellFxView<?>> createName() {
-        return new DefaultMenuName<>(ShellFxView.class);
+    private static MenuName<ShellView<?>> createName() {
+        return new DefaultMenuName<>(ShellView.class);
     }
 
-    private static MenuGroupName<ShellFxView<?>> createGroupName(String text) {
-        return new DefaultMenuGroupName<>(ShellFxView.class, text);
+    private static MenuGroupName<ShellView<?>> createGroupName(String text) {
+        return new DefaultMenuGroupName<>(ShellView.class, text);
     }
 
     private ShellControls() {

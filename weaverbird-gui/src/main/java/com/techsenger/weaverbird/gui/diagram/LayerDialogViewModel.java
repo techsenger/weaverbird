@@ -18,42 +18,27 @@ package com.techsenger.weaverbird.gui.diagram;
 
 import com.techsenger.shellfx.core.CloseCheckResult;
 import com.techsenger.shellfx.core.ClosePreparationResult;
-import com.techsenger.shellfx.core.dialog.AbstractDialogPresenter;
+import com.techsenger.shellfx.core.dialog.AbstractDialogViewModel;
 import com.techsenger.weaverbird.core.api.model.ComponentLayerModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- *
+ * @param <C> the composer type
  * @author Pavel Castornii
  */
-public class LayerDialogPresenter<V extends LayerDialogView> extends AbstractDialogPresenter<V>
+public class LayerDialogViewModel<C extends LayerDialogComposer> extends AbstractDialogViewModel<C>
         implements LayerDialogPort {
 
     private final List<LayerConfig> layerConfigs;
 
-    private final Map<Integer, LayerConfig> previousLayerConfigsById; // We keep changes for previous configs
-
-    /**
-     * Constructor.
-     *
-     * @param view
-     */
-    public LayerDialogPresenter(V view, LayerDialogParams params) {
-        super(view, params);
-        if (params.getPreviousLayerConfigs() != null) {
-            this.previousLayerConfigsById = params.getPreviousLayerConfigs().stream()
-                    .collect(Collectors.toMap(c -> c.getLayer().getId(), c -> c));
-        } else {
-            this.previousLayerConfigsById = null;
-        }
-        this.layerConfigs = createLayerConfigs(params.getLayerModels());
-        getView().getComposer().setLayerConfigs(this.layerConfigs);
+    public LayerDialogViewModel(LayerDialogParams params) {
+        super(params);
+        this.layerConfigs = createLayerConfigs(params.getLayerModels(), params.getPreviousLayerConfigs());
     }
 
     @Override
@@ -67,7 +52,7 @@ public class LayerDialogPresenter<V extends LayerDialogView> extends AbstractDia
     }
 
     @Override
-    public void prepareToClose(Consumer<ClosePreparationResult> cnsmr) {
+    public void prepareToClose(Consumer<ClosePreparationResult> resultCallback) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -78,8 +63,8 @@ public class LayerDialogPresenter<V extends LayerDialogView> extends AbstractDia
         setHeight(600);
         setTitle("Layer Diagram Configuration");
         setResizable(true);
-        getView().updateRightButtons(LayerDialogButtons.CANCEL, LayerDialogButtons.OK);
-        getView().updateButtonDefault(LayerDialogButtons.OK, true);
+        setRightButtons(LayerDialogButtons.CANCEL, LayerDialogButtons.OK);
+        setButtonDefault(LayerDialogButtons.OK, true);
     }
 
     protected void onReset() {
@@ -96,19 +81,23 @@ public class LayerDialogPresenter<V extends LayerDialogView> extends AbstractDia
             }
         }
         // and only now update all initialized pages
-        for (var p : getView().getComposer().getPageHostPort().getComposerAccess().getPagePorts()) {
+        for (var p : getComposer().getPageHostPort().getComposerAccess().getPagePorts()) {
             LayerPagePort pagePort = (LayerPagePort) p;
             pagePort.reset();
         }
     }
 
-    private List<LayerConfig> createLayerConfigs(List<ComponentLayerModel> layers) {
+    private List<LayerConfig> createLayerConfigs(List<ComponentLayerModel> layers,
+            List<LayerConfig> previousLayerConfigs) {
+        var previousLayerConfigsById = previousLayerConfigs != null
+                ? previousLayerConfigs.stream().collect(Collectors.toMap(c -> c.getLayer().getId(), c -> c))
+                : null;
         var result = new ArrayList<LayerConfig>();
         LayerConfig frameworkLayerConfig = null;
         for (var layer : layers) {
             LayerConfig layerConfig = null;
-            if (this.previousLayerConfigsById != null) {
-                var previousConfig = this.previousLayerConfigsById.get(layer.getId());
+            if (previousLayerConfigsById != null) {
+                var previousConfig = previousLayerConfigsById.get(layer.getId());
                 if (previousConfig != null) {
                     layerConfig = previousConfig;
                 }

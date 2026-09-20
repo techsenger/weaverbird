@@ -16,16 +16,97 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.weaverbird.gui.session.SessionToolBarView;
-import java.util.List;
+import atlantafx.base.theme.Styles;
+import com.techsenger.shellfx.material.icon.FontIconView;
+import com.techsenger.shellfx.material.style.StyleClasses;
+import com.techsenger.toolkit.fx.Spacer;
+import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarView;
+import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
+import javafx.geometry.Orientation;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Separator;
+import javafx.scene.control.Tooltip;
 
 /**
- *
+ * @param <VM> the ViewModel type
  * @author Pavel Castornii
  */
-public interface DiagramToolBarView extends SessionToolBarView {
+public class DiagramToolBarView<VM extends DiagramToolBarViewModel<?>> extends AbstractSessionToolBarView<VM> {
 
-    void updateZoomLevels(List<String> levels);
+    private final Button layerDiagramButton = new Button(null, new FontIconView(WeaverbirdIcons.LAYER_DIAGRAMS));
 
-    void updateZoomLevel(String level);
+    private final ComboBox<String> zoomLevelComboBox = new ComboBox<>();
+
+    private final Button zoomOutButton = new Button(null, new FontIconView(WeaverbirdIcons.ZOOM_OUT));
+
+    private final Button zoomInButton = new Button(null, new FontIconView(WeaverbirdIcons.ZOOM_IN));
+
+    public DiagramToolBarView(VM viewModel) {
+        super(viewModel);
+    }
+
+    @Override
+    public void requestFocus() {
+        // the diagram toolbar itself never takes focus
+    }
+
+    @Override
+    protected void build() {
+        super.build();
+        layerDiagramButton.setTooltip(new Tooltip("Layer Diagram"));
+        layerDiagramButton.getStyleClass().addAll(Styles.FLAT, StyleClasses.SIZE_L);
+        zoomLevelComboBox.getStyleClass().add(Styles.DENSE);
+        zoomLevelComboBox.setItems(getViewModel().getZoomLevels());
+        zoomInButton.setTooltip(new Tooltip("Zoom In"));
+        zoomInButton.getStyleClass().addAll(Styles.FLAT, StyleClasses.SIZE_L);
+        zoomOutButton.setTooltip(new Tooltip("Zoom Out"));
+        zoomOutButton.getStyleClass().addAll(Styles.FLAT, StyleClasses.SIZE_L);
+
+        getNode().getItems().addAll(layerDiagramButton, new Separator(Orientation.VERTICAL),
+            zoomOutButton, zoomLevelComboBox, zoomInButton, new Spacer(Orientation.HORIZONTAL),
+            getSessionLabel(), getSessionComboBox(), getRefreshButton());
+    }
+
+    @Override
+    protected void bind() {
+        super.bind();
+        getViewModel().zoomLevelWrapper().bind(zoomLevelComboBox.getSelectionModel().selectedItemProperty());
+    }
+
+    @Override
+    protected void addListeners() {
+        super.addListeners();
+        var viewModel = getViewModel();
+        updateZoomLevel(viewModel.getZoomLevel());
+        viewModel.selectZoomLevelSource().addListener((level) -> updateZoomLevel(level));
+    }
+
+    @Override
+    protected void addHandlers() {
+        super.addHandlers();
+        layerDiagramButton.setOnAction(e -> getViewModel().onLayerDiagram());
+        zoomOutButton.setOnAction(e -> getViewModel().onZoomOut());
+        zoomInButton.setOnAction(e -> getViewModel().onZoomIn());
+    }
+
+    protected Button getLayerDiagramButton() {
+        return layerDiagramButton;
+    }
+
+    protected ComboBox<String> getZoomLevelComboBox() {
+        return zoomLevelComboBox;
+    }
+
+    protected Button getZoomOutButton() {
+        return zoomOutButton;
+    }
+
+    protected Button getZoomInButton() {
+        return zoomInButton;
+    }
+
+    private void updateZoomLevel(String level) {
+        zoomLevelComboBox.getSelectionModel().select(level);
+    }
 }

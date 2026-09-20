@@ -22,7 +22,7 @@ package com.techsenger.weaverbird.gui.console;
  */
 public interface CompletionPopupPort {
 
-    String getSelectedItemText();
+    String getItemText();
 
     void updateItems(String text);
 

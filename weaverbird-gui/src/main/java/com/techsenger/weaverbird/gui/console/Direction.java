@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-package com.techsenger.weaverbird.gui.session;
-
-import com.techsenger.weaverbird.net.client.api.ClientSession;
-import com.techsenger.shellfx.core.area.AreaView;
-import java.util.List;
+package com.techsenger.weaverbird.gui.console;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface SessionToolBarView extends AreaView {
+enum Direction {
 
-    void updateSessions(List<ClientSession> sessions);
-
-    void updateSession(ClientSession session);
+    NONE, UP, DOWN
 }

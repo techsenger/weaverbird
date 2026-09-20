@@ -53,7 +53,7 @@ public class DiagramToolBarParams extends SessionToolBarParams {
     }
 
     @Override
-    protected void validate() {
+    public void validate() {
         super.validate();
         Objects.requireNonNull(toolBarAware);
     }

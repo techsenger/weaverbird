@@ -16,14 +16,12 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.shellfx.core.dialog.FullDialogPort;
-import java.util.List;
+import com.techsenger.shellfx.core.tab.HostTabComposer;
 
 /**
- *
  * @author Pavel Castornii
  */
-public interface LayerDialogPort extends FullDialogPort {
+public interface DiagramTabComposer extends HostTabComposer {
 
-    List<LayerConfig> getLayerConfigs();
+    LayerDialogPort openLayerDialog(LayerDialogParams params);
 }

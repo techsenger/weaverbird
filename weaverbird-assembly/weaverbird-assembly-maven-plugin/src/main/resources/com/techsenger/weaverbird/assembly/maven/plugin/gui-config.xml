@@ -44,7 +44,7 @@
         <!--### PATTERNFX ###-->
         <Module groupId="com.google.errorprone" artifactId="error_prone_annotations" version="${bom.errorprone.version}"/>
         <Module groupId="com.techsenger.patternfx" artifactId="patternfx-core" version="${bom.patternfx.version}"/>
-        <Module groupId="com.techsenger.patternfx" artifactId="patternfx-mvp" version="${bom.patternfx.version}"/>
+        <Module groupId="com.techsenger.patternfx" artifactId="patternfx-mvvm" version="${bom.patternfx.version}"/>
 
         <!--### TABSHELL ###-->
         <Module groupId="com.helger" artifactId="ph-css" version="${bom.ph.css.version}"/>

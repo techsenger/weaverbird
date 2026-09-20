@@ -17,13 +17,11 @@
 package com.techsenger.weaverbird.gui.session;
 
 import atlantafx.base.theme.Styles;
-import com.techsenger.shellfx.core.area.AbstractAreaFxView;
+import com.techsenger.shellfx.core.area.AbstractAreaView;
 import com.techsenger.shellfx.material.icon.FontIconView;
 import com.techsenger.shellfx.material.style.StyleClasses;
 import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
-import java.util.List;
-import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -32,11 +30,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
 /**
+ * Base View for toolbars that let the user pick the active {@code ClientSession} via a combo box.
  *
+ * @param <VM> the ViewModel type
  * @author Pavel Castornii
  */
-public abstract class AbstractSessionToolBarFxView<P extends AbstractSessionToolBarPresenter<?>>
-        extends AbstractAreaFxView<P> implements SessionToolBarView {
+public abstract class AbstractSessionToolBarView<VM extends AbstractSessionToolBarViewModel<?>>
+        extends AbstractAreaView<VM> {
 
     private final Label sessionLabel = new Label("Session");
 
@@ -46,14 +46,8 @@ public abstract class AbstractSessionToolBarFxView<P extends AbstractSessionTool
 
     private final ToolBar toolBar = new ToolBar();
 
-    @Override
-    public void updateSessions(List<ClientSession> sessions) {
-        sessionComboBox.setItems(FXCollections.observableArrayList(sessions));
-    }
-
-    @Override
-    public void updateSession(ClientSession session) {
-        sessionComboBox.getSelectionModel().select(session);
+    public AbstractSessionToolBarView(VM viewModel) {
+        super(viewModel);
     }
 
     @Override
@@ -73,20 +67,29 @@ public abstract class AbstractSessionToolBarFxView<P extends AbstractSessionTool
         refreshButton.getStyleClass().addAll(Styles.FLAT, StyleClasses.SIZE_L);
 
         toolBar.getStyleClass().add(StyleClasses.BLEND);
-        var css = AbstractSessionToolBarFxView.class.getResource("tool-bar.css").toExternalForm();
+        var css = AbstractSessionToolBarView.class.getResource("tool-bar.css").toExternalForm();
         toolBar.getStylesheets().add(css);
     }
 
     @Override
-    protected void addHandlers() {
-        super.addHandlers();
-        refreshButton.setOnAction(e -> getPresenter().onRefresh());
+    protected void bind() {
+        super.bind();
+        getViewModel().sessionWrapper().bind(sessionComboBox.getSelectionModel().selectedItemProperty());
     }
 
     @Override
     protected void addListeners() {
         super.addListeners();
-        sessionComboBox.valueProperty().addListener((ov, oldV, newV) -> getPresenter().onSessionChanged(newV));
+        var viewModel = getViewModel();
+        sessionComboBox.setItems(viewModel.getSessions());
+        updateSession(viewModel.getSession());
+        viewModel.sessionSource().addListener((session) -> updateSession(session));
+    }
+
+    @Override
+    protected void addHandlers() {
+        super.addHandlers();
+        refreshButton.setOnAction(e -> getViewModel().refresh());
     }
 
     protected Label getSessionLabel() {
@@ -99,5 +102,9 @@ public abstract class AbstractSessionToolBarFxView<P extends AbstractSessionTool
 
     protected Button getRefreshButton() {
         return refreshButton;
+    }
+
+    private void updateSession(ClientSession session) {
+        sessionComboBox.getSelectionModel().select(session);
     }
 }

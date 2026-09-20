@@ -17,16 +17,16 @@
 package com.techsenger.weaverbird.gui;
 
 import com.techsenger.shellfx.core.DefaultShellContext;
-import com.techsenger.shellfx.core.DefaultShellFxView;
 import com.techsenger.shellfx.core.DefaultShellParams;
-import com.techsenger.shellfx.core.DefaultShellPresenter;
-import com.techsenger.shellfx.core.area.AreaParams;
+import com.techsenger.shellfx.core.DefaultShellView;
+import com.techsenger.shellfx.core.DefaultShellViewModel;
 import com.techsenger.shellfx.core.history.InMemoryHistoryManager;
 import com.techsenger.shellfx.core.registry.ControlRegistry;
 import com.techsenger.shellfx.icons.Fonts;
 import com.techsenger.shellfx.icons.IconStylesheetFactory;
-import com.techsenger.shellfx.layout.tabhost.TabHostFxView;
-import com.techsenger.shellfx.layout.tabhost.TabHostPresenter;
+import com.techsenger.shellfx.layout.tabhost.ProminentTabHostParams;
+import com.techsenger.shellfx.layout.tabhost.ProminentTabHostView;
+import com.techsenger.shellfx.layout.tabhost.ProminentTabHostViewModel;
 import com.techsenger.shellfx.material.icon.FontIconView;
 import com.techsenger.shellfx.material.style.Density;
 import com.techsenger.shellfx.material.style.IconStylesheets;
@@ -72,19 +72,20 @@ public class WeaverbirdApplication extends Application {
         IconStylesheets.addAll(WeaverbirdIconStylesheets.getAll());
 
         var controlRegistry = new ControlRegistry();
-        var shellView = new DefaultShellFxView<>(this, stage, null, ShellControls.MAIN_MENU_GROUP,
-                controlRegistry);
         var context = new DefaultShellContext(createSettings(), new InMemoryHistoryManager(), getHostServices());
         var shellParams = new DefaultShellParams(context);
-        var shellPresenter = new DefaultShellPresenter<>(shellView, shellParams);
-        shellPresenter.initialize();
-        shellPresenter.setOnClosed(() -> Platform.exit());
-        shellPresenter.setTitle("Weaverbird Framework");
+        var shellViewModel = new DefaultShellViewModel<>(shellParams);
+        var shellView = new DefaultShellView<>(shellViewModel, this, stage, null, ShellControls.MAIN_MENU_GROUP,
+                controlRegistry);
+        shellView.initialize();
+        shellViewModel.setOnClosed(() -> Platform.exit());
+        shellViewModel.setTitle("Weaverbird Framework");
         shellView.getStage().getScene().getRoot().getStyleClass().add(StyleClasses.DENSITY_S);
 
-        var workspaceView = new TabHostFxView<>(true);
-        var workspacePresenter = new TabHostPresenter<>(workspaceView, new AreaParams());
-        workspacePresenter.initialize();
+        var workspaceParams = new ProminentTabHostParams(context.getSettings().getAppearance());
+        var workspaceViewModel = new ProminentTabHostViewModel<>(workspaceParams);
+        var workspaceView = new ProminentTabHostView<>(workspaceViewModel);
+        workspaceView.initialize();
         shellView.getComposer().addWorkspace(workspaceView);
 
         var registrar = new ModuleControlRegistrar(shellView, ModuleActivatorProvider.getFramework());

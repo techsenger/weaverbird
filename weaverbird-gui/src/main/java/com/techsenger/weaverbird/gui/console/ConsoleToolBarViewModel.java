@@ -16,30 +16,32 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarPresenter;
+import com.techsenger.patternfx.mvvm.ChildComposer;
+import com.techsenger.weaverbird.gui.session.AbstractSessionToolBarViewModel;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 /**
- *
+ * @param <C> the composer type
  * @author Pavel Castornii
  */
-public class ConsoleToolBarPresenter<V extends ConsoleToolBarView> extends AbstractSessionToolBarPresenter<V>
+public class ConsoleToolBarViewModel<C extends ChildComposer> extends AbstractSessionToolBarViewModel<C>
         implements ConsoleToolBarPort {
+
+    private final BooleanProperty copyDisabled = new SimpleBooleanProperty();
+
+    private final BooleanProperty pasteDisabled = new SimpleBooleanProperty();
 
     private final ConsoleToolBarAwarePort toolBarAware;
 
-    private boolean copyDisabled = false;
-
-    private boolean pasteDisabled = false;
-
-    public ConsoleToolBarPresenter(V view, ConsoleToolBarParams params) {
-        super(view, params);
+    public ConsoleToolBarViewModel(ConsoleToolBarParams params) {
+        super(params);
         this.toolBarAware = params.getToolBarAware();
     }
 
     @Override
     public void updateSession(ClientSession session) {
-        setSessions(getClientSessions());
         setSession(session);
     }
 
@@ -49,10 +51,26 @@ public class ConsoleToolBarPresenter<V extends ConsoleToolBarView> extends Abstr
     }
 
     public boolean isCopyDisabled() {
+        return copyDisabled.get();
+    }
+
+    public void setCopyDisabled(boolean value) {
+        copyDisabled.set(value);
+    }
+
+    public BooleanProperty copyDisabledProperty() {
         return copyDisabled;
     }
 
     public boolean isPasteDisabled() {
+        return pasteDisabled.get();
+    }
+
+    public void setPasteDisabled(boolean value) {
+        pasteDisabled.set(value);
+    }
+
+    public BooleanProperty pasteDisabledProperty() {
         return pasteDisabled;
     }
 
@@ -60,40 +78,23 @@ public class ConsoleToolBarPresenter<V extends ConsoleToolBarView> extends Abstr
     protected void postInitialize() {
         super.postInitialize();
         setCopyDisabled(true);
-        // setPasteDisabled(true);
-    }
-
-    protected void onClear() {
-        this.toolBarAware.onClear();
-    }
-
-    protected void onCopy() {
-        this.toolBarAware.onCopy();
-    }
-
-    protected void onPaste() {
-        this.toolBarAware.onPaste();
-    }
-
-    protected void setCopyDisabled(boolean copyDisabled) {
-        if (this.copyDisabled == copyDisabled) {
-            return;
-        }
-        this.copyDisabled = copyDisabled;
-        getView().updateCopyDisabled(copyDisabled);
-    }
-
-    protected void setPasteDisabled(boolean pasteDisabled) {
-        if (this.pasteDisabled == pasteDisabled) {
-            return;
-        }
-        this.pasteDisabled = pasteDisabled;
-        getView().updatePasteDisabled(pasteDisabled);
     }
 
     @Override
     protected void onSessionChanged(ClientSession session) {
         super.onSessionChanged(session);
-        this.toolBarAware.onSessionChanged(session);
+        toolBarAware.onSessionChanged(session);
+    }
+
+    protected void onClear() {
+        toolBarAware.onClear();
+    }
+
+    protected void onCopy() {
+        toolBarAware.onCopy();
+    }
+
+    protected void onPaste() {
+        toolBarAware.onPaste();
     }
 }

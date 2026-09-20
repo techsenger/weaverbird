@@ -16,30 +16,13 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.shellfx.core.page.AbstractPagePresenter;
+import com.techsenger.shellfx.core.window.WindowComposer;
+import com.techsenger.shellfx.layout.pagehost.PageHostPort;
 
 /**
- *
  * @author Pavel Castornii
  */
-public class LayerPagePresenter<V extends LayerPageView> extends AbstractPagePresenter<V> implements LayerPagePort {
+public interface LayerDialogComposer extends WindowComposer {
 
-    private final LayerConfig layer;
-
-    public LayerPagePresenter(V view, LayerPageParams params) {
-        super(view, params);
-        this.layer = params.getLayer();
-    }
-
-    @Override
-    public void reset() {
-        getView().refreshModules();
-        getView().clearSelectAll();
-    }
-
-    @Override
-    protected void postInitialize() {
-        super.postInitialize();
-        getView().showLayer(layer);
-    }
+    PageHostPort getPageHostPort();
 }

@@ -54,20 +54,19 @@ class ModuleConfigAdapter extends UmlComponentAdapter {
         requests.addListener(getAutoIncludeListener());
         services.addListener(getAutoIncludeListener());
 
+        autoExclude(reads);
+        autoExclude(exports);
+        autoExclude(opens);
+        autoExclude(requires);
+        autoExclude(requests);
+        autoExclude(services);
+
         reads.addListener((obs, o, v) -> config.setReads(v));
         exports.addListener((obs, o, v) -> config.setExports(v));
         opens.addListener((obs, o, v) -> config.setOpens(v));
         requires.addListener((obs, o, v) -> config.setRequires(v));
         requests.addListener((obs, o, v) -> config.setRequests(v));
         services.addListener((obs, o, v) -> config.setServices(v));
-    }
-
-    public ModuleConfig getComponent() {
-        return (ModuleConfig) super.getComponent();
-    }
-
-    public BooleanProperty readsProperty() {
-        return reads;
     }
 
     public boolean isReads() {
@@ -78,8 +77,8 @@ class ModuleConfigAdapter extends UmlComponentAdapter {
         reads.set(v);
     }
 
-    public BooleanProperty exportsProperty() {
-        return exports;
+    public BooleanProperty readsProperty() {
+        return reads;
     }
 
     public boolean isExports() {
@@ -90,8 +89,8 @@ class ModuleConfigAdapter extends UmlComponentAdapter {
         exports.set(v);
     }
 
-    public BooleanProperty opensProperty() {
-        return opens;
+    public BooleanProperty exportsProperty() {
+        return exports;
     }
 
     public boolean isOpens() {
@@ -102,8 +101,8 @@ class ModuleConfigAdapter extends UmlComponentAdapter {
         opens.set(v);
     }
 
-    public BooleanProperty requiresProperty() {
-        return requires;
+    public BooleanProperty opensProperty() {
+        return opens;
     }
 
     public boolean isRequires() {
@@ -114,8 +113,8 @@ class ModuleConfigAdapter extends UmlComponentAdapter {
         requires.set(v);
     }
 
-    public BooleanProperty requestsProperty() {
-        return requests;
+    public BooleanProperty requiresProperty() {
+        return requires;
     }
 
     public boolean isRequests() {
@@ -126,8 +125,8 @@ class ModuleConfigAdapter extends UmlComponentAdapter {
         requests.set(v);
     }
 
-    public BooleanProperty servicesProperty() {
-        return services;
+    public BooleanProperty requestsProperty() {
+        return requests;
     }
 
     public boolean isServices() {
@@ -138,15 +137,7 @@ class ModuleConfigAdapter extends UmlComponentAdapter {
         services.set(v);
     }
 
-    @Override
-    public void update() {
-        var component = getComponent();
-        super.update();
-        reads.set(component.isReads());
-        exports.set(component.isExports());
-        opens.set(component.isOpens());
-        requires.set(component.isRequires());
-        requests.set(component.isRequests());
-        services.set(component.isServices());
+    public BooleanProperty servicesProperty() {
+        return services;
     }
 }

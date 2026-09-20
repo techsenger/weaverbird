@@ -20,7 +20,9 @@ import com.techsenger.shellfx.core.CloseCheckResult;
 import com.techsenger.shellfx.core.ClosePreparationResult;
 import com.techsenger.shellfx.core.UiExecutor;
 import com.techsenger.shellfx.core.settings.SettingsSubscription;
-import com.techsenger.shellfx.core.tab.AbstractHostTabPresenter;
+import com.techsenger.shellfx.core.tab.AbstractHostTabViewModel;
+import com.techsenger.toolkit.fx.value.ObservableSource;
+import com.techsenger.toolkit.fx.value.SimpleObservableSource;
 import com.techsenger.weaverbird.core.api.Constants;
 import com.techsenger.weaverbird.core.api.message.DefaultMessage;
 import com.techsenger.weaverbird.core.api.message.Message;
@@ -30,21 +32,25 @@ import com.techsenger.weaverbird.executor.api.CommandExecutorFactory;
 import com.techsenger.weaverbird.executor.api.CommandSyntax;
 import com.techsenger.weaverbird.executor.api.command.Commands;
 import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
+import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.text.Font;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * @param <C> the composer type
  * @author Pavel Castornii
  */
-public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostTabPresenter<V>
+public class ConsoleTabViewModel<C extends ConsoleTabComposer> extends AbstractHostTabViewModel<C>
         implements CompletionPopupAwarePort, ConsoleToolBarAwarePort {
 
     /**
@@ -56,7 +62,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
     private record PromptlessInput(String text, int caretOffset, int elementIndex,
         int elementLength, boolean elementFirst) { };
 
-    private static final Logger logger = LoggerFactory.getLogger(ConsoleTabPresenter.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConsoleTabViewModel.class);
 
     private static final String PROMPT = "> ";
 
@@ -101,16 +107,38 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
                 || String.valueOf(ch).equals(CommandSyntax.LOCAL_COMMAND);
     }
 
-    private volatile String sessionPrompt;
+    private final ReadOnlyObjectWrapper<Font> monospaceFont = new ReadOnlyObjectWrapper<>();
+
+    private final ObservableSource<String> printPromptSource = new SimpleObservableSource<>();
+
+    private final ObservableSource<String> updatePromptSource = new SimpleObservableSource<>();
+
+    private final ObservableSource<List<Message>> printMessagesSource = new SimpleObservableSource<>();
+
+    private final ObservableSource<Set<String>> highlightCommandsSource = new SimpleObservableSource<>();
+
+    private final ObservableSource<String> replaceInputSource = new SimpleObservableSource<>();
+
+    private final ObservableSource<Void> beepSource = new SimpleObservableSource<>();
+
+    private final ObservableSource<Void> clearSource = new SimpleObservableSource<>();
+
+    private final ObservableSource<Void> copySource = new SimpleObservableSource<>();
+
+    private final ObservableSource<Void> pasteSource = new SimpleObservableSource<>();
+
+    private final ClientService client;
+
+    private final ClientSession initialSession;
 
     /**
      * Command executor that will execute commands from this console.
      */
     private final CommandExecutor executor;
 
-    private SettingsSubscription fontSubscription;
+    private volatile String sessionPrompt;
 
-    private Font monospaceFont;
+    private SettingsSubscription fontSubscription;
 
     /**
      * If null then the caret is outside of the editable region.
@@ -129,11 +157,10 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
      */
     private volatile int commandIndex = -1;
 
-    public ConsoleTabPresenter(V view, ConsoleTabParams params) {
-        super(view, params);
-        var composer = getView().getComposer();
-        composer.setClient(params.getClient());
-        composer.setSession(params.getSession());
+    public ConsoleTabViewModel(ConsoleTabParams params) {
+        super(params);
+        this.client = params.getClient();
+        this.initialSession = params.getSession();
         CommandExecutor ex = null;
         try {
             ex = CommandExecutorFactory.create(params.getFramework(), params.getClient());
@@ -141,6 +168,11 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
             logger.error("{} Error creating executor", getDescriptor().getLogPrefix(), e);
         }
         this.executor = ex;
+        selectedProperty().addListener((ov, oldV, newV) -> {
+            if (newV) {
+                requestFocus();
+            }
+        });
     }
 
     @Override
@@ -153,12 +185,12 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public String getSessionPrompt() {
-        return sessionPrompt;
+    public Font getMonospaceFont() {
+        return monospaceFont.get();
     }
 
-    public Font getMonospaceFont() {
-        return this.monospaceFont;
+    public ReadOnlyObjectProperty<Font> monospaceFontProperty() {
+        return monospaceFont.getReadOnlyProperty();
     }
 
     @Override
@@ -168,27 +200,27 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
 
     @Override
     public void onPopupClose() {
-        getView().getComposer().closePopup();
-        getView().requestFocus();
+        getComposer().closePopup();
+        requestFocus();
     }
 
     @Override
     public void onClear() {
         this.lastCommands.clear();
         this.commandIndex = -1;
-        getView().clear();
-        getView().printPrompt(getPrompt());
-        getView().requestFocus();
+        clearSource.next(null);
+        printPromptSource.next(getPrompt());
+        requestFocus();
     }
 
     @Override
     public void onCopy() {
-        getView().copy();
+        copySource.next(null);
     }
 
     @Override
     public void onPaste() {
-        getView().paste();
+        pasteSource.next(null);
     }
 
     @Override
@@ -197,16 +229,8 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
         if (cmdContext.getSession() != session) {
             cmdContext.setSession(session);
             updatePrompt();
-            getView().updatePrompt(getPrompt());
-            getView().requestFocus();
-        }
-    }
-
-    @Override
-    public void onSelected(boolean selected) {
-        super.onSelected(selected);
-        if (selected) {
-            getView().requestFocus();
+            updatePromptSource.next(getPrompt());
+            requestFocus();
         }
     }
 
@@ -217,11 +241,11 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
         setIcon(WeaverbirdIcons.CONSOLE);
         updatePrompt();
         showPrompt();
-        getView().requestFocus();
-        var settings = getView().getComposer().getShellPort().getContext().getSettings().getAppearance();
+        requestFocus();
+        var settings = getShellContext().getSettings().getAppearance();
         setMonospaceFont(settings.getMonospaceFont());
         this.fontSubscription = settings.onMonospaceFontChanged((oldV, newV) -> setMonospaceFont(newV));
-        getView().highlightCommands(executor.getCommandsByName().keySet());
+        highlightCommandsSource.next(executor.getCommandsByName().keySet());
     }
 
     @Override
@@ -231,44 +255,46 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
     }
 
     protected void showPrompt() {
-        UiExecutor.execute(() -> getView().printPrompt(getPrompt()));
+        UiExecutor.execute(() -> printPromptSource.next(getPrompt()));
     }
 
     protected void onElementSubmitted() {
-        var composer = getView().getComposer();
+        var composer = getComposer();
         var popup = composer.getPopupPort();
-        addElement(popup.getType(), popup.getSelectedItemText());
+        addElement(popup.getType(), popup.getItemText());
         composer.closePopup();
-        getView().requestFocus();
+        requestFocus();
     }
 
     protected void onAutocomplete(String paragraph) {
         this.input = createInput(paragraph);
         String elementToken = null;
-        int offset = this.input.caretOffset + getPrompt().length();
-        if (this.input.elementIndex >= 0) {
-            elementToken = input.text.substring(input.elementIndex, input.elementIndex + input.elementLength);
-            offset = this.input.elementIndex + getPrompt().length();
+        int offset = this.input.caretOffset() + getPrompt().length();
+        if (this.input.elementIndex() >= 0) {
+            elementToken = input.text().substring(input.elementIndex(), input.elementIndex() + input.elementLength());
+            offset = this.input.elementIndex() + getPrompt().length();
         }
 
         var processingCommand = false;
-        if ((input.text.substring(0, input.caretOffset).isBlank() || input.elementFirst)) {
+        if ((input.text().substring(0, input.caretOffset()).isBlank() || input.elementFirst())) {
             processingCommand = true;
         }
 
         if (processingCommand) {
             var commands = executor.getCommandsByName().values();
             var sessionExists = executor.getCommandContext().getSession() != null;
-            getView().getComposer().openCommandPopup(commands, sessionExists, elementToken, offset);
+            var params = new CompletionPopupParams(commands, sessionExists, null, elementToken, this);
+            getComposer().openCommandPopup(params, offset);
         } else {
-            var splits = this.input.text.trim().split(Pattern.quote(" "));
+            var splits = this.input.text().trim().split(Pattern.quote(" "));
             var cmd = splits[0].trim();
             if (cmd.startsWith(CommandSyntax.LOCAL_COMMAND) && cmd.length() > 1) {
                 cmd = cmd.substring(1);
             }
             var command = executor.getCommandsByName().get(cmd);
             if (command != null) {
-                getView().getComposer().openParameterPopup(command.getParameters(), elementToken, offset);
+                var params = new CompletionPopupParams(null, false, command.getParameters(), elementToken, this);
+                getComposer().openParameterPopup(params, offset);
             }
         }
     }
@@ -278,7 +304,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
     }
 
     protected void onCopyAvailable(boolean value) {
-        getView().getComposer().getToolBarPort().onCopyAvailable(value);
+        getComposer().getToolBarPort().onCopyAvailable(value);
     }
 
     protected void onCommandsSubmitted(String paragraph, int width) {
@@ -294,19 +320,15 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
                 var oldSession = executor.getCommandContext().getSession();
                 var results = executor.executeCommands(input, null, null, width);
                 results.forEach(r -> {
-                if (!r.getCommandName().equals(Commands.LOG_PRINT)) {
-                    UiExecutor.execute(() -> getView().printMessages(r.getMessages()));
-                }
-//                else {
-//                    this.logMessages.next(r.getMessages());
-//                }
+                    if (!r.getCommandName().equals(Commands.LOG_PRINT)) {
+                        UiExecutor.execute(() -> printMessagesSource.next(r.getMessages()));
+                    }
                 });
                 var newSession = executor.getCommandContext().getSession();
                 if (!Objects.equals(oldSession, newSession)) {
-                    UiExecutor.execute(() -> getView().getComposer().getToolBarPort().updateSession(newSession));
+                    UiExecutor.execute(() -> getComposer().getToolBarPort().updateSession(newSession));
                 }
                 updatePrompt();
-                // syncSessionBarAndContext(null);
                 this.showPrompt();
             } catch (Exception ex) {
                 logger.error("{} Error executing commands from GUI console", getDescriptor().getLogPrefix(), ex);
@@ -319,28 +341,29 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
                         "Enter \"command:list\" to get a list of all commands."));
                 messages.add(new DefaultMessage(MessageType.OUTPUT,
                         "Enter \"command -?\" to get help on a specific command."));
-                UiExecutor.execute(() -> getView().printMessages(messages));
+                UiExecutor.execute(() -> printMessagesSource.next(messages));
                 this.showPrompt();
             }
         });
     }
 
     protected void onTextInput(String paragraph) {
-        var popup = getView().getComposer().getPopupPort();
+        var popup = getComposer().getPopupPort();
         if (popup == null) {
             return;
         }
         var input = createInput(paragraph);
         if (popup.getType() == CompletionType.COMMAND) {
-            if (input.elementIndex >= 0) {
-                var command = input.text.substring(input.elementIndex, input.elementIndex + input.elementLength);
+            if (input.elementIndex() >= 0) {
+                var command = input.text().substring(input.elementIndex(),
+                        input.elementIndex() + input.elementLength());
                 popup.updateItems(command);
             }
         }
     }
 
     protected void onMoveUp() {
-        var popup = getView().getComposer().getPopupPort();
+        var popup = getComposer().getPopupPort();
         if (popup == null) {
             scrollHistoryUp();
         } else {
@@ -349,7 +372,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
     }
 
     protected void onMoveDown() {
-        var popup = getView().getComposer().getPopupPort();
+        var popup = getComposer().getPopupPort();
         if (popup == null) {
             scrollHistoryDown();
         } else {
@@ -357,19 +380,18 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
         }
     }
 
-    protected void setSessionPrompt(String sessionPrompt) {
+    private void setMonospaceFont(Font font) {
+        if (Objects.equals(getMonospaceFont(), font)) {
+            return;
+        }
+        this.monospaceFont.set(font);
+    }
+
+    private void setSessionPrompt(String sessionPrompt) {
         this.sessionPrompt = sessionPrompt;
     }
 
-    protected void setMonospaceFont(Font font) {
-        if (Objects.equals(this.monospaceFont, font)) {
-            return;
-        }
-        this.monospaceFont = font;
-        getView().updateMonospaceFont(font);
-    }
-
-    protected String buildSessionPrompt(ClientSession session) {
+    private String buildSessionPrompt(ClientSession session) {
         var sb = new StringBuilder();
         sb.append(session.getLoginName());
         sb.append("@");
@@ -378,7 +400,7 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
         return sb.toString();
     }
 
-    protected void scrollHistoryUp() {
+    private void scrollHistoryUp() {
         int index = 0;
         if (this.commandIndex == -1) {
             index = this.lastCommands.size() - 1;
@@ -387,13 +409,13 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
         }
         if (index >= 0) {
             this.commandIndex = index;
-            getView().replaceInput(lastCommands.get(index));
+            replaceInputSource.next(lastCommands.get(index));
         } else {
-            getView().beep();
+            beepSource.next(null);
         }
     }
 
-    protected void scrollHistoryDown() {
+    private void scrollHistoryDown() {
         int index = 0;
         if (this.commandIndex == -1) {
             index = -1;
@@ -402,26 +424,26 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
         }
         if (index >= 0 && index < this.lastCommands.size()) {
             this.commandIndex = index;
-            getView().replaceInput(lastCommands.get(index));
+            replaceInputSource.next(lastCommands.get(index));
         } else if (index == this.lastCommands.size()) {
             this.commandIndex = -1;
-            getView().replaceInput("");
+            replaceInputSource.next("");
         } else {
-            getView().beep();
+            beepSource.next(null);
         }
     }
 
     private void addElement(CompletionType type, String element) {
         String oldInput = null;
-        if (this.input.elementIndex >= 0) {
-            oldInput = this.input.text.substring(0, this.input.elementIndex);
+        if (this.input.elementIndex() >= 0) {
+            oldInput = this.input.text().substring(0, this.input.elementIndex());
         } else {
-            oldInput = this.input.text.substring(0, this.input.caretOffset);
+            oldInput = this.input.text().substring(0, this.input.caretOffset());
         }
         var newInput = oldInput + (element == null ? "" : element + " ");
-        getView().replaceInput(newInput);
-        getView().getComposer().closePopup();
-        getView().requestFocus();
+        replaceInputSource.next(newInput);
+        getComposer().closePopup();
+        requestFocus();
         this.input = null;
     }
 
@@ -443,9 +465,9 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
     private void updatePrompt() {
         var session = executor.getCommandContext().getSession();
         if (session != null) {
-            this.sessionPrompt = buildSessionPrompt(session);
+            setSessionPrompt(buildSessionPrompt(session));
         } else {
-            this.sessionPrompt = null;
+            setSessionPrompt(null);
         }
     }
 
@@ -455,5 +477,57 @@ public class ConsoleTabPresenter<V extends ConsoleTabView> extends AbstractHostT
         } else {
             return PROMPT;
         }
+    }
+
+    /**
+     * Returns the client this console was opened with, read by {@link ConsoleTabComposer#compose()} when
+     * creating the toolbar. Direct invocation by user code outside the composer is undefined behavior.
+     */
+    ClientService getClient() {
+        return client;
+    }
+
+    /**
+     * Returns the session this console was opened with, read by {@link ConsoleTabComposer#compose()} when
+     * creating the toolbar. Direct invocation by user code outside the composer is undefined behavior.
+     */
+    ClientSession getInitialSession() {
+        return initialSession;
+    }
+
+    ObservableSource<String> printPromptSource() {
+        return printPromptSource;
+    }
+
+    ObservableSource<String> updatePromptSource() {
+        return updatePromptSource;
+    }
+
+    ObservableSource<List<Message>> printMessagesSource() {
+        return printMessagesSource;
+    }
+
+    ObservableSource<Set<String>> highlightCommandsSource() {
+        return highlightCommandsSource;
+    }
+
+    ObservableSource<String> replaceInputSource() {
+        return replaceInputSource;
+    }
+
+    ObservableSource<Void> beepSource() {
+        return beepSource;
+    }
+
+    ObservableSource<Void> clearSource() {
+        return clearSource;
+    }
+
+    ObservableSource<Void> copySource() {
+        return copySource;
+    }
+
+    ObservableSource<Void> pasteSource() {
+        return pasteSource;
     }
 }
