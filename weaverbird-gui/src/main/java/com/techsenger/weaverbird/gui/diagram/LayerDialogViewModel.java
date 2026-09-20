@@ -16,8 +16,8 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.shellfx.core.CloseCheckResult;
-import com.techsenger.shellfx.core.ClosePreparationResult;
+import com.techsenger.shellfx.core.close.CloseCheckResult;
+import com.techsenger.shellfx.core.close.ClosePreparationResult;
 import com.techsenger.shellfx.core.dialog.AbstractDialogViewModel;
 import com.techsenger.weaverbird.core.api.model.ComponentLayerModel;
 import java.util.ArrayList;

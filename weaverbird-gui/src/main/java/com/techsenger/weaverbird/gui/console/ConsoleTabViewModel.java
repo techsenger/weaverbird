@@ -16,9 +16,9 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.shellfx.core.CloseCheckResult;
-import com.techsenger.shellfx.core.ClosePreparationResult;
 import com.techsenger.shellfx.core.UiExecutor;
+import com.techsenger.shellfx.core.close.CloseCheckResult;
+import com.techsenger.shellfx.core.close.ClosePreparationResult;
 import com.techsenger.shellfx.core.settings.SettingsSubscription;
 import com.techsenger.shellfx.core.tab.AbstractHostTabViewModel;
 import com.techsenger.toolkit.fx.value.ObservableSource;
