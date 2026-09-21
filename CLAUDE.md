@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project
+## Project Overview
 
 Techsenger Weaverbird is a framework built on JPMS (Java Platform Module System) that manages modular
 components through dynamic module layers. The framework lives in the boot layer and manages other layers;
@@ -14,6 +14,11 @@ assembly plugin) — it's long and thorough, read it before making framework-lev
 
 Requires **Java 25+** and **JavaFX 25+** (for the GUI console).
 
+## Language
+
+Everything in the project is written in English — README, documentation, Javadoc, code comments, commit
+messages, etc. Always — regardless of what language the conversation with the assistant happens in.
+
 ## Scope of work
 
 It is strictly forbidden to operate outside the project directory. This applies absolutely, to every kind
@@ -24,29 +29,8 @@ specific task. In that case, work must stay confined to the project directory pl
 directory/directories the developer named — nothing else. Proactively suggesting or using any other
 outside directory on your own is strictly forbidden.
 
-## Build & test
-
-```
-mvn clean install                 # build everything (multi-module reactor)
-mvn -pl weaverbird-core install   # build a single module (and its dependents if -am is added)
-mvn test -pl weaverbird-core      # unit tests only, one module
-mvn verify -pl weaverbird-it/weaverbird-it-core   # runs integration tests (Failsafe) for that IT module
-mvn test -Dtest=SomeTestClass#someMethod -pl weaverbird-core   # single test method
-```
-
-- Unit tests use JUnit 5 + AssertJ and run via Surefire during `test`/`install`.
-- Integration tests live under `weaverbird-it/*` and run via Failsafe during `verify` (not `install`),
-  driven by the `weaverbird-assembly-maven-plugin`'s `assemble-runtime` goal bound to `initialize`, which
-  builds a real framework runtime under `target/framework` before the ITs execute against it. If you change
-  core/component behavior, prefer running `verify` on the relevant `weaverbird-it-*` module, not just `test`.
-- `weaverbird-it-activator` and `weaverbird-it-shared` must compile before `weaverbird-it-core`/`weaverbird-it-net`
-  (declared as test-scope dependencies, not just module order).
-- No local checkstyle/lint config in this repo — style rules come from the `com.techsenger.maven.root:maven-root`
-  parent POM. License headers (Apache 2.0, `Copyright 2018-2026 Pavel Castornii.`) are present at the top of
-  every Java file — copy the existing header verbatim into new files.
-- There is no local CI test workflow; `.github/workflows/snapshot-deploy.yml` only deploys SNAPSHOT versions
-  to a Repsy repository on push to `main` — it does not gate on tests.
-- Version is a shared reactor `1.0.0-SNAPSHOT` set once in the root `pom.xml`.
+If some source you need isn't in an allowed directory, ask the developer where to find it — never search
+the rest of the machine for it on your own.
 
 ## Module layout (reactor)
 
@@ -79,7 +63,31 @@ Every module is a real JPMS module (`module-info.java` under `src/main/java`, an
 `src/test/java` for modular tests) — when adding a new package that must be visible outside its module, remember
 to add `exports`/`opens`/`provides`/`uses` in `module-info.java`, not just make the class `public`.
 
-## GUI architecture (weaverbird-gui)
+## Commands
+
+```
+mvn clean install                 # build everything (multi-module reactor)
+mvn -pl weaverbird-core install   # build a single module (and its dependents if -am is added)
+mvn test -pl weaverbird-core      # unit tests only, one module
+mvn verify -pl weaverbird-it/weaverbird-it-core   # runs integration tests (Failsafe) for that IT module
+mvn test -Dtest=SomeTestClass#someMethod -pl weaverbird-core   # single test method
+```
+
+- Unit tests use JUnit 5 + AssertJ and run via Surefire during `test`/`install`.
+- Integration tests live under `weaverbird-it/*` and run via Failsafe during `verify` (not `install`),
+  driven by the `weaverbird-assembly-maven-plugin`'s `assemble-runtime` goal bound to `initialize`, which
+  builds a real framework runtime under `target/framework` before the ITs execute against it. If you change
+  core/component behavior, prefer running `verify` on the relevant `weaverbird-it-*` module, not just `test`.
+- `weaverbird-it-activator` and `weaverbird-it-shared` must compile before `weaverbird-it-core`/`weaverbird-it-net`
+  (declared as test-scope dependencies, not just module order).
+- No local checkstyle/lint config in this repo — style rules come from the `com.techsenger.maven.root:maven-root`
+  parent POM. License headers (Apache 2.0, `Copyright 2018-2026 Pavel Castornii.`) are present at the top of
+  every Java file — copy the existing header verbatim into new files.
+- There is no local CI test workflow; `.github/workflows/snapshot-deploy.yml` only deploys SNAPSHOT versions
+  to a Repsy repository on push to `main` — it does not gate on tests.
+- Version is a shared reactor `1.0.0-SNAPSHOT` set once in the root `pom.xml`.
+
+## Architecture: components in GUI
 
 The GUI is mid-refactor onto an MVVM pattern built on two external Techsenger libraries:
 **patternfx** (`com.techsenger.patternfx.core`/`.mvvm`) for MVVM plumbing, and **shellfx**
@@ -103,6 +111,134 @@ pairs without a Composer/Port) are legacy, not the target shape.
 GUI console component itself (module list, directives) — check it when adding a new module dependency to
 `weaverbird-gui` that needs framework-level directives (opens/reads/exports) at runtime.
 
+## Architecture: ViewModel state in GUI
+
+The **ViewModel is the source of truth** for a component's state, exposed as JavaFX properties that the View
+binds to directly. Every ViewModel property falls into one of three shapes:
+
+1. **Read and written from outside, fully owned by the ViewModel** (nothing else can change it
+independently): a plain `Property`, exposed as three public methods — `xProperty()`, `getX()`, `setX()`:
+
+```java
+// ViewModel
+private final ObjectProperty<Foo> foo = new SimpleObjectProperty<>();
+
+public ObjectProperty<Foo> fooProperty() {
+    return this.foo;
+}
+
+public Foo getFoo() {
+    return this.foo.get();
+}
+
+public void setFoo(Foo foo) {
+    this.foo.set(foo);
+}
+```
+
+2. **Read only from outside, fully owned by the ViewModel:** a `ReadOnlyObjectWrapper` backing field,
+exposed as two public methods — `xProperty()`, `getX()`:
+
+```java
+// ViewModel
+private final ReadOnlyObjectWrapper<Foo> foo = new ReadOnlyObjectWrapper<>();
+
+public ReadOnlyObjectProperty<Foo> fooProperty() {
+    return this.foo.getReadOnlyProperty();
+}
+
+public Foo getFoo() {
+    return this.foo.get();
+}
+
+ReadOnlyObjectWrapper<Foo> fooWrapper() {
+    return this.foo;
+}
+
+```
+
+3. **Read only from outside, with a request setter — for state a View or the platform owns, not the
+ViewModel (the `wrapper`/`source` naming pattern, its setter marked `@RequestSetter`).** Some ViewModel
+state isn't decided by the ViewModel itself — it's decided by the real widget or the OS (a window's
+width/height/x/y, maximized/minimized, a `TableView`'s selection) — and the *requested* value and the
+*actual* value can legitimately diverge (the platform clamps, ignores, or rejects the request). This is why
+real JavaFX's own `Window#widthProperty()` is `ReadOnlyDoubleProperty` with a separate best-effort
+`setWidth(double)`, not a plain `DoubleProperty`. For this kind of state:
+
+- Expose it as a `ReadOnly*Property` on the Port/ViewModel — never a plain writable `Property`. A writable
+  property lets a caller write an optimistic value straight in; if the platform then silently rejects the
+  request (no compensating change event fires, because nothing about the real state actually changed), that
+  optimistic value sits there being wrong forever — a "lying property," which is worse than the
+  two-way-binding reentrancy problem it might look like it's avoiding.
+- Back it with a `ReadOnly*Wrapper` field, and add a package-private `xWrapper()` accessor — documented as a
+  framework contract ("written directly by the View... direct invocation by user code results in undefined
+  behavior") — that the paired View `.bind()`s straight to the real widget/`Stage` property. When there is no
+  independent widget truth to bind to at all (confirmed only asynchronously, e.g. by a manager after it
+  finishes an operation), the View instead writes the wrapper directly, once, at the point the real outcome
+  is known.
+- Give the public setter (`setWidth`, `setSelectedItem`, ...) a matching package-private `xSource()`
+  accessor returning an `ObservableSource<T>`. The setter only calls `xSource.next(value)` — it never touches
+  the wrapper itself. The View subscribes to `xSource()` and performs the real widget/platform call; the
+  outcome flows back solely through the wrapper. This keeps exactly one writer per property in each
+  direction, so there's no reentrancy/cycle to guard against and no way to bypass whatever side effect the
+  request needs to trigger. Annotate the setter itself with `@RequestSetter`, marking it as best-effort rather
+  than a guaranteed state change.
+- Don't reach for `wrapper`/`source` for state the ViewModel fully owns itself, even if its setter carries a
+  side effect or validation (a derived flag to update, a check that throws) — as long as the setter is the
+  *only* way in, a plain `Property` is correct and a `ReadOnly` wrapper only makes the API harder to use for
+  no safety benefit. Reserve `wrapper`/`source` for state a second, independent party (the View, the
+  platform) can also change out from under the ViewModel.
+- **Naming applies uniformly, with or without a paired wrapper.** A command source with no matching
+  `ReadOnly*Wrapper` at all (e.g. a ViewModel unconditionally telling the View "re-render this now," with no
+  independent "actual" value to diverge from) is still named `<action>Source`, with a same-named accessor
+  `<action>Source()` — never `request<Verb>`/`getRequest<Verb>()`.
+
+```java
+// ViewModel
+private final ReadOnlyObjectWrapper<Item> selectedItem = new ReadOnlyObjectWrapper<>();
+
+private final ObservableSource<Item> selectedItemSource = new SimpleObservableSource<>();
+
+public ReadOnlyObjectProperty<Item> selectedItemProperty() {
+    return this.selectedItem.getReadOnlyProperty();
+}
+
+public Item getSelectedItem() {
+    return this.selectedItem.get();
+}
+
+@RequestSetter
+public void setSelectedItem(Item item) {
+    this.selectedItemSource.next(item);
+}
+
+ReadOnlyObjectWrapper<Item> selectedItemWrapper() {
+    return this.selectedItem;
+}
+
+ObservableSource<Item> selectedItemSource() {
+    return this.selectedItemSource;
+}
+```
+
+```java
+// View
+viewModel.selectedItemWrapper().bind(this.table.getSelectionModel().selectedItemProperty());
+viewModel.selectedItemSource().addListener((item) -> {
+    if (item == null) {
+        this.table.getSelectionModel().clearSelection();
+    } else {
+        this.table.getSelectionModel().select(item);
+    }
+});
+```
+
+4. **Collections fully owned by the ViewModel:** an `ObservableList`/`ObservableSet`/`ObservableMap` follows
+the same read-only-from-outside idea without needing a wrapper at all: keep a private modifiable collection,
+expose an unmodifiable view over it to the View (`FXCollections.unmodifiableObservableList(...)`) — callers
+observe structural changes directly — and, if a subclass needs to mutate the collection itself, expose the
+modifiable collection to subclasses through a `protected` accessor rather than widening the public one.
+
 ## Module directives gotcha
 
 JPMS directives can come from two places: `module-info.java` (compile-time) and the component XML config
@@ -114,10 +250,11 @@ package to the framework core module via `--add-opens` at JVM startup; the core 
 `Module.addOpens()` since it created every layer). Don't assume a missing `opens`/`reads` can always be fixed
 purely in `module-info.java` — for boot-layer modules it may need this relay approach or a config `Directive`.
 
-## Language
+## Nullability
 
-Everything in the project is written in English — README, documentation, Javadoc, code comments, commit
-messages, etc. Always — regardless of what language the conversation with the assistant happens in.
+Types use `com.techsenger.annotations.Nullable`/`@Unmodifiable`; NullAway is enforced at compile time
+(`OnlyNullMarked` mode) — only annotate/guard packages that are explicitly null-marked, don't add blanket
+null checks elsewhere.
 
 ## Member ordering
 
@@ -143,10 +280,10 @@ So the full sequence in one class is: static nested types (public→private) →
 fields (public→private) → constructors (public→private) → instance methods (public→private).
 
 **Field grouping, within one role+visibility bucket.** The three criteria above leave ties: in a `Port` or
-`ViewModel` interface/class, `getX()`/`isX()`, `setX()`, and `xProperty()` for the same field are normally all
-`public` instance methods, so nothing above orders them relative to each other or to the next field's trio.
-**When they share the same access modifier, group them by field** instead of batching all getters, then all
-setters, then all property accessors as three separate blocks — `getX()` → `setX()` (if present) →
+`ViewModel` interface/class, `getX()`/`isX()`, `setX()`, and `xProperty()` for the same field are normally
+all `public` instance methods, so nothing above orders them relative to each other or to the next field's
+trio. **When they share the same access modifier, group them by field** instead of batching all getters,
+then all setters, then all property accessors as three separate blocks — `getX()` → `setX()` (if present) →
 `xProperty()` (if present), then move on to the next field's trio:
 
 ```java
@@ -172,7 +309,7 @@ ReadOnlyDoubleProperty heightProperty();
 ```
 
 Field order otherwise follows whichever order is already established (typically the backing fields'
-declaration order in the `Abstract*ViewModel`).
+declaration order in the concrete `XxxViewModel`).
 
 If the field's methods don't share one access modifier — e.g. a `wrapper()`/`source()` pair is
 package-private while `getX()`/`xProperty()` are public (see the `wrapper`/`source` pattern above), or a
@@ -180,6 +317,47 @@ setter is `protected` while its getter is `public` — visibility still wins: ke
 visibility block, don't pull a lower-visibility method up next to a public one just to keep the trio
 together. The package-private `xWrapper()`/`xSource()` pair still groups with each other, just in the
 package-private block further down the class, not next to the public `getX()`/`xProperty()`.
+
+## Naming convention
+
+Component classes follow: `[UniqueName][Role][Element]`, e.g. `AlertDialogView`, `EditorTabViewModel`,
+`InfoPopupParams`, `ToolBarPort`. Role examples: `Tab`, `Window`, `Popup`, `Area`, `Panel`, `ToolBar`. Element
+examples: `View`, `ViewModel`, `Params`, `Port`, `History`.
+
+`Composer` methods split into two categories — keep this distinction when adding new component types:
+- Lifecycle-managing: `open*`/`close*` (create+add / remove+destroy) and `show*`/`hide*`.
+- Structural-only (no lifecycle): `add*`/`remove*`/`replace*`.
+
+| Component | Create + Add | Remove + Destroy | Add Only | Remove Only |
+|---|---|---|---|---|
+| Window | `openWindow(params)` | `closeWindow(window)` | `addWindow(window)` | `removeWindow(window)` |
+| Tab | `openTab(params)` | `closeTab(tab)` | `addTab(tab)` | `removeTab(tab)` |
+| Dialog | `openDialog(params)` | `closeDialog(dialog)` | `addDialog(dialog)` | `removeDialog(dialog)` |
+| Popup | `openPopup(params)` | `closePopup(popup)` | `addPopup(popup)` | `removePopup(popup)` |
+| Page | `openPage(params)` | `closePage(page)` | `addPage(page)` | `removePage(page)` |
+| Area | `openArea(params)` | `closeArea(area)` | `addArea(area)` | `removeArea(area)` |
+
+Prefer `create*`-delegating implementations of `open*`/`show*` where the pattern already uses them — it keeps
+the created component swappable.
+
+A `Map`-typed field/parameter/local/getter/setter is named `<values>By<key>` (e.g. `Map<FileType, Boolean>
+selectionsByType`, `getSelectionsByType()`/`setSelectionsByType(...)`), not `<key><values>` (e.g.
+`typeSelections`). The `by`-form reads directly as "which value, keyed by which type of key" at the
+declaration site, without having to look at the generic type arguments to tell which side is the key.
+
+State mirroring from ViewModel to View goes through the View binding to the ViewModel's properties directly,
+in `bind()` (a plain `.bind()`) or `addListeners()` (`ValueUtils.callAndAddListener`/manual listeners, and any
+`wrapper`/`source` property — see Architecture above). The private method that actually pushes a value onto
+the real widget/platform uses the `update<X>` verb, e.g. `updateWidth`, `updateMaximized`, `updateTheme` — it
+is private and triggered by the View's own listener/binding, never called publicly from outside the View:
+
+- Plain property: `ValueUtils.callAndAddListener(viewModel.xProperty(), (ov, oldV, newV) -> updateX(newV));`
+- `wrapper`/`source` property: `updateX(viewModel.getX()); viewModel.xSource().addListener((value) ->
+  updateX(value));` — the explicit initial `updateX(...)` call is required because an `ObservableSource` has no
+  "current value" to replay to a new subscriber the way a `Property` does.
+
+Command methods — View methods that perform an action rather than mirror ViewModel state — still use an
+appropriate action verb, such as `showX`, `hideX`, `scrollToFile`, `selectFile`, `clearX`, or `refreshMenu`.
 
 ## Javadoc
 
@@ -240,7 +418,7 @@ the interface method or the parent class method being overridden, not duplicated
 
 ## Code style (Checkstyle)
 
-Checkstyle runs on every `mvn package`/`install` (see Build above) via the `com.techsenger.checkstyle.config`
+Checkstyle runs on every `mvn package`/`install` (see Commands above) via the `com.techsenger.checkstyle.config`
 artifact (Sun checks-derived, `severity=error`) — a violation fails the build, not just a lint warning. Treat
 every rule below as binding when writing or editing Java. `module-info.java` files are exempt from all of it.
 Run just this check with `mvn checkstyle:check`, or skip it entirely with `-Dcheckstyle.plugin.skip=true`
