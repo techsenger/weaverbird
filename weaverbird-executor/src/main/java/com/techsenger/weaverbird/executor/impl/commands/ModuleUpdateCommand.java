@@ -16,6 +16,7 @@
 
 package com.techsenger.weaverbird.executor.impl.commands;
 
+import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 import com.techsenger.toolkit.core.StringUtils;
 import com.techsenger.weaverbird.core.api.message.MessageArtifactEventListener;
@@ -42,7 +43,16 @@ import java.util.Map;
         description = "Updates module in repo (unresolves and resolves it from specific repo)")
 public class ModuleUpdateCommand extends AbstractCommand {
 
+    private static final class TypeConverter implements IStringConverter<ModuleType> {
+
+        @Override
+        public ModuleType convert(String string) {
+            return string == null ? null : ModuleType.valueOf(string.toUpperCase());
+        }
+    }
+
     private static final String MAVEN_CENTRAL_REPO_URL = "https://repo1.maven.org/maven2/";
+
 
     @Parameter(names = {"-g", "--group-id"}, required = true, description = "sets the group id of the module")
     private String groupId;
@@ -56,9 +66,9 @@ public class ModuleUpdateCommand extends AbstractCommand {
     @Parameter(names = {"-c", "--classifier"}, required = false, description = "sets the classifier of the module")
     private String classifier;
 
-    @Parameter(names = {"-t", "--type"}, required = false,
+    @Parameter(names = {"-t", "--type"}, required = false, converter = TypeConverter.class,
             description = "sets the type of the module (jar/war), default is jar")
-    private String type;
+    private ModuleType type = ModuleType.JAR;
 
     /**
      * Using central maven repo.
@@ -94,11 +104,7 @@ public class ModuleUpdateCommand extends AbstractCommand {
         if (remoteReposByName.isEmpty()) {
             throw new IllegalArgumentException("Remote repos are undefined");
         }
-        ModuleType t = null;
-        if (this.type != null) {
-            t = ModuleType.valueOf(type.toUpperCase());
-        }
-        var artifact = new DefaultModuleArtifact(groupId, artifactId, version, classifier, t);
+        var artifact = new DefaultModuleArtifact(groupId, artifactId, version, classifier, type);
         String message = "Module was uninstalled";
         if (context.isExecutionLocal()) {
             var framework = context.getFramework();
