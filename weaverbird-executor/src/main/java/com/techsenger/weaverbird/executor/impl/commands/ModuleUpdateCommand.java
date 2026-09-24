@@ -119,6 +119,6 @@ public class ModuleUpdateCommand extends AbstractCommand {
             printer.printlnMessage(message);
             client.resolveModule(artifact, remoteReposByName);
         }
-        printer.printlnError("Module was installed");
+        printer.printlnMessage("Module was installed");
     }
 }
