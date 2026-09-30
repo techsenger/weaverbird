@@ -31,6 +31,7 @@ public class SessionToolBarParams extends AreaParams {
     private final ClientSession session;
 
     public SessionToolBarParams(ClientService client, ClientSession session) {
+        super(null);
         this.client = client;
         this.session = session;
     }

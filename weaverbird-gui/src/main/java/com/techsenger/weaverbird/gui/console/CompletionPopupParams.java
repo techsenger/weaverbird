@@ -40,7 +40,7 @@ public class CompletionPopupParams extends PopupParams {
 
     public CompletionPopupParams(Collection<CommandInfo> commands, boolean sessionExists,
             List<ParameterDescriptor> parameterDescriptors, String token, CompletionPopupAwarePort popupAware) {
-        super(false);
+        super(null, false);
         this.commands = commands;
         this.sessionExists = sessionExists;
         this.parameterDescriptors = parameterDescriptors;

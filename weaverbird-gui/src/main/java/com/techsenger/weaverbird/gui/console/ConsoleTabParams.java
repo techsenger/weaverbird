@@ -34,7 +34,9 @@ public class ConsoleTabParams extends HostTabParams {
 
     private final ClientSession session;
 
-    public ConsoleTabParams(Framework framework, ClientService client, ClientSession session) {
+    public ConsoleTabParams(ConsoleTabConfig config, Framework framework, ClientService client,
+            ClientSession session) {
+        super(config);
         this.framework = framework;
         this.client = client;
         this.session = session;
@@ -50,6 +52,11 @@ public class ConsoleTabParams extends HostTabParams {
 
     public ClientSession getSession() {
         return session;
+    }
+
+    @Override
+    public ConsoleTabConfig getConfig() {
+        return (ConsoleTabConfig) super.getConfig();
     }
 
     @Override

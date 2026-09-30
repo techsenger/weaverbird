@@ -16,30 +16,32 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.shellfx.core.page.PageItem;
-import com.techsenger.shellfx.core.page.PageParams;
-import java.util.Objects;
+import com.techsenger.shellfx.core.dialog.DialogConfig;
+import com.techsenger.shellfx.layout.pagehost.BasePageHostConfig;
+import java.io.Serial;
 
 /**
  *
  * @author Pavel Castornii
  */
-public class LayerPageParams extends PageParams {
+public class LayerDialogConfig extends DialogConfig {
 
-    private final LayerConfig layer;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-    public LayerPageParams(PageItem item, LayerConfig layer) {
-        super(null, item);
-        this.layer = layer;
+    private BasePageHostConfig pageHost = new BasePageHostConfig();
+
+    public LayerDialogConfig() {
+        setWidth(1000);
+        setHeight(600);
+        pageHost.setDividerPosition(0.275);
     }
 
-    public LayerConfig getLayer() {
-        return layer;
+    public BasePageHostConfig getPageHost() {
+        return pageHost;
     }
 
-    @Override
-    public void validate() {
-        super.validate();
-        Objects.requireNonNull(layer);
+    public void setPageHost(BasePageHostConfig pageHost) {
+        this.pageHost = pageHost;
     }
 }

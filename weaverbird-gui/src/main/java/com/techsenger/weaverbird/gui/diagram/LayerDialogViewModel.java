@@ -59,12 +59,15 @@ public class LayerDialogViewModel<C extends LayerDialogComposer> extends Abstrac
     @Override
     protected void postInitialize() {
         super.postInitialize();
-        setWidth(1000);
-        setHeight(600);
         setTitle("Layer Diagram Configuration");
         setResizable(true);
         setRightButtons(LayerDialogButtons.CANCEL, LayerDialogButtons.OK);
         setButtonDefault(LayerDialogButtons.OK, true);
+    }
+
+    @Override
+    protected LayerDialogConfig getConfig() {
+        return (LayerDialogConfig) super.getConfig();
     }
 
     protected void onReset() {

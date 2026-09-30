@@ -16,30 +16,15 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.shellfx.core.page.PageItem;
-import com.techsenger.shellfx.core.page.PageParams;
-import java.util.Objects;
+import com.techsenger.shellfx.core.tab.HostTabConfig;
+import java.io.Serial;
 
 /**
  *
  * @author Pavel Castornii
  */
-public class LayerPageParams extends PageParams {
+public class DiagramTabConfig extends HostTabConfig {
 
-    private final LayerConfig layer;
-
-    public LayerPageParams(PageItem item, LayerConfig layer) {
-        super(null, item);
-        this.layer = layer;
-    }
-
-    public LayerConfig getLayer() {
-        return layer;
-    }
-
-    @Override
-    public void validate() {
-        super.validate();
-        Objects.requireNonNull(layer);
-    }
+    @Serial
+    private static final long serialVersionUID = 1L;
 }

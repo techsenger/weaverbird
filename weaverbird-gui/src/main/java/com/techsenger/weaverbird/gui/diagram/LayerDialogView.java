@@ -46,7 +46,6 @@ public class LayerDialogView<VM extends LayerDialogViewModel<?>> extends Abstrac
             super.compose();
 
             pageHost = createPageHost();
-            pageHost.getViewModel().setDividerPosition(0.275);
             getModifiableChildren().add(pageHost);
             getContentBox().getChildren().add(pageHost.getNode());
             VBox.setVgrow(pageHost.getNode(), Priority.ALWAYS);
@@ -63,7 +62,7 @@ public class LayerDialogView<VM extends LayerDialogViewModel<?>> extends Abstrac
         }
 
         protected PageHostView<?> createPageHost() {
-            var params = new PageHostParams(null);
+            var params = new PageHostParams(getViewModel().getConfig().getPageHost());
             var viewModel = new PageHostViewModel<>(params);
             var view = new PageHostView<>(viewModel);
             view.initialize();

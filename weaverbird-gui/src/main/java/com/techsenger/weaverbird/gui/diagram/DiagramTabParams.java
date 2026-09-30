@@ -37,8 +37,9 @@ public class DiagramTabParams extends HostTabParams {
 
     private final DiagramSettings settings;
 
-    public DiagramTabParams(Framework framework, ClientService client, ClientSession session,
-            DiagramSettings settings) {
+    public DiagramTabParams(DiagramTabConfig config, Framework framework, ClientService client,
+            ClientSession session, DiagramSettings settings) {
+        super(config);
         this.framework = framework;
         this.client = client;
         this.session = session;
@@ -59,6 +60,11 @@ public class DiagramTabParams extends HostTabParams {
 
     public DiagramSettings getSettings() {
         return settings;
+    }
+
+    @Override
+    public DiagramTabConfig getConfig() {
+        return (DiagramTabConfig) super.getConfig();
     }
 
     @Override

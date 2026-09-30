@@ -28,9 +28,11 @@ import com.techsenger.shellfx.material.menu.ManagedMenuItem;
 import com.techsenger.shellfx.material.menu.MenuItemHandler;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.gui.ShellControls;
+import com.techsenger.weaverbird.gui.console.ConsoleTabConfig;
 import com.techsenger.weaverbird.gui.console.ConsoleTabParams;
 import com.techsenger.weaverbird.gui.console.ConsoleTabView;
 import com.techsenger.weaverbird.gui.console.ConsoleTabViewModel;
+import com.techsenger.weaverbird.gui.diagram.DiagramTabConfig;
 import com.techsenger.weaverbird.gui.diagram.DiagramTabParams;
 import com.techsenger.weaverbird.gui.diagram.DiagramTabView;
 import com.techsenger.weaverbird.gui.diagram.DiagramTabViewModel;
@@ -92,7 +94,9 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
                 @Override
                 public void onAction() {
                     var shell = getComponent();
-                    var params = new ConsoleTabParams(framework, client, null);
+                    var config = shell.getViewModel().getContext().getConfigManager()
+                            .getOrCreateConfig(ConsoleTabConfig.class, ConsoleTabConfig::new);
+                    var params = new ConsoleTabParams(config, framework, client, null);
                     var consoleViewModel = new ConsoleTabViewModel<>(params);
                     var consoleView = new ConsoleTabView<>(consoleViewModel, shell);
                     consoleView.initialize();
@@ -116,7 +120,10 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
                 public void onAction() {
                     var shell = getComponent();
                     var consoleSettings = (ConsoleSettings) shell.getViewModel().getContext().getSettings();
-                    var params = new DiagramTabParams(framework, client, null, consoleSettings.getDiagram());
+                    var config = shell.getViewModel().getContext().getConfigManager()
+                            .getOrCreateConfig(DiagramTabConfig.class, DiagramTabConfig::new);
+                    var params = new DiagramTabParams(config, framework, client, null,
+                            consoleSettings.getDiagram());
                     var diagramViewModel = new DiagramTabViewModel<>(params);
                     var diagramView = new DiagramTabView<>(diagramViewModel, shell);
                     diagramView.initialize();
