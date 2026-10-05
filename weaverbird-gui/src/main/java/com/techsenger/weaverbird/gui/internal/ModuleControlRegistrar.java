@@ -19,6 +19,7 @@ package com.techsenger.weaverbird.gui.internal;
 import com.techsenger.shellfx.core.ShellView;
 import com.techsenger.shellfx.core.registry.AbstractControlRegistrar;
 import com.techsenger.shellfx.layout.tabhost.TabHostView;
+import com.techsenger.shellfx.material.ControlGroup;
 import com.techsenger.shellfx.material.icon.FontIconView;
 import com.techsenger.shellfx.material.menu.AbstractMenuItemHandler;
 import com.techsenger.shellfx.material.menu.MenuItemHandler;
@@ -75,6 +76,7 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
 
     private void registerFileMenu() {
         register(Slots.FileMenu.MENU, v -> new Menu("_File"));
+        register(Slots.FileMenu.MAIN, v -> new ControlGroup<>());
     }
 
     private void registerConsoleItem() {
