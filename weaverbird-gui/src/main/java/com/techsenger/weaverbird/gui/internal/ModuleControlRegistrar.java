@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package com.techsenger.weaverbird.gui.controls;
+package com.techsenger.weaverbird.gui.internal;
 
 import com.techsenger.shellfx.core.ShellView;
 import com.techsenger.shellfx.core.registry.AbstractControlRegistrar;
-import com.techsenger.shellfx.core.registry.ControlFactory;
 import com.techsenger.shellfx.layout.tabhost.TabHostView;
 import com.techsenger.shellfx.material.icon.FontIconView;
 import com.techsenger.shellfx.material.menu.AbstractMenuItemHandler;
-import com.techsenger.shellfx.material.menu.ManagedMenu;
-import com.techsenger.shellfx.material.menu.ManagedMenuGroup;
-import com.techsenger.shellfx.material.menu.ManagedMenuItem;
 import com.techsenger.shellfx.material.menu.MenuItemHandler;
 import com.techsenger.weaverbird.core.api.Framework;
-import com.techsenger.weaverbird.gui.ShellControls;
 import com.techsenger.weaverbird.gui.console.ConsoleTabConfig;
 import com.techsenger.weaverbird.gui.console.ConsoleTabParams;
 import com.techsenger.weaverbird.gui.console.ConsoleTabView;
@@ -40,6 +35,9 @@ import com.techsenger.weaverbird.gui.settings.ConsoleSettings;
 import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientServiceFactory;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -58,38 +56,33 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
     private final ClientService client = ClientServiceFactory.create();
 
     public ModuleControlRegistrar(ShellView<?> shell, Framework framework) {
-        super(shell.getControlRegistry());
+        super(shell.getContext().getControlRegistry());
         this.shell = shell;
         this.framework = framework;
     }
 
     @Override
     public void register() {
+        registerMainMenu();
         registerFileMenu();
-        registerFileMainGroup();
         registerConsoleItem();
         registerDiagramItem();
     }
 
-    private void registerFileMenu() {
-        ControlFactory<ShellView<?>, ManagedMenu> f = (v) -> {
-            return new ManagedMenu(ShellControls.FileMenu.NAME, "_File", 0);
-        };
-        addRegistration(getRegistry().registerMenu(ShellControls.MAIN_MENU_GROUP, f));
+    private void registerMainMenu() {
+        register(Slots.MAIN_MENU, v -> new MenuBar());
     }
 
-    private void registerFileMainGroup() {
-        ControlFactory<ShellView<?>, ManagedMenuGroup> f = (v) ->
-                new ManagedMenuGroup(ShellControls.FileMenu.MAIN, 100);
-        addRegistration(getRegistry().registerMenuGroup(ShellControls.FileMenu.NAME, f));
+    private void registerFileMenu() {
+        register(Slots.FileMenu.MENU, v -> new Menu("_File"));
     }
 
     private void registerConsoleItem() {
-        ControlFactory<ShellView<?>, ManagedMenuItem> f = (v) -> {
-            var item = new ManagedMenuItem("C_onsole", 100);
+        register(Slots.FileMenu.MAIN, 100, v -> {
+            var item = new MenuItem("C_onsole");
             item.setGraphic(new FontIconView(WeaverbirdIcons.CONSOLE));
             item.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-            var handler = new AbstractMenuItemHandler<ShellView<?>, ManagedMenuItem>(shell, item) {
+            var handler = new AbstractMenuItemHandler<ShellView<?>, MenuItem>(shell, item) {
 
                 @Override
                 public void onAction() {
@@ -106,16 +99,15 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
             };
             MenuItemHandler.setHandler(item, handler);
             return item;
-        };
-        addRegistration(getRegistry().registerMenuItem(ShellControls.FileMenu.MAIN, f));
+        });
     }
 
     private void registerDiagramItem() {
-        ControlFactory<ShellView<?>, ManagedMenuItem> f = (v) -> {
-            var item = new ManagedMenuItem("D_iagrams", 200);
+        register(Slots.FileMenu.MAIN, 200, v -> {
+            var item = new MenuItem("D_iagrams");
             item.setGraphic(new FontIconView(WeaverbirdIcons.DIAGRAMS));
             item.setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN));
-            var handler = new AbstractMenuItemHandler<ShellView<?>, ManagedMenuItem>(shell, item) {
+            var handler = new AbstractMenuItemHandler<ShellView<?>, MenuItem>(shell, item) {
                 @Override
                 public void onAction() {
                     var shell = getComponent();
@@ -133,8 +125,6 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
             };
             MenuItemHandler.setHandler(item, handler);
             return item;
-
-        };
-        addRegistration(getRegistry().registerMenuItem(ShellControls.FileMenu.MAIN, f));
+        });
     }
 }

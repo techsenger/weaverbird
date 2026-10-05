@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.techsenger.weaverbird.gui;
+package com.techsenger.weaverbird.gui.internal;
 
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.core.spi.module.ModuleActivator;
 import com.techsenger.weaverbird.core.spi.module.ModuleContext;
+import com.techsenger.weaverbird.gui.WeaverbirdApplication;
 import javafx.application.Application;
 import javafx.application.Platform;
 
@@ -30,7 +31,7 @@ public class ModuleActivatorProvider implements ModuleActivator {
 
     private static Framework framework;
 
-    static Framework getFramework() {
+    public static Framework getFramework() {
         return framework;
     }
 

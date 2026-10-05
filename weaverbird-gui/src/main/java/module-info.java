@@ -43,6 +43,6 @@ module com.techsenger.weaverbird.gui {
     exports com.techsenger.weaverbird.gui.style;
 
     provides com.techsenger.weaverbird.core.spi.module.ModuleActivator
-            with com.techsenger.weaverbird.gui.ModuleActivatorProvider;
+            with com.techsenger.weaverbird.gui.internal.ModuleActivatorProvider;
 }
 
