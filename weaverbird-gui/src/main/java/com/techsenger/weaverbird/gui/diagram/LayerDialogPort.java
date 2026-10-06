@@ -16,14 +16,14 @@
 
 package com.techsenger.weaverbird.gui.diagram;
 
-import com.techsenger.shellfx.core.dialog.FullDialogPort;
+import com.techsenger.shellfx.core.dialog.DialogPort;
 import java.util.List;
 
 /**
  *
  * @author Pavel Castornii
  */
-public interface LayerDialogPort extends FullDialogPort {
+public interface LayerDialogPort extends DialogPort {
 
     List<LayerConfig> getLayerConfigs();
 }
