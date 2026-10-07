@@ -18,11 +18,10 @@ package com.techsenger.weaverbird.gui.internal;
 
 import com.techsenger.shellfx.core.ShellView;
 import com.techsenger.shellfx.core.registry.AbstractControlRegistrar;
+import com.techsenger.shellfx.core.registry.SimpleControlProvider;
+import com.techsenger.shellfx.core.registry.SimpleGroupProvider;
 import com.techsenger.shellfx.layout.tabhost.TabHostView;
-import com.techsenger.shellfx.material.ControlGroup;
 import com.techsenger.shellfx.material.icon.FontIconView;
-import com.techsenger.shellfx.material.menu.AbstractMenuItemHandler;
-import com.techsenger.shellfx.material.menu.MenuItemHandler;
 import com.techsenger.weaverbird.core.api.Framework;
 import com.techsenger.weaverbird.gui.console.ConsoleTabConfig;
 import com.techsenger.weaverbird.gui.console.ConsoleTabParams;
@@ -71,24 +70,23 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
     }
 
     private void registerMainMenu() {
-        register(Slots.MAIN_MENU, v -> new MenuBar());
+        register(Slots.MAIN_MENU, () -> new SimpleControlProvider<>(new MenuBar()));
     }
 
     private void registerFileMenu() {
-        register(Slots.FileMenu.MENU, v -> new Menu("_File"));
-        register(Slots.FileMenu.MAIN, v -> new ControlGroup<>());
+        register(Slots.FileMenu.MENU, () -> new SimpleControlProvider<>(new Menu("_File")));
+        register(Slots.FileMenu.MAIN, SimpleGroupProvider::new);
     }
 
     private void registerConsoleItem() {
-        register(Slots.FileMenu.MAIN, 100, v -> {
-            var item = new MenuItem("C_onsole");
-            item.setGraphic(new FontIconView(WeaverbirdIcons.CONSOLE));
-            item.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-            var handler = new AbstractMenuItemHandler<ShellView<?>, MenuItem>(shell, item) {
+        register(Slots.FileMenu.MAIN, 100, () -> new SimpleControlProvider<>(new MenuItem("C_onsole")) {
 
-                @Override
-                public void onAction() {
-                    var shell = getComponent();
+            @Override
+            public void initialize(ShellView<?> v) {
+                super.initialize(v);
+                getControl().setGraphic(new FontIconView(WeaverbirdIcons.CONSOLE));
+                getControl().setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+                getControl().setOnAction(e -> {
                     var config = shell.getViewModel().getContext().getConfigManager()
                             .getOrCreateConfig(ConsoleTabConfig.class, ConsoleTabConfig::new);
                     var params = new ConsoleTabParams(config, framework, client, null);
@@ -97,22 +95,20 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
                     consoleView.initialize();
                     TabHostView<?> workspace = (TabHostView<?>) shell.getComposer().getWorkspace();
                     workspace.getComposer().addTab(consoleView);
-                }
-            };
-            MenuItemHandler.setHandler(item, handler);
-            return item;
+                });
+            }
         });
     }
 
     private void registerDiagramItem() {
-        register(Slots.FileMenu.MAIN, 200, v -> {
-            var item = new MenuItem("D_iagrams");
-            item.setGraphic(new FontIconView(WeaverbirdIcons.DIAGRAMS));
-            item.setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN));
-            var handler = new AbstractMenuItemHandler<ShellView<?>, MenuItem>(shell, item) {
-                @Override
-                public void onAction() {
-                    var shell = getComponent();
+        register(Slots.FileMenu.MAIN, 200, () -> new SimpleControlProvider<>(new MenuItem("D_iagrams")) {
+
+            @Override
+            public void initialize(ShellView<?> v) {
+                super.initialize(v);
+                getControl().setGraphic(new FontIconView(WeaverbirdIcons.DIAGRAMS));
+                getControl().setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN));
+                getControl().setOnAction(e -> {
                     var consoleSettings = (ConsoleSettings) shell.getViewModel().getContext().getSettings();
                     var config = shell.getViewModel().getContext().getConfigManager()
                             .getOrCreateConfig(DiagramTabConfig.class, DiagramTabConfig::new);
@@ -123,10 +119,8 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
                     diagramView.initialize();
                     TabHostView<?> workspace = (TabHostView<?>) shell.getComposer().getWorkspace();
                     workspace.getComposer().addTab(diagramView);
-                }
-            };
-            MenuItemHandler.setHandler(item, handler);
-            return item;
+                });
+            }
         });
     }
 }
