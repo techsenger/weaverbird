@@ -72,7 +72,7 @@ public class WeaverbirdApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FontIconView.setDefaultIconFont(Fonts.MATERIAL_DESIGN_ICONS.getFamily());
+        FontIconView.setDefaultIconFamily(Fonts.MATERIAL_DESIGN_ICONS.getFamily());
         IconStylesheets.addAll(IconStylesheetFactory.forAll());
         IconStylesheets.addAll(WeaverbirdIconStylesheets.getAll());
 

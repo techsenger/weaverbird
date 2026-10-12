@@ -26,7 +26,7 @@ import java.util.List;
 public final class WeaverbirdIconStylesheets {
 
     private static final List<Stylesheet> stylesheets =
-            List.of(new Stylesheet(WeaverbirdIconStylesheets.class.getResource("icons.css"))
+            List.of(new Stylesheet(WeaverbirdIconStylesheets.class.getResource("icons.css").toExternalForm())
     );
 
     public static List<Stylesheet> getAll() {
