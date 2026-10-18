@@ -16,11 +16,11 @@
 
 package com.techsenger.weaverbird.gui.console;
 
-import com.techsenger.shellfx.core.UiExecutor;
 import com.techsenger.shellfx.core.close.CloseCheckResult;
 import com.techsenger.shellfx.core.close.ClosePreparationResult;
 import com.techsenger.shellfx.core.settings.SettingsSubscription;
 import com.techsenger.shellfx.core.tab.AbstractHostTabViewModel;
+import com.techsenger.shellfx.material.UiExecutor;
 import com.techsenger.toolkit.fx.value.ObservableSource;
 import com.techsenger.toolkit.fx.value.SimpleObservableSource;
 import com.techsenger.weaverbird.core.api.Constants;
