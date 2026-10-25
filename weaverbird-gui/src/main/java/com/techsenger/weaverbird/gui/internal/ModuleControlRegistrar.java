@@ -17,9 +17,9 @@
 package com.techsenger.weaverbird.gui.internal;
 
 import com.techsenger.shellfx.core.ShellView;
-import com.techsenger.shellfx.core.registry.AbstractControlRegistrar;
-import com.techsenger.shellfx.core.registry.SimpleControlProvider;
-import com.techsenger.shellfx.core.registry.SimpleGroupProvider;
+import com.techsenger.shellfx.core.registries.AbstractControlRegistrar;
+import com.techsenger.shellfx.core.registries.SimpleControlProvider;
+import com.techsenger.shellfx.core.registries.SimpleGroupProvider;
 import com.techsenger.shellfx.layout.tabhost.TabHostView;
 import com.techsenger.shellfx.material.icon.FontIconView;
 import com.techsenger.weaverbird.core.api.Framework;

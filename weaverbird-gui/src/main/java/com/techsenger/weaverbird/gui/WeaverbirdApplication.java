@@ -16,16 +16,14 @@
 
 package com.techsenger.weaverbird.gui;
 
-import com.techsenger.weaverbird.gui.internal.ModuleActivatorProvider;
-import com.techsenger.weaverbird.gui.internal.Slots;
 import com.techsenger.shellfx.core.DefaultShellContext;
 import com.techsenger.shellfx.core.DefaultShellParams;
 import com.techsenger.shellfx.core.DefaultShellView;
 import com.techsenger.shellfx.core.DefaultShellViewModel;
 import com.techsenger.shellfx.core.ShellConfig;
 import com.techsenger.shellfx.core.config.InMemoryConfigManager;
-import com.techsenger.shellfx.core.registry.ControlRegistry;
-import com.techsenger.shellfx.core.registry.SlotRegistry;
+import com.techsenger.shellfx.core.registries.ControlRegistry;
+import com.techsenger.shellfx.core.registries.SlotRegistry;
 import com.techsenger.shellfx.icons.Fonts;
 import com.techsenger.shellfx.icons.IconStylesheetFactory;
 import com.techsenger.shellfx.layout.tabhost.ProminentTabHostParams;
@@ -37,8 +35,10 @@ import com.techsenger.shellfx.material.style.IconStylesheets;
 import com.techsenger.shellfx.material.style.StyleClasses;
 import com.techsenger.shellfx.material.theme.AtlantaFxTheme;
 import com.techsenger.toolkit.fx.color.ColorUtils;
+import com.techsenger.weaverbird.gui.internal.ModuleActivatorProvider;
 import com.techsenger.weaverbird.gui.internal.ModuleControlRegistrar;
 import com.techsenger.weaverbird.gui.internal.ModuleSlotRegistrar;
+import com.techsenger.weaverbird.gui.internal.Slots;
 import com.techsenger.weaverbird.gui.settings.ConsoleSettings;
 import com.techsenger.weaverbird.gui.settings.LayoutEngine;
 import com.techsenger.weaverbird.gui.settings.LineType;
