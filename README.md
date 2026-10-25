@@ -635,7 +635,7 @@ Example:
 
 ## Requirements <a name="requirements"></a>
 
-The framework requires Java 25+ and JavaFX 25+ for GUI console.
+The framework requires Java 25+ and JavaFX 27+ for GUI console.
 
 ## Dependencies <a name="dependencies"></a>
 
