@@ -27,7 +27,6 @@ open module com.techsenger.weaverbird.it.net {
     requires commons.logging;
     requires org.slf4j;
     requires java.xml;
-    requires com.google.gson;
     requires jakarta.el;
     requires org.glassfish.expressly;
 

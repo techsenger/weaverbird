@@ -25,17 +25,22 @@ import com.techsenger.weaverbird.core.api.module.ModuleArtifact;
 import com.techsenger.weaverbird.core.api.module.ModuleType;
 import com.techsenger.weaverbird.core.spi.repo.RepoService;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.artifact.DefaultArtifact;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Pavel Castornii
  */
 public class MavenRepoProvider implements RepoService {
+
+    private static final Logger logger = LoggerFactory.getLogger(MavenRepoProvider.class);
 
     private static final SingletonFactory<RepoService> singletonFactory =
             new SingletonFactory<>(() -> new MavenRepoProvider());
@@ -64,9 +69,18 @@ public class MavenRepoProvider implements RepoService {
         List<Artifact> rArtifacts = artifacts.stream()
                 .map(d -> moduleToArtifact(d))
                 .collect(Collectors.toList());
+        //repositories without URL (for example, a variable was not set) are not used; order is kept.
+        Map<String, String> usedReposByName = new LinkedHashMap<>();
+        remoteReposByName.forEach((name, url) -> {
+            if (url == null || url.isBlank()) {
+                logger.debug("Repository {} has no URL and is skipped", name);
+            } else {
+                usedReposByName.put(name, url);
+            }
+        });
         var checksumEnabled = framework.getSettings().isRepoChecksumEnabled();
         var localRepo = framework.getPathManager().getRepositoryDirectory();
-        return mavenRepo.resolve(localRepo, remoteReposByName, checksumEnabled, rArtifacts, createListener(listener));
+        return mavenRepo.resolve(localRepo, usedReposByName, checksumEnabled, rArtifacts, createListener(listener));
     }
 
     @Override

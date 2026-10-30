@@ -14,7 +14,7 @@
     <description>Integration tests for client-server interaction</description>
 
     <properties>
-        <failsafe.plugin.arguments>--add-opens java.base/java.time=com.techsenger.weaverbird.core --enable-native-access=com.techsenger.weaverbird.core</failsafe.plugin.arguments>
+        <failsafe.plugin.arguments>--add-opens java.base/java.time=com.techsenger.weaverbird.core --enable-native-access=com.techsenger.weaverbird.core -Dcom.techsenger.weaverbird.repo.local=file://${settings.localRepository}</failsafe.plugin.arguments>
     </properties>
 
     <dependencies>
@@ -113,6 +113,39 @@
                         <component>weaverbird-cli</component>
                         <component>weaverbird-gui</component>
                     </components>
+                </configuration>
+            </plugin>
+            <!--
+                Workaround for https://bugs.openjdk.org/browse/JDK-8322302. Because of the bug the tests cannot run with
+                deployed components, so they run in the boot layer, which already contains Gson (used by net-shared).
+                The repo component is created above the boot layer, and its own Gson would give automatic modules two
+                modules with the same name. The transformation removes Gson from the repo component configuration.
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>xml-maven-plugin</artifactId>
+                <version>1.2.2</version>
+                <executions>
+                    <execution>
+                        <id>remove-repo-gson</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>transform</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <forceCreation>true</forceCreation>
+                    <transformationSets>
+                        <transformationSet>
+                            <dir>${project.build.directory}/framework/config/weaverbird-repo/${project.version}</dir>
+                            <includes>
+                                <include>configuration.xml</include>
+                            </includes>
+                            <stylesheet>${project.basedir}/src/test/xsl/remove-repo-gson.xsl</stylesheet>
+                            <outputDir>${project.build.directory}/framework/config/weaverbird-repo/${project.version}</outputDir>
+                        </transformationSet>
+                    </transformationSets>
                 </configuration>
             </plugin>
         </plugins>

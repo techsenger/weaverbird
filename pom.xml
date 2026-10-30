@@ -62,16 +62,16 @@
         <maven.plugin.version>3.15.2</maven.plugin.version>
         <osp-bom.version>1.8.0-SNAPSHOT</osp-bom.version>
         <bom-properties.plugin.version>1.0.0-SNAPSHOT</bom-properties.plugin.version>
-        <mvn.version>3.8.1</mvn.version>
+        <mvn.version>3.9.16</mvn.version>
         <javafx.version>26</javafx.version>
         <exec.plugin.version>3.6.3</exec.plugin.version>
 
         <!--### dependencies that are not in BOM ###-->
-        <commons.codec.version>1.11</commons.codec.version>
-        <apache.httpclient.version>4.5.12</apache.httpclient.version>
-        <apache.httpcore.version>4.4.13</apache.httpcore.version>
-        <plexus.interpolation.version>1.25</plexus.interpolation.version>
-        <plexus.utils.version>3.2.1</plexus.utils.version>
+        <commons.codec.version>1.22.1</commons.codec.version>
+        <apache.httpclient.version>4.5.14</apache.httpclient.version>
+        <apache.httpcore.version>4.4.16</apache.httpcore.version>
+        <plexus.interpolation.version>1.29</plexus.interpolation.version>
+        <plexus.utils.version>3.6.1</plexus.utils.version>
         <commons.logging.version>1.2</commons.logging.version>
     </properties>
 

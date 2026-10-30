@@ -14,7 +14,7 @@
     <description>Integration tests for framework core</description>
 
     <properties>
-        <failsafe.plugin.arguments>--add-opens java.base/java.time=com.techsenger.weaverbird.core --enable-native-access=com.techsenger.weaverbird.core</failsafe.plugin.arguments>
+        <failsafe.plugin.arguments>--add-opens java.base/java.time=com.techsenger.weaverbird.core --enable-native-access=com.techsenger.weaverbird.core -Dcom.techsenger.weaverbird.repo.local=file://${settings.localRepository}</failsafe.plugin.arguments>
     </properties>
 
     <dependencies>

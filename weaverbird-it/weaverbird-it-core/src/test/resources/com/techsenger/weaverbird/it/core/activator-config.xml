@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Configuration name="weaverbird-it-activator" version="${project.version}" type="base">
     <Repositories>
-        <Repository name="local" url="file://${settings.localRepository}"/>
+        <Repository name="local" url="${sys['com.techsenger.weaverbird.repo.local']}"/>
     </Repositories>
 
     <Modules>
