@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.techsenger.weaverbird.gui.internal;
+package com.techsenger.weaverbird.gui.registrars;
 
 import com.techsenger.shellfx.core.ShellView;
-import com.techsenger.shellfx.core.registries.AbstractSlotRegistrar;
+import com.techsenger.shellfx.core.registrars.AbstractSlotRegistrar;
+import com.techsenger.weaverbird.gui.slots.ShellSlots;
 
 /**
  * Builds the tree of the slots of the Weaverbird shell: which menus the menu bar has, and which groups each
@@ -33,7 +34,7 @@ public class ModuleSlotRegistrar extends AbstractSlotRegistrar {
 
     @Override
     public void register() {
-        register(Slots.MAIN_MENU, 0, Slots.FileMenu.MENU);
-        register(Slots.FileMenu.MENU, 0, Slots.FileMenu.MAIN);
+        register(ShellSlots.MAIN_MENU, 0, ShellSlots.FileMenu.MENU);
+        register(ShellSlots.FileMenu.MENU, 0, ShellSlots.FileMenu.MAIN);
     }
 }

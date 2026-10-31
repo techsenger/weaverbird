@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.techsenger.weaverbird.gui.internal;
+package com.techsenger.weaverbird.gui.registrars;
 
 import com.techsenger.shellfx.core.ShellView;
-import com.techsenger.shellfx.core.registries.AbstractControlRegistrar;
+import com.techsenger.shellfx.core.registrars.AbstractControlRegistrar;
 import com.techsenger.shellfx.core.registries.SimpleControlProvider;
 import com.techsenger.shellfx.core.registries.SimpleGroupProvider;
 import com.techsenger.shellfx.layout.tabhost.TabHostView;
@@ -32,6 +32,7 @@ import com.techsenger.weaverbird.gui.diagram.DiagramTabParams;
 import com.techsenger.weaverbird.gui.diagram.DiagramTabView;
 import com.techsenger.weaverbird.gui.diagram.DiagramTabViewModel;
 import com.techsenger.weaverbird.gui.settings.ConsoleSettings;
+import com.techsenger.weaverbird.gui.slots.ShellSlots;
 import com.techsenger.weaverbird.gui.style.WeaverbirdIcons;
 import com.techsenger.weaverbird.net.client.api.ClientService;
 import com.techsenger.weaverbird.net.client.api.ClientServiceFactory;
@@ -70,16 +71,16 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
     }
 
     private void registerMainMenu() {
-        register(Slots.MAIN_MENU, () -> new SimpleControlProvider<>(new MenuBar()));
+        register(ShellSlots.MAIN_MENU, () -> new SimpleControlProvider<>(new MenuBar()));
     }
 
     private void registerFileMenu() {
-        register(Slots.FileMenu.MENU, () -> new SimpleControlProvider<>(new Menu("_File")));
-        register(Slots.FileMenu.MAIN, SimpleGroupProvider::new);
+        register(ShellSlots.FileMenu.MENU, () -> new SimpleControlProvider<>(new Menu("_File")));
+        register(ShellSlots.FileMenu.MAIN, SimpleGroupProvider::new);
     }
 
     private void registerConsoleItem() {
-        register(Slots.FileMenu.MAIN, 100, () -> new SimpleControlProvider<>(new MenuItem("C_onsole")) {
+        register(ShellSlots.FileMenu.MAIN, 100, () -> new SimpleControlProvider<>(new MenuItem("C_onsole")) {
 
             @Override
             public void initialize(ShellView<?> v) {
@@ -101,7 +102,7 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
     }
 
     private void registerDiagramItem() {
-        register(Slots.FileMenu.MAIN, 200, () -> new SimpleControlProvider<>(new MenuItem("D_iagrams")) {
+        register(ShellSlots.FileMenu.MAIN, 200, () -> new SimpleControlProvider<>(new MenuItem("D_iagrams")) {
 
             @Override
             public void initialize(ShellView<?> v) {
