@@ -26,7 +26,7 @@ import jfx.incubator.scene.control.richtext.model.StyleAttributeMap;
 public final class TextAreaCssStyles {
 
     protected static final StyleAttribute<String> CSS_ATTRIBUTE
-            = new StyleAttribute("CSS_ATTRIBUTE", String.class, false);
+            = StyleAttribute.character("CSS_ATTRIBUTE", String.class);
 
     protected static final StyleAttributeMap ERROR = StyleAttributeMap
             .of(CSS_ATTRIBUTE, "-fx-fill: -color-danger-5;");

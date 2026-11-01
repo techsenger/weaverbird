@@ -63,7 +63,7 @@
         <osp-bom.version>1.8.0-SNAPSHOT</osp-bom.version>
         <bom-properties.plugin.version>1.0.0-SNAPSHOT</bom-properties.plugin.version>
         <mvn.version>3.9.16</mvn.version>
-        <javafx.version>26</javafx.version>
+        <javafx.version>27</javafx.version>
         <exec.plugin.version>3.6.3</exec.plugin.version>
 
         <!--### dependencies that are not in BOM ###-->
