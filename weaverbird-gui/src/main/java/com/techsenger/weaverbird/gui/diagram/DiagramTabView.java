@@ -62,7 +62,7 @@ public class DiagramTabView<VM extends DiagramTabViewModel<?>> extends AbstractH
 
         protected LayerDialogView<?> createDialog(LayerDialogParams params) {
             var viewModel = new LayerDialogViewModel<>(params);
-            var view = new LayerDialogView<>(viewModel);
+            var view = new LayerDialogView<>(viewModel, getShell().getContext().getStylesheetRegistry());
             view.initialize();
             return view;
         }

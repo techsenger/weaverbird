@@ -24,6 +24,8 @@ import com.techsenger.shellfx.core.ShellConfig;
 import com.techsenger.shellfx.core.config.InMemoryConfigManager;
 import com.techsenger.shellfx.core.registries.ControlRegistry;
 import com.techsenger.shellfx.core.registries.SlotRegistry;
+import com.techsenger.shellfx.core.registries.StylesheetRegistry;
+import com.techsenger.shellfx.core.window.AbstractWindowView;
 import com.techsenger.shellfx.icons.Fonts;
 import com.techsenger.shellfx.icons.IconStylesheetFactory;
 import com.techsenger.shellfx.layout.tabhost.ProminentTabHostParams;
@@ -31,7 +33,6 @@ import com.techsenger.shellfx.layout.tabhost.ProminentTabHostView;
 import com.techsenger.shellfx.layout.tabhost.ProminentTabHostViewModel;
 import com.techsenger.shellfx.material.icon.FontIconView;
 import com.techsenger.shellfx.material.style.Density;
-import com.techsenger.shellfx.material.style.IconStylesheets;
 import com.techsenger.shellfx.material.style.StyleClasses;
 import com.techsenger.shellfx.material.theme.AtlantaFxTheme;
 import com.techsenger.toolkit.fx.color.ColorUtils;
@@ -72,16 +73,21 @@ public class WeaverbirdApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FontIconView.setDefaultIconFamily(Fonts.MATERIAL_DESIGN_ICONS.getFamily());
-        IconStylesheets.addAll(IconStylesheetFactory.forAll());
-        IconStylesheets.addAll(WeaverbirdIconStylesheets.getAll());
+        // creating application stylesheets
+        var defaultIconFont = Fonts.MATERIAL_DESIGN_ICONS;
+        FontIconView.setDefaultIconFamily(defaultIconFont.getFamily());
+        var stylesheetRegistry = new StylesheetRegistry();
+        stylesheetRegistry.register(AbstractWindowView.createDefaultStylesheets());
+        stylesheetRegistry.register(IconStylesheetFactory.forDefaultFont(defaultIconFont));
+        stylesheetRegistry.register(IconStylesheetFactory.forAllModules());
+        stylesheetRegistry.register(WeaverbirdIconStylesheets.getAll());
 
         var context = new DefaultShellContext(createSettings(), new InMemoryConfigManager(), getHostServices(),
-                new SlotRegistry(), new ControlRegistry());
+                new SlotRegistry(), new ControlRegistry(), stylesheetRegistry);
         var shellConfig = context.getConfigManager().getOrCreateConfig(ShellConfig.class, ShellConfig::new);
         var shellParams = new DefaultShellParams(shellConfig, context);
         var shellViewModel = new DefaultShellViewModel<>(shellParams);
-        var shellView = new DefaultShellView<>(shellViewModel, stage, null, ShellSlots.MAIN_MENU, context);
+        var shellView = new DefaultShellView<>(shellViewModel, context, stage, ShellSlots.MAIN_MENU);
         shellView.initialize();
         shellViewModel.setOnClosed(() -> Platform.exit());
         shellViewModel.setTitle("Weaverbird Framework");

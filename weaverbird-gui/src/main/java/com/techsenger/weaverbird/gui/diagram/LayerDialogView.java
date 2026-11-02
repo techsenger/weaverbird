@@ -20,6 +20,7 @@ import com.techsenger.shellfx.core.dialog.AbstractDialogView;
 import com.techsenger.shellfx.core.page.DefaultPageDescriptor;
 import com.techsenger.shellfx.core.page.PageDescriptor;
 import com.techsenger.shellfx.core.page.PageItem;
+import com.techsenger.shellfx.core.registries.StylesheetRegistry;
 import com.techsenger.shellfx.core.window.AbstractWindowView;
 import com.techsenger.shellfx.layout.pagehost.PageHostParams;
 import com.techsenger.shellfx.layout.pagehost.PageHostPort;
@@ -84,8 +85,8 @@ public class LayerDialogView<VM extends LayerDialogViewModel<?>> extends Abstrac
 
     private final ResultButton okButton = new ResultButton(LayerDialogButtons.OK, "OK");
 
-    public LayerDialogView(VM viewModel) {
-        super(viewModel);
+    public LayerDialogView(VM viewModel, StylesheetRegistry stylesheetRegistry) {
+        super(viewModel, stylesheetRegistry);
     }
 
     @Override
