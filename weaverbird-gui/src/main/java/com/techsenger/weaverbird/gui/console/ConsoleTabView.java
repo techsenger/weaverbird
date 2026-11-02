@@ -21,7 +21,6 @@ import com.techsenger.shellfx.core.tab.AbstractHostTabView;
 import com.techsenger.shellfx.material.Anchors;
 import com.techsenger.shellfx.material.style.StyleClasses;
 import com.techsenger.shellfx.material.style.StyleUtils;
-import com.techsenger.shellfx.material.theme.AtlantaFxTheme;
 import com.techsenger.toolkit.fx.utils.NodeUtils;
 import com.techsenger.toolkit.fx.value.ValueUtils;
 import com.techsenger.weaverbird.core.api.message.Message;
@@ -36,7 +35,6 @@ import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Priority;
@@ -216,9 +214,6 @@ public class ConsoleTabView<VM extends ConsoleTabViewModel<?>> extends AbstractH
     @Override
     protected void build() {
         super.build();
-        var button = new Button("test");
-        button.setOnAction(e -> getComposer().getShellPort().getContext()
-                .getSettings().getAppearance().setTheme(AtlantaFxTheme.DRACULA));
         textArea.getStyleClass().addAll("console-text-area", StyleClasses.MONOSPACE);
         textArea.setEditable(true);
         textArea.setWrapText(true);

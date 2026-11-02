@@ -16,13 +16,6 @@
 
 package com.techsenger.weaverbird.gui.settings;
 
-import com.techsenger.shellfx.core.settings.SettingsCallback;
-import com.techsenger.shellfx.core.settings.SettingsSubscription;
-import com.techsenger.shellfx.core.settings.SubscriptionUtils;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
 
 /**
@@ -31,74 +24,54 @@ import javafx.scene.paint.Color;
  */
 public class DiagramSettings {
 
-    private ObjectProperty<Color> layerColor = new SimpleObjectProperty<>();
+    private Color layerColor;
 
-    private ObjectProperty<Color> moduleColor = new SimpleObjectProperty<>();
+    private Color moduleColor;
 
-    private ObjectProperty<LineType> lineType = new SimpleObjectProperty<>();
+    private LineType lineType;
 
-    private ObjectProperty<LayoutEngine> layoutEngine = new SimpleObjectProperty<>();
+    private LayoutEngine layoutEngine;
 
-    private IntegerProperty limitSize = new SimpleIntegerProperty();
+    private int limitSize;
 
     public Color getLayerColor() {
-        return layerColor.get();
+        return layerColor;
     }
 
     public void setLayerColor(Color layerColor) {
-        this.layerColor.set(layerColor);
-    }
-
-    public SettingsSubscription onLayerColorChanged(SettingsCallback<Color> callback) {
-        return SubscriptionUtils.onChanged(layerColor, callback);
+        this.layerColor = layerColor;
     }
 
     public Color getModuleColor() {
-        return moduleColor.get();
+        return moduleColor;
     }
 
     public void setModuleColor(Color moduleColor) {
-        this.moduleColor.set(moduleColor);
-    }
-
-    public SettingsSubscription onModuleColorChanged(SettingsCallback<Color> callback) {
-        return SubscriptionUtils.onChanged(moduleColor, callback);
+        this.moduleColor = moduleColor;
     }
 
     public LineType getLineType() {
-        return lineType.get();
+        return lineType;
     }
 
     public void setLineType(LineType lineType) {
-        this.lineType.set(lineType);
-    }
-
-    public SettingsSubscription onLineTypeChanged(SettingsCallback<LineType> callback) {
-        return SubscriptionUtils.onChanged(lineType, callback);
+        this.lineType = lineType;
     }
 
     public LayoutEngine getLayoutEngine() {
-        return layoutEngine.get();
+        return layoutEngine;
     }
 
     public void setLayoutEngine(LayoutEngine layoutEngine) {
-        this.layoutEngine.set(layoutEngine);
-    }
-
-    public SettingsSubscription onLayoutEngineChanged(SettingsCallback<LayoutEngine> callback) {
-        return SubscriptionUtils.onChanged(layoutEngine, callback);
+        this.layoutEngine = layoutEngine;
     }
 
     public int getLimitSize() {
-        return limitSize.get();
+        return limitSize;
     }
 
     public void setLimitSize(int limitSize) {
-        this.limitSize.set(limitSize);
-    }
-
-    public SettingsSubscription onLimitSizeChanged(SettingsCallback<Integer> callback) {
-        return SubscriptionUtils.onChanged(limitSize, callback);
+        this.limitSize = limitSize;
     }
 
 }

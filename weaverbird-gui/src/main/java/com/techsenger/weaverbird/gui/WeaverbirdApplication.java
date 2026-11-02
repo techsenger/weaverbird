@@ -93,7 +93,7 @@ public class WeaverbirdApplication extends Application {
         shellViewModel.setTitle("Weaverbird Framework");
         shellView.getStage().getScene().getRoot().getStyleClass().add(StyleClasses.DENSITY_S);
 
-        var workspaceParams = new ProminentTabHostParams(null, context.getSettings().getAppearance());
+        var workspaceParams = new ProminentTabHostParams(null, context.getSettings());
         var workspaceViewModel = new ProminentTabHostViewModel<>(workspaceParams);
         var workspaceView = new ProminentTabHostView<>(workspaceViewModel);
         workspaceView.initialize();

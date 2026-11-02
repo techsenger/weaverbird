@@ -18,7 +18,7 @@ package com.techsenger.weaverbird.gui.console;
 
 import com.techsenger.shellfx.core.close.CloseCheckResult;
 import com.techsenger.shellfx.core.close.ClosePreparationResult;
-import com.techsenger.shellfx.core.settings.SettingsSubscription;
+import com.techsenger.shellfx.core.settings.SettingsListener;
 import com.techsenger.shellfx.core.tab.AbstractHostTabViewModel;
 import com.techsenger.shellfx.material.UiExecutor;
 import com.techsenger.toolkit.fx.value.ObservableSource;
@@ -138,7 +138,7 @@ public class ConsoleTabViewModel<C extends ConsoleTabComposer> extends AbstractH
 
     private volatile String sessionPrompt;
 
-    private SettingsSubscription fontSubscription;
+    private final SettingsListener settingsListener = this::applySettings;
 
     /**
      * If null then the caret is outside of the editable region.
@@ -242,16 +242,15 @@ public class ConsoleTabViewModel<C extends ConsoleTabComposer> extends AbstractH
         updatePrompt();
         showPrompt();
         requestFocus();
-        var settings = getShellContext().getSettings().getAppearance();
-        setMonospaceFont(settings.getMonospaceFont());
-        this.fontSubscription = settings.onMonospaceFontChanged((oldV, newV) -> setMonospaceFont(newV));
+        applySettings();
+        getShellContext().getSettings().addListener(this.settingsListener);
         highlightCommandsSource.next(executor.getCommandsByName().keySet());
     }
 
     @Override
     protected void preDeinitialize() {
         super.preDeinitialize();
-        this.fontSubscription.unsubscribe();
+        getShellContext().getSettings().removeListener(this.settingsListener);
     }
 
     protected void showPrompt() {
@@ -378,6 +377,10 @@ public class ConsoleTabViewModel<C extends ConsoleTabComposer> extends AbstractH
         } else {
             popup.moveDown();
         }
+    }
+
+    private void applySettings() {
+        setMonospaceFont(getShellContext().getSettings().getAppearance().getMonospaceFont());
     }
 
     private void setMonospaceFont(Font font) {

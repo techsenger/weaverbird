@@ -17,7 +17,7 @@
 package com.techsenger.weaverbird.gui.diagram;
 
 import com.techsenger.shellfx.core.dialog.DialogParams;
-import com.techsenger.shellfx.core.settings.AppearanceSettings;
+import com.techsenger.shellfx.core.settings.ShellSettings;
 import com.techsenger.shellfx.core.window.WindowType;
 import com.techsenger.weaverbird.core.api.model.ComponentLayerModel;
 import java.util.List;
@@ -40,7 +40,7 @@ public class LayerDialogParams extends DialogParams {
      * @param previousLayerConfigs can differ from current components. For example, there can be new components in the
      * current configuration or even the same components but with new modules (for example, after component restart).
      */
-    public LayerDialogParams(LayerDialogConfig config, AppearanceSettings settings,
+    public LayerDialogParams(LayerDialogConfig config, ShellSettings settings,
             List<ComponentLayerModel> layerModels, List<LayerConfig> previousLayerConfigs) {
         super(config, WindowType.NESTED, settings);
         this.layerModels = layerModels;

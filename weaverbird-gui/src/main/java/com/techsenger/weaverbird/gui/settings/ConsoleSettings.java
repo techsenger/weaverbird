@@ -16,15 +16,15 @@
 
 package com.techsenger.weaverbird.gui.settings;
 
+import com.techsenger.shellfx.core.settings.AbstractShellSettings;
 import com.techsenger.shellfx.core.settings.AppearanceSettings;
 import com.techsenger.shellfx.core.settings.DefaultAppearanceSettings;
-import com.techsenger.shellfx.core.settings.ShellSettings;
 
 /**
  *
  * @author Pavel Castornii
  */
-public class ConsoleSettings implements ShellSettings {
+public class ConsoleSettings extends AbstractShellSettings {
 
     private final AppearanceSettings appearance = new DefaultAppearanceSettings();
 
