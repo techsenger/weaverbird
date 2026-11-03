@@ -16,6 +16,9 @@
 
 package com.techsenger.weaverbird.core.impl;
 
+import com.techsenger.toolkit.core.StringUtils;
+import com.techsenger.toolkit.core.file.FilePermissionException;
+import com.techsenger.toolkit.core.file.FileUtils;
 import com.techsenger.weaverbird.core.api.Constants;
 import com.techsenger.weaverbird.core.api.DefaultPathManager;
 import com.techsenger.weaverbird.core.api.DefaultPathResolver;
@@ -26,25 +29,21 @@ import com.techsenger.weaverbird.core.api.component.ComponentConfigInfo;
 import com.techsenger.weaverbird.core.api.component.ComponentConfigUtils;
 import com.techsenger.weaverbird.core.api.component.ComponentException;
 import com.techsenger.weaverbird.core.impl.component.ConfigXmlReader;
-import com.techsenger.toolkit.core.StringUtils;
-import com.techsenger.toolkit.core.file.FilePermissionException;
-import com.techsenger.toolkit.core.file.FileUtils;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -78,7 +77,8 @@ class ComponentFileManager {
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
             //resolving path of the file relative to component base directory, for example, config/name/version
             Path relativePath = sourceDirectory.relativize(file);
-            ZipEntry zipEntry = new ZipEntry(destinationDirectory + "/" + relativePath.toString());
+            ZipEntry zipEntry = new ZipEntry(destinationDirectory + "/"
+                    + relativePath.toString().replace(File.separatorChar, '/'));
             zos.putNextEntry(zipEntry);
             Files.copy(file, zos);
             zos.closeEntry();
@@ -103,80 +103,108 @@ class ComponentFileManager {
     }
 
     public Path build(ComponentConfig config, Path directoryPath, String extension) throws ComponentException {
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-             ZipOutputStream zos = new ZipOutputStream(baos)) {
-            addDirectoryToArchive(pathResolver.resolveConfigDirectory(config),
-                    DefaultPathManager.CONFIG_DIRECTORY_NAME, zos);
-            addDirectoryToArchive(pathResolver.resolveDataDirectory(config),
-                    DefaultPathManager.DATA_DIRECTORY_NAME, zos);
-            addDirectoryToArchive(pathResolver.resolveDocumentDirectory(config),
-                    DefaultPathManager.DOCUMENT_DIRECTORY_NAME, zos);
-            addDirectoryToArchive(pathResolver.resolveLegalDirectory(config),
-                    DefaultPathManager.LEGAL_DIRECTORY_NAME, zos);
-            zos.finish();
-            byte[] zipBytes = baos.toByteArray();
-            var archivePath = directoryPath.resolve(config.getName() + "-" + config.getVersion() + "." + extension);
-            Files.write(archivePath, zipBytes);
+        var archivePath = directoryPath.resolve(config.getName() + "-" + config.getVersion() + "." + extension);
+        try {
+            try (ZipOutputStream zos = new ZipOutputStream(
+                    new BufferedOutputStream(Files.newOutputStream(archivePath)))) {
+                addDirectoryToArchive(pathResolver.resolveConfigDirectory(config),
+                        resolveArchiveDirectory(DefaultPathManager.CONFIG_DIRECTORY_NAME, config), zos);
+                addDirectoryToArchive(pathResolver.resolveDataDirectory(config),
+                        resolveArchiveDirectory(DefaultPathManager.DATA_DIRECTORY_NAME, config), zos);
+                addDirectoryToArchive(pathResolver.resolveDocumentDirectory(config),
+                        resolveArchiveDirectory(DefaultPathManager.DOCUMENT_DIRECTORY_NAME, config), zos);
+                addDirectoryToArchive(pathResolver.resolveLegalDirectory(config),
+                        resolveArchiveDirectory(DefaultPathManager.LEGAL_DIRECTORY_NAME, config), zos);
+            }
             return archivePath;
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
+            //a partially written archive must not stay on disk
+            try {
+                Files.deleteIfExists(archivePath);
+            } catch (IOException deleteEx) {
+                ex.addSuppressed(deleteEx);
+            }
             throw new ComponentException(StringUtils.format("Error building {}{}{}", config.getName(),
                     Constants.NAME_VERSION_SEPARATOR, config.getVersion()), ex);
         }
     }
 
     /**
-     * Component adding is done in two steps, as we need to read config, before copying files.
+     * Reads the component config from the archive. Component adding is done in two steps, as the config must be
+     * read before copying files. The archive structure mirrors the framework structure, so the config is located
+     * at {@code config/<name>/<version>/configuration.xml}; the name and version in this path must match the config.
      *
-     * @param zipArchive
-     * @return
+     * @param zipFile the component archive
+     * @return the config of the component
+     * @throws ComponentException if there is no config, more than one config, or the config doesn't match its path
      */
     public ComponentConfig readConfig(ZipFile zipFile) throws ComponentException {
-        var configPath = DefaultPathManager.CONFIG_DIRECTORY_NAME + "/" + DefaultPathResolver.CONFIG_FILE_NAME;
-        var entry = zipFile.getEntry(configPath);
-        if (entry == null) {
-            throw new ComponentException(StringUtils.format("Component config not found at {}", zipFile));
+        var configEntries = zipFile.stream()
+                .filter(e -> !e.isDirectory() && isConfigEntryName(e.getName()))
+                .toList();
+        if (configEntries.isEmpty()) {
+            throw new ComponentException(StringUtils.format("Component config not found at {}", zipFile.getName()));
         }
+        if (configEntries.size() > 1) {
+            throw new ComponentException(StringUtils.format("Component archive {} contains more than one config: {}",
+                    zipFile.getName(), configEntries.stream().map(ZipEntry::getName).toList()));
+        }
+        var entry = configEntries.get(0);
+        ComponentConfig config;
         try (InputStream inputStream = zipFile.getInputStream(entry)) {
             var reader = new ConfigXmlReader();
-            var config = reader.read(inputStream, this.configInfo, this.configUtils);
-            return config;
+            config = reader.read(inputStream, this.configInfo, this.configUtils);
         } catch (Exception ex) {
-            throw new ComponentException(StringUtils.format("Error reading config at {}", zipFile), ex);
+            throw new ComponentException(StringUtils.format("Error reading config at {}", zipFile.getName()), ex);
         }
+        var expectedName = resolveArchiveDirectory(DefaultPathManager.CONFIG_DIRECTORY_NAME, config) + "/"
+                + DefaultPathResolver.CONFIG_FILE_NAME;
+        if (!expectedName.equals(entry.getName())) {
+            throw new ComponentException(StringUtils.format("Component config {} in archive {} doesn't match its "
+                    + "name and version, expected {}", entry.getName(), zipFile.getName(), expectedName));
+        }
+        return config;
     }
 
+    /**
+     * Copies archive files to the framework directory. All archive entries are validated before the first file is
+     * written, so an invalid archive doesn't leave anything on disk.
+     *
+     * @param config the config read from this archive
+     * @param zipPath the path of the archive
+     * @param zipfile the opened archive
+     * @throws ComponentException if the archive contains an illegal entry
+     * @throws IOException if a file cannot be written
+     */
     public void addComponent(ComponentConfig config, Path zipPath, ZipFile zipfile)
             throws ComponentException, IOException {
-        //for simplicity we extract all files
-        var filesByPath = extractAllFiles(zipfile);
+        var root = pathManager.getRootDirectory().toAbsolutePath().normalize();
+        var allowedDirectories = List.of(
+                pathResolver.resolveConfigDirectory(config),
+                pathResolver.resolveDataDirectory(config),
+                pathResolver.resolveDocumentDirectory(config),
+                pathResolver.resolveLegalDirectory(config),
+                pathManager.getRepositoryDirectory()).stream()
+                .map(p -> p.toAbsolutePath().normalize())
+                .toList();
 
-        var configPath = pathResolver.resolveConfigDirectory(config);
-        var dataPath = pathResolver.resolveDataDirectory(config);
-        var docPath = pathResolver.resolveDocumentDirectory(config);
-        var legalPath = pathResolver.resolveLegalDirectory(config);
-
-        var configPathStr = DefaultPathManager.CONFIG_DIRECTORY_NAME + "/";
-        var dataPathStr = DefaultPathManager.DATA_DIRECTORY_NAME + "/";
-        var docPathStr = DefaultPathManager.DOCUMENT_DIRECTORY_NAME + "/";
-        var legalPathStr = DefaultPathManager.LEGAL_DIRECTORY_NAME + "/";
-        var repoPathStr = DefaultPathManager.REPOSITORY_DIRECTORY_NAME + "/";
-
-        //we add only concrete folders
-        for (var entry : filesByPath.entrySet()) {
-            if (entry.getKey().startsWith(configPathStr)) {
-                writeArchiveFile(entry.getKey(), entry.getValue(), configPathStr, configPath);
-            } else if (entry.getKey().startsWith(dataPathStr)) {
-                writeArchiveFile(entry.getKey(), entry.getValue(), dataPathStr, dataPath);
-            } else if (entry.getKey().startsWith(docPathStr)) {
-                writeArchiveFile(entry.getKey(), entry.getValue(), docPathStr, docPath);
-            } else if (entry.getKey().startsWith(legalPathStr)) {
-                writeArchiveFile(entry.getKey(), entry.getValue(), legalPathStr, legalPath);
-            } else if (entry.getKey().startsWith(repoPathStr)) {
-                writeArchiveFileToRepo(entry.getKey(), entry.getValue());
-            } else {
+        //the archive structure mirrors the framework structure, so entries are validated and then written as is
+        var entries = new ArrayList<ZipEntry>();
+        for (var entry : zipfile.stream().filter(e -> !e.isDirectory()).toList()) {
+            var target = root.resolve(entry.getName()).normalize();
+            if (allowedDirectories.stream().noneMatch(d -> !target.equals(d) && target.startsWith(d))) {
                 throw new ComponentException(StringUtils.format("Illegal file {} in component archive at {}",
-                        entry.getKey(), zipPath));
+                        entry.getName(), zipPath));
             }
+            entries.add(entry);
+        }
+        for (var entry : entries) {
+            var target = root.resolve(entry.getName()).normalize();
+            Files.createDirectories(target.getParent());
+            try (InputStream is = zipfile.getInputStream(entry)) {
+                Files.copy(is, target, StandardCopyOption.REPLACE_EXISTING);
+            }
+            logger.debug("Wrote {} from archive to {}", entry.getName(), target);
         }
     }
 
@@ -243,77 +271,17 @@ class ComponentFileManager {
         }
     }
 
-    /**
-     * Extracts all files to map.
-     *
-     * @param zipFile
-     * @return
-     * @throws IOException
-     */
-    private Map<String, byte[]> extractAllFiles(ZipFile zipFile) throws IOException {
-        Map<String, byte[]> fileContents = new HashMap<>();
-        Enumeration<? extends ZipEntry> entries = zipFile.entries();
-        while (entries.hasMoreElements()) {
-            ZipEntry entry = entries.nextElement();
-            if (entry.isDirectory()) {
-                continue;
-            }
-            try (InputStream is = zipFile.getInputStream(entry)) {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = is.read(buffer)) > 0) {
-                    baos.write(buffer, 0, length);
-                }
-                fileContents.put(entry.getName(), baos.toByteArray());
-            }
-        }
-        return fileContents;
+    private String resolveArchiveDirectory(String directoryName, ComponentConfig config) {
+        return directoryName + "/" + config.getName() + "/" + config.getVersion().getFull();
     }
 
     /**
-     * Writes archived file content to framework directory. Attention - this method is not used for directories.
-     *
-     * @param filePathStr the path of the file in zip archive
-     * @param content
-     * @param dirName the name of the directory in the archive that keeps this file (for example 'config/')
-     * @param destDir full path to destination folder
-     * @throws IOException
+     * Checks that the name looks like {@code config/<name>/<version>/configuration.xml}.
      */
-    private void writeArchiveFile(String filePathStr, byte[] content, String dirName, Path destDir)
-            throws IOException {
-        //removing 'config/'
-        filePathStr = filePathStr.substring(dirName.length());
-        if (File.separator.equals("\\")) {
-            //windows
-            filePathStr = filePathStr.replace("/", "\\");
-        }
-        var filePath = destDir.resolve(filePathStr);
-        Files.createDirectories(filePath.getParent());
-        try (OutputStream os = Files.newOutputStream(filePath)) {
-            os.write(content);
-        }
-        logger.debug("Wrote {} from archive to {}", filePathStr, filePath);
-    }
-
-    /**
-     * Writes files to repo. It is assumed that maven repo is used.
-     *
-     * @param filePathStr
-     * @param content
-     * @throws IOException
-     */
-    private void writeArchiveFileToRepo(String filePathStr, byte[] content) throws IOException {
-        if (File.separator.equals("\\")) {
-            //windows
-            filePathStr = filePathStr.replace("/", "\\");
-        }
-        //resolve to root because filePathStr starts with "repo/..."
-        var filePath = this.pathManager.getRootDirectory().resolve(filePathStr);
-        Files.createDirectories(filePath.getParent());
-        try (OutputStream os = Files.newOutputStream(filePath)) {
-            os.write(content);
-        }
-        logger.debug("Wrote {} from archive to repo: {}", filePathStr, filePath);
+    private boolean isConfigEntryName(String entryName) {
+        var parts = entryName.split("/");
+        return parts.length == 4
+                && DefaultPathManager.CONFIG_DIRECTORY_NAME.equals(parts[0])
+                && DefaultPathResolver.CONFIG_FILE_NAME.equals(parts[3]);
     }
 }

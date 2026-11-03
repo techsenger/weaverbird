@@ -19,6 +19,7 @@ commands — helping developers efficiently build and manage modular systems.
         * [Life Cycle](#usage-component-life)
         * [Activator](#usage-component-activator)
         * [Configuration](#usage-component-config)
+        * [Archive](#usage-component-archive)
         * [Events](#usage-component-events)
         * [Services](#usage-component-services)
     * [Remote Control](#usage-remote-control)
@@ -182,14 +183,8 @@ To manually add a component, the following steps need to be performed:
 2. Place the configuration in the special `config` folder.
 3. Add the component to the AddedComponents registry of the framework.
 
-The automatic addition of a component occurs when there is a component ZIP archive (with any extension).
-
-The component archive is used for distributing the component. For example, if a program using the framework works with
-plugins, each plugin is distributed via its archive. The component archive must always contain the component's
-configuration. Additionally, it may contain JAR/WAR modules (which are not in the repository), component data, etc.
-
-The component archive can be created using the `component:build` command, and the component can be added using the
-`component:add` command.
+The automatic addition of a component occurs when there is a component ZIP archive (with any extension), see
+[Archive](#usage-component-archive).
 
 **Resolved**. The component's modules have been loaded into the framework's repository, and the component can be deployed.
 The resolution of the component is performed using the `component:resolve` command.
@@ -402,6 +397,35 @@ configuration will open `java.time` from `java.base` to Gson:
 ```
 
 For a specific example of working with directives, see the configuration of the demo component — `weaverbird-gui`.
+
+#### Archive <a name="usage-component-archive"></a>
+
+A component may be distributed as a ZIP archive (with any extension). This is optional: a component that consists
+only of its XML configuration, with modules loaded from repositories, can be added without an archive. The archive is
+needed when the component brings its own files, such as legal documents, data or JAR/WAR modules that are not in a
+repository. For example, if a program using the framework works with plugins, each plugin can be distributed via its
+archive. The archive must always contain the component's configuration. A component is added from the archive
+automatically, see [Life Cycle](#usage-component-life).
+
+The structure of the archive mirrors the structure of the framework, so the archive is extracted relative to the
+framework root. Files of the component are placed in `<directory>/<name>/<version>/`, where `<directory>` is `config`,
+`data`, `doc` or `legal`, and the JAR/WAR modules are placed in `repo`. For example, the foo component with version
+1.0.0 has the following archive:
+
+```
+config/foo/1.0.0/configuration.xml
+data/foo/1.0.0/...
+legal/foo/1.0.0/LICENSE.txt
+repo/...
+```
+
+The configuration must be located at `config/<name>/<version>/configuration.xml`, and its name and version must match
+the path. All entries are validated before the first file is written, so an invalid archive (for example, one that
+contains a file of another component or a file outside of the listed directories) is rejected without changing the
+framework.
+
+The component archive can be created using the `component:build` command, and the component can be added using the
+`component:add` command.
 
 #### Events <a name="usage-component-events"></a>
 
