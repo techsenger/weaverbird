@@ -419,10 +419,17 @@ legal/foo/1.0.0/LICENSE.txt
 repo/...
 ```
 
-The configuration must be located at `config/<name>/<version>/configuration.xml`, and its name and version must match
-the path. All entries are validated before the first file is written, so an invalid archive (for example, one that
-contains a file of another component or a file outside of the listed directories) is rejected without changing the
-framework.
+The archive is checked before any file is extracted. It is rejected if:
+
+* it has no configuration, has more than one, or the configuration is not located at
+  `config/<name>/<version>/configuration.xml` matching its name and version;
+* it contains a file outside of the `config`, `data`, `doc` and `legal` directories of this component, or outside of
+  `repo`;
+* it contains a file in `repo` that is not a module declared in the configuration.
+
+Because the check is done first, a rejected archive leaves the framework unchanged. Requiring every file in `repo` to
+be a declared module makes the configuration the only source of truth about the modules of the component, so they can
+be removed when the component is unresolved.
 
 The component archive can be created using the `component:build` command, and the component can be added using the
 `component:add` command.

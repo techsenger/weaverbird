@@ -44,6 +44,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -167,13 +168,20 @@ class ComponentFileManager {
     }
 
     /**
-     * Copies archive files to the framework directory. All archive entries are validated before the first file is
-     * written, so an invalid archive doesn't leave anything on disk.
+     * Copies archive files to the framework directory. Before the first file is written, every entry is checked
+     * against the following rules, so an invalid archive doesn't leave anything on disk:
+     * <ul>
+     * <li>the entry must be located in {@code config}, {@code data}, {@code doc} or {@code legal} directory of this
+     * component ({@code <directory>/<name>/<version>/...}) or in {@code repo} directory; the path is normalized, so
+     * entries with {@code ..} cannot escape these directories;</li>
+     * <li>the entry in {@code repo} must be a module declared in the component config, that is, it must have exactly
+     * the path that the module has in the repository.</li>
+     * </ul>
      *
      * @param config the config read from this archive
      * @param zipPath the path of the archive
      * @param zipfile the opened archive
-     * @throws ComponentException if the archive contains an illegal entry
+     * @throws ComponentException if the archive contains an illegal entry or an undeclared module
      * @throws IOException if a file cannot be written
      */
     public void addComponent(ComponentConfig config, Path zipPath, ZipFile zipfile)
@@ -187,6 +195,10 @@ class ComponentFileManager {
                 pathManager.getRepositoryDirectory()).stream()
                 .map(p -> p.toAbsolutePath().normalize())
                 .toList();
+        var repositoryDirectory = pathManager.getRepositoryDirectory().toAbsolutePath().normalize();
+        var declaredModuleFiles = config.getModules().stream()
+                .map(m -> pathResolver.resolveModule(m).toAbsolutePath().normalize())
+                .collect(Collectors.toSet());
 
         //the archive structure mirrors the framework structure, so entries are validated and then written as is
         var entries = new ArrayList<ZipEntry>();
@@ -195,6 +207,10 @@ class ComponentFileManager {
             if (allowedDirectories.stream().noneMatch(d -> !target.equals(d) && target.startsWith(d))) {
                 throw new ComponentException(StringUtils.format("Illegal file {} in component archive at {}",
                         entry.getName(), zipPath));
+            }
+            if (target.startsWith(repositoryDirectory) && !declaredModuleFiles.contains(target)) {
+                throw new ComponentException(StringUtils.format("File {} in component archive at {} is not a module "
+                        + "declared in the component config", entry.getName(), zipPath));
             }
             entries.add(entry);
         }

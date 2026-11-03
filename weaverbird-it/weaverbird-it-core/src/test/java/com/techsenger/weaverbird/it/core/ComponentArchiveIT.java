@@ -59,6 +59,10 @@ public class ComponentArchiveIT {
 
     private static final String LEGAL_ENTRY = "legal/" + NAME + "/" + VERSION + "/LICENSE.txt";
 
+    private static final String MODULE_DIRECTORY = "repo/com/google/code/gson/gson/2.12.1/";
+
+    private static final String MODULE_ENTRY = MODULE_DIRECTORY + "gson-2.12.1.jar";
+
     private static String createXmlConfig(String name, String version) {
         return """
                 <?xml version="1.0" encoding="UTF-8" ?>
@@ -205,6 +209,45 @@ public class ComponentArchiveIT {
                 .isInstanceOf(ComponentException.class)
                 .hasMessageContaining("Illegal file");
         assertThat(framework.getPathManager().getDataDirectory().resolve("escaped.txt")).doesNotExist();
+        assertThat(framework.getPathManager().getConfigDirectory().resolve(NAME)).doesNotExist();
+    }
+
+    @Test
+    public void addComponent_declaredModuleInRepo_moduleWrittenToRepository() throws Exception {
+        var entries = new LinkedHashMap<String, String>();
+        entries.put(CONFIG_ENTRY, createXmlConfig(NAME, VERSION));
+        entries.put(MODULE_ENTRY, "jar content");
+        var archivePath = createArchive(entries);
+        componentManager.addComponent(archivePath);
+        assertThat(framework.getPathManager().getRootDirectory().resolve(MODULE_ENTRY)).hasContent("jar content");
+    }
+
+    @Test
+    public void addComponent_undeclaredModuleInRepo_exceptionThrownAndNothingWritten() throws Exception {
+        var entries = new LinkedHashMap<String, String>();
+        entries.put(CONFIG_ENTRY, createXmlConfig(NAME, VERSION));
+        entries.put(MODULE_ENTRY, "jar content");
+        entries.put("repo/org/other/other/1.0.0/other-1.0.0.jar", "other content");
+        var archivePath = createArchive(entries);
+        assertThatThrownBy(() -> componentManager.addComponent(archivePath))
+                .isInstanceOf(ComponentException.class)
+                .hasMessageContaining("not a module declared");
+        assertThat(framework.getPathManager().getRepositoryDirectory().resolve("org/other")).doesNotExist();
+        assertThat(framework.getPathManager().getRootDirectory().resolve(MODULE_ENTRY)).doesNotExist();
+        assertThat(framework.getPathManager().getConfigDirectory().resolve(NAME)).doesNotExist();
+    }
+
+    @Test
+    public void addComponent_undeclaredFileNextToDeclaredModule_exceptionThrownAndNothingWritten() throws Exception {
+        var entries = new LinkedHashMap<String, String>();
+        entries.put(CONFIG_ENTRY, createXmlConfig(NAME, VERSION));
+        entries.put(MODULE_ENTRY, "jar content");
+        entries.put(MODULE_DIRECTORY + "gson-2.12.1-sources.jar", "sources content");
+        var archivePath = createArchive(entries);
+        assertThatThrownBy(() -> componentManager.addComponent(archivePath))
+                .isInstanceOf(ComponentException.class)
+                .hasMessageContaining("not a module declared");
+        assertThat(framework.getPathManager().getRootDirectory().resolve(MODULE_ENTRY)).doesNotExist();
         assertThat(framework.getPathManager().getConfigDirectory().resolve(NAME)).doesNotExist();
     }
 
