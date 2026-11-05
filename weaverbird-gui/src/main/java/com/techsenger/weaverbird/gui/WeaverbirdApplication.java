@@ -21,10 +21,8 @@ import com.techsenger.shellfx.core.DefaultShellParams;
 import com.techsenger.shellfx.core.DefaultShellView;
 import com.techsenger.shellfx.core.DefaultShellViewModel;
 import com.techsenger.shellfx.core.ShellConfig;
-import com.techsenger.shellfx.core.config.InMemoryConfigManager;
-import com.techsenger.shellfx.core.registries.ControlRegistry;
-import com.techsenger.shellfx.core.registries.SlotRegistry;
-import com.techsenger.shellfx.core.registries.StylesheetRegistry;
+import com.techsenger.shellfx.core.config.ConfigData;
+import com.techsenger.shellfx.core.config.DefaultConfigManager;
 import com.techsenger.shellfx.core.window.AbstractWindowView;
 import com.techsenger.shellfx.icons.Fonts;
 import com.techsenger.shellfx.icons.IconStylesheetFactory;
@@ -73,17 +71,18 @@ public class WeaverbirdApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        var context = new DefaultShellContext(createSettings(), new DefaultConfigManager(new ConfigData()),
+                getHostServices());
+
         // creating application stylesheets
         var defaultIconFont = Fonts.MATERIAL_DESIGN_ICONS;
         FontIconView.setDefaultIconFamily(defaultIconFont.getFamily());
-        var stylesheetRegistry = new StylesheetRegistry();
+        var stylesheetRegistry = context.getStylesheetRegistry();
         stylesheetRegistry.register(AbstractWindowView.createDefaultStylesheets());
         stylesheetRegistry.register(IconStylesheetFactory.forDefaultFont(defaultIconFont));
         stylesheetRegistry.register(IconStylesheetFactory.forAllModules());
         stylesheetRegistry.register(WeaverbirdIconStylesheets.getAll());
 
-        var context = new DefaultShellContext(createSettings(), new InMemoryConfigManager(), getHostServices(),
-                new SlotRegistry(), new ControlRegistry(), stylesheetRegistry);
         var shellConfig = context.getConfigManager().getOrCreateConfig(ShellConfig.class, ShellConfig::new);
         var shellParams = new DefaultShellParams(shellConfig, context);
         var shellViewModel = new DefaultShellViewModel<>(shellParams);
