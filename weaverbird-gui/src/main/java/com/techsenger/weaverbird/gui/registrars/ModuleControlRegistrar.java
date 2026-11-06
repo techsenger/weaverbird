@@ -88,7 +88,7 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
                 getControl().setGraphic(new FontIconView(WeaverbirdIcons.CONSOLE));
                 getControl().setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
                 getControl().setOnAction(e -> {
-                    var config = shell.getViewModel().getContext().getConfigManager()
+                    var config = shell.getContext().getConfigManager()
                             .getOrCreateConfig(ConsoleTabConfig.class, ConsoleTabConfig::new);
                     var params = new ConsoleTabParams(config, framework, client, null);
                     var consoleViewModel = new ConsoleTabViewModel<>(params);
@@ -110,8 +110,8 @@ public class ModuleControlRegistrar extends AbstractControlRegistrar {
                 getControl().setGraphic(new FontIconView(WeaverbirdIcons.DIAGRAMS));
                 getControl().setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN));
                 getControl().setOnAction(e -> {
-                    var consoleSettings = (ConsoleSettings) shell.getViewModel().getContext().getSettings();
-                    var config = shell.getViewModel().getContext().getConfigManager()
+                    var consoleSettings = (ConsoleSettings) shell.getContext().getSettings();
+                    var config = shell.getContext().getConfigManager()
                             .getOrCreateConfig(DiagramTabConfig.class, DiagramTabConfig::new);
                     var params = new DiagramTabParams(config, framework, client, null,
                             consoleSettings.getDiagram());

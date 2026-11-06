@@ -243,14 +243,14 @@ public class ConsoleTabViewModel<C extends ConsoleTabComposer> extends AbstractH
         showPrompt();
         requestFocus();
         applySettings();
-        getShellContext().getSettings().addListener(this.settingsListener);
+        getContextAccess().getSettings().addListener(this.settingsListener);
         highlightCommandsSource.next(executor.getCommandsByName().keySet());
     }
 
     @Override
     protected void preDeinitialize() {
         super.preDeinitialize();
-        getShellContext().getSettings().removeListener(this.settingsListener);
+        getContextAccess().getSettings().removeListener(this.settingsListener);
     }
 
     protected void showPrompt() {
@@ -380,7 +380,7 @@ public class ConsoleTabViewModel<C extends ConsoleTabComposer> extends AbstractH
     }
 
     private void applySettings() {
-        setMonospaceFont(getShellContext().getSettings().getAppearance().getMonospaceFont());
+        setMonospaceFont(getContextAccess().getSettings().getAppearance().getMonospaceFont());
     }
 
     private void setMonospaceFont(Font font) {

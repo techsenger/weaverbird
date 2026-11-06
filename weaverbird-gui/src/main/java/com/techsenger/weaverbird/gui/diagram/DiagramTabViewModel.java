@@ -170,8 +170,8 @@ public class DiagramTabViewModel<C extends DiagramTabComposer> extends AbstractH
             this.previousLayersInfo = layersInfo;
 
             var layersByComponentId = layersInfo.getLayersById();
-            var shellSettings = getShellContext().getSettings();
-            var dialogConfig = getShellContext().getConfigManager()
+            var shellSettings = getContextAccess().getSettings();
+            var dialogConfig = getContextAccess().getConfigManager()
                     .getOrCreateConfig(LayerDialogConfig.class, LayerDialogConfig::new);
             var params = new LayerDialogParams(dialogConfig, shellSettings,
                     new ArrayList<>(layersByComponentId.values()), previousLayerConfigs);
