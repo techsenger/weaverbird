@@ -16,11 +16,13 @@
 
 package com.techsenger.weaverbird.gui.console;
 
+import com.techsenger.shellfx.core.popup.PopupPort;
+
 /**
  *
  * @author Pavel Castornii
  */
-public interface CompletionPopupPort {
+public interface CompletionPopupPort extends PopupPort {
 
     String getItemText();
 

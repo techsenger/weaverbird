@@ -192,6 +192,7 @@ public class DiagramTabViewModel<C extends DiagramTabComposer> extends AbstractH
                 }
                 dialog.closeSafely();
             });
+            dialog.setVisible(true);
         } catch (Exception ex) {
             logger.error("{} Error getting layers info from server", getDescriptor().getLogPrefix(), ex);
         }

@@ -102,7 +102,7 @@ public class WeaverbirdApplication extends Application {
         new ModuleControlRegistrar(shellView, ModuleActivatorProvider.getFramework()).register();
 
         shellView.upgradeMenuBar();
-        stage.show();
+        shellViewModel.setVisible(true);
     }
 
 }
