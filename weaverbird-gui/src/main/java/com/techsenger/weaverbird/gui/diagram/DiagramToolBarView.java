@@ -55,13 +55,13 @@ public class DiagramToolBarView<VM extends DiagramToolBarViewModel<?>> extends A
     protected void build() {
         super.build();
         layerDiagramButton.setTooltip(new Tooltip("Layer Diagram"));
-        layerDiagramButton.getStyleClass().addAll(Styles.FLAT, StyleClasses.SIZE_L);
+        layerDiagramButton.getStyleClass().addAll(StyleClasses.SQUARE, Styles.FLAT, StyleClasses.SIZE_L);
         zoomLevelComboBox.getStyleClass().add(Styles.DENSE);
         zoomLevelComboBox.setItems(getViewModel().getZoomLevels());
         zoomInButton.setTooltip(new Tooltip("Zoom In"));
-        zoomInButton.getStyleClass().addAll(Styles.FLAT, StyleClasses.SIZE_L);
+        zoomInButton.getStyleClass().addAll(StyleClasses.SQUARE, Styles.FLAT, StyleClasses.SIZE_L);
         zoomOutButton.setTooltip(new Tooltip("Zoom Out"));
-        zoomOutButton.getStyleClass().addAll(Styles.FLAT, StyleClasses.SIZE_L);
+        zoomOutButton.getStyleClass().addAll(StyleClasses.SQUARE, Styles.FLAT, StyleClasses.SIZE_L);
 
         getNode().getItems().addAll(layerDiagramButton, new Separator(Orientation.VERTICAL),
             zoomOutButton, zoomLevelComboBox, zoomInButton, new Spacer(Orientation.HORIZONTAL),

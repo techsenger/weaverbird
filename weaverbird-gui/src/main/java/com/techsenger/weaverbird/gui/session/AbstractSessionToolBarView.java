@@ -64,7 +64,7 @@ public abstract class AbstractSessionToolBarView<VM extends AbstractSessionToolB
         sessionComboBox.setButtonCell(new SessionListCell<ClientSession>());
         sessionComboBox.getStyleClass().add("session");
         HBox.setHgrow(sessionComboBox, Priority.ALWAYS);
-        refreshButton.getStyleClass().addAll(Styles.FLAT, StyleClasses.SIZE_L);
+        refreshButton.getStyleClass().addAll(StyleClasses.SQUARE, Styles.FLAT, StyleClasses.SIZE_L);
 
         toolBar.getStyleClass().add(StyleClasses.BLEND);
         var css = AbstractSessionToolBarView.class.getResource("tool-bar.css").toExternalForm();
