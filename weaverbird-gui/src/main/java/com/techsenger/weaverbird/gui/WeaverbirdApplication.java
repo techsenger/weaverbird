@@ -91,7 +91,6 @@ public class WeaverbirdApplication extends Application {
         shellView.initialize();
         shellViewModel.setOnClosed(() -> Platform.exit());
         shellViewModel.setTitle("Weaverbird Framework");
-        shellView.getStage().getScene().getRoot().getStyleClass().add(StyleClasses.DENSITY_S);
 
         var workspaceParams = new AreaParams(null);
         var workspaceViewModel = new TabHostViewModel<>(workspaceParams);
