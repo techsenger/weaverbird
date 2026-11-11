@@ -24,7 +24,7 @@ import com.techsenger.shellfx.core.ShellConfig;
 import com.techsenger.shellfx.core.area.AreaParams;
 import com.techsenger.shellfx.core.config.ConfigData;
 import com.techsenger.shellfx.core.config.DefaultConfigManager;
-import com.techsenger.shellfx.core.window.AbstractWindowView;
+import com.techsenger.shellfx.core.window.AbstractFrameWindowView;
 import com.techsenger.shellfx.icons.Fonts;
 import com.techsenger.shellfx.icons.IconStylesheetFactory;
 import com.techsenger.shellfx.layout.tabhost.TabHostView;
@@ -79,7 +79,7 @@ public class WeaverbirdApplication extends Application {
         var defaultIconFont = Fonts.MATERIAL_DESIGN_ICONS;
         FontIconView.setDefaultIconFamily(defaultIconFont.getFamily());
         var stylesheetRegistry = context.getStylesheetRegistry();
-        stylesheetRegistry.register(AbstractWindowView.createDefaultStylesheets());
+        stylesheetRegistry.register(AbstractFrameWindowView.createDefaultStylesheets());
         stylesheetRegistry.register(IconStylesheetFactory.forDefaultFont(defaultIconFont));
         stylesheetRegistry.register(IconStylesheetFactory.forAllModules());
         stylesheetRegistry.register(WeaverbirdIconStylesheets.getAll());
