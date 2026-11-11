@@ -15,6 +15,7 @@
  */
 
 module com.techsenger.weaverbird.gui {
+    requires com.techsenger.tabpanepro.core;
     requires com.techsenger.toolkit.core;
     requires com.techsenger.toolkit.fx;
     requires org.slf4j;

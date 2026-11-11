@@ -21,17 +21,18 @@ import com.techsenger.shellfx.core.DefaultShellParams;
 import com.techsenger.shellfx.core.DefaultShellView;
 import com.techsenger.shellfx.core.DefaultShellViewModel;
 import com.techsenger.shellfx.core.ShellConfig;
+import com.techsenger.shellfx.core.area.AreaParams;
 import com.techsenger.shellfx.core.config.ConfigData;
 import com.techsenger.shellfx.core.config.DefaultConfigManager;
 import com.techsenger.shellfx.core.window.AbstractWindowView;
 import com.techsenger.shellfx.icons.Fonts;
 import com.techsenger.shellfx.icons.IconStylesheetFactory;
-import com.techsenger.shellfx.layout.tabhost.ProminentTabHostParams;
-import com.techsenger.shellfx.layout.tabhost.ProminentTabHostView;
-import com.techsenger.shellfx.layout.tabhost.ProminentTabHostViewModel;
+import com.techsenger.shellfx.layout.tabhost.TabHostView;
+import com.techsenger.shellfx.layout.tabhost.TabHostViewModel;
 import com.techsenger.shellfx.material.icon.FontIconView;
 import com.techsenger.shellfx.material.style.Density;
 import com.techsenger.shellfx.material.style.StyleClasses;
+import com.techsenger.shellfx.material.tabpane.SlantedTabPanePro;
 import com.techsenger.shellfx.material.theme.AtlantaFxTheme;
 import com.techsenger.toolkit.fx.color.ColorUtils;
 import com.techsenger.weaverbird.gui.internal.ModuleActivatorProvider;
@@ -92,10 +93,11 @@ public class WeaverbirdApplication extends Application {
         shellViewModel.setTitle("Weaverbird Framework");
         shellView.getStage().getScene().getRoot().getStyleClass().add(StyleClasses.DENSITY_S);
 
-        var workspaceParams = new ProminentTabHostParams(null, context.getSettings());
-        var workspaceViewModel = new ProminentTabHostViewModel<>(workspaceParams);
-        var workspaceView = new ProminentTabHostView<>(workspaceViewModel);
+        var workspaceParams = new AreaParams(null);
+        var workspaceViewModel = new TabHostViewModel<>(workspaceParams);
+        var workspaceView = new TabHostView<>(workspaceViewModel, SlantedTabPanePro::new);
         workspaceView.initialize();
+        workspaceView.getNode().getStyleClass().add(StyleClasses.SIZE_L);
         shellView.getComposer().addWorkspace(workspaceView);
 
         new ModuleSlotRegistrar(shellView).register();

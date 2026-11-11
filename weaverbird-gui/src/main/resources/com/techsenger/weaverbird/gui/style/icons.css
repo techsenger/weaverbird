@@ -18,81 +18,81 @@
     Author     : Pavel Castornii
 */
 .font-icon-view.xml-file-icon {
-    -fx-icon-code: 984512; /* xml */
+    -sfx-icon-code: 984512; /* xml */
 }
 
 .font-icon-view.text-file-icon {
-    -fx-icon-code: 985514; /* text-long */
+    -sfx-icon-code: 985514; /* text-long */
 }
 
 .font-icon-view.script-file-icon {
-    -fx-icon-code: 986051; /* script-text-outline */
+    -sfx-icon-code: 986051; /* script-text-outline */
 }
 
 .font-icon-view.console-icon {
-    -fx-icon-code: 985015; /* console */
+    -sfx-icon-code: 985015; /* console */
 }
 
 .font-icon-view.memory-log-icon {
-    -fx-icon-code: 989660; /* receipt-text-outline */
+    -sfx-icon-code: 989660; /* receipt-text-outline */
 }
 
 .font-icon-view.file-log-icon {
-    -fx-icon-code: 985582; /* file-document-outline */
+    -sfx-icon-code: 985582; /* file-document-outline */
 }
 
 .font-icon-view.dependency-icon {
-    -fx-icon-code: 989252; /* magic-staff */
+    -sfx-icon-code: 989252; /* magic-staff */
 }
 
 .font-icon-view.diagrams-icon {
-    -fx-icon-code: 984685; /* chart-scatter-plot-hexbin */
+    -sfx-icon-code: 984685; /* chart-scatter-plot-hexbin */
 }
 
 .font-icon-view.layer-diagrams-icon {
-    -fx-icon-code: 988300; /* view-module-outline */
+    -sfx-icon-code: 988300; /* view-module-outline */
 }
 
 .font-icon-view.filter-icon {
-    -fx-icon-code: 983603; /* filter-outline */
+    -sfx-icon-code: 983603; /* filter-outline */
 }
 
 .font-icon-view.filter-settings-icon {
-    -fx-icon-code: 989860; /* filter-cog-outline */
+    -sfx-icon-code: 989860; /* filter-cog-outline */
 }
 
 .font-icon-view.weaverbird-icon {
-    -fx-icon-code: 983083; /* alpha */
+    -sfx-icon-code: 983083; /* alpha */
 }
 
 .font-icon-view.network-icon {
-    -fx-icon-code: 983832; /* lan-connect */
+    -sfx-icon-code: 983832; /* lan-connect */
 }
 
 .font-icon-view.refresh-icon {
-    -fx-icon-code: 984144; /* refresh */
+    -sfx-icon-code: 984144; /* refresh */
 }
 
 .font-icon-view.detach-session-icon {
-    -fx-icon-code: 983558; /* exit-to-app */
+    -sfx-icon-code: 983558; /* exit-to-app */
 }
 
 .font-icon-view.copy-icon {
-    -fx-icon-code: 983439; /* content-copy */
+    -sfx-icon-code: 983439; /* content-copy */
 }
 
 .font-icon-view.paste-icon {
-    -fx-icon-code: 983442; /* content-paste */
+    -sfx-icon-code: 983442; /* content-paste */
 }
 
 .font-icon-view.clear-icon {
-    -fx-icon-code: 983266; /* broom */
+    -sfx-icon-code: 983266; /* broom */
 }
 
 .font-icon-view.zoom-in-icon {
-    -fx-icon-code: 984085; /* plus */
+    -sfx-icon-code: 984085; /* plus */
 }
 
 .font-icon-view.zoom-out-icon {
-    -fx-icon-code: 983924; /* minus */
+    -sfx-icon-code: 983924; /* minus */
 }
