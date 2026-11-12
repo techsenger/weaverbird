@@ -17,6 +17,7 @@
 package com.techsenger.weaverbird.gui.console;
 
 import com.techsenger.shellfx.core.popup.PopupParams;
+import com.techsenger.shellfx.core.settings.ShellSettings;
 import com.techsenger.weaverbird.executor.api.command.CommandInfo;
 import com.techsenger.weaverbird.executor.api.command.ParameterDescriptor;
 import java.util.Collection;
@@ -39,8 +40,9 @@ public class CompletionPopupParams extends PopupParams {
     private final CompletionPopupAwarePort popupAware;
 
     public CompletionPopupParams(Collection<CommandInfo> commands, boolean sessionExists,
-            List<ParameterDescriptor> parameterDescriptors, String token, CompletionPopupAwarePort popupAware) {
-        super(null, false);
+            List<ParameterDescriptor> parameterDescriptors, String token, CompletionPopupAwarePort popupAware,
+            ShellSettings settings) {
+        super(null, false, settings);
         this.commands = commands;
         this.sessionExists = sessionExists;
         this.parameterDescriptors = parameterDescriptors;

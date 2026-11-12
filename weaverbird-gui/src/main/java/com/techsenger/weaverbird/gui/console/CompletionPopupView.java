@@ -17,6 +17,7 @@
 package com.techsenger.weaverbird.gui.console;
 
 import com.techsenger.shellfx.core.popup.AbstractPopupView;
+import com.techsenger.shellfx.core.registries.StylesheetRegistry;
 import com.techsenger.toolkit.core.Pair;
 import com.techsenger.toolkit.fx.utils.ListViewUtils;
 import com.techsenger.toolkit.fx.utils.NodeUtils;
@@ -48,8 +49,8 @@ public class CompletionPopupView<VM extends CompletionPopupViewModel<?>> extends
 
     private final SplitPane splitPane = new SplitPane(listView, textArea);
 
-    public CompletionPopupView(VM viewModel) {
-        super(viewModel);
+    public CompletionPopupView(VM viewModel, StylesheetRegistry stylesheetRegistry) {
+        super(viewModel, stylesheetRegistry, null);
     }
 
     @Override

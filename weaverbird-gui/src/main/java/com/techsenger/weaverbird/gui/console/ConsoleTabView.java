@@ -111,7 +111,7 @@ public class ConsoleTabView<VM extends ConsoleTabViewModel<?>> extends AbstractH
             if (this.completionPopup == null) {
                 return;
             }
-            closePopup(completionPopup);
+            closeWindow(completionPopup);
             this.completionPopup = null;
             view.textArea.requestFocus();
         }
@@ -131,7 +131,7 @@ public class ConsoleTabView<VM extends ConsoleTabViewModel<?>> extends AbstractH
 
         protected CompletionPopupView<?> createPopup(CompletionPopupParams params) {
             var viewModel = new CompletionPopupViewModel<>(params);
-            var view = new CompletionPopupView<>(viewModel);
+            var view = new CompletionPopupView<>(viewModel, getShell().getContext().getStylesheetRegistry());
             view.initialize();
             return view;
         }

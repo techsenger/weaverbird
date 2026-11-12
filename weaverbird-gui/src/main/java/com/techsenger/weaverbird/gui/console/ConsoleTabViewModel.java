@@ -282,7 +282,8 @@ public class ConsoleTabViewModel<C extends ConsoleTabComposer> extends AbstractH
         if (processingCommand) {
             var commands = executor.getCommandsByName().values();
             var sessionExists = executor.getCommandContext().getSession() != null;
-            var params = new CompletionPopupParams(commands, sessionExists, null, elementToken, this);
+            var params = new CompletionPopupParams(commands, sessionExists, null, elementToken, this,
+                    getContextAccess().getSettings());
             getComposer().openCommandPopup(params, offset);
             getComposer().getPopupPort().setVisible(true);
         } else {
@@ -293,7 +294,8 @@ public class ConsoleTabViewModel<C extends ConsoleTabComposer> extends AbstractH
             }
             var command = executor.getCommandsByName().get(cmd);
             if (command != null) {
-                var params = new CompletionPopupParams(null, false, command.getParameters(), elementToken, this);
+                var params = new CompletionPopupParams(null, false, command.getParameters(), elementToken, this,
+                        getContextAccess().getSettings());
                 getComposer().openParameterPopup(params, offset);
                 getComposer().getPopupPort().setVisible(true);
             }
